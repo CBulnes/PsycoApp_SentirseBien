@@ -1,0 +1,48 @@
+﻿@model dynamic
+@{
+    ViewData["Title"] = "Inicio";
+}
+
+<div class="bd-example" style="background-color: #FFF; margin-top: 30px;">
+    <div class="row">
+        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+            <b style="color: #004A92; font-size: 20px;">Configuración</b>
+        </div>
+        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">&nbsp;</div>
+        
+        <!--carrousel-->
+        <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
+            @await Html.PartialAsync("~/Views/Home/Index.cshtml")
+        </div>
+
+        <!--configuracion carrousel-->
+        <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
+            <div class="form-group">
+
+                <div class="row">
+
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                        <span class="label-form" style="display: block; margin-bottom: 5px;">Orden:</span>
+                        <select class="form-control" id="cboOrden">
+                            <option value="-1">Seleccione el orden de la imagen a cargar</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                        </select>
+                    </div>
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                        <span class="label-form" style="display: block; margin-bottom: 5px;">&nbsp;</span>
+                        <button type="button" class="btn btn-doc second_color" onclick="validar_orden()" style="color: #FFF; font-size: 12px; width: 100%;">
+                            <i class="fas fa-cloud-upload-alt"></i>&nbsp;Selecccionar imagen
+                        </button>
+                        <input type="file" name="file" id="fuImagen" class="uploader" style="display: none;" accept="image/jpg, image/jpeg, image/png" />
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</div>

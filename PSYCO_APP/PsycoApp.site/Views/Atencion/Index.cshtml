@@ -1,0 +1,30 @@
+﻿@model dynamic
+@{
+    ViewData["Title"] = "Atención al cliente";
+}
+
+    @*<script type="text/javascript" src="~/basic/call.js"></script>
+    <script type="text/javascript" src="~/basic/whatsapp.js"></script>
+    <script type="text/javascript" src="~/basic/atencion.js"></script>*@
+
+    <div class="bd-example">
+        <div class="row">
+            <p style="text-align: justify;">
+                Al conceder permisos para acceder a su ubicación, los <i style="font-weight: bold !important;">Centros de Atención</i> se ordenarán del más cercano al más lejano, según su ubicación.
+            </p>
+        </div>
+
+        <div class="row" id="div_c_a"></div>
+
+        <br />
+
+        <div class="row" style="display: grid; place-items: center;">
+            <div class="col-sm-12 col-md-6 col-lg-4 col-xlg-4">
+                <button class="btn btn-primary main_color" id="CALLButton" onclick="callNumber('@Model.call_center');" style="width: 100%;">CALL CENTER <br /> @Model.call_center <br /> Horario de atención: @Model.horario_atencion</button>
+            </div>
+        </div>
+
+        <a href="tel:@Model.call_center" class="hide-element" id="templink"></a>
+
+        <div id="WAButton" onclick="registrar_punto_visitado('WHATSAPP')"></div>
+    </div>

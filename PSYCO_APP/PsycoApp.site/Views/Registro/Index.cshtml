@@ -1,0 +1,188 @@
+﻿@model string
+@using PsycoApp.utilities; 
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Registro - @Helper.GetNombreSite()</title>
+
+    <link rel="stylesheet" type="text/css" href="~/login/vendor/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="~/login/fonts/font-awesome-4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="~/login/fonts/Linearicons-Free-v1.0.0/icon-font.min.css">
+    <link rel="stylesheet" type="text/css" href="~/login/vendor/animate/animate.css">
+    <link rel="stylesheet" type="text/css" href="~/login/vendor/css-hamburgers/hamburgers.min.css">
+    <link rel="stylesheet" type="text/css" href="~/login/vendor/animsition/css/animsition.min.css">
+    <link rel="stylesheet" type="text/css" href="~/login/vendor/select2/select2.min.css">
+    <link rel="stylesheet" type="text/css" href="~/login/vendor/daterangepicker/daterangepicker.css">
+    <link rel="stylesheet" type="text/css" href="~/login/css/util.css">
+    <link rel="stylesheet" type="text/css" href="~/login/css/main.css">
+    <link rel="stylesheet" type="text/css" href="~/basic/cust_styles.css">
+
+    <link href="~/assets/plugins/sweetalert/sweetalert.css" rel="stylesheet" type="text/css">
+
+    <style>
+        .bg {
+            position: absolute;
+            z-index: -1;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: url('https://images.freeimages.com/images/large-previews/01a/technology-background-1632715.jpg') center center;
+            opacity: .4;
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="preloader hide-element">
+        <div style="display: grid; place-items: center; height: 100%;">
+            <img src="~/images/loading.gif" />
+        </div>
+    </div>
+
+    <div class="limiter">
+        <div class="container-login100" style="position: relative; z-index: 1;">
+            <div class="bg"></div>
+            <div class="wrap-login100 p-l-55 p-r-55 p-t-65 p-b-50">
+                <form class="login100-form validate-form">
+                    <span class="login100-form-title p-b-33">
+                        REGISTRO
+                    </span>
+
+                    <div class="wrap-input100 validate-input">
+                        <input class="input100" type="text" required="" placeholder="Nombres" id="txtNombres" autocomplete="off" />
+                        <span class="focus-input100-1"></span>
+                        <span class="focus-input100-2"></span>
+                    </div>
+
+                    <div class="wrap-input100 validate-input">
+                        <input class="input100" type="text" required="" placeholder="Apellidos" id="txtApellidos" autocomplete="off" />
+                        <span class="focus-input100-1"></span>
+                        <span class="focus-input100-2"></span>
+                    </div>
+
+                    <div class="wrap-input100 validate-input">
+                        <select class="input100 custom-select col-12" id="cboTipoDocumento" style="height: 68px; padding: 0 25px 0 25px;">
+                            <option value="">Tipo de documento</option>
+                            <option value="DNI">DNI</option>
+                            <option value="CARNET DE EXTRANJERÍA">CARNET DE EXTRANJERÍA</option>
+                        </select>
+                        <span class="focus-input100-1"></span>
+                        <span class="focus-input100-2"></span>
+                    </div>
+
+                    <div class="wrap-input100 rs1 validate-input">
+                        <input class="input100" type="text" required="" placeholder="N° de documento" id="txtNumDocumento" autocomplete="off" maxlength="0" />
+                        <span class="focus-input100-1"></span>
+                        <span class="focus-input100-2"></span>
+                    </div>
+
+                    <div class="wrap-input100 validate-input">
+                        <select class="input100 custom-select col-12" id="cboTipoLinea" style="height: 68px; padding: 0 25px 0 25px;">
+                            <option value="">Seleccione tipo de línea</option>
+                            <option value="1">Móvil</option>
+                            <option value="2">Fija</option>
+                        </select>
+                        <span class="focus-input100-1"></span>
+                        <span class="focus-input100-2"></span>
+                    </div>
+
+                    <div class="wrap-input100 rs1 validate-input">
+                        <input class="input100" type="text" required="" placeholder="Línea" id="txtLinea" maxlength="0" autocomplete="off" />
+                        <span class="focus-input100-1"></span>
+                        <span class="focus-input100-2"></span>
+                    </div>
+
+                    <div class="container-login100-form-btn m-t-20">
+                        <button onclick="validar_registro()" class="login100-form-btn text-uppercase waves-effect waves-light" type="button">
+                            ACEPTAR
+                        </button>
+                    </div>
+                    <div class="form-group m-b-0">
+                        <div class="col-sm-12 text-center">
+                            <br />
+                            <p>¿Ya estás registrado? <a href="#" onclick="redireccionar('Login')" class="text-info m-l-5"><b>Ingresa aquí</b></a></p>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        var ruta = '@Model';
+    </script>
+
+    <script src="~/assets/plugins/jquery/jquery.min.js"></script>
+    <!-- Bootstrap tether Core JavaScript -->
+    <script src="~/assets/plugins/bootstrap/js/popper.min.js"></script>
+    <script src="~/assets/plugins/bootstrap/js/bootstrap.min.js"></script>
+    <!-- slimscrollbar scrollbar JavaScript -->
+    <script src="~/assets/js/jquery.slimscroll.js"></script>
+    <!--Wave Effects -->
+    <script src="~/assets/js/waves.js"></script>
+    <!--Menu sidebar -->
+    <script src="~/assets/js/sidebarmenu.js"></script>
+    <!--stickey kit -->
+    <script src="~/assets/plugins/sticky-kit-master/dist/sticky-kit.min.js"></script>
+    <script src="~/assets/plugins/sparkline/jquery.sparkline.min.js"></script>
+    <!--Custom JavaScript -->
+    <script src="~/assets/js/custom.min.js"></script>
+    <!-- ============================================================== -->
+    <!-- Style switcher -->
+    <!-- ============================================================== -->
+    <script src="~/assets/plugins/styleswitcher/jQuery.style.switcher.js"></script>
+
+    <script src="~/basic/registro.js"></script>
+
+    <script src="~/assets/plugins/sweetalert/sweetalert.min.js"></script>
+
+    <script type="text/javascript">
+
+        function alerta(text, type) {
+            !function ($) {
+                "use strict";
+                var SweetAlert = function () { };
+
+                SweetAlert.prototype.init = function () {
+                    //Auto Close Timer
+                    //$('#sa-close').click(function () {
+                    swal({
+                        title: "Auto close alert!",
+                        type: type,
+                        text: text,
+                        timer: 2000,
+                        showConfirmButton: false,
+                        allowEscapeKey: false
+                    });
+                    //});
+                },
+                    //init
+                    $.SweetAlert = new SweetAlert, $.SweetAlert.Constructor = SweetAlert
+            }(window.jQuery),
+
+                //initializing
+                function ($) {
+                    "use strict";
+                    $.SweetAlert.init()
+                }(window.jQuery);
+        }
+    </script>
+</body>
+
+</html>

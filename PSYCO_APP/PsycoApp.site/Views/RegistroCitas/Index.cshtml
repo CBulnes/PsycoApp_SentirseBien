@@ -1,0 +1,108 @@
+﻿@model dynamic
+@{
+    ViewData["Title"] = "Registro de citas";
+    var dHoy = DateTime.Now;
+}
+
+@*<script type="text/javascript" src="~/basic/call.js"></script>
+    <script type="text/javascript" src="~/basic/whatsapp.js"></script>
+    <script type="text/javascript" src="~/basic/atencion.js"></script>*@
+
+<div class="bd-example">
+    <div class="row">
+        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+            <b style="color: #004A92; font-size: 20px;">Registro de citas</b>
+        </div>
+        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">&nbsp;</div>
+
+        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 table-responsive calendar-container">
+            <div id="my-calendar"></div>
+        </div>
+    </div>
+</div>
+
+<div id="mdl_cita" class="modal" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="true">
+    <div class="modal-dialog modal-lg" role="document" style="height: 90%; display: grid; place-items: center;">
+        <div class="modal-content" style="width: 100%;">
+            <div class="modal-header second_color" style="background-color: transparent;">
+                <h5 class="modal-title" style="color: #FFFFFF;">Programación</h5>
+                <button onclick="cerrar_modal_cita()" type="button" class="close" aria-label="Close" style="outline: none; cursor: pointer; color: #FFFFFF;">
+                    <span>&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                        <div class="row">
+
+                            <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                <div class="form-group">
+                                    <span class="label-form">Fecha seleccionada</span><br />
+                                    <input class="form-control" type="text" id="txtFecha" autocomplete="off" disabled="disabled" />
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6" id="divReasignar">
+                                <div class="form-group">
+                                    <span class="label-form">Fecha reasignar</span><br />
+                                    <input class="form-control" type="date" id="txtFechaReasignar" autocomplete="off" max="2050-12-31" min="2022-08-01" onkeydown="return false" />
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                <div class="form-group">
+                                    <span class="label-form">Hora</span><br />
+                                    <div class="input-group date" id="dtpicker1">
+                                        <input type="text" class="form-control form-hora" id="txtHora" onkeydown="return false;" onchange="validateHhMm(this);" onpaste="validateHhMm(this);" maxlength="8" placeholder="Seleccionar hora" autocomplete="off" />
+                                        <span class="input-group-append input-group-addon">
+                                            <span style="margin: 0 auto; display: flex; " class="input-group-text mdi mdi-clock">
+                                            </span>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                <div class="form-group">
+                                    <span class="label-form">Especialista</span><br />
+                                    <div class="input-group">
+                                        <select class="form-control" id="cboDoctor" onchange="verificar_disponibilidad()">
+                                            <option value="-1">Seleccionar</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                <div class="form-group">
+                                    <table class="table table-responsive" style="display: inline-table;">
+                                        <thead>
+                                            <tr>
+                                                <th class="text-center">Hora</th>
+                                                <th class="text-center">Estado</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="divDisponibilidad"></tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="cerrar_modal_cita()">Volver</button>
+                <button type="button" class="btn btn-primary main_color" onclick="guardar_cita()" id="btnGuardarCita">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <link rel="stylesheet" href="~/assets/css/zabuto.css" />
+    <link rel="stylesheet" href="~/assets/css/datetimepicker.css" />
+
+    <script src="~/basic/zabuto.js?f=@dHoy.ToString("yyyyMMddhhmmss")"></script>
+    <script src="~/basic/moments.js?f=@dHoy.ToString("yyyyMMddhhmmss")"></script>
+    <script src="~/basic/datetimepicker.js?f=@dHoy.ToString("yyyyMMddhhmmss")"></script>
+
+    <script src="~/basic/registro_citas.js?f=@dHoy.ToString("yyyyMMddhhmmss")"></script>
+}

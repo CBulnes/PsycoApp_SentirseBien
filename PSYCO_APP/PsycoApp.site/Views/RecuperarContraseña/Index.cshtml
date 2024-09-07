@@ -1,0 +1,177 @@
+﻿@model string
+@using PsycoApp.utilities; 
+@{
+    Layout = null;
+    var dHoy = DateTime.Now;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Cambiar contraseña - @Helper.GetNombreSite()</title>
+
+    <link rel="stylesheet" type="text/css" href="~/login/vendor/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="~/login/fonts/font-awesome-4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="~/login/fonts/Linearicons-Free-v1.0.0/icon-font.min.css">
+    <link rel="stylesheet" type="text/css" href="~/login/vendor/animate/animate.css">
+    <link rel="stylesheet" type="text/css" href="~/login/vendor/css-hamburgers/hamburgers.min.css">
+    <link rel="stylesheet" type="text/css" href="~/login/vendor/animsition/css/animsition.min.css">
+    <link rel="stylesheet" type="text/css" href="~/login/vendor/select2/select2.min.css">
+    <link rel="stylesheet" type="text/css" href="~/login/vendor/daterangepicker/daterangepicker.css">
+    <link rel="stylesheet" type="text/css" href="~/login/css/util.css">
+    <link rel="stylesheet" type="text/css" href="~/login/css/main.css?f=@dHoy.ToString("yyyyMMddhhmmss")">
+    <link rel="stylesheet" type="text/css" href="~/basic/cust_styles.css?f=@dHoy.ToString("yyyyMMddhhmmss")">
+
+    <link href="~/assets/plugins/sweetalert/sweetalert.css" rel="stylesheet" type="text/css">
+
+    <style>
+        .bg {
+            position: absolute;
+            z-index: -1;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            /*background: url('https://images.freeimages.com/images/large-previews/01a/technology-background-1632715.jpg') center center;*/
+            opacity: .4;
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="preloader hide-element">
+        <div style="display: grid; place-items: center; height: 100%;">
+            <img src="~/images/loading.gif" />
+        </div>
+    </div>
+
+    <div class="limiter">
+        <div class="container-login100" style="position: relative; z-index: 1;">
+            <div class="bg"></div>
+            <div class="wrap-login100 p-l-55 p-r-55 p-t-65 p-b-50">
+                <form class="login100-form validate-form">
+                    <span class="login100-form-title p-b-33">
+                        CAMBIAR CONTRASEÑA
+                    </span>
+
+                    <div class="wrap-input100 rs1 validate-input" data-validate="Ingresa tu email">
+                        <input class="input100" type="email" name="email" placeholder="Email" id="txtEmail" autocomplete="off" />
+                        <span class="focus-input100-1"></span>
+                        <span class="focus-input100-2"></span>
+                    </div>
+                    <br />
+                    <div class="wrap-input100 rs1 validate-input" data-validate="Ingresa tu contraseña actual">
+                        <input class="input100" type="password" name="password" placeholder="Contraseña actual" id="txtPassword" autocomplete="off" />
+                        <span class="focus-input100-1"></span>
+                        <span class="focus-input100-2"></span>
+                    </div>
+                    <br />
+                    <div class="wrap-input100 rs1 validate-input" data-validate="Ingresa tu nueva contraseña">
+                        <input class="input100" type="password" name="password" placeholder="Nueva contraseña" id="txtNuevaPassword" autocomplete="off" />
+                        <span class="focus-input100-1"></span>
+                        <span class="focus-input100-2"></span>
+                    </div>
+                    <br />
+                    <div class="wrap-input100 rs1 validate-input" data-validate="Repite tu nueva contraseña">
+                        <input class="input100" type="password" name="password" placeholder="Repetir nueva contraseña" id="txtNuevaPassword2" autocomplete="off" />
+                        <span class="focus-input100-1"></span>
+                        <span class="focus-input100-2"></span>
+                    </div>
+                    <br />
+                    <div class="wrap-input100 rs1 validate-input hide-element" id="div_requisitos">
+                        <span class="focus-input100-1 req-pass req-pass-er" id="spnIguales">Las nueva contraseña no coincide</span>
+                        <span class="focus-input100-1 req-pass req-pass-er" id="spnMayusc">La nueva contraseña debe contener mayúsculas</span>
+                        <span class="focus-input100-1 req-pass req-pass-er" id="spnMinusc">La nueva contraseña debe contener minúsculas</span>
+                        <span class="focus-input100-1 req-pass req-pass-er" id="spnNumeros">La nueva contraseña debe contener números</span>
+                        <span class="focus-input100-1 req-pass req-pass-er" id="spnEspeciales">La nueva contraseña debe contener caracteres especiales</span>
+                    </div>
+
+                    <div class="container-login100-form-btn m-t-20">
+                        <button onclick="validar_registro()" class="login100-form-btn text-uppercase waves-effect waves-light" type="button" id="btn_ing" style="background-color: #ff6060 !important; font-weight: bold;">
+                            ACEPTAR
+                        </button>
+                    </div>
+                    <div class="form-group m-b-0">
+                        <div class="col-sm-12 text-center">
+                            <br />
+                            <p>Para iniciar sesión<a href="#" onclick="redireccionar('Login')" class="text-info m-l-5" style="color: #565656 !important;"><b>INGRESA AQUÍ</b></a></p>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        var ruta = '@Model';
+    </script>
+
+    <script src="~/assets/plugins/jquery/jquery.min.js"></script>
+    <!-- Bootstrap tether Core JavaScript -->
+    <script src="~/assets/plugins/bootstrap/js/popper.min.js"></script>
+    <script src="~/assets/plugins/bootstrap/js/bootstrap.min.js"></script>
+    <!-- slimscrollbar scrollbar JavaScript -->
+    <script src="~/assets/js/jquery.slimscroll.js"></script>
+    <!--Wave Effects -->
+    <script src="~/assets/js/waves.js"></script>
+    <!--Menu sidebar -->
+    <script src="~/assets/js/sidebarmenu.js"></script>
+    <!--stickey kit -->
+    <script src="~/assets/plugins/sticky-kit-master/dist/sticky-kit.min.js"></script>
+    <script src="~/assets/plugins/sparkline/jquery.sparkline.min.js"></script>
+    <!--Custom JavaScript -->
+    <script src="~/assets/js/custom.min.js"></script>
+    <!-- ============================================================== -->
+    <!-- Style switcher -->
+    <!-- ============================================================== -->
+    <script src="~/assets/plugins/styleswitcher/jQuery.style.switcher.js"></script>
+
+    <script src="~/basic/recuperar.js?f=@dHoy.ToString("yyyyMMddhhmmss")"></script>
+
+    <script src="~/assets/plugins/sweetalert/sweetalert.min.js"></script>
+
+    <script type="text/javascript">
+
+        function alerta(text, type) {
+            !function ($) {
+                "use strict";
+                var SweetAlert = function () { };
+
+                SweetAlert.prototype.init = function () {
+                    //Auto Close Timer
+                    //$('#sa-close').click(function () {
+                    swal({
+                        title: "Auto close alert!",
+                        type: type,
+                        text: text,
+                        timer: 2000,
+                        showConfirmButton: false,
+                        allowEscapeKey: false
+                    });
+                    //});
+                },
+                    //init
+                    $.SweetAlert = new SweetAlert, $.SweetAlert.Constructor = SweetAlert
+            }(window.jQuery),
+
+                //initializing
+                function ($) {
+                    "use strict";
+                    $.SweetAlert.init()
+                }(window.jQuery);
+        }
+    </script>
+</body>
+
+</html>

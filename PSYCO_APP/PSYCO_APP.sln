@@ -1,0 +1,55 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30320.27
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PsycoApp.site", "PsycoApp.site\PsycoApp.site.csproj", "{F14AB58C-BDF3-4D5E-A080-17EEAD985429}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PsycoApp.api", "PsycoApp.api\PsycoApp.api.csproj", "{F6934FF2-1B29-4138-9BEF-44CF80CDD6BA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PsycoApp.entities", "PsycoApp.Entities\PsycoApp.entities.csproj", "{ECC9DED5-2FFA-43A2-B04F-357AC02A84C8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PsycoApp.utilities", "PsycoApp.utilities\PsycoApp.utilities.csproj", "{DFA8A69C-B274-44F0-A41A-CDB34616A4CE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PsycoApp.DA", "PsycoApp.DA\PsycoApp.DA.csproj", "{33B55324-46DC-4BFD-BAEC-3DBAB369B1A3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PsycoApp.BL", "PsycoApp.BL\PsycoApp.BL.csproj", "{E7902EC5-EE6E-47C9-9027-C9E1F97A3DFD}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F14AB58C-BDF3-4D5E-A080-17EEAD985429}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F14AB58C-BDF3-4D5E-A080-17EEAD985429}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F14AB58C-BDF3-4D5E-A080-17EEAD985429}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F14AB58C-BDF3-4D5E-A080-17EEAD985429}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F6934FF2-1B29-4138-9BEF-44CF80CDD6BA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F6934FF2-1B29-4138-9BEF-44CF80CDD6BA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F6934FF2-1B29-4138-9BEF-44CF80CDD6BA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F6934FF2-1B29-4138-9BEF-44CF80CDD6BA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ECC9DED5-2FFA-43A2-B04F-357AC02A84C8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ECC9DED5-2FFA-43A2-B04F-357AC02A84C8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ECC9DED5-2FFA-43A2-B04F-357AC02A84C8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ECC9DED5-2FFA-43A2-B04F-357AC02A84C8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DFA8A69C-B274-44F0-A41A-CDB34616A4CE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DFA8A69C-B274-44F0-A41A-CDB34616A4CE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DFA8A69C-B274-44F0-A41A-CDB34616A4CE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DFA8A69C-B274-44F0-A41A-CDB34616A4CE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{33B55324-46DC-4BFD-BAEC-3DBAB369B1A3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{33B55324-46DC-4BFD-BAEC-3DBAB369B1A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{33B55324-46DC-4BFD-BAEC-3DBAB369B1A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{33B55324-46DC-4BFD-BAEC-3DBAB369B1A3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E7902EC5-EE6E-47C9-9027-C9E1F97A3DFD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E7902EC5-EE6E-47C9-9027-C9E1F97A3DFD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E7902EC5-EE6E-47C9-9027-C9E1F97A3DFD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E7902EC5-EE6E-47C9-9027-C9E1F97A3DFD}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {2D3D6CED-C516-4E90-95E1-CFB9AF11E510}
+	EndGlobalSection
+EndGlobal

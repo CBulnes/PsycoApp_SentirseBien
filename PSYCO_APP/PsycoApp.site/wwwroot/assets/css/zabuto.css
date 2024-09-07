@@ -1,0 +1,293 @@
+﻿/*calendario*/
+.calendar-month-navigation {
+    text-align: center;
+}
+
+.calendar-month-header > th {
+    text-align: center !important;
+    color: #004A92;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.calendar-dow-header > th {
+    font-size: 11px;
+    text-align: right;
+    color: #868686 !important;
+    width: 14.2% !important;
+}
+
+.calendar-dow > td {
+    font-size: 15px;
+    border: 2px solid #f3f3f3;
+    text-align: right;
+    color: #333333 !important;
+    font-weight: bold;
+    width: 14.2% !important;
+    height: 120px;
+}
+
+.info_marcacion {
+    text-align: left;
+    font-family: Quicksand;
+}
+
+.span_in_out {
+    font-size: 12px;
+    color: #9b9b9b;
+    margin-bottom: -25px;
+    display: block;
+    margin-top: 8px;
+}
+
+.span_in_out_tardanza {
+    font-size: 12px;
+    color: #F94199;
+    margin-bottom: -25px;
+    display: block;
+    margin-top: 8px;
+}
+
+.span_in_out.span_sin_marcacion {
+    text-align: center !important;
+}
+
+.span_hour {
+    font-size: 12px;
+    color: #444444;
+    display: block;
+}
+
+.span_hour_tardanza {
+    font-size: 12px;
+    color: #F94199;
+    display: block;
+}
+
+.span_falta {
+    color: #FF6877;
+    background-color: #FFEFF0;
+    /*width: 50%;
+    display: block;
+    text-align: center;*/
+    margin: 0 auto;
+    margin-top: 10px;
+    font-size: 12px;
+}
+
+.span_vacaciones {
+    color: #505449;
+    background-color: #ebe6df;
+    border: 1px solid #000;
+    width: 50%;
+    display: block;
+    text-align: center;
+    margin: 0 auto;
+    margin-top: 10px;
+    font-size: 12px;
+}
+
+.info_papeleta {
+    text-align: left;
+    font-family: Quicksand;
+    width: 100%;
+    background-color: #caefef;
+    display: inline-grid;
+    padding-top: 8px;
+    padding-bottom: 8px;
+}
+
+.span_papeleta {
+    color: #FFF;
+    background-color: #74c4d1;
+    width: 90%;
+    display: block;
+    text-align: center;
+    margin: 0 auto;
+    font-size: 12px;
+}
+
+.span_papeleta2 {
+    color: #44a8b9;
+    background-color: transparent;
+    width: 90%;
+    display: block;
+    text-align: center;
+    margin: 0 auto;
+    font-size: 12px;
+    margin-top: 5px;
+}
+
+.span_compensacion {
+    color: #4753dd;
+    background-color: #e3e1ff;
+    width: 75%;
+    display: block;
+    text-align: center;
+    margin: 0 auto;
+    margin-top: 10px;
+    font-size: 12px;
+}
+
+.span_feriado {
+    color: #ff3434;
+    /*background-color: #ffbebe;*/
+    width: 50%;
+    display: block;
+    text-align: center;
+    margin: 0 auto;
+    margin-top: 4px;
+    font-size: 14px;
+}
+
+.class_feriado {
+    color: red;
+}
+
+#cbo_seleccion_mes, #txt_seleccion_mes {
+    color: #004A92;
+    font-size: 18px;
+    font-weight: bold;
+    border: 0px;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.nav_mes_anterior, .nav_mes_siguiente {
+    /*display: none;*/
+}
+
+.btn-nav-record {
+    background-color: #FFF;
+    border: 2px solid #004A92;
+    float: left;
+    font-size: 12px;
+    color: #004A92;
+    font-weight: bold;
+    max-width: 100%;
+    cursor: pointer !important;
+}
+
+.btn-record-sel {
+    background-color: #004A92 !important;
+    color: #FFF !important;
+}
+
+.btn-nav-semana {
+    border-radius: .25rem 0rem 0rem .25rem !important;
+}
+
+.btn-nav-mes {
+    border-radius: 0rem .25rem .25rem 0rem !important;
+}
+
+
+#div_dias_semana {
+    margin: 10px;
+    border-radius: 10px;
+}
+
+.div_nombre_dia {
+    min-height: 80px;
+    background-color: #FFF;
+    color: #004A92;
+    font-size: 16px;
+    font-weight: bold;
+    border: 2px solid #f3f3f3;
+}
+
+.div_contenido_dia {
+    min-height: 80px;
+    background-color: #FFF;
+    border: 2px solid #f3f3f3;
+}
+
+.span_nombre_dia {
+    margin-top: 30px;
+    display: block;
+    margin-left: 10px;
+}
+
+.nombre_mes_detalle {
+    font-weight: normal !important;
+    font-size: 12px !important;
+}
+
+.dia_inhabilitado {
+    background-color: #f5f5f5 !important;
+    color: #9b9b9b !important;
+    cursor: default !important;
+}
+
+.dia_feriado {
+    background-color: #ffbebe !important;
+    color: #ff3434 !important;
+}
+
+.current_day_event {
+    background-color: #e2ffe2 !important;
+}
+
+@media (min-width: 576px) {
+    .modal-dialog-custom {
+        max-width: 620px !important;
+    }
+}
+
+.btnRecord {
+    background-color: #F59D24;
+    color: #FFF;
+    width: 100%;
+}
+
+.btnPapeleta {
+    background-color: #F59D24;
+    color: #FFF;
+    width: 100%;
+}
+
+.btnVacaciones {
+    background-color: #E71D73;
+    color: #FFF;
+    width: 100%;
+}
+
+.border-4 {
+    border-width: 4px !important;
+}
+
+.border-l-4 {
+    border-left-width: 4px !important;
+}
+
+.border-color-l-4 {
+    border-left-color: #28AECE !important;
+}
+
+.div-vertical-center {
+    display: flex;
+    align-items: center;
+}
+
+.txt-search {
+    border-right: 0px !important;
+}
+
+.form-control-icon {
+    width: 30px;
+    background: url(../assets/img/comun/icono-busqueda-2.png) !important;
+    border: 1px solid #c6c6c6;
+    background-color: #FFF;
+    border-left: 0px;
+    margin-left: -1px;
+    border-radius: 0rem .25rem .25rem 0rem;
+    cursor: pointer;
+}
+
+.zabuto_calendar {
+    background: #FFFFFF;
+}
+
+.day_click_event {
+    cursor: pointer;
+}

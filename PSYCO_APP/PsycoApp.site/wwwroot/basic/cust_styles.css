@@ -1,0 +1,136 @@
+﻿.hide-element {
+    display: none !important;
+}
+
+/*.preloader {
+    position: relative;
+    margin: 0 auto;
+    width: 100px;
+}*/
+
+.preloader {
+    width: 100%;
+    height: 100%;
+    top: 0px;
+    position: fixed;
+    z-index: 99999;
+    background: #fff;
+    opacity: 0.7;
+}
+
+    /*.preloader .cssload-speeding-wheel {
+        position: absolute;
+        top: calc(50% - 3.5px);
+        left: calc(50% - 3.5px);
+    }
+
+    .preloader:before {
+        content: '';
+        display: block;
+        padding-top: 100%;
+    }*/
+
+.circular {
+    animation: rotate 2s linear infinite;
+    height: 50px;
+    transform-origin: center center;
+    width: 50px;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+}
+
+.path {
+    stroke-dasharray: 1, 200;
+    stroke-dashoffset: 0;
+    animation: dash 1.5s ease-in-out infinite, color 6s ease-in-out infinite;
+    stroke-linecap: round;
+}
+
+#btnCloseSession01:hover {
+    background: #ff6060;
+    color: #FFFFFF;
+    /*color: #009efb;*/
+    text-decoration: none;
+}
+
+#btnCloseSession01 {
+    background: transparent;
+    padding: 9px 15px;
+    display: block;
+    color: #99abb4;
+    width: 100%;
+    text-align: right;
+    border: 0px;
+    margin: 6px;
+    margin-left: 0px;
+    cursor: pointer;
+    outline: 0px;
+}
+
+#btnCloseSession02:hover, #btnCloseSession02:focus {
+    color: #009efb !important;
+}
+
+#btnCloseSession02 {
+    padding: 15px;
+    width: 33.333337%;
+    float: left;
+    text-align: center;
+    font-size: 18px;
+    color: #455a64;
+    background-color: transparent;
+    cursor: pointer;
+    outline: 0px;
+    border: 0px;
+}
+
+
+
+.floating-wpp .floating-wpp-button {
+    width: 60px !important;
+    height: 60px !important;
+}
+
+#ChatButton, #WAButton {
+    z-index: 100;
+}
+
+.slimScrollBar{
+    display: none !important;
+}
+
+.bd-example {
+    border: solid transparent !important;
+}
+
+.carousel-inner img {
+    width: 100%;
+    height: 90%;
+}
+
+.req-pass {
+    position: inherit !important;
+    font-size: 12px;
+    padding: 2px 5px 2px 5px;
+}
+
+.req-pass-ok {
+    color: #16d572 !important;
+}
+
+.req-pass-er {
+    color: #ff0000;
+}
+
+.floating-wpp-button {
+    border-radius: 20% !important;
+    box-shadow: 3px 3px 0px rgb(60 60 60 / 50%) !important;
+}
+
+.text-tbl {
+    font-size: 12px;
+}
