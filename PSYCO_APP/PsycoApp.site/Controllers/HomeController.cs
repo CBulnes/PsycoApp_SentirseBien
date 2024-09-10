@@ -220,12 +220,14 @@ namespace PsycoApp.site.Controllers
 
                 string tipo_usuario = HttpContext.Session.GetString("tipousuario");
 
-                menu.Add(new Menu { nombre_opcion = "Inicio", ruta_opcion = "Home" });
+                menu.Add(new Menu { nombre_opcion = "Inicio", ruta_opcion = "/Home" });
 
                 if (tipo_usuario == "ADMIN" || tipo_usuario == "ADMINISTRADOR")
                 {
                     //menu.Add(new Menu { nombre_opcion = "Mantenimiento", ruta_opcion = "Mantenimiento" });
-                    menu.Add(new Menu { nombre_opcion = "Reportes", ruta_opcion = "Reportes" });
+                    menu.Add(new Menu { nombre_opcion = "Reportes", ruta_opcion = "/Reportes" });
+                    menu.Add(new Menu { nombre_opcion = "Clientes", ruta_opcion = "/Mantenimiento/Cliente" });
+                    menu.Add(new Menu { nombre_opcion = "Pacientes", ruta_opcion = "/Mantenimiento/Paciente" });
                 }
                 else if (tipo_usuario == "CLIENTE")
                 {

@@ -1,0 +1,194 @@
+﻿@model dynamic
+@{
+    ViewData["Title"] = "Paciente";
+    var dHoy = DateTime.Now;
+}
+
+<div class="bd-example">
+    <div class="row">
+
+        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+            <b style="color: #004A92; font-size: 20px;">Pacientes</b>
+        </div>
+
+        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">&nbsp;</div>
+
+        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+
+            <div class="row" style="background-color: #FFFFFF;">
+                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">&nbsp;</div>
+
+                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                    @*style="padding-left: 0px; padding-right: 0px;">*@
+                    <div class="row">
+                        <div class="col-6 col-sm-6 col-md-4 col-lg-4 col-xl-4">
+                            <div class="form-group">
+                                <span class="label-form">Fecha</span><br />
+                                <input id="txtFecha" class="form-control" type="date" max="2050-12-31" />
+                            </div>
+                        </div>
+                        <div class="col-6 col-sm-6 col-md-4 col-lg-4 col-xl-4">
+                            <div class="form-group">
+                                <span class="label-form">Estado</span><br />
+                                <select class="form-control cbo-search" id="cboEstado">
+                                    <option value="-1">Seleccionar</option>
+                                    <option value="1">Registrado</option>
+                                    <option value="2">Atendido</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-6 col-sm-6 col-md-4 col-lg-4 col-xl-4">
+                            <div class="form-group">
+                                <span class="label-form">&nbsp;</span><br />
+                                <button type="button" class="btn btn-doc second_color" style="color: #FFF; font-size: 12px; width: 100%;" onclick="cargar_historial()">
+                                    <i class="fa fa-search"></i>&nbsp;Buscar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="row">
+                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">&nbsp;</div>
+            </div>
+
+            <!-- contenido -->
+            <div class="row" style="background-color: #FFFFFF;">
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12" style="padding-left: 0px; padding-right: 0px; width: 100%!important;">
+
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th class="text-center" style="width: 80px;">#</th>
+                                <th class="text-center">
+                                    Paciente
+                                </th>
+                                <th class="text-center">
+                                    Fecha
+                                </th>
+                                <th class="text-center">
+                                    Hora
+                                </th>
+                                <th class="text-center">
+                                    Estado
+                                </th>
+                                <th class="text-center">
+                                    Acción
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody id="bdCitas">
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div id="mdl_historial" class="modal" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="true">
+    <div class="modal-dialog modal-lg" role="document" style="height: 90%; display: grid; place-items: center; width: 100%;">
+        <div class="modal-content" style="width: 100%;">
+            <div class="modal-header second_color">
+                <h5 class="modal-title" style="color: #FFFFFF;">Historial del paciente</h5>
+                <button onclick="cerrar_modal_historial()" type="button" class="close" aria-label="Close" style="outline: none; cursor: pointer; color: #FFFFFF;">
+                    <span>&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                        <div class="row">
+
+                            <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th class="text-center" style="width: 80px;">#</th>
+                                            <th class="text-center">
+                                                Nota
+                                            </th>
+                                            <th class="text-center">
+                                                Recomendaciones
+                                            </th>
+                                            <th class="text-center">
+                                                Medicinas
+                                            </th>
+                                            <th class="text-center">
+                                                Doctor
+                                            </th>
+                                            <th class="text-center">
+                                                Fecha
+                                            </th>
+                                            <th class="text-center">
+                                                Hora
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="bdHistorial">
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12" id="divDatos">
+                                <div class="row">
+                                    <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6">
+                                        <div class="form-group">
+                                            <span class="label-form">Nota</span><br />
+                                            <textarea class="form-control" id="txtNota" placeholder="Ingresar nota" maxlength="500"
+                                                      style="resize: none; height: auto !important;" rows="3"></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6">
+                                        <div class="form-group">
+                                            <span class="label-form">Recomendación</span><br />
+                                            <textarea class="form-control" id="txtRecomendacion" placeholder="Ingresar recomendaciones" maxlength="500"
+                                                      style="resize: none; height: auto !important;" rows="3"></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6">
+                                        <div class="form-group">
+                                            <span class="label-form">Medicinas</span><br />
+                                            <textarea class="form-control" id="txtMedicina" placeholder="Ingresar medicinas" maxlength="500"
+                                                      style="resize: none; height: auto !important;" rows="3"></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6">
+                                        <div class="form-group">
+                                            <span class="label-form">Test asignados</span><br />
+
+                                            <span id="spnSinCuestionarios" class="label-form">Sin cuestionarios registrados<br /></span>
+                                            <a id="spnCuestionario01" href="~/articulos/Resultado_cuestionario01.pdf" download class="label-form">Cuestionario #1<br /></a>
+                                            <a id="spnCuestionario02" href="~/articulos/Resultado_cuestionario02.pdf" download class="label-form">Cuestionario #2<br /></a>
+                                            <a id="spnCuestionario03" href="~/articulos/Resultado_cuestionario03.pdf" download class="label-form">Cuestionario #3<br /></a>
+                                            <a id="spnCuestionario04" href="~/articulos/Resultado_cuestionario04.pdf" download class="label-form">Cuestionario #4<br /></a>
+                                            @*<button type="button" class="btn btn-doc main_color" style="color: #FFF; font-size: 12px; width: 100%;">
+                                                <i class="fa fa-search"></i>&nbsp;Test asignados
+                                            </button>*@
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="cerrar_modal_historial()">Volver</button>
+                <button type="button" class="btn btn-primary main_color" onclick="guardar_cita()" id="btnGuardarCita">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script src="~/basic/moments.js?f=@dHoy.ToString("yyyyMMddhhmmss")"></script>
+    <script src="~/basic/datetimepicker.js?f=@dHoy.ToString("yyyyMMddhhmmss")"></script>
+
+    <script src="~/basic/historial_citas.js?f=@dHoy.ToString("yyyyMMddhhmmss")"></script>
+}
