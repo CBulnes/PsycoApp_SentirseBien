@@ -23,8 +23,8 @@
                     <div class="row">
                         <div class="col-6 col-sm-6 col-md-4 col-lg-4 col-xl-4">
                             <div class="form-group">
-                                <span class="label-form">Fecha</span><br />
-                                <input id="txtFecha" class="form-control" type="date" max="2050-12-31" />
+                                <span class="label-form">Fecha de Nacimiento</span><br />
+                                <input id="txtFecha" class="form-control" type="date"  />
                             </div>
                         </div>
                         <div class="col-6 col-sm-6 col-md-4 col-lg-4 col-xl-4">
@@ -46,7 +46,73 @@
                             </div>
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="row">
+                        <div class="col-2 col-sm-6 col-md-4 col-lg-4 col-xl-4">
+                            <div class="form-group">
+                                <span class="label-form">Documento</span><br />
+                                <select class="form-control cbo-search" id="cboEstado">
+                                    <option value="-1">Seleccionar</option>
+                                    <option value="1">DNI</option>
+                                    <option value="2">Carnet Extranjeria</option>
+                                </select>
+                            </div>
+                            </div>
+                            <div class="col-2 col-sm-6 col-md-4 col-lg-4 col-xl-4">
+
+                            <div class="form-group">
+
+                                <input id="txtDNI" class="form-control" type="text" />
+                            </div>
+                        </div>
+                        </div>
+                        </div>
+                        <div class="col-6 col-sm-6 col-md-4 col-lg-4 col-xl-4">
+                            <div class="form-group">
+                                <span class="label-form">Nombres y Apellidos Completos</span><br />
+                                <input id="txtNombre" class="form-control" type="text" />
+                            </div>
+                        </div>
+                        <div class="col-6 col-sm-6 col-md-4 col-lg-4 col-xl-4">
+                            <div class="form-group">
+                                <span class="label-form">Telefono</span><br />
+                                <input id="txtTelefono" class="form-control" type="text" />
+                            </div>
+                        </div>
+                    </div>
                 </div>
+                <div class="row">
+                    <div class="col-6 col-sm-6 col-md-4 col-lg-4 col-xl-4">
+                        <div class="form-group">
+                            <span class="label-form">Estadol Civil</span><br />
+                            <select class="form-control cbo-search" id="cboEstado">
+                                <option value="-1">Seleccionar</option>
+                                <option value="1">Soltero</option>
+                                <option value="2">Casado</option>
+                                <option value="3">Divorciado</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-6 col-sm-6 col-md-4 col-lg-4 col-xl-4">
+                        <div class="form-group">
+                            <div class="form-group">
+                                <span class="label-form">Sexo</span><br />
+                                <select class="form-control cbo-search" id="cboEstado">
+                                    <option value="-1">Seleccionar</option>
+                                    <option value="1">Masculino</option>
+                                    <option value="2">Femenino</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6 col-sm-6 col-md-4 col-lg-4 col-xl-4">
+                        <div class="form-group">
+                            <span class="label-form">Telefono</span><br />
+                            <input id="txtTelefono" class="form-control" type="text" />
+                        </div>
+                    </div>
+                </div>
+            </div>
 
             </div>
 
