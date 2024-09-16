@@ -292,7 +292,7 @@
                                             </div>
                                             <div class="u-text">
                                                 <h4 id="lbl_nomApe2" runat="server">¡Hola!</h4>
-                                                <p class="text-muted" id="lbl_TipoUsuario" runat="server">@Model.nombres @Model.apellidos</p>
+                                                <p class="text-muted" id="lbl_TipoUsuario" runat="server">@Model.DynamicData.nombres @Model.DynamicData.apellidos</p>
                                             </div>
                                         </div>
                                     </li>
@@ -448,7 +448,7 @@
                     </button>
                 </div>
                 <div id="body_mdl_bienvenida" class="modal-body" style="background-color: #FFF;">
-                    <h3>Bienvenid&#64; @Model.nombres!!</h3>
+                    <h3>Bienvenid&#64; @Model.DynamicData.nombres!!</h3>
                     <p>Yo soy <b>Watson</b> y soy el encargado de resolver cualquier duda que tengas.</p>
                     <p>¿Hay algo en lo que pueda ayudarte?</p>
                 </div>
@@ -586,26 +586,26 @@
     @*<script src="~/assets/plugins/styleswitcher/jQuery.style.switcher.js"></script>*@
 
     <script type="text/javascript">
-        var ruta = '@Model.path';
-        var call_center = '@Model.call_center';
-        var whatsapp = '@Model.whatsapp';
-        var id_usuario = '@Model.id_usuario';
-        var id_tipousuario = '@Model.id_tipousuario';
-        var tipo_documento = '@Model.tipo_documento';
-        var num_documento = '@Model.num_documento';
+        var ruta = '@Model.DynamicData.path';
+        var call_center = '@Model.DynamicData.call_center';
+        var whatsapp = '@Model.DynamicData.whatsapp';
+        var id_usuario = '@Model.DynamicData.id_usuario';
+        var id_tipousuario = '@Model.DynamicData.id_tipousuario';
+        var tipo_documento = '@Model.DynamicData.tipo_documento';
+        var num_documento = '@Model.DynamicData.num_documento';
     </script>
 
     <script type="text/javascript" src="~/basic/general.js?f=@dHoy.ToString("yyyyMMddhhmmss")"></script>
     <script type="text/javascript" src="~/basic/check_timeout_session.js?f=@dHoy.ToString("yyyyMMddhhmmss")"></script>
     <script type="text/javascript" src="~/basic/layout.js?f=@dHoy.ToString("yyyyMMddhhmmss")"></script>
     @{
-        if (Model.id_tipousuario == 1) //admin
+        if (Model.DynamicData.id_tipousuario == 1) //admin
         {
-            if (Model.vista == "HOME")
+            if (Model.DynamicData.vista == "HOME")
             {
 
             }
-            else if (Model.vista == "REPORTE")
+            else if (Model.DynamicData.vista == "REPORTE")
             {
                 <script src="~/assets/plugins/flot/excanvas.js"></script>
                 <script src="~/assets/plugins/flot/jquery.flot.js"></script>
@@ -627,7 +627,7 @@
             <script type="text/javascript" src="~/basic/call.js?f=@dHoy.ToString("yyyyMMddhhmmss")"></script>
             <script type="text/javascript" src="~/basic/whatsapp.js?f=@dHoy.ToString("yyyyMMddhhmmss")"></script>
             <script type="text/javascript" src="~/basic/chat.js?f=@dHoy.ToString("yyyyMMddhhmmss")"></script>
-            if (Model.vista == "ATENCION")
+            if (Model.DynamicData.vista == "ATENCION")
             {
                 <script type="text/javascript" src="~/basic/atencion.js?f=@dHoy.ToString("yyyyMMddhhmmss")"></script>
             }

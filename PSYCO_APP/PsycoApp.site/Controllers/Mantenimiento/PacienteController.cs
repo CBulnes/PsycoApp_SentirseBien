@@ -2,27 +2,42 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using PsycoApp.site.Models;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using PsycoApp.entities;
 using PsycoApp.utilities;
 using Microsoft.AspNetCore.Http;
+using System.Net.Http;
+using PsycoApp.site.Models;
 
 namespace PsycoApp.site.Controllers.Mantenimiento
 {
     public class PacienteController : Controller
     {
-        //private string url_usuario = Helper.GetUrlApi() + "/api/usuario";
-        //private string url = "";
-
-        //dynamic obj = new System.Dynamic.ExpandoObject();
+        private readonly string apiUrl = Helper.GetUrlApi()+ "/api/paciente"; // URL base de la API
 
         [Route("Mantenimiento/Paciente")]
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
             if (!string.IsNullOrEmpty(HttpContext.Session.GetString("nombres") as string))
             {
+                string url = $"{apiUrl}/listar"; // Supongamo que esta es la URL de la API para obtener la lista de pacientes.
+                var pacientes = await GetFromApiAsync<List<PsycoApp.entities.Paciente>>(url);
+                var pacientesViewModel = pacientes.Select(p => new PsycoApp.site.Models.Paciente
+                {
+                    Id = p.Id,
+                    Nombre = p.Nombre,
+                    DocumentoNumero= p.DocumentoNumero,
+                    Estado = p.Estado,
+                    DocumentoTipo = p.DocumentoTipo,
+                    EstadoCivil = p.EstadoCivil,
+                    FechaNacimiento = p.FechaNacimiento,
+                    Sexo = p.Sexo,
+                    Telefono = p.Telefono
+
+                    
+                }).ToList();
+
                 dynamic obj = new System.Dynamic.ExpandoObject();
                 string path = $"{this.Request.Scheme}://{this.Request.Host}{this.Request.PathBase}";
                 obj.path = path;
@@ -35,22 +50,103 @@ namespace PsycoApp.site.Controllers.Mantenimiento
                 obj.id_tipousuario = HttpContext.Session.GetInt32("id_tipousuario");
                 obj.tipo_documento = HttpContext.Session.GetString("tipo_documento");
                 obj.num_documento = HttpContext.Session.GetString("num_documento");
+                obj.vista = "HOME";
+                obj.call_center_invitado = Helper.GetCallCenterInvitado();
 
-                obj.vista = "PACIENTE";
-
-                if (obj.id_tipousuario == 1) //admin
+                var viewModelContainer = new ViewModelContainer<IEnumerable<PsycoApp.site.Models.Paciente>>
                 {
-                    return View("~/Views/Mantenimiento/Paciente/Index.cshtml", obj);
-                }
-                else //cliente
-                {
-                    return RedirectToAction("Index", "Home");
-                }
+                    Model = pacientesViewModel, // pacientesViewModel es una lista, pero como IEnumerable es más general, no necesita conversión explícita
+                    DynamicData = obj
+                };
+                return View("~/Views/Mantenimiento/Paciente/Index.cshtml", viewModelContainer);
             }
             else
             {
                 return RedirectToAction("Index", "Login");
             }
+        }
+
+        // POST: Paciente/Buscar
+        [HttpPost]
+        public async Task<IActionResult> Buscar(string nombre)
+        {
+            string url = $"{apiUrl}/buscar_paciente?nombre={nombre}";
+            var pacientes = await GetFromApiAsync<List<entities.Paciente>>(url);
+            return Json(pacientes);
+        }
+        [Route("Mantenimiento/Paciente/Agregar")]
+        // POST: Paciente/Agregar
+        [HttpPost]
+        public async Task<IActionResult> Agregar([FromBody] PsycoApp.site.Models.Paciente paciente)
+        {
+            if (ModelState.IsValid)
+            {
+                string url = $"{apiUrl}/agregar_paciente";
+                var response = await PostToApiAsync(url, paciente);
+                if (response.IsSuccessStatusCode)
+                {
+                    return Ok(new { message = "Paciente guardado correctamente" });
+                }
+                return StatusCode((int)response.StatusCode, "Error al agregar paciente.");
+            }
+            return BadRequest("Modelo no válido.");
+        }
+
+        // POST: Paciente/Editar
+        [HttpPost]
+        public async Task<IActionResult> Editar([FromBody] entities.Paciente paciente)
+        {
+            if (ModelState.IsValid)
+            {
+                string url = $"{apiUrl}/editar_paciente/{paciente.Id}";
+                var response = await PutToApiAsync(url, paciente);
+                if (response.IsSuccessStatusCode)
+                {
+                    return Ok(new { message = "Paciente editado correctamente" });
+                }
+                return StatusCode((int)response.StatusCode, "Error al editar paciente.");
+            }
+            return BadRequest("Modelo no válido.");
+        }
+
+        // POST: Paciente/Eliminar
+        [HttpPost]
+        public async Task<IActionResult> Eliminar(int id)
+        {
+            string url = $"{apiUrl}/eliminar_paciente/{id}";
+            var response = await DeleteFromApiAsync(url);
+            if (response.IsSuccessStatusCode)
+            {
+                return Ok(new { message = "Paciente eliminado correctamente" });
+            }
+            return StatusCode((int)response.StatusCode, "Error al eliminar paciente.");
+        }
+
+        private async Task<T> GetFromApiAsync<T>(string url)
+        {
+            using var client = new HttpClient();
+            var response = await client.GetStringAsync(url);
+            return JsonConvert.DeserializeObject<T>(response);
+        }
+
+        private async Task<HttpResponseMessage> PostToApiAsync<T>(string url, T data)
+        {
+            using var client = new HttpClient();
+            var content = new StringContent(JsonConvert.SerializeObject(data), System.Text.Encoding.UTF8, "application/json");
+            return await client.PostAsync(url, content);
+        }
+
+        private async Task<HttpResponseMessage> PutToApiAsync<T>(string url, T data)
+        {
+            using var client = new HttpClient();
+            var content = new StringContent(JsonConvert.SerializeObject(data), System.Text.Encoding.UTF8, "application/json");
+            return await client.PutAsync(url, content);
+        }
+
+        private async Task<HttpResponseMessage> DeleteFromApiAsync(string url)
+        {
+            using var client = new HttpClient();
+            return await client.DeleteAsync(url);
         }
     }
 }

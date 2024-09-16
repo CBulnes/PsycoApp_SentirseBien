@@ -1,0 +1,111 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Data.SqlClient;
+using System.Data;
+using System.Text;
+using PsycoApp.entities;
+using PsycoApp.DA.SQLConnector;
+
+namespace PsycoApp.DA
+{
+    public class PacienteDA
+    {
+        private readonly SqlConnection _connection;
+        SqlConnection cn = new SqlConnector().cadConnection_psyco;
+        public PacienteDA()
+        {
+            _connection = cn; // Cambia la cadena de conexión según tu configuración
+        }
+
+        public List<Paciente> ListarPacientes()
+        {
+            var pacientes = new List<Paciente>();
+
+            using (var command = new SqlCommand("sp_listar_pacientes", _connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+
+                _connection.Open();
+
+                using (var reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        pacientes.Add(new Paciente
+                        {
+                            Id = reader.GetInt32(0),
+                            Nombre = reader.GetString(1),
+                            FechaNacimiento = reader.GetDateTime(2),
+                            DocumentoTipo = reader.GetString(3),
+                            DocumentoNumero = reader.GetString(4),
+                            Telefono = reader.GetString(5),
+                            EstadoCivil = reader.GetString(6),
+                            Sexo = reader.GetString(7),
+                            Estado = reader.GetString(8)
+                        });
+                    }
+                }
+
+                _connection.Close();
+            }
+
+            return pacientes;
+        }
+
+        public void AgregarPaciente(Paciente paciente)
+        {
+            using (var command = new SqlCommand("sp_agregar_paciente", _connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+
+                command.Parameters.AddWithValue("@Nombre", paciente.Nombre);
+                command.Parameters.AddWithValue("@FechaNacimiento", paciente.FechaNacimiento);
+                command.Parameters.AddWithValue("@DocumentoTipo", paciente.DocumentoTipo);
+                command.Parameters.AddWithValue("@DocumentoNumero", paciente.DocumentoNumero);
+                command.Parameters.AddWithValue("@Telefono", paciente.Telefono);
+                command.Parameters.AddWithValue("@EstadoCivil", paciente.EstadoCivil);
+                command.Parameters.AddWithValue("@Sexo", paciente.Sexo);
+                command.Parameters.AddWithValue("@Estado", paciente.Estado);
+
+                _connection.Open();
+                command.ExecuteNonQuery();
+                _connection.Close();
+            }
+        }
+
+        public void ActualizarPaciente(Paciente paciente)
+        {
+            using (var command = new SqlCommand("sp_actualizar_paciente", _connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+
+                command.Parameters.AddWithValue("@Id", paciente.Id);
+                command.Parameters.AddWithValue("@Nombre", paciente.Nombre);
+                command.Parameters.AddWithValue("@FechaNacimiento", paciente.FechaNacimiento);
+                command.Parameters.AddWithValue("@DocumentoTipo", paciente.DocumentoTipo);
+                command.Parameters.AddWithValue("@DocumentoNumero", paciente.DocumentoNumero);
+                command.Parameters.AddWithValue("@Telefono", paciente.Telefono);
+                command.Parameters.AddWithValue("@EstadoCivil", paciente.EstadoCivil);
+                command.Parameters.AddWithValue("@Sexo", paciente.Sexo);
+                command.Parameters.AddWithValue("@Estado", paciente.Estado);
+
+                _connection.Open();
+                command.ExecuteNonQuery();
+                _connection.Close();
+            }
+        }
+
+        public void EliminarPaciente(int id)
+        {
+            using (var command = new SqlCommand("sp_eliminar_paciente", _connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.Parameters.AddWithValue("@Id", id);
+
+                _connection.Open();
+                command.ExecuteNonQuery();
+                _connection.Close();
+            }
+        }
+    }
+}

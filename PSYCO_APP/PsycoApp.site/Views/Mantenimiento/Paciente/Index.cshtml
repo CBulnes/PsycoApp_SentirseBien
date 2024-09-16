@@ -1,260 +1,212 @@
-﻿@model dynamic
+﻿@* @model IEnumerable<PsycoApp.site.Models.Paciente> *@
+    @model ViewModelContainer<IEnumerable<PsycoApp.site.Models.Paciente>>
+
 @{
-    ViewData["Title"] = "Paciente";
-    var dHoy = DateTime.Now;
+    var dynamicData = Model.DynamicData;
+    var pacientes = Model.Model;
+    ViewData["Title"] = "Pacientes";
 }
+
 
 <div class="bd-example">
     <div class="row">
-
-        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+        <div class="col-12">
             <b style="color: #004A92; font-size: 20px;">Pacientes</b>
         </div>
 
-        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">&nbsp;</div>
+        <div class="col-12">&nbsp;</div>
 
-        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
-
-            <div class="row" style="background-color: #FFFFFF;">
-                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">&nbsp;</div>
-
-                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                    @*style="padding-left: 0px; padding-right: 0px;">*@
-                    <div class="row">
-                        <div class="col-6 col-sm-6 col-md-4 col-lg-4 col-xl-4">
-                            <div class="form-group">
-                                <span class="label-form">Fecha de Nacimiento</span><br />
-                                <input id="txtFecha" class="form-control" type="date"  />
-                            </div>
-                        </div>
-                        <div class="col-6 col-sm-6 col-md-4 col-lg-4 col-xl-4">
-                            <div class="form-group">
-                                <span class="label-form">Estado</span><br />
-                                <select class="form-control cbo-search" id="cboEstado">
-                                    <option value="-1">Seleccionar</option>
-                                    <option value="1">Registrado</option>
-                                    <option value="2">Atendido</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-6 col-sm-6 col-md-4 col-lg-4 col-xl-4">
-                            <div class="form-group">
-                                <span class="label-form">&nbsp;</span><br />
-                                <button type="button" class="btn btn-doc second_color" style="color: #FFF; font-size: 12px; width: 100%;" onclick="cargar_historial()">
-                                    <i class="fa fa-search"></i>&nbsp;Buscar
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="row">
-                        <div class="col-2 col-sm-6 col-md-4 col-lg-4 col-xl-4">
-                            <div class="form-group">
-                                <span class="label-form">Documento</span><br />
-                                <select class="form-control cbo-search" id="cboEstado">
-                                    <option value="-1">Seleccionar</option>
-                                    <option value="1">DNI</option>
-                                    <option value="2">Carnet Extranjeria</option>
-                                </select>
-                            </div>
-                            </div>
-                            <div class="col-2 col-sm-6 col-md-4 col-lg-4 col-xl-4">
-
-                            <div class="form-group">
-
-                                <input id="txtDNI" class="form-control" type="text" />
-                            </div>
-                        </div>
-                        </div>
-                        </div>
-                        <div class="col-6 col-sm-6 col-md-4 col-lg-4 col-xl-4">
-                            <div class="form-group">
-                                <span class="label-form">Nombres y Apellidos Completos</span><br />
-                                <input id="txtNombre" class="form-control" type="text" />
-                            </div>
-                        </div>
-                        <div class="col-6 col-sm-6 col-md-4 col-lg-4 col-xl-4">
-                            <div class="form-group">
-                                <span class="label-form">Telefono</span><br />
-                                <input id="txtTelefono" class="form-control" type="text" />
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-6 col-sm-6 col-md-4 col-lg-4 col-xl-4">
-                        <div class="form-group">
-                            <span class="label-form">Estadol Civil</span><br />
-                            <select class="form-control cbo-search" id="cboEstado">
-                                <option value="-1">Seleccionar</option>
-                                <option value="1">Soltero</option>
-                                <option value="2">Casado</option>
-                                <option value="3">Divorciado</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-6 col-sm-6 col-md-4 col-lg-4 col-xl-4">
-                        <div class="form-group">
-                            <div class="form-group">
-                                <span class="label-form">Sexo</span><br />
-                                <select class="form-control cbo-search" id="cboEstado">
-                                    <option value="-1">Seleccionar</option>
-                                    <option value="1">Masculino</option>
-                                    <option value="2">Femenino</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-6 col-sm-6 col-md-4 col-lg-4 col-xl-4">
-                        <div class="form-group">
-                            <span class="label-form">Telefono</span><br />
-                            <input id="txtTelefono" class="form-control" type="text" />
-                        </div>
-                    </div>
-                </div>
+        <!-- Campo de búsqueda por nombre -->
+        <div class="col-12">
+            <div class="form-group">
+                <span class="label-form">Nombre del Paciente</span><br />
+                <input id="txtBuscarNombre" class="form-control" type="text" placeholder="Ingrese nombre para buscar" />
             </div>
+            <button type="button" class="btn btn-doc second_color" style="color: #FFF; font-size: 12px;" onclick="buscarPaciente()">
+                <i class="fa fa-search"></i>&nbsp;Buscar
+            </button>
+            <button type="button" class="btn btn-primary main_color" style="color: #FFF; font-size: 12px;" onclick="mostrarFormularioAgregar()">
+                <i class="fa fa-plus"></i>&nbsp;Agregar
+            </button>
+        </div>
 
-            </div>
+        <div class="col-12">&nbsp;</div>
 
-            <div class="row">
-                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">&nbsp;</div>
-            </div>
-
-            <!-- contenido -->
+        <!-- Contenedor de la tabla que se mostrará al hacer clic en "Buscar" -->
+        <div id="containerTabla" class="container" style="display: none;">
             <div class="row" style="background-color: #FFFFFF;">
                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12" style="padding-left: 0px; padding-right: 0px; width: 100%!important;">
-
                     <table class="table">
                         <thead>
                             <tr>
                                 <th class="text-center" style="width: 80px;">#</th>
-                                <th class="text-center">
-                                    Paciente
-                                </th>
-                                <th class="text-center">
-                                    Fecha
-                                </th>
-                                <th class="text-center">
-                                    Hora
-                                </th>
-                                <th class="text-center">
-                                    Estado
-                                </th>
-                                <th class="text-center">
-                                    Acción
-                                </th>
+                                <th class="text-center">Paciente</th>
+                                <th class="text-center">Fecha Nacimiento</th>
+                                <th class="text-center">Estado</th>
+                                <th class="text-center">Acción</th>
                             </tr>
                         </thead>
-                        <tbody id="bdCitas">
+                        <tbody id="bdPacientes">
+                            <!-- Aquí irán las filas generadas dinámicamente -->
                         </tbody>
                     </table>
-
                 </div>
             </div>
         </div>
 
-    </div>
-</div>
+        <!-- Contenedor de formulario para agregar/editar paciente -->
+        <div id="containerFormulario" class="container" style="display: none;">
+            <div class="row" style="background-color: #FFFFFF;">
+                <div class="col-12">&nbsp;</div>
 
-<div id="mdl_historial" class="modal" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="true">
-    <div class="modal-dialog modal-lg" role="document" style="height: 90%; display: grid; place-items: center; width: 100%;">
-        <div class="modal-content" style="width: 100%;">
-            <div class="modal-header second_color">
-                <h5 class="modal-title" style="color: #FFFFFF;">Historial del paciente</h5>
-                <button onclick="cerrar_modal_historial()" type="button" class="close" aria-label="Close" style="outline: none; cursor: pointer; color: #FFFFFF;">
-                    <span>&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="row">
-                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                        <div class="row">
+                <form id="formPaciente">
+                    <input type="hidden" id="hdnPacienteId" name="Id" />
 
-                            <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                <table class="table">
-                                    <thead>
-                                        <tr>
-                                            <th class="text-center" style="width: 80px;">#</th>
-                                            <th class="text-center">
-                                                Nota
-                                            </th>
-                                            <th class="text-center">
-                                                Recomendaciones
-                                            </th>
-                                            <th class="text-center">
-                                                Medicinas
-                                            </th>
-                                            <th class="text-center">
-                                                Doctor
-                                            </th>
-                                            <th class="text-center">
-                                                Fecha
-                                            </th>
-                                            <th class="text-center">
-                                                Hora
-                                            </th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="bdHistorial">
-                                    </tbody>
-                                </table>
-                            </div>
-
-                            <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12" id="divDatos">
-                                <div class="row">
-                                    <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6">
-                                        <div class="form-group">
-                                            <span class="label-form">Nota</span><br />
-                                            <textarea class="form-control" id="txtNota" placeholder="Ingresar nota" maxlength="500"
-                                                      style="resize: none; height: auto !important;" rows="3"></textarea>
-                                        </div>
-                                    </div>
-                                    <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6">
-                                        <div class="form-group">
-                                            <span class="label-form">Recomendación</span><br />
-                                            <textarea class="form-control" id="txtRecomendacion" placeholder="Ingresar recomendaciones" maxlength="500"
-                                                      style="resize: none; height: auto !important;" rows="3"></textarea>
-                                        </div>
-                                    </div>
-                                    <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6">
-                                        <div class="form-group">
-                                            <span class="label-form">Medicinas</span><br />
-                                            <textarea class="form-control" id="txtMedicina" placeholder="Ingresar medicinas" maxlength="500"
-                                                      style="resize: none; height: auto !important;" rows="3"></textarea>
-                                        </div>
-                                    </div>
-                                    <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6">
-                                        <div class="form-group">
-                                            <span class="label-form">Test asignados</span><br />
-
-                                            <span id="spnSinCuestionarios" class="label-form">Sin cuestionarios registrados<br /></span>
-                                            <a id="spnCuestionario01" href="~/articulos/Resultado_cuestionario01.pdf" download class="label-form">Cuestionario #1<br /></a>
-                                            <a id="spnCuestionario02" href="~/articulos/Resultado_cuestionario02.pdf" download class="label-form">Cuestionario #2<br /></a>
-                                            <a id="spnCuestionario03" href="~/articulos/Resultado_cuestionario03.pdf" download class="label-form">Cuestionario #3<br /></a>
-                                            <a id="spnCuestionario04" href="~/articulos/Resultado_cuestionario04.pdf" download class="label-form">Cuestionario #4<br /></a>
-                                            @*<button type="button" class="btn btn-doc main_color" style="color: #FFF; font-size: 12px; width: 100%;">
-                                                <i class="fa fa-search"></i>&nbsp;Test asignados
-                                            </button>*@
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
+                    <div class="col-6">
+                        <div class="form-group">
+                            <span class="label-form">Nombres y Apellidos Completos</span><br />
+                            <input id="txtNombre" name="Nombre" class="form-control" type="text" required />
                         </div>
                     </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" onclick="cerrar_modal_historial()">Volver</button>
-                <button type="button" class="btn btn-primary main_color" onclick="guardar_cita()" id="btnGuardarCita">Guardar</button>
+
+                    <div class="col-6">
+                        <div class="form-group">
+                            <span class="label-form">Fecha de Nacimiento</span><br />
+                            <input id="txtFecha" name="FechaNacimiento" class="form-control" type="date" required />
+                        </div>
+                    </div>
+
+                    <div class="col-6">
+                        <div class="form-group">
+                            <span class="label-form">Estado</span><br />
+                            <select class="form-control" id="cboEstado" name="Estado" required>
+                                <option value="-1">Seleccionar</option>
+                                <option value="1">Registrado</option>
+                                <option value="2">Atendido</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="col-6">
+                        <div class="form-group">
+                            <span class="label-form">Documento</span><br />
+                            <select class="form-control" id="cboDocumento" name="DocumentoTipo" required>
+                                <option value="-1">Seleccionar</option>
+                                <option value="1">DNI</option>
+                                <option value="2">Carnet Extranjeria</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="col-6">
+                        <div class="form-group">
+                            <span class="label-form">Número de Documento</span><br />
+                            <input id="txtDocumento" name="DocumentoNumero" class="form-control" type="text" required />
+                        </div>
+                    </div>
+
+                    <div class="col-6">
+                        <div class="form-group">
+                            <span class="label-form">Teléfono</span><br />
+                            <input id="txtTelefono" name="Telefono" class="form-control" type="text" />
+                        </div>
+                    </div>
+
+                    <div class="col-12 text-right">
+                        <button type="button" class="btn btn-success" onclick="guardarPaciente()">Guardar</button>
+                        <button type="button" class="btn btn-secondary" onclick="cancelarFormulario()">Cancelar</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
 </div>
 
-@section Scripts{
-    <script src="~/basic/moments.js?f=@dHoy.ToString("yyyyMMddhhmmss")"></script>
-    <script src="~/basic/datetimepicker.js?f=@dHoy.ToString("yyyyMMddhhmmss")"></script>
+@section Scripts {
+    <script>
+        function buscarPaciente() {
+            let nombre = document.getElementById('txtBuscarNombre').value;
+            $.post('/Mantenimiento/Paciente/Buscar', { nombre: nombre }, function (data) {
+                let tableBody = $('#bdPacientes');
+                tableBody.empty();
+                data.forEach(paciente => {
+                    tableBody.append(`
+                                <tr>
+                                    <td class="text-center">${paciente.id}</td>
+                                    <td class="text-center">${paciente.nombre}</td>
+                                    <td class="text-center">${paciente.fechaNacimiento}</td>
+                                    <td class="text-center">${paciente.estado}</td>
+                                    <td class="text-center">
+                                        <button class="btn btn-warning btn-sm" onclick="editarPaciente(${paciente.id})">Editar</button>
+                                        <button class="btn btn-danger btn-sm" onclick="eliminarPaciente(${paciente.id})">Eliminar</button>
+                                    </td>
+                                </tr>
+                            `);
+                });
+                $('#containerTabla').show();
+            });
+        }
 
-    <script src="~/basic/historial_citas.js?f=@dHoy.ToString("yyyyMMddhhmmss")"></script>
+        function mostrarFormularioAgregar() {
+            $('#containerFormulario').show();
+            $('#containerFormulario input').val('');
+            $('#containerFormulario select').val('-1');
+        }
+
+        function editarPaciente(id) {
+            $.get(`/Mantenimiento/Paciente/Get/${id}`, function (paciente) {
+                $('#hdnPacienteId').val(paciente.id);
+                $('#txtNombre').val(paciente.nombre);
+                $('#txtFecha').val(paciente.fechaNacimiento);
+                $('#cboEstado').val(paciente.estado);
+                $('#cboDocumento').val(paciente.documentoTipo);
+                $('#txtDocumento').val(paciente.documentoNumero);
+                $('#txtTelefono').val(paciente.telefono);
+                $('#containerFormulario').show();
+            });
+        }
+
+        function eliminarPaciente(id) {
+            if (confirm('¿Estás seguro de que quieres eliminar este paciente?')) {
+                $.post(`/Mantenimiento/Paciente/Eliminar`, { id: id }, function (response) {
+                    alert(response.message);
+                    buscarPaciente(); // Actualiza la lista después de eliminar
+                });
+            }
+        }
+
+        function guardarPaciente() {
+            console.log('guardar');
+
+            let paciente = {
+                Id: $('#hdnPacienteId').val(),
+                Nombre: $('#txtNombre').val(),
+                FechaNacimiento: $('#txtFecha').val(),
+                Estado: $('#cboEstado').val(),
+                DocumentoTipo: $('#cboDocumento').val(),
+                DocumentoNumero: $('#txtDocumento').val(),
+                Telefono: $('#txtTelefono').val()
+            };
+
+            let url = paciente.Id ? '/Mantenimiento/Paciente/Editar' : '/Mantenimiento/Paciente/Agregar';
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data: JSON.stringify(paciente),
+                contentType: 'application/json',
+                success: function (response) {
+                    alert(response.message);
+                    $('#containerFormulario').hide();
+                    buscarPaciente(); // Actualiza la lista después de guardar
+                },
+                error: function (xhr) {
+                    alert('Error al guardar paciente.');
+                }
+            });
+        }
+
+        function cancelarFormulario() {
+            $('#containerFormulario').hide();
+        }
+    </script>
 }

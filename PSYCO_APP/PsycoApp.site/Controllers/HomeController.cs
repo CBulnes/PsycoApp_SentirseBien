@@ -73,7 +73,11 @@ namespace PsycoApp.site.Controllers
                 {
                     vista = "IndexDoctor";
                 }
-                return View(vista, obj);
+                var viewModelContainer = new ViewModelContainer<List<PsycoApp.site.Models.Paciente>>
+                {
+                    DynamicData = obj
+                };
+                return View(vista, viewModelContainer);
             }
             else
             {
