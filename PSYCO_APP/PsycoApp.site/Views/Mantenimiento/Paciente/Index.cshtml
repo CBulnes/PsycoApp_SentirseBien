@@ -6,6 +6,9 @@
     var pacientes = Model.Model;
     ViewData["Title"] = "Pacientes";
 }
+
+<!-- SB - STYLE -->
+
 <link rel="stylesheet" href="~/src/css/sb-pacientes.css" />
 
 <div class="bd-example">
@@ -31,7 +34,7 @@
         <div class="col-12">&nbsp;</div>
 
         <!-- Contenedor de la tabla que se mostrará al hacer clic en "Buscar" -->
-        <div id="containerTabla" class="container" ">
+        <div id="containerTabla" class="container"">
             <div class="row" style="background-color: #FFFFFF;">
                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12" style="padding-left: 0px; padding-right: 0px; width: 100%!important;">
                     <table class="table">
@@ -78,6 +81,7 @@
                     <input id="txtFecha" name="FechaNacimiento" class="form-control" type="date" required />
                 </div>
             </div>
+
             <div class="sb-frm-agregar-block">
                 <div class="sb-frm-agregar-block-item">
                     <span class="label-form">Estado Civil</span><br />
@@ -239,3 +243,10 @@
         }
     </script>
 }
+
+@* Script sb-home *@
+
+<script src="~/src/js/sb-main.js?ver=002"></script>
+
+@* Script sb-home Fin *@
+
