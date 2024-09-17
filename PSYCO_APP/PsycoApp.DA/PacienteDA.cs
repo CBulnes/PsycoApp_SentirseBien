@@ -17,6 +17,75 @@ namespace PsycoApp.DA
             _connection = cn; // Cambia la cadena de conexión según tu configuración
         }
 
+        public Paciente BuscarPacienteId(int id)
+        {
+            Paciente paciente = null;
+
+            using (var command = new SqlCommand("sp_obtener_paciente", _connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.Parameters.AddWithValue("@Id", id);
+
+                _connection.Open();
+                using (var reader = command.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        paciente = new Paciente
+                        {
+                            Id = (int)reader["Id"],
+                            Nombre = (string)reader["Nombre"],
+                            FechaNacimiento = (DateTime)reader["FechaNacimiento"],
+                            DocumentoTipo = (string)reader["DocumentoTipo"],
+                            DocumentoNumero = (string)reader["DocumentoNumero"],
+                            Telefono = (string)reader["Telefono"],
+                            EstadoCivil = (string)reader["EstadoCivil"],
+                            Sexo = (string)reader["Sexo"],
+                            Estado = (string)reader["Estado"]
+                        };
+                    }
+                }
+                _connection.Close();
+            }
+
+            return paciente;
+        }
+
+        public List<Paciente> BuscarPaciente(string nombre)
+        {
+            var pacientes = new List<Paciente>();
+
+            using (var command = new SqlCommand("sp_buscar_paciente", _connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.Parameters.AddWithValue("@Nombre", nombre);
+
+                _connection.Open();
+                using (var reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        var paciente = new Paciente
+                        {
+                            Id = (int)reader["Id"],
+                            Nombre = (string)reader["Nombre"],
+                            FechaNacimiento = (DateTime)reader["FechaNacimiento"],
+                            DocumentoTipo = (string)reader["DocumentoTipo"],
+                            DocumentoNumero = (string)reader["DocumentoNumero"],
+                            Telefono = (string)reader["Telefono"],
+                            EstadoCivil = (string)reader["EstadoCivil"],
+                            Sexo = (string)reader["Sexo"],
+                            Estado = (string)reader["Estado"]
+                        };
+                        pacientes.Add(paciente);
+                    }
+                }
+                _connection.Close();
+            }
+
+            return pacientes;
+        }
+
         public List<Paciente> ListarPacientes()
         {
             var pacientes = new List<Paciente>();

@@ -40,6 +40,20 @@ namespace PsycoApp.api.Controllers
                 return BadRequest(ex.Message);
             }
         }
+ 
+        [HttpGet("buscar")]
+        public ActionResult Buscar([FromQuery] string nombre)
+        {
+            try
+            {
+                var pacientes = _pacienteBL.BuscarPaciente(nombre);
+                return Ok(pacientes);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
 
         [HttpPut("actualizar")]
         public ActionResult Actualizar([FromBody] Paciente paciente)
@@ -62,6 +76,23 @@ namespace PsycoApp.api.Controllers
             {
                 _pacienteBL.EliminarPaciente(id);
                 return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        [HttpGet("BuscarId/{id}")]
+        public ActionResult ObtenerPaciente(int id)
+        {
+            try
+            {
+                var paciente = _pacienteBL.BuscarPacienteId(id);
+                if (paciente == null)
+                {
+                    return NotFound("Paciente no encontrado.");
+                }
+                return Ok(paciente);
             }
             catch (Exception ex)
             {
