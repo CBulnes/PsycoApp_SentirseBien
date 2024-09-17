@@ -170,7 +170,7 @@
         }
 
         function mostrarFormularioAgregar() {
-            $('#containerFormulario').show();
+            $('#containerFormulario').css('display', 'flex');
             $('#containerFormulario input').val('');
             $('#containerFormulario select').val('-1');
         }
@@ -187,7 +187,7 @@
                 $('#txtTelefono').val(paciente.telefono);
                 $('#cboEstadoCivil').val(paciente.estadoCivil);
                 $('#cboSexo').val(paciente.sexo);
-                $('#containerFormulario').show();
+                $('#containerFormulario').css('display', 'flex');
             });
         }
 
