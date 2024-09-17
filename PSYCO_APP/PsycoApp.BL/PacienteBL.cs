@@ -20,9 +20,21 @@ namespace PsycoApp.BL
             return _pacienteDA.ListarPacientes();
         }
 
+
+
+
         public void AgregarPaciente(Paciente paciente)
         {
             _pacienteDA.AgregarPaciente(paciente);
+        }
+        public List<Paciente> BuscarPaciente(string nombre)
+        {
+           return _pacienteDA.BuscarPaciente(nombre);
+        }
+        
+        public Paciente BuscarPacienteId(int id)
+        {
+            return _pacienteDA.BuscarPacienteId(id);
         }
 
         public void ActualizarPaciente(Paciente paciente)

@@ -86,7 +86,26 @@
                             </select>
                         </div>
                     </div>
-
+                    <div class="col-6">
+                        <div class="form-group">
+                            <span class="label-form">Estado Civil</span><br />
+                            <select class="form-control" id="cboEstadoCivil" name="Estado" required>
+                                <option value="-1">Seleccionar</option>
+                                <option value="1">Casado</option>
+                                <option value="2">Soltero</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="form-group">
+                            <span class="label-form">Sexo</span><br />
+                            <select class="form-control" id="cboSexo" name="Estado" required>
+                                <option value="-1">Seleccionar</option>
+                                <option value="1">Masculino</option>
+                                <option value="2">Femenino</option>
+                            </select>
+                        </div>
+                    </div>
                     <div class="col-6">
                         <div class="form-group">
                             <span class="label-form">Documento</span><br />
@@ -154,6 +173,7 @@
         }
 
         function editarPaciente(id) {
+            console.log(2);
             $.get(`/Mantenimiento/Paciente/Get/${id}`, function (paciente) {
                 $('#hdnPacienteId').val(paciente.id);
                 $('#txtNombre').val(paciente.nombre);
@@ -162,6 +182,8 @@
                 $('#cboDocumento').val(paciente.documentoTipo);
                 $('#txtDocumento').val(paciente.documentoNumero);
                 $('#txtTelefono').val(paciente.telefono);
+                $('#cboEstadoCivil').val(paciente.estadoCivil);
+                $('#cboSexo').val(paciente.sexo);
                 $('#containerFormulario').show();
             });
         }
@@ -177,23 +199,27 @@
 
         function guardarPaciente() {
             console.log('guardar');
-
             let paciente = {
-                Id: $('#hdnPacienteId').val(),
+                Id: parseInt($('#hdnPacienteId').val()) || 0,
                 Nombre: $('#txtNombre').val(),
                 FechaNacimiento: $('#txtFecha').val(),
                 Estado: $('#cboEstado').val(),
                 DocumentoTipo: $('#cboDocumento').val(),
                 DocumentoNumero: $('#txtDocumento').val(),
-                Telefono: $('#txtTelefono').val()
+                Telefono: $('#txtTelefono').val(),
+                EstadoCivil: $('#cboEstadoCivil').val(),
+                Sexo: $('#cboSexo').val(),
             };
-
+            let dataToSend = {
+                paciente: paciente // Enviar dentro de un objeto "paciente"
+            };
+            console.log(dataToSend.paciente);
             let url = paciente.Id ? '/Mantenimiento/Paciente/Editar' : '/Mantenimiento/Paciente/Agregar';
             $.ajax({
                 type: 'POST',
                 url: url,
-                data: JSON.stringify(paciente),
                 contentType: 'application/json',
+                data: JSON.stringify(dataToSend.paciente),
                 success: function (response) {
                     alert(response.message);
                     $('#containerFormulario').hide();

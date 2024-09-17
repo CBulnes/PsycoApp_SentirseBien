@@ -67,21 +67,23 @@ namespace PsycoApp.site.Controllers.Mantenimiento
         }
 
         // POST: Paciente/Buscar
+        [Route("/Mantenimiento/Paciente/Buscar")]
+        
         [HttpPost]
         public async Task<IActionResult> Buscar(string nombre)
         {
-            string url = $"{apiUrl}/buscar_paciente?nombre={nombre}";
+            string url = $"{apiUrl}/buscar?nombre={nombre}";
             var pacientes = await GetFromApiAsync<List<entities.Paciente>>(url);
             return Json(pacientes);
         }
         [Route("Mantenimiento/Paciente/Agregar")]
         // POST: Paciente/Agregar
         [HttpPost]
-        public async Task<IActionResult> Agregar([FromBody] PsycoApp.site.Models.Paciente paciente)
+        public async Task<IActionResult> Agregar([FromBody] Models.Paciente paciente)
         {
             if (ModelState.IsValid)
             {
-                string url = $"{apiUrl}/agregar_paciente";
+                string url = $"{apiUrl}/agregar";
                 var response = await PostToApiAsync(url, paciente);
                 if (response.IsSuccessStatusCode)
                 {
@@ -92,13 +94,45 @@ namespace PsycoApp.site.Controllers.Mantenimiento
             return BadRequest("Modelo no válido.");
         }
 
+        //[HttpPost]
+        //public async Task<IActionResult> Agregar([FromBody] dynamic data)
+        //{
+        //    try
+        //    {
+        //        // Obtener el objeto "paciente" desde el JSON
+        //        var pacienteJson = data.paciente.ToString();
+        //        var paciente = JsonConvert.DeserializeObject<PsycoApp.site.Models.Paciente>(pacienteJson);
+
+        //        if (paciente == null)
+        //        {
+        //            return BadRequest("El modelo no es válido. JSON no pudo ser deserializado.");
+        //        }
+
+        //        if (ModelState.IsValid)
+        //        {
+        //            string url = $"{apiUrl}/agregar_paciente";
+        //            var response = await PostToApiAsync(url, paciente);
+        //            if (response.IsSuccessStatusCode)
+        //            {
+        //                return Ok(new { message = "Paciente guardado correctamente" });
+        //            }
+        //            return StatusCode((int)response.StatusCode, "Error al agregar paciente.");
+        //        }
+        //        return BadRequest("Modelo no válido.");
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return BadRequest($"Error al procesar los datos: {ex.Message}");
+        //    }
+        //}
+        [Route("/Mantenimiento/Paciente/Editar")]
         // POST: Paciente/Editar
         [HttpPost]
         public async Task<IActionResult> Editar([FromBody] entities.Paciente paciente)
         {
             if (ModelState.IsValid)
             {
-                string url = $"{apiUrl}/editar_paciente/{paciente.Id}";
+                string url = $"{apiUrl}/actualizar";
                 var response = await PutToApiAsync(url, paciente);
                 if (response.IsSuccessStatusCode)
                 {
@@ -108,7 +142,7 @@ namespace PsycoApp.site.Controllers.Mantenimiento
             }
             return BadRequest("Modelo no válido.");
         }
-
+        [Route("/Mantenimiento/Paciente/Eliminar")]
         // POST: Paciente/Eliminar
         [HttpPost]
         public async Task<IActionResult> Eliminar(int id)
@@ -128,7 +162,27 @@ namespace PsycoApp.site.Controllers.Mantenimiento
             var response = await client.GetStringAsync(url);
             return JsonConvert.DeserializeObject<T>(response);
         }
+        [Route("/Mantenimiento/Paciente/Get/{id}")]
+        [HttpGet]
+        public async Task<IActionResult> GetPaciente(int id)
+        {
+            try
+            {
+                string url = $"{apiUrl}/BuscarId/{id}"; // URL de la API para obtener el paciente por ID
+                var paciente = await GetFromApiAsync<PsycoApp.entities.Paciente>(url);
 
+                if (paciente == null)
+                {
+                    return NotFound("Paciente no encontrado.");
+                }
+
+                return Json(paciente); // Devuelve los detalles del paciente como JSON
+            }
+            catch (Exception ex)
+            {
+                return BadRequest($"Error al obtener el paciente: {ex.Message}");
+            }
+        }
         private async Task<HttpResponseMessage> PostToApiAsync<T>(string url, T data)
         {
             using var client = new HttpClient();
