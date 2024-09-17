@@ -147,7 +147,7 @@ namespace PsycoApp.site.Controllers.Mantenimiento
         [HttpPost]
         public async Task<IActionResult> Eliminar(int id)
         {
-            string url = $"{apiUrl}/eliminar_paciente/{id}";
+            string url = $"{apiUrl}/eliminar/{id}";
             var response = await DeleteFromApiAsync(url);
             if (response.IsSuccessStatusCode)
             {
