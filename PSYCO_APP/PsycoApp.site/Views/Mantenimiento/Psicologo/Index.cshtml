@@ -1,0 +1,248 @@
+﻿@model ViewModelContainer<IEnumerable<PsycoApp.site.Models.Psicologo>>
+@{
+    var dynamicData = Model.DynamicData;
+    var psicologos = Model.Model;
+    var ubigeos = dynamicData.ubigeos;
+    ViewData["Title"] = "Psicólogos";
+}
+
+<div class="bd-example">
+    <div class="row">
+        <div class="col-12">
+            <b style="color: #004A92; font-size: 20px;">Psicólogos</b>
+        </div>
+
+        <div class="col-12">&nbsp;</div>
+
+        <!-- Campo de búsqueda por nombre -->
+        <div class="col-12">
+            <div class="form-group">
+                <span class="label-form">Nombre del Psicólogo</span><br />
+                <input id="txtBuscarNombre" class="form-control" type="text" placeholder="Ingrese nombre para buscar" />
+            </div>
+            <button type="button" class="btn btn-doc second_color" style="color: #FFF; font-size: 12px;" onclick="buscarPsicologo()">
+                <i class="fa fa-search"></i>&nbsp;Buscar
+            </button>
+            <button type="button" class="btn btn-primary main_color" style="color: #FFF; font-size: 12px;" onclick="mostrarFormularioAgregar()">
+                <i class="fa fa-plus"></i>&nbsp;Agregar
+            </button>
+        </div>
+
+        <div class="col-12">&nbsp;</div>
+
+        <!-- Contenedor de la tabla que se mostrará al hacer clic en "Buscar" -->
+        <div id="containerTabla" class="container" style="display: none;">
+            <div class="row" style="background-color: #FFFFFF;">
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12" style="padding-left: 0px; padding-right: 0px; width: 100%!important;">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th class="text-center" style="width: 80px;">#</th>
+                                <th class="text-center">Psicólogo</th>
+                                <th class="text-center">Fecha Nacimiento</th>
+                                <th class="text-center">Estado</th>
+                                <th class="text-center">Acción</th>
+                            </tr>
+                        </thead>
+                        <tbody id="bdPsicologos">
+                            <!-- Aquí irán las filas generadas dinámicamente -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Contenedor de formulario para agregar/editar psicologo -->
+        <div id="containerFormulario" class="container" style="display: none;">
+            <div class="row" style="background-color: #FFFFFF;">
+                <div class="col-12">&nbsp;</div>
+
+                <form id="formPsicologo">
+                    <input type="hidden" id="hdnPsicologoId" name="Id" />
+
+                    <div class="col-6">
+                        <div class="form-group">
+                            <span class="label-form">Nombres y Apellidos Completos</span><br />
+                            <input id="txtNombre" name="Nombre" class="form-control" type="text" required />
+                        </div>
+                    </div>
+
+                    <div class="col-6">
+                        <div class="form-group">
+                            <span class="label-form">Fecha de Nacimiento</span><br />
+                            <input id="txtFecha" name="FechaNacimiento" class="form-control" type="date" required />
+                        </div>
+                    </div>
+
+                    <div class="col-6">
+                        <div class="form-group">
+                            <span class="label-form">Estado</span><br />
+                            <select class="form-control" id="cboEstado" name="Estado" required>
+                                <option value="-1">Seleccionar</option>
+                                <option value="1">Habilitado</option>
+                                <option value="0">Deshabilitado</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="form-group">
+                            <span class="label-form">Especialidad</span><br />
+                            <select class="form-control" id="cboEspecialidad" name="Especialidad" required>
+                                <option value="-1">Seleccionar</option>
+                                <option value="1">Niños</option>
+                                <option value="2">Jóvenes</option>
+                                <option value="2">Adultos</option>
+                                <option value="3">Parejas</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="col-6">
+                        <div class="form-group">
+                            <span class="label-form">Dirección</span><br />
+                            <input id="txtDireccion" name="Direccion" class="form-control" type="text" required />
+                        </div>
+                    </div>
+
+                    <div class="col-6">
+                        <div class="form-group">
+                            <span class="label-form">Distrito</span><br />
+                            @* <select class="form-control" id="cboDistrito" name="Distrito" required>
+                                <option value="-1">Seleccionar</option>
+                                <option value="150115">La Victoria</option>
+                                <option value="150116">Lince</option>
+                            </select> *@
+                            @Html.DropDownList("cboDistrito", new SelectList(ubigeos, "CodUbigeo", "Distrito"), new { @class = "form-control" })
+                        </div>
+                    </div>
+
+                    <div class="col-6">
+                        <div class="form-group">
+                            <span class="label-form">Documento</span><br />
+                            <select class="form-control" id="cboDocumento" name="DocumentoTipo" required>
+                                <option value="-1">Seleccionar</option>
+                                <option value="1">DNI</option>
+                                <option value="2">Carnet Extranjeria</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="col-6">
+                        <div class="form-group">
+                            <span class="label-form">Número de Documento</span><br />
+                            <input id="txtDocumento" name="DocumentoNumero" class="form-control" type="text" required />
+                        </div>
+                    </div>
+
+                    <div class="col-6">
+                        <div class="form-group">
+                            <span class="label-form">Teléfono</span><br />
+                            <input id="txtTelefono" name="Telefono" class="form-control" type="text" />
+                        </div>
+                    </div>
+
+                    <div class="col-12 text-right">
+                        <button type="button" class="btn btn-success" onclick="guardarPsicologo()">Guardar</button>
+                        <button type="button" class="btn btn-secondary" onclick="cancelarFormulario()">Cancelar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function buscarPsicologo() {
+            let nombre = document.getElementById('txtBuscarNombre').value;
+            $.post('/Mantenimiento/Psicologo/Buscar', { nombre: nombre }, function (data) {
+                let tableBody = $('#bdPsicologos');
+                tableBody.empty();
+                data.forEach(psicologo => {
+                    tableBody.append(`
+                                        <tr>
+                                            <td class="text-center">${psicologo.id}</td>
+                                            <td class="text-center">${psicologo.nombre}</td>
+                                            <td class="text-center">${psicologo.fechaNacimiento}</td>
+                                            <td class="text-center">${psicologo.estado}</td>
+                                            <td class="text-center">
+                                                <button class="btn btn-warning btn-sm" onclick="editarPsicologo(${psicologo.id})">Editar</button>
+                                                <button class="btn btn-danger btn-sm" onclick="eliminarPsicologo(${psicologo.id})">Eliminar</button>
+                                            </td>
+                                        </tr>
+                                    `);
+                });
+                $('#containerTabla').show();
+            });
+        }
+
+        function mostrarFormularioAgregar() {
+            $('#containerFormulario').show();
+            $('#containerFormulario input').val('');
+            $('#containerFormulario select').val('-1');
+        }
+
+        function editarPsicologo(id) {
+            $.get(`/Mantenimiento/Psicologo/Get/${id}`, function (psicologo) {
+                $('#hdnPsicologoId').val(psicologo.id);
+                $('#txtNombre').val(psicologo.nombre);
+                $('#txtFecha').val(psicologo.fechaNacimiento.substring(0, 10));
+                $('#cboEstado').val(psicologo.estado);
+                $('#cboDocumento').val(psicologo.documentoTipo);
+                $('#txtDocumento').val(psicologo.documentoNumero);
+                $('#txtTelefono').val(psicologo.telefono);
+                $('#cboEspecialidad').val(psicologo.especialidad);
+                $('#txtDireccion').val(psicologo.direccion);
+                $('#cboDistrito').val(psicologo.distrito);
+                $('#containerFormulario').show();
+            });
+        }
+
+        function eliminarPsicologo(id) {
+            if (confirm('¿Estás seguro de que quieres eliminar este psicólogo?')) {
+                $.post(`/Mantenimiento/Psicologo/Eliminar`, { id: id }, function (response) {
+                    alert(response.message);
+                    buscarPsicologo(); // Actualiza la lista después de eliminar
+                });
+            }
+        }
+
+        function guardarPsicologo() {
+            let psicologo = {
+                Id: parseInt($('#hdnPsicologoId').val()) || 0,
+                Nombre: $('#txtNombre').val(),
+                FechaNacimiento: $('#txtFecha').val(),
+                Estado: $('#cboEstado').val(),
+                DocumentoTipo: $('#cboDocumento').val(),
+                DocumentoNumero: $('#txtDocumento').val(),
+                Telefono: $('#txtTelefono').val(),
+                Especialidad: parseInt($('#cboEspecialidad').val()),
+                Direccion: $('#txtDireccion').val(),
+                Distrito: $('#cboDistrito').val(),
+            };
+            let dataToSend = {
+                psicologo: psicologo // Enviar dentro de un objeto "psicologo"
+            };
+            
+            let url = psicologo.Id ? '/Mantenimiento/Psicologo/Editar' : '/Mantenimiento/Psicologo/Agregar';
+            $.ajax({
+                type: 'POST',
+                url: url,
+                contentType: 'application/json',
+                data: JSON.stringify(dataToSend.psicologo),
+                success: function (response) {
+                    alert(response.message);
+                    $('#containerFormulario').hide();
+                    buscarPsicologo(); // Actualiza la lista después de guardar
+                },
+                error: function (xhr) {
+                    alert('Error al guardar psicólogo.');
+                }
+            });
+        }
+
+        function cancelarFormulario() {
+            $('#containerFormulario').hide();
+        }
+    </script>
+}

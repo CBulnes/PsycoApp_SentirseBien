@@ -230,7 +230,7 @@ namespace PsycoApp.site.Controllers
                 {
                     //menu.Add(new Menu { nombre_opcion = "Mantenimiento", ruta_opcion = "Mantenimiento" });
                     menu.Add(new Menu { nombre_opcion = "Reportes", ruta_opcion = "/Reportes" });
-                    menu.Add(new Menu { nombre_opcion = "Clientes", ruta_opcion = "/Mantenimiento/Cliente" });
+                    menu.Add(new Menu { nombre_opcion = "Psicologos", ruta_opcion = "/Mantenimiento/Psicologo" });
                     menu.Add(new Menu { nombre_opcion = "Pacientes", ruta_opcion = "/Mantenimiento/Paciente" });
                 }
                 else if (tipo_usuario == "CLIENTE")
