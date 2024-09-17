@@ -53,6 +53,10 @@
     <link rel="stylesheet" href="~/basic/scrollbar.css?f=@dHoy.ToString("yyyyMMddhhmmss")" />
     <link rel="stylesheet" href="~/basic/dots-elastic.css?f=@dHoy.ToString("yyyyMMddhhmmss")" />
 
+    <!-- SB - STYLE -->
+
+    <link rel="stylesheet" href="~/src/css/sb-styles.css" />
+
 </head>
 
 <body class="fix-header fix-sidebar card-no-border">
@@ -62,7 +66,125 @@
         </svg>
     </div>
 
-    <div id="main-wrapper">
+    @* SB-Administador *@
+
+    <div class="sb-main-hm">
+        <div class="sb-aside">
+            <div class="sb-aside-container">
+                <div class="sb-aside-user">
+                    <div class="sb-aside-user-photo">
+                        <img src="../images/user.png" alt="">
+                    </div>
+                    <div class="sb-aside-user-info">
+                        <span id="lbl_TipoUsuario" runat="server">@Model.DynamicData.nombres @Model.DynamicData.apellidos</span>
+                        <p>admin</p>
+                    </div>
+                </div>
+                <div class="sb-aside-list">
+                    <div class="sb-aside-admin">
+                        <a href="/Home" class="sb-aside-item">
+                            <div class="sb-aside-item-bloc">
+                                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#FFFFFF"><g stroke-width="0" /><g stroke-linecap="round" stroke-linejoin="round" /><g><path d="M22 12.2039V13.725C22 17.6258 22 19.5763 20.8284 20.7881C19.6569 22 17.7712 22 14 22H10C6.22876 22 4.34315 22 3.17157 20.7881C2 19.5763 2 17.6258 2 13.725V12.2039C2 9.91549 2 8.77128 2.5192 7.82274C3.0384 6.87421 3.98695 6.28551 5.88403 5.10813L7.88403 3.86687C9.88939 2.62229 10.8921 2 12 2C13.1079 2 14.1106 2.62229 16.116 3.86687L18.116 5.10812C20.0131 6.28551 20.9616 6.87421 21.4808 7.82274" stroke="#FFFFFF" stroke-width="1.5" stroke-linecap="round" /> <path d="M15 18H9" stroke="#FFFFFF" stroke-width="1.5" stroke-linecap="round" /> </g></svg>
+                                <p>Incio</p>
+                            </div>
+                        </a>
+                        <a href="#" class="sb-aside-item">
+                            <div class="sb-aside-item-bloc">
+                                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0" /><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round" /><g id="SVGRepo_iconCarrier"> <path d="M3 8C3 5.17157 3 3.75736 3.87868 2.87868C4.75736 2 6.17157 2 9 2H15C17.8284 2 19.2426 2 20.1213 2.87868C21 3.75736 21 5.17157 21 8V16C21 18.8284 21 20.2426 20.1213 21.1213C19.2426 22 17.8284 22 15 22H9C6.17157 22 4.75736 22 3.87868 21.1213C3 20.2426 3 18.8284 3 16V8Z" stroke="#FFF" stroke-width="1.5" /> <path d="M8 2.5V22" stroke="#FFF" stroke-width="1.5" stroke-linecap="round" /> <path d="M2 12H4" stroke="#FFF" stroke-width="1.5" stroke-linecap="round" /> <path d="M2 16H4" stroke="#FFF" stroke-width="1.5" stroke-linecap="round" /> <path d="M2 8H4" stroke="#FFF" stroke-width="1.5" stroke-linecap="round" /> <path d="M11.5 6.5H16.5" stroke="#FFF" stroke-width="1.5" stroke-linecap="round" /> <path d="M11.5 10H16.5" stroke="#FFF" stroke-width="1.5" stroke-linecap="round" /> </g></svg>
+                                <p>Agenda</p>
+                            </div>
+                        </a>
+                        <a href="/Mantenimiento/Paciente" class="sb-aside-item">
+                            <div class="sb-aside-item-bloc">
+                                <svg version="1.1" id="_x32_" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 512 512" xml:space="preserve" fill="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0" /><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round" /><g id="SVGRepo_iconCarrier"> <style type="text/css">
+                                                                                                                                                                                                                                                                                                                                                                   .st0 {
+                                                                                                                                                                                                                                                                                                                                                                       fill: #FFF;
+                                                                                                                                                                                                                                                                                                                                                                   }
+</style> <g> <path class="st0" d="M256,265.308c73.252,0,132.644-59.391,132.644-132.654C388.644,59.412,329.252,0,256,0 c-73.262,0-132.643,59.412-132.643,132.654C123.357,205.917,182.738,265.308,256,265.308z" /> <path class="st0" d="M425.874,393.104c-5.922-35.474-36-84.509-57.552-107.465c-5.829-6.212-15.948-3.628-19.504-1.427 c-27.04,16.672-58.782,26.399-92.819,26.399c-34.036,0-65.778-9.727-92.818-26.399c-3.555-2.201-13.675-4.785-19.505,1.427 c-21.55,22.956-51.628,71.991-57.551,107.465C71.573,480.444,164.877,512,256,512C347.123,512,440.427,480.444,425.874,393.104z" /> </g> </g></svg>
+                                <p>Paciente</p>
+                            </div>
+                        </a>
+                        <a href="#" class="sb-aside-item">
+                            <div class="sb-aside-item-bloc">
+                                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0" /><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round" /><g id="SVGRepo_iconCarrier"> <g id="Navigation / Building_03"> <path id="Vector" d="M2 20H4M4 20H15M4 20V14.3682C4 13.8428 4 13.58 4.063 13.335C4.11883 13.1178 4.21073 12.9118 4.33496 12.7252C4.47505 12.5147 4.67114 12.3384 5.06152 11.9877L7.3631 9.91997C8.11784 9.24192 8.49549 8.90264 8.92249 8.77393C9.29894 8.66045 9.7007 8.66045 10.0771 8.77393C10.5045 8.90275 10.8827 9.2422 11.6387 9.92139L13.9387 11.9877C14.3295 12.3388 14.5245 12.5146 14.6647 12.7252C14.7889 12.9118 14.8807 13.1178 14.9365 13.335C14.9995 13.58 15 13.8428 15 14.3682V20M15 20H20M20 20H22M20 20V7.19691C20 6.07899 20 5.5192 19.7822 5.0918C19.5905 4.71547 19.2837 4.40973 18.9074 4.21799C18.4796 4 17.9203 4 16.8002 4H10.2002C9.08009 4 8.51962 4 8.0918 4.21799C7.71547 4.40973 7.40973 4.71547 7.21799 5.0918C7 5.51962 7 6.08009 7 7.2002V10.0002" stroke="#FFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" /> </g> </g></svg>
+                                <p>Empresas</p>
+                            </div>
+                        </a>
+                        <a href="#" class="sb-aside-item">
+                            <div class="sb-aside-item-bloc">
+                                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0" /><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round" /><g id="SVGRepo_iconCarrier"> <path d="M21 18L20.1703 11.7771C20.0391 10.7932 19.9735 10.3012 19.7392 9.93082C19.5327 9.60444 19.2362 9.34481 18.8854 9.1833C18.4873 9 17.991 9 16.9983 9H7.00165C6.00904 9 5.51274 9 5.11461 9.1833C4.76381 9.34481 4.46727 9.60444 4.26081 9.93082C4.0265 10.3012 3.96091 10.7932 3.82972 11.7771L3 18M21 18H3M21 18V19.4C21 19.9601 21 20.2401 20.891 20.454C20.7951 20.6422 20.6422 20.7951 20.454 20.891C20.2401 21 19.9601 21 19.4 21H4.6C4.03995 21 3.75992 21 3.54601 20.891C3.35785 20.7951 3.20487 20.6422 3.10899 20.454C3 20.2401 3 19.9601 3 19.4V18M7.5 12V12.01M10.5 12V12.01M9 15V15.01M12 15V15.01M15 15V15.01M13.5 12V12.01M16.5 12V12.01M9 9V6M5.8 6H12.2C12.48 6 12.62 6 12.727 5.9455C12.8211 5.89757 12.8976 5.82108 12.9455 5.727C13 5.62004 13 5.48003 13 5.2V3.8C13 3.51997 13 3.37996 12.9455 3.273C12.8976 3.17892 12.8211 3.10243 12.727 3.0545C12.62 3 12.48 3 12.2 3H5.8C5.51997 3 5.37996 3 5.273 3.0545C5.17892 3.10243 5.10243 3.17892 5.0545 3.273C5 3.37996 5 3.51997 5 3.8V5.2C5 5.48003 5 5.62004 5.0545 5.727C5.10243 5.82108 5.17892 5.89757 5.273 5.9455C5.37996 6 5.51997 6 5.8 6Z" stroke="#FFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" /> </g></svg>
+                                <p>Caja</p>
+                            </div>
+                        </a>
+                        <a href="#" class="sb-aside-item">
+                            <div class="sb-aside-item-bloc">
+                                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0" /><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round" /><g id="SVGRepo_iconCarrier"> <path d="M7 20H4.6C4.03995 20 3.75992 20 3.54601 19.891C3.35785 19.7951 3.20487 19.6422 3.10899 19.454C3 19.2401 3 18.9601 3 18.4V9.0398C3 8.66343 3 8.47524 3.05919 8.31095C3.1115 8.16573 3.19673 8.03458 3.30819 7.9278C3.43428 7.80699 3.60625 7.73056 3.95018 7.5777L12 4L20.0498 7.5777C20.3938 7.73056 20.5657 7.80699 20.6918 7.9278C20.8033 8.03458 20.8885 8.16573 20.9408 8.31095C21 8.47524 21 8.66343 21 9.0398V18.4C21 18.9601 21 19.2401 20.891 19.454C20.7951 19.6422 20.6422 19.7951 20.454 19.891C20.2401 20 19.9601 20 19.4 20H17M7 20H17M7 20V14M17 20V14M7 14V10H17V14M7 14H17" stroke="#FFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" /> </g></svg>
+                                <p>Taller</p>
+                            </div>
+                        </a>
+                        <a href="#" class="sb-aside-item">
+                            <div class="sb-aside-item-bloc">
+                                <svg viewBox="0 0 512 512" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" fill="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0" /><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round" /><g id="SVGRepo_iconCarrier"> <title>maintenance</title> <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"> <g id="Combined-Shape" fill="#FFF" transform="translate(42.666667, 42.666667)"> <path d="M128,7.10542736e-15 C198.692448,7.10542736e-15 256,57.307552 256,128 C256,140.931179 254.082471,153.414494 250.516246,165.181113 L384,298.666667 C407.564149,322.230816 407.564149,360.435851 384,384 C360.435851,407.564149 322.230816,407.564149 298.666667,384 L165.181113,250.516246 C153.414494,254.082471 140.931179,256 128,256 C57.307552,256 7.10542736e-15,198.692448 7.10542736e-15,128 C7.10542736e-15,114.357909 2.13416363,101.214278 6.08683609,88.884763 L66.6347809,149.333333 L126.649,129.346 L129.329,126.666 L149.333333,66.7080586 L88.7145729,6.14152881 C101.0933,2.15385405 114.29512,7.10542736e-15 128,7.10542736e-15 Z"> </path> </g> </g> </g></svg>
+                                <p>Mantenimiento</p>
+                            </div>
+                        </a>
+                        <a href="#" class="sb-aside-item">
+                            <div class="sb-aside-item-bloc">
+                                <svg fill="#FFF" viewBox="-5.03 0 32.406 32.406" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0" /><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round" /><g id="SVGRepo_iconCarrier"> <g transform="translate(-549.634 -578.31)"> <path d="M569.84,610.716H551.781a2.149,2.149,0,0,1-2.147-2.147V580.478a2.152,2.152,0,0,1,2.142-2.146l11.522-.021,8.688,8.708v21.55A2.149,2.149,0,0,1,569.84,610.716Zm-7.37-30.4-10.689.019a.148.148,0,0,0-.147.146v28.091a.147.147,0,0,0,.147.147H569.84a.147.147,0,0,0,.146-.147V587.845Z" /> <path d="M570.986,588.432h-.013l-7.176-.09a2.032,2.032,0,0,1-2-2.055l.09-6.987a.975.975,0,0,1,1.013-.988,1,1,0,0,1,.987,1.013l-.09,6.986,7.205.121a1,1,0,0,1-.013,2Z" /> <path d="M566.89,593h-12.1a1,1,0,0,1,0-2h12.1a1,1,0,0,1,0,2Z" /> <path d="M566.89,598.542h-12.1a1,1,0,0,1,0-2h12.1a1,1,0,0,1,0,2Z" /> <path d="M566.89,604.084h-12.1a1,1,0,0,1,0-2h12.1a1,1,0,0,1,0,2Z" /> </g> </g></svg>
+                                <p>Reportes</p>
+                            </div>
+                        </a>
+                        <a href="#" class="sb-aside-item">
+                            <div class="sb-aside-item-bloc">
+                                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0" /><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round" /><g id="SVGRepo_iconCarrier"> <path fill-rule="evenodd" clip-rule="evenodd" d="M12 3.73169L19.5 5.39836V12.75C19.5 15.6371 17.5419 18.9972 12.2605 20.9533L12 21.0498L11.7395 20.9533C6.45811 18.9972 4.5 15.6371 4.5 12.75V5.39836L12 3.73169ZM6 6.60161V12.75C6 14.8245 7.3659 17.6481 12 19.4479C16.6341 17.6481 18 14.8245 18 12.75V6.60161L12 5.26828L6 6.60161Z" fill="#FFF" /> </g></svg>
+                                <p>Seguridad</p>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="sb-aside-logoff">
+                        <div class="sb-aside-logoff-bloc">
+                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0" /><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round" /><g id="SVGRepo_iconCarrier"> <path d="M10.0303 8.96965C9.73741 8.67676 9.26253 8.67676 8.96964 8.96965C8.67675 9.26255 8.67675 9.73742 8.96964 10.0303L10.9393 12L8.96966 13.9697C8.67677 14.2625 8.67677 14.7374 8.96966 15.0303C9.26255 15.3232 9.73743 15.3232 10.0303 15.0303L12 13.0607L13.9696 15.0303C14.2625 15.3232 14.7374 15.3232 15.0303 15.0303C15.3232 14.7374 15.3232 14.2625 15.0303 13.9696L13.0606 12L15.0303 10.0303C15.3232 9.73744 15.3232 9.26257 15.0303 8.96968C14.7374 8.67678 14.2625 8.67678 13.9696 8.96968L12 10.9393L10.0303 8.96965Z" fill="#FFF" /> <path fill-rule="evenodd" clip-rule="evenodd" d="M12 1.25C6.06294 1.25 1.25 6.06294 1.25 12C1.25 17.9371 6.06294 22.75 12 22.75C17.9371 22.75 22.75 17.9371 22.75 12C22.75 6.06294 17.9371 1.25 12 1.25ZM2.75 12C2.75 6.89137 6.89137 2.75 12 2.75C17.1086 2.75 21.25 6.89137 21.25 12C21.25 17.1086 17.1086 21.25 12 21.25C6.89137 21.25 2.75 17.1086 2.75 12Z" fill="#FFF" /> </g></svg>
+                            <p>Cerrar Sesión</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="sb-aside-compress">
+                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M8.70710678,12 L19.5,12 C19.7761424,12 20,12.2238576 20,12.5 C20,12.7761424 19.7761424,13 19.5,13 L8.70710678,13 L11.8535534,16.1464466 C12.0488155,16.3417088 12.0488155,16.6582912 11.8535534,16.8535534 C11.6582912,17.0488155 11.3417088,17.0488155 11.1464466,16.8535534 L7.14644661,12.8535534 C6.95118446,12.6582912 6.95118446,12.3417088 7.14644661,12.1464466 L11.1464466,8.14644661 C11.3417088,7.95118446 11.6582912,7.95118446 11.8535534,8.14644661 C12.0488155,8.34170876 12.0488155,8.65829124 11.8535534,8.85355339 L8.70710678,12 L8.70710678,12 Z M4,5.5 C4,5.22385763 4.22385763,5 4.5,5 C4.77614237,5 5,5.22385763 5,5.5 L5,19.5 C5,19.7761424 4.77614237,20 4.5,20 C4.22385763,20 4,19.7761424 4,19.5 L4,5.5 Z" />
+                </svg>
+            </div>
+
+        </div>
+
+        <div class="sb-admninistrator">
+
+            @RenderBody()
+
+        </div>
+
+        <div class="sb-alert-off">
+            <div class="sb-alert-off-block">
+                <p>¿Estas seguro de Cerrar Sesión?</p>
+                <div class="sb-alert-off-buttons">
+                    <div class="sb-alert-off-button-yes btnCloseSession">
+                        <p>Si</p>
+                    </div>
+                    <div class="sb-alert-off-button-no">
+                        <p>No</p>
+                    </div>
+                </div>
+                <div class="sb-alert-off-block-cross">
+                    <p>x</p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    @* SB-Administador - Fin *@
+
+    <div id="main-wrapper" style="display:none;">
         <header class="topbar">
             <nav class="navbar top-navbar navbar-expand-md navbar-light">
                 <div class="navbar-header">
@@ -349,7 +471,7 @@
                     </div>
                 </div>
 
-                @RenderBody()
+                
             </div>
 
             <footer class="footer hide-element">&copy; @DateTime.Now.Year</footer>
@@ -545,6 +667,13 @@
     <script src="~/assets/plugins/sticky-kit-master/dist/sticky-kit.min.js"></script>
     <script src="~/assets/plugins/sparkline/jquery.sparkline.min.js"></script>
     <script src="~/assets/js/custom.js?f=@dHoy.ToString("yyyyMMddhhmmss")"></script>
+
+    @* Script sb-home *@
+
+    <script src="~/src/js/sb-main.js?ver=002"></script>
+
+    @* Script sb-home Fin *@
+
 
     @*<script src="~/assets/plugins/chartist-js/dist/chartist.min.js"></script>*@
     @*<script src="~/assets/plugins/d3/d3.min.js"></script>*@
