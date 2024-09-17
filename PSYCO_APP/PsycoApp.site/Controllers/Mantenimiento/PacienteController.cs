@@ -17,25 +17,24 @@ namespace PsycoApp.site.Controllers.Mantenimiento
         private readonly string apiUrl = Helper.GetUrlApi()+ "/api/paciente"; // URL base de la API
 
         [Route("Mantenimiento/Paciente")]
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int pageNumber = 1, int pageSize = 10)
         {
             if (!string.IsNullOrEmpty(HttpContext.Session.GetString("nombres") as string))
             {
-                string url = $"{apiUrl}/listar"; // Supongamo que esta es la URL de la API para obtener la lista de pacientes.
+                //string url = $"{apiUrl}/listar?pageNumber={pageNumber}&pageSize={pageSize}"; // URL de la API para obtener la lista de pacientes con paginación
+                string url = $"{apiUrl}/listar/{pageNumber}/{pageSize}"; // URL de la API para obtener la lista de pacientes con paginación
                 var pacientes = await GetFromApiAsync<List<PsycoApp.entities.Paciente>>(url);
                 var pacientesViewModel = pacientes.Select(p => new PsycoApp.site.Models.Paciente
                 {
                     Id = p.Id,
                     Nombre = p.Nombre,
-                    DocumentoNumero= p.DocumentoNumero,
+                    DocumentoNumero = p.DocumentoNumero,
                     Estado = p.Estado,
                     DocumentoTipo = p.DocumentoTipo,
                     EstadoCivil = p.EstadoCivil,
                     FechaNacimiento = p.FechaNacimiento,
                     Sexo = p.Sexo,
                     Telefono = p.Telefono
-
-                    
                 }).ToList();
 
                 dynamic obj = new System.Dynamic.ExpandoObject();
@@ -55,9 +54,14 @@ namespace PsycoApp.site.Controllers.Mantenimiento
 
                 var viewModelContainer = new ViewModelContainer<IEnumerable<PsycoApp.site.Models.Paciente>>
                 {
-                    Model = pacientesViewModel, // pacientesViewModel es una lista, pero como IEnumerable es más general, no necesita conversión explícita
+                    Model = pacientesViewModel,
                     DynamicData = obj
                 };
+
+                // Devolver la vista con los datos del paginado y la lista de pacientes
+                ViewBag.PageNumber = pageNumber;
+                ViewBag.PageSize = pageSize;
+
                 return View("~/Views/Mantenimiento/Paciente/Index.cshtml", viewModelContainer);
             }
             else
@@ -65,7 +69,6 @@ namespace PsycoApp.site.Controllers.Mantenimiento
                 return RedirectToAction("Index", "Login");
             }
         }
-
         // POST: Paciente/Buscar
         [Route("/Mantenimiento/Paciente/Buscar")]
         
@@ -183,6 +186,7 @@ namespace PsycoApp.site.Controllers.Mantenimiento
                 return BadRequest($"Error al obtener el paciente: {ex.Message}");
             }
         }
+
         private async Task<HttpResponseMessage> PostToApiAsync<T>(string url, T data)
         {
             using var client = new HttpClient();

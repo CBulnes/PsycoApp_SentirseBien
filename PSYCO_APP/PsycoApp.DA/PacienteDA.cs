@@ -86,13 +86,17 @@ namespace PsycoApp.DA
             return pacientes;
         }
 
-        public List<Paciente> ListarPacientes()
+        public List<Paciente> ListarPacientes(int pagina, int tamanoPagina)
         {
             var pacientes = new List<Paciente>();
 
-            using (var command = new SqlCommand("sp_listar_pacientes", _connection))
+            using (var command = new SqlCommand("sp_listar_pacientes_paginado", _connection))
             {
                 command.CommandType = CommandType.StoredProcedure;
+
+                // Añadir parámetros para la paginación
+                command.Parameters.AddWithValue("@Pagina", pagina);
+                command.Parameters.AddWithValue("@TamanoPagina", tamanoPagina);
 
                 _connection.Open();
 
@@ -120,7 +124,6 @@ namespace PsycoApp.DA
 
             return pacientes;
         }
-
         public void AgregarPaciente(Paciente paciente)
         {
             using (var command = new SqlCommand("sp_agregar_paciente", _connection))

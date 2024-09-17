@@ -15,11 +15,10 @@ namespace PsycoApp.BL
             _pacienteDA = new PacienteDA();
         }
 
-        public List<Paciente> ListarPacientes()
+        public List<Paciente> ListarPacientes(int pagina, int tamanoPagina)
         {
-            return _pacienteDA.ListarPacientes();
+            return _pacienteDA.ListarPacientes(pagina, tamanoPagina);
         }
-
 
 
 

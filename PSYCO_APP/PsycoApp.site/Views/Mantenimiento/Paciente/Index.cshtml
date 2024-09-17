@@ -34,10 +34,10 @@
         <div class="col-12">&nbsp;</div>
 
         <!-- Contenedor de la tabla que se mostrará al hacer clic en "Buscar" -->
-        <div id="containerTabla" class="container"">
+        <div id="containerTabla" class="container">
             <div class="row" style="background-color: #FFFFFF;">
                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12" style="padding-left: 0px; padding-right: 0px; width: 100%!important;">
-                    <table class="table">
+                    <table class="table table-bordered">
                         <thead>
                             <tr>
                                 <th class="text-center" style="width: 80px;">#</th>
@@ -48,13 +48,49 @@
                             </tr>
                         </thead>
                         <tbody id="bdPacientes">
-                            <!-- Aquí irán las filas generadas dinámicamente -->
+                            @foreach (var paciente in Model.Model)
+                            {
+                                <tr>
+                                    <td class="text-center">@paciente.Id</td>
+                                    <td class="text-center">@paciente.Nombre</td>
+                                    <td class="text-center">@paciente.FechaNacimiento</td>
+                                    <td class="text-center">@paciente.Estado</td>
+                                    <td class="text-center">
+                                        <button class="btn btn-warning" onclick="editarPaciente(@paciente.Id)">Editar</button>
+                                        <button class="btn btn-danger" onclick="eliminarPaciente(@paciente.Id)">Eliminar</button>
+                                    </td>
+                                </tr>
+                            }
                         </tbody>
                     </table>
                 </div>
             </div>
-        </div>
+             <!-- Paginación -->
 
+        <div class="pagination-container text-center">
+            <ul class="pagination">
+                @if (ViewBag.PageNumber > 1)
+                {
+                    <li class="page-item">
+                        <a class="page-link" href="/Mantenimiento/Paciente?pageNumber=@(ViewBag.PageNumber - 1)&pageSize=@ViewBag.PageSize">
+                            Anterior
+                        </a>
+                    </li>
+                }
+
+                <li class="page-item active">
+                    <a class="page-link" href="#">@ViewBag.PageNumber</a>
+                </li>
+
+                <li class="page-item">
+                    <a class="page-link" href="/Mantenimiento/Paciente?pageNumber=@(ViewBag.PageNumber + 1)&pageSize=@ViewBag.PageSize">
+                        Siguiente
+                    </a>
+                </li>
+            </ul>
+        </div>
+        </div>
+       
     </div>
 
 </div>
