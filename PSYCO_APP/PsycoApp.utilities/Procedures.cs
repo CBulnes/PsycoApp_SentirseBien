@@ -45,5 +45,18 @@ namespace PsycoApp.utilities
         public const string sp_listar_citas_usuario = "SP_LISTAR_CITAS_USUARIO";
         public const string sp_listar_citas_doctor = "SP_LISTAR_CITAS_DOCTOR";
 
+        #region "psicologos"
+        public const string obtener_psicologo = "dbo.sp_obtener_psicologo";
+        public const string buscar_psicologo = "dbo.sp_buscar_psicologo";
+        public const string listar_psicologo = "dbo.sp_listar_psicologos";
+        public const string agregar_psicologo = "dbo.sp_agregar_psicologo";
+        public const string actualizar_psicologo = "dbo.sp_actualizar_psicologo";
+        public const string eliminar_psicologo = "dbo.sp_eliminar_psicologo";
+        #endregion
+
+        #region "ubigeo"
+        public const string listar_ubigeos = "dbo.sp_listar_ubigeos";
+        #endregion
+
     }
 }
