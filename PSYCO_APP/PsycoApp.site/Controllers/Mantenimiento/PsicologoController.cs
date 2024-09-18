@@ -36,6 +36,14 @@ namespace PsycoApp.site.Controllers.Mantenimiento
                     Direccion = p.Direccion,
                     Distrito = p.Distrito,
                     Telefono = p.Telefono
+                    //Estudios = p.Estudios.Select(q => new PsycoApp.site.Models.Estudio
+                    //{
+                    //    Id = q.Id,
+                    //    IdPsicologo = q.IdPsicologo,
+                    //    GradoAcademico = q.GradoAcademico,
+                    //    Institucion = q.Institucion,
+                    //    Carrera = q.Carrera
+                    //}).ToList()
                 }).ToList();
 
                 url = $"{apiUrlUbigeo}/listar";
