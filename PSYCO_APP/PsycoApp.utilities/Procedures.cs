@@ -48,10 +48,12 @@ namespace PsycoApp.utilities
         #region "psicologos"
         public const string obtener_psicologo = "dbo.sp_obtener_psicologo";
         public const string buscar_psicologo = "dbo.sp_buscar_psicologo";
-        public const string listar_psicologo = "dbo.sp_listar_psicologos";
+        public const string listar_psicologos = "dbo.sp_listar_psicologos";
         public const string agregar_psicologo = "dbo.sp_agregar_psicologo";
         public const string actualizar_psicologo = "dbo.sp_actualizar_psicologo";
         public const string eliminar_psicologo = "dbo.sp_eliminar_psicologo";
+
+        public const string listar_estudios_psicologo = "dbo.sp_listar_estudios_psicologo";
         #endregion
 
         #region "ubigeo"

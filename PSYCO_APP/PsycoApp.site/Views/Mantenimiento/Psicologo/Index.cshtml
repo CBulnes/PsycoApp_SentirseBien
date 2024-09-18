@@ -54,10 +54,9 @@
 
         <!-- Contenedor de formulario para agregar/editar psicologo -->
         <div id="containerFormulario" class="container" style="display: none;">
-            <div class="row" style="background-color: #FFFFFF;">
-                <div class="col-12">&nbsp;</div>
-
-                <form id="formPsicologo">
+            <form id="formPsicologo">
+                <div class="row" style="background-color: #FFFFFF;">
+                    <div class="col-12">&nbsp;</div>
                     <input type="hidden" id="hdnPsicologoId" name="Id" />
 
                     <div class="col-6">
@@ -108,9 +107,9 @@
                         <div class="form-group">
                             <span class="label-form">Distrito</span><br />
                             @* <select class="form-control" id="cboDistrito" name="Distrito" required>
-                                <option value="-1">Seleccionar</option>
-                                <option value="150115">La Victoria</option>
-                                <option value="150116">Lince</option>
+                            <option value="-1">Seleccionar</option>
+                            <option value="150115">La Victoria</option>
+                            <option value="150116">Lince</option>
                             </select> *@
                             @Html.DropDownList("cboDistrito", new SelectList(ubigeos, "CodUbigeo", "Distrito"), new { @class = "form-control" })
                         </div>
@@ -141,36 +140,61 @@
                         </div>
                     </div>
 
+                    <div class="col-12">&nbsp;</div>
+
+                    <div class="col-12">
+                        <div class="form-group">
+                            <span class="label-form">Estudios</span><br />
+                            <div class="row">
+                                <div class="col-12">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th class="text-center" style="width: 80px;">#</th>
+                                                <th class="text-center">Grado de instrucción</th>
+                                                <th class="text-center">Institución</th>
+                                                <th class="text-center">Carrera/especialidad</th>
+                                                <th class="text-center">Acción</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="bdEstudios"></tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="col-12 text-right">
                         <button type="button" class="btn btn-success" onclick="guardarPsicologo()">Guardar</button>
                         <button type="button" class="btn btn-secondary" onclick="cancelarFormulario()">Cancelar</button>
                     </div>
-                </form>
-            </div>
+                </div>
+            </form>
         </div>
     </div>
 </div>
 
 @section Scripts {
     <script>
+        var global_estudios = [];
         function buscarPsicologo() {
             let nombre = document.getElementById('txtBuscarNombre').value;
             $.post('/Mantenimiento/Psicologo/Buscar', { nombre: nombre }, function (data) {
                 let tableBody = $('#bdPsicologos');
                 tableBody.empty();
-                data.forEach(psicologo => {
+                data.forEach((psicologo, index) => {
                     tableBody.append(`
-                                        <tr>
-                                            <td class="text-center">${psicologo.id}</td>
-                                            <td class="text-center">${psicologo.nombre}</td>
-                                            <td class="text-center">${psicologo.fechaNacimiento}</td>
-                                            <td class="text-center">${psicologo.estado}</td>
-                                            <td class="text-center">
-                                                <button class="btn btn-warning btn-sm" onclick="editarPsicologo(${psicologo.id})">Editar</button>
-                                                <button class="btn btn-danger btn-sm" onclick="eliminarPsicologo(${psicologo.id})">Eliminar</button>
-                                            </td>
-                                        </tr>
-                                    `);
+                        <tr>
+                            <td class="text-center">${index+1}</td>
+                            <td class="text-center">${psicologo.nombre}</td>
+                            <td class="text-center">${psicologo.fechaNacimiento}</td>
+                            <td class="text-center">${psicologo.estado}</td>
+                            <td class="text-center">
+                                <button class="btn btn-warning btn-sm" onclick="editarPsicologo(${psicologo.id})">Editar</button>
+                                <button class="btn btn-danger btn-sm" onclick="eliminarPsicologo(${psicologo.id})">Eliminar</button>
+                            </td>
+                        </tr>
+                    `);
                 });
                 $('#containerTabla').show();
             });
@@ -180,6 +204,8 @@
             $('#containerFormulario').show();
             $('#containerFormulario input').val('');
             $('#containerFormulario select').val('-1');
+
+            listarEstudios([{ id: 0, idPsicologo: 0, gradoAcademico: -1, institucion: -1, carrera: -1 }], 0);
         }
 
         function editarPsicologo(id) {
@@ -194,8 +220,78 @@
                 $('#cboEspecialidad').val(psicologo.especialidad);
                 $('#txtDireccion').val(psicologo.direccion);
                 $('#cboDistrito').val(psicologo.distrito);
+
+                listarEstudios(psicologo.estudios, psicologo.id);
+                global_estudios = psicologo.estudios;
+
                 $('#containerFormulario').show();
             });
+        }
+
+        function listarEstudios(estudios, idPsicologo){
+            let tableBody = $('#bdEstudios');
+            tableBody.empty();
+
+            for (var i = 0; i < estudios.length; i++) {
+                var correlativoId = (i + 1).toString();
+                var rowId = 'row0' + correlativoId;
+                var gradoId = 'grado0' + correlativoId;
+                var insId = 'ins0' + correlativoId;
+                var carrId = 'carr0' + correlativoId;
+
+                tableBody.append(`
+                    <tr class="rowTbl" id="${rowId}">
+                        <td class="text-center">${correlativoId}</td>
+                        <td class="text-center">
+                            <select class="form-control grado" id="${gradoId}" onchange="actualizarValor('grado', ${i}, '${gradoId}')">
+                                <option value="-1">Seleccionar</option>
+                                <option value="1">Posgrado</option>
+                                <option value="2">Maestría</option>
+                            </select>
+                        </td>
+                        <td class="text-center">
+                            <select class="form-control institucion" id="${insId}" onchange="actualizarValor('institucion', ${i}, '${insId}')">
+                                <option value="-1">Seleccionar</option>
+                                <option value="1">UNMSM</option>
+                                <option value="2">UPC</option>
+                            </select>
+                        </td>
+                        <td class="text-center">
+                            <select class="form-control carrera" id="${carrId}" onchange="actualizarValor('carrera', ${i}, '${carrId}')">
+                                <option value="-1">Seleccionar</option>
+                                <option value="1">Psicología 1</option>
+                                <option value="2">Psicología 2</option>
+                            </select>
+                        </td>
+                        <td class="text-center">
+                            <button class="btn btn-danger btn-sm${(correlativoId == '1' ? ' hide' : '')}" title="Eliminar estudio" type="button" onclick="eliminarEstudio('${rowId}', ${i}, ${idPsicologo})">
+                                <i class="fa fa-trash"></i>
+                            </button>
+
+                            <button class="btn btn-primary btn-sm main_color${(correlativoId != '1' ? ' hide' : '')}" title="Nuevo estudio" type="button" onclick="agregarEstudio(${idPsicologo})">
+                                <i class="fa fa-plus"></i>
+                            </button>
+                        </td>
+                    </tr>
+                `);
+                setValorComboDinamico(estudios[i].gradoAcademico, gradoId);
+                setValorComboDinamico(estudios[i].institucion, insId);
+                setValorComboDinamico(estudios[i].carrera, carrId);
+            };
+        }
+
+        function setValorComboDinamico(valor, idCombo) {
+            $('#' + idCombo).val(valor);
+        }
+
+        function actualizarValor(tipo, index, idCampo) {
+            var valor = $('#' + idCampo).val();
+            if (tipo == 'grado')
+                global_estudios[index].gradoAcademico = valor;
+            if (tipo == 'institucion')
+                global_estudios[index].institucion = valor;
+            if (tipo == 'carrera')
+                global_estudios[index].carrera = valor;
         }
 
         function eliminarPsicologo(id) {
@@ -205,6 +301,28 @@
                     buscarPsicologo(); // Actualiza la lista después de eliminar
                 });
             }
+        }
+
+        function agregarEstudio(idPsicologo) {
+            global_estudios.push({
+                id: 0,
+                idPsicologo: idPsicologo,
+                gradoAcademico: -1,
+                institucion: -1,
+                carrera: -1
+            });
+            console.log(global_estudios);
+            listarEstudios(global_estudios, idPsicologo);
+        }
+
+        function eliminarEstudio(idFila, index, idPsicologo) {
+            if ($('.rowTbl').length == 1){
+                alert('debes tener al menos un estudio');
+                return;
+            }
+            $('#' + idFila).remove();
+            global_estudios.splice(index, 1);
+            listarEstudios(global_estudios, idPsicologo);
         }
 
         function guardarPsicologo() {
@@ -218,12 +336,14 @@
                 Telefono: $('#txtTelefono').val(),
                 Especialidad: parseInt($('#cboEspecialidad').val()),
                 Direccion: $('#txtDireccion').val(),
-                Distrito: $('#cboDistrito').val(),
+                Distrito: $('#cboDistrito').val()
             };
+            psicologo.estudios = obtenerEstudiosGuardar(psicologo.Id);
+
             let dataToSend = {
                 psicologo: psicologo // Enviar dentro de un objeto "psicologo"
             };
-            
+
             let url = psicologo.Id ? '/Mantenimiento/Psicologo/Editar' : '/Mantenimiento/Psicologo/Agregar';
             $.ajax({
                 type: 'POST',
@@ -239,6 +359,24 @@
                     alert('Error al guardar psicólogo.');
                 }
             });
+        }
+
+        function obtenerEstudiosGuardar(idPsicologo){
+            let estudios = [];
+            $('.rowTbl').each(function () {
+                var grado = $(this).find('.grado').val();
+                var institucion = $(this).find('.institucion').val();
+                var carrera = $(this).find('.carrera').val();
+
+                estudios.push({
+                    Id: 0,
+                    IdPsicologo: idPsicologo,
+                    GradoAcademico: parseInt(grado),
+                    Institucion: parseInt(institucion),
+                    Carrera: parseInt(carrera)
+                });
+            });
+            return estudios;
         }
 
         function cancelarFormulario() {
