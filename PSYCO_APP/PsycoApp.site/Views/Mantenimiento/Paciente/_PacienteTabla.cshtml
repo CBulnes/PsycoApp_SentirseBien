@@ -19,7 +19,20 @@
                 <tr>
                     <td>@paciente.Nombre</td>
                     <td>@paciente.DocumentoTipo - @paciente.DocumentoNumero</td>
-                    <td>@paciente.Estado</td>
+                  <td>
+                    @if (@paciente.Estado == "1")
+                    {
+                        <span>Registrado</span>
+                    }
+                    else if (@paciente.Estado == "2")
+                    {
+                        <span>Atendido</span>
+                    }
+                    else
+                    {
+                        <span>Desconocido</span> <!-- Por si hay otros estados no contemplados -->
+                    }
+                </td>
                     <td>@paciente.FechaNacimiento</td>
                     <td>@paciente.Telefono</td>
                     <td>
