@@ -1,0 +1,63 @@
+﻿@model IEnumerable<PsycoApp.site.Models.Paciente>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Nombre</th>
+            <th>Documento</th>
+            <th>Estado</th>
+            <th>Fecha de Nacimiento</th>
+            <th>Teléfono</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null && Model.Any())
+        {
+            foreach (var paciente in Model)
+            {
+                <tr>
+                    <td>@paciente.Nombre</td>
+                    <td>@paciente.DocumentoTipo - @paciente.DocumentoNumero</td>
+                    <td>@paciente.Estado</td>
+                    <td>@paciente.FechaNacimiento</td>
+                    <td>@paciente.Telefono</td>
+                    <td>
+                        <!-- Acciones como editar o eliminar -->
+                        <button class="btn btn-warning btn-sm" onclick="editarPaciente(@paciente.Id)">Editar</button>
+                        <button class="btn btn-danger btn-sm" onclick="eliminarPaciente(@paciente.Id)">Eliminar</button>
+                    </td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="6">No se encontraron pacientes.</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<!-- Controles de Paginación -->
+@if (ViewBag.PageNumber != null && ViewBag.PageSize != null)
+{
+    <nav aria-label="Paginación">
+        <ul class="pagination">
+            <li class="page-item @(ViewBag.PageNumber == 1 ? "disabled" : "")">
+                <a class="page-link" href="javascript:void(0)" onclick="buscarPaciente(@(ViewBag.PageNumber - 1))">Anterior</a>
+            </li>
+
+            <!-- Aquí podrías agregar más lógica para mostrar números de página si es necesario -->
+            <li class="page-item">
+                <span class="page-link">
+                    Página @(ViewBag.PageNumber)
+                </span>
+            </li>
+
+            <li class="page-item @(Model.Count() < ViewBag.PageSize ? "disabled" : "")">
+                <a class="page-link" href="javascript:void(0)" onclick="buscarPaciente(@(ViewBag.PageNumber + 1))">Siguiente</a>
+            </li>
+        </ul>
+    </nav>
+}

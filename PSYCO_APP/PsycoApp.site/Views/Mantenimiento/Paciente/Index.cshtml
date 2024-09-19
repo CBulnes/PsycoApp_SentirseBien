@@ -23,7 +23,7 @@
                 <span class="label-form">Nombre del Paciente</span><br />
                 <input id="txtBuscarNombre" class="form-control" type="text" placeholder="Ingrese nombre para buscar" />
             </div>
-            <button type="button" class="btn btn-doc second_color" style="color: #FFF; font-size: 12px;" onclick="buscarPaciente()">
+            <button type="button" class="btn btn-doc second_color" onclick="buscarPaciente()">
                 <i class="fa fa-search"></i>&nbsp;Buscar
             </button>
             <button type="button" class="btn btn-primary main_color" style="color: #FFF; font-size: 12px;" onclick="mostrarFormularioAgregar()">
@@ -33,8 +33,8 @@
 
         <div class="col-12">&nbsp;</div>
 
-        <!-- Contenedor de la tabla que se mostrará al hacer clic en "Buscar" -->
-        <div id="containerTabla" class="container">
+        <!-- Contenedor de la tabla -->
+   @*      <div id="containerTabla" class="container">
             <div class="row" style="background-color: #FFFFFF;">
                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12" style="padding-left: 0px; padding-right: 0px; width: 100%!important;">
                     <table class="table table-bordered">
@@ -56,8 +56,8 @@
                                     <td class="text-center">@paciente.FechaNacimiento</td>
                                     <td class="text-center">@paciente.Estado</td>
                                     <td class="text-center">
-                                        <button class="btn btn-warning" onclick="editarPaciente(@paciente.Id)">Editar</button>
-                                        <button class="btn btn-danger" onclick="eliminarPaciente(@paciente.Id)">Eliminar</button>
+                                        <button class="btn btn-warning btn-sm" onclick="editarPaciente(@paciente.Id)">Editar</button>
+                                        <button class="btn btn-danger btn-sm" onclick="eliminarPaciente(@paciente.Id)">Eliminar</button>
                                     </td>
                                 </tr>
                             }
@@ -65,32 +65,56 @@
                     </table>
                 </div>
             </div>
-             <!-- Paginación -->
 
-        <div class="pagination-container text-center">
-            <ul class="pagination">
-                @if (ViewBag.PageNumber > 1)
-                {
-                    <li class="page-item">
-                        <a class="page-link" href="/Mantenimiento/Paciente?pageNumber=@(ViewBag.PageNumber - 1)&pageSize=@ViewBag.PageSize">
-                            Anterior
-                        </a>
+            <!-- Paginación -->
+            <div class="pagination-container text-center">
+                <ul class="pagination">
+                    @if (ViewBag.PageNumber > 1)
+                    {
+                        <li class="page-item">
+                            @if (!String.IsNullOrEmpty(ViewBag.NombreBuscado))
+                            {
+                                <a class="page-link" href="/Mantenimiento/Paciente/Buscar?pageNumber=@(ViewBag.PageNumber - 1)&pageSize=@ViewBag.PageSize&nombre=@ViewBag.NombreBuscado">
+                                    Anterior
+                                </a>
+                            }
+                            else
+                            {
+                                <a class="page-link" href="/Mantenimiento/Paciente?pageNumber=@(ViewBag.PageNumber - 1)&pageSize=@ViewBag.PageSize">
+                                    Anterior
+                                </a>
+                            }
+                        </li>
+                    }
+
+                    <li class="page-item active">
+                        <a class="page-link" href="#">@ViewBag.PageNumber</a>
                     </li>
-                }
 
-                <li class="page-item active">
-                    <a class="page-link" href="#">@ViewBag.PageNumber</a>
-                </li>
+                    <li class="page-item">
+                        @if (!String.IsNullOrEmpty(ViewBag.NombreBuscado))
+                        {
+                            <a class="page-link" href="/Mantenimiento/Paciente/Buscar?pageNumber=@(ViewBag.PageNumber + 1)&pageSize=@ViewBag.PageSize&nombre=@ViewBag.NombreBuscado">
+                                Siguiente
+                            </a>
+                        }
+                        else
+                        {
+                            <a class="page-link" href="/Mantenimiento/Paciente?pageNumber=@(ViewBag.PageNumber + 1)&pageSize=@ViewBag.PageSize">
+                                Siguiente
+                            </a>
+                        }
+                    </li>
+                </ul>
+            </div>
+        </div>
+ *@
 
-                <li class="page-item">
-                    <a class="page-link" href="/Mantenimiento/Paciente?pageNumber=@(ViewBag.PageNumber + 1)&pageSize=@ViewBag.PageSize">
-                        Siguiente
-                    </a>
-                </li>
-            </ul>
+        <!-- Contenedor de la tabla -->
+        <div id="containerTabla" class="container">
+            <!-- Aquí se carga la vista parcial con la tabla de pacientes -->
+            @await Html.PartialAsync("~/Views/Mantenimiento/Paciente/_PacienteTabla.cshtml", Model.Model)
         </div>
-        </div>
-       
     </div>
 
 </div>
@@ -115,6 +139,7 @@
                 <div class="sb-frm-agregar-block-item">
                     <span class="label-form">Fecha de Nacimiento</span>
                     <input id="txtFecha" name="FechaNacimiento" class="form-control" type="date" required />
+
                 </div>
             </div>
 
@@ -186,27 +211,18 @@
 
 @section Scripts {
     <script>
-        function buscarPaciente() {
+        function buscarPaciente(pageNumber = 1) {
             let nombre = document.getElementById('txtBuscarNombre').value;
-            $.post('/Mantenimiento/Paciente/Buscar', { nombre: nombre }, function (data) {
-                let tableBody = $('#bdPacientes');
-                tableBody.empty();
-                data.forEach(paciente => {
-                    tableBody.append(`
-                                <tr>
-                                    <td class="text-center">${paciente.id}</td>
-                                    <td class="text-center">${paciente.nombre}</td>
-                                    <td class="text-center">${paciente.fechaNacimiento}</td>
-                                    <td class="text-center">${paciente.estado}</td>
-                                    <td class="text-center">
-                                        <button class="btn btn-warning btn-sm" onclick="editarPaciente(${paciente.id})">Editar</button>
-                                        <button class="btn btn-danger btn-sm" onclick="eliminarPaciente(${paciente.id})">Eliminar</button>
-                                    </td>
-                                </tr>
-                            `);
+            let pageSize = 10; // Número de pacientes por página
+
+            $.post('/Mantenimiento/Paciente/Buscar', { nombre: nombre, pageNumber: pageNumber, pageSize: pageSize })
+                .done(function (data) {
+                    // Actualizar solo el contenido de la tabla
+                    $('#containerTabla').html(data);
+                })
+                .fail(function () {
+                    alert('Error en la búsqueda de pacientes.');
                 });
-                $('#containerTabla').show();
-            });
         }
 
         function mostrarFormularioAgregar() {
@@ -220,7 +236,7 @@
             $.get(`/Mantenimiento/Paciente/Get/${id}`, function (paciente) {
                 $('#hdnPacienteId').val(paciente.id);
                 $('#txtNombre').val(paciente.nombre);
-                $('#txtFecha').val(paciente.fechaNacimiento);
+                $('#txtFecha').val(paciente.fechaNacimiento.substring(0, 10));
                 $('#cboEstado').val(paciente.estado);
                 $('#cboDocumento').val(paciente.documentoTipo);
                 $('#txtDocumento').val(paciente.documentoNumero);

@@ -9,6 +9,8 @@ using PsycoApp.utilities;
 using Microsoft.AspNetCore.Http;
 using System.Net.Http;
 using PsycoApp.site.Models;
+using System.Drawing.Printing;
+using System.Reflection;
 
 namespace PsycoApp.site.Controllers.Mantenimiento
 {
@@ -17,12 +19,15 @@ namespace PsycoApp.site.Controllers.Mantenimiento
         private readonly string apiUrl = Helper.GetUrlApi()+ "/api/paciente"; // URL base de la API
 
         [Route("Mantenimiento/Paciente")]
-        public async Task<IActionResult> Index(int pageNumber = 1, int pageSize = 10)
+        public async Task<IActionResult> Index(int pageNumber = 1, int pageSize = 10, string search = "")
         {
             if (!string.IsNullOrEmpty(HttpContext.Session.GetString("nombres") as string))
             {
-                //string url = $"{apiUrl}/listar?pageNumber={pageNumber}&pageSize={pageSize}"; // URL de la API para obtener la lista de pacientes con paginación
-                string url = $"{apiUrl}/listar/{pageNumber}/{pageSize}"; // URL de la API para obtener la lista de pacientes con paginación
+                // Construir la URL para la API dependiendo de si hay un término de búsqueda
+                string url = string.IsNullOrEmpty(search) ?
+                    $"{apiUrl}/listar/{pageNumber}/{pageSize}" :
+                    $"{apiUrl}/buscar?nombre={search}&pageNumber={pageNumber}&pageSize={pageSize}";
+
                 var pacientes = await GetFromApiAsync<List<PsycoApp.entities.Paciente>>(url);
                 var pacientesViewModel = pacientes.Select(p => new PsycoApp.site.Models.Paciente
                 {
@@ -61,6 +66,7 @@ namespace PsycoApp.site.Controllers.Mantenimiento
                 // Devolver la vista con los datos del paginado y la lista de pacientes
                 ViewBag.PageNumber = pageNumber;
                 ViewBag.PageSize = pageSize;
+                ViewBag.Search = search; // Pasar el término de búsqueda a la vista
 
                 return View("~/Views/Mantenimiento/Paciente/Index.cshtml", viewModelContainer);
             }
@@ -71,13 +77,47 @@ namespace PsycoApp.site.Controllers.Mantenimiento
         }
         // POST: Paciente/Buscar
         [Route("/Mantenimiento/Paciente/Buscar")]
-        
         [HttpPost]
-        public async Task<IActionResult> Buscar(string nombre)
+        public async Task<IActionResult> Buscar(string nombre, int pageNumber = 1, int pageSize = 10)
         {
-            string url = $"{apiUrl}/buscar?nombre={nombre}";
+            string url = $"{apiUrl}/buscar?nombre={nombre}&pageNumber={pageNumber}&pageSize={pageSize}";
             var pacientes = await GetFromApiAsync<List<entities.Paciente>>(url);
-            return Json(pacientes);
+
+            dynamic obj = new System.Dynamic.ExpandoObject();
+            string path = $"{this.Request.Scheme}://{this.Request.Host}{this.Request.PathBase}";
+            obj.path = path;
+            obj.call_center = Helper.GetCallCenter();
+            obj.horario_atencion = Helper.GetHorario();
+            obj.whatsapp = Helper.GetWhatsapp();
+            obj.nombres = HttpContext.Session.GetString("nombres");
+            obj.apellidos = HttpContext.Session.GetString("apellidos");
+            obj.id_usuario = HttpContext.Session.GetInt32("id_usuario");
+            obj.id_tipousuario = HttpContext.Session.GetInt32("id_tipousuario");
+            obj.tipo_documento = HttpContext.Session.GetString("tipo_documento");
+            obj.num_documento = HttpContext.Session.GetString("num_documento");
+            obj.vista = "HOME";
+            var viewModelContainer = new ViewModelContainer<IEnumerable<PsycoApp.site.Models.Paciente>>
+            {
+                Model = pacientes.Select(p => new PsycoApp.site.Models.Paciente
+                {
+                    Id = p.Id,
+                    Nombre = p.Nombre,
+                    DocumentoNumero = p.DocumentoNumero,
+                    Estado = p.Estado,
+                    DocumentoTipo = p.DocumentoTipo,
+                    EstadoCivil = p.EstadoCivil,
+                    FechaNacimiento = p.FechaNacimiento,
+                    Sexo = p.Sexo,
+                    Telefono = p.Telefono
+                }).ToList(),
+                DynamicData = obj
+            };
+
+            ViewBag.PageNumber = pageNumber;
+            ViewBag.PageSize = pageSize;
+            ViewBag.NombreBuscado = nombre; // Guardamos el término de búsqueda
+                                            //return RedirectToAction("Index", new { pageNumber, pageSize, search = nombre });
+            return PartialView("~/Views/Mantenimiento/Paciente/_PacienteTabla.cshtml", viewModelContainer.Model);
         }
         [Route("Mantenimiento/Paciente/Agregar")]
         // POST: Paciente/Agregar

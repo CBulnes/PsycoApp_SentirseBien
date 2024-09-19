@@ -41,13 +41,13 @@ namespace PsycoApp.api.Controllers
                 return BadRequest(ex.Message);
             }
         }
- 
+
         [HttpGet("buscar")]
-        public ActionResult Buscar([FromQuery] string nombre)
+        public ActionResult Buscar([FromQuery] string nombre, int pageNumber = 1, int pageSize = 10)
         {
             try
             {
-                var pacientes = _pacienteBL.BuscarPaciente(nombre);
+                var pacientes = _pacienteBL.BuscarPaciente(nombre, pageNumber, pageSize);
                 return Ok(pacientes);
             }
             catch (Exception ex)
