@@ -116,13 +116,15 @@ namespace PsycoApp.DA
             return psicologos;
         }
 
-        public List<Psicologo> ListarPsicologos()
+        public List<Psicologo> ListarPsicologos(int pagina, int tamanoPagina)
         {
             var psicologos = new List<Psicologo>();
 
-            using (var command = new SqlCommand(Procedures.listar_psicologos, _connection))
+            using (var command = new SqlCommand(Procedures.listar_psicologos_paginado, _connection))
             {
                 command.CommandType = CommandType.StoredProcedure;
+                command.Parameters.AddWithValue("@Pagina", pagina);
+                command.Parameters.AddWithValue("@TamanoPagina", tamanoPagina);
 
                 _connection.Open();
 

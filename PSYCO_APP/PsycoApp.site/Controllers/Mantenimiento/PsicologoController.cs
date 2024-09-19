@@ -18,11 +18,11 @@ namespace PsycoApp.site.Controllers.Mantenimiento
         private readonly string apiUrlUbigeo = Helper.GetUrlApi() + "/api/ubigeo";
 
         [Route("Mantenimiento/Psicologo")]
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int pageNumber = 1, int pageSize = 10)
         {
             if (!string.IsNullOrEmpty(HttpContext.Session.GetString("nombres") as string))
             {
-                string url = $"{apiUrl}/listar";
+                string url = $"{apiUrl}/listar/{pageNumber}/{pageSize}";
                 var psicologos = await GetFromApiAsync<List<PsycoApp.entities.Psicologo>>(url);
                 var psicologosViewModel = psicologos.Select(p => new PsycoApp.site.Models.Psicologo
                 {
@@ -78,6 +78,9 @@ namespace PsycoApp.site.Controllers.Mantenimiento
                     Model = psicologosViewModel,
                     DynamicData = obj
                 };
+
+                ViewBag.PageNumber = pageNumber;
+                ViewBag.PageSize = pageSize;
 
                 if (obj.id_tipousuario == 1) //admin
                 {

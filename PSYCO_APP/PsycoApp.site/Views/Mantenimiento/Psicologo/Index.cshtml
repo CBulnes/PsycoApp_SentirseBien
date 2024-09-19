@@ -9,7 +9,7 @@
 <div class="bd-example">
     <div class="row">
         <div class="col-12">
-            <b style="color: #004A92; font-size: 20px;">Psicólogos</b>
+            <b style="color: #004A92; font-size: 20px;">Búsqueda y registro de psicólogos</b>
         </div>
 
         <div class="col-12">&nbsp;</div>
@@ -17,7 +17,7 @@
         <!-- Campo de búsqueda por nombre -->
         <div class="col-12">
             <div class="form-group">
-                <span class="label-form">Nombre del Psicólogo</span><br />
+                <span class="label-form">Nombre del psicólogo</span><br />
                 <input id="txtBuscarNombre" class="form-control" type="text" placeholder="Ingrese nombre para buscar" />
             </div>
             <button type="button" class="btn btn-doc second_color" style="color: #FFF; font-size: 12px;" onclick="buscarPsicologo()">
@@ -31,7 +31,7 @@
         <div class="col-12">&nbsp;</div>
 
         <!-- Contenedor de la tabla que se mostrará al hacer clic en "Buscar" -->
-        <div id="containerTabla" class="container" style="display: none;">
+        <div id="containerTabla" class="container">
             <div class="row" style="background-color: #FFFFFF;">
                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12" style="padding-left: 0px; padding-right: 0px; width: 100%!important;">
                     <table class="table">
@@ -45,10 +45,47 @@
                             </tr>
                         </thead>
                         <tbody id="bdPsicologos">
-                            <!-- Aquí irán las filas generadas dinámicamente -->
+                            @foreach (var psicologo in psicologos.Select((item, index) => (item, index)))
+                            {
+                                <tr>
+                                    <td class="text-center">@(psicologo.index + 1)</td>
+                                    <td class="text-center">@psicologo.item.Nombre</td>
+                                    <td class="text-center">@psicologo.item.FechaNacimiento</td>
+                                    <td class="text-center">@psicologo.item.Estado</td>
+                                    <td class="text-center">
+                                        <button class="btn btn-warning btn-sm" onclick="editarPsicologo(@psicologo.item.Id)">Editar</button>
+                                        <button class="btn btn-danger btn-sm" onclick="eliminarPsicologo(@psicologo.item.Id)">Eliminar</button>
+                                    </td>
+                                </tr>
+                            }
                         </tbody>
                     </table>
                 </div>
+            </div>
+
+            <!-- Paginación -->
+
+            <div class="pagination-container text-center">
+                <ul class="pagination">
+                    @if (ViewBag.PageNumber > 1)
+                    {
+                        <li class="page-item">
+                            <a class="page-link" href="/Mantenimiento/Psicologo?pageNumber=@(ViewBag.PageNumber - 1)&pageSize=@ViewBag.PageSize">
+                                Anterior
+                            </a>
+                        </li>
+                    }
+
+                    <li class="page-item active">
+                        <a class="page-link" href="#">@ViewBag.PageNumber</a>
+                    </li>
+
+                    <li class="page-item">
+                        <a class="page-link" href="/Mantenimiento/Psicologo?pageNumber=@(ViewBag.PageNumber + 1)&pageSize=@ViewBag.PageSize">
+                            Siguiente
+                        </a>
+                    </li>
+                </ul>
             </div>
         </div>
 
