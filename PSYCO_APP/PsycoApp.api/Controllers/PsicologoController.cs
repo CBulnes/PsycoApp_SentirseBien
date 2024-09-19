@@ -14,12 +14,12 @@ namespace PsycoApp.api.Controllers
 
         PsicologoBL _psicologoBL = new PsicologoBL();
 
-        [HttpGet("listar")]
-        public ActionResult<List<Psicologo>> Listar()
+        [HttpGet("listar/{pagina}/{tamanoPagina}")]
+        public ActionResult<List<Psicologo>> Listar(int pagina = 1, int tamanoPagina = 100)
         {
             try
             {
-                return _psicologoBL.ListarPsicologos();
+                return _psicologoBL.ListarPsicologos(pagina, tamanoPagina);
             }
             catch (Exception ex)
             {

@@ -15,9 +15,9 @@ namespace PsycoApp.BL
             _psicologoDA = new PsicologoDA();
         }
 
-        public List<Psicologo> ListarPsicologos()
+        public List<Psicologo> ListarPsicologos(int pagina, int tamanoPagina)
         {
-            return _psicologoDA.ListarPsicologos();
+            return _psicologoDA.ListarPsicologos(pagina, tamanoPagina);
         }
 
         public void AgregarPsicologo(Psicologo psicologo)
