@@ -27,7 +27,7 @@
             <div class="sb-pa-container-buscador-block">
                 <div class="sb-pa-container-buscador-block-item">
                     <span class="label-form">Nombre del Paciente: </span>
-                    <input id="txtNombre" name="Nombre" placeholder="Ingrese nombre para buscar" type="text" required />
+                    <input id="txtBuscarNombre" name="Nombre" placeholder="Ingrese nombre para buscar" type="text" required />
                     <button type="button" onclick="buscarPaciente()">
                         <i class="fa fa-search"></i>&nbsp;Buscar
                     </button>
@@ -52,7 +52,7 @@
         <div class="col-12">
             <div class="form-group">
                 <span class="label-form">Nombre del Paciente</span><br />
-                <input id="txtBuscarNombre" class="form-control" type="text" placeholder="Ingrese nombre para buscar" />
+                <input id="txtBuscarNombreD" class="form-control" type="text" placeholder="Ingrese nombre para buscar" />
             </div>
             <button type="button" class="btn btn-doc second_color" onclick="buscarPaciente()">
                 <i class="fa fa-search"></i>&nbsp;Buscar
@@ -245,7 +245,7 @@
         function buscarPaciente(pageNumber = 1) {
             let nombre = document.getElementById('txtBuscarNombre').value;
             let pageSize = 10; // Número de pacientes por página
-
+            console.log('paciente');
             $.post('/Mantenimiento/Paciente/Buscar', { nombre: nombre, pageNumber: pageNumber, pageSize: pageSize })
                 .done(function (data) {
                     // Actualizar solo el contenido de la tabla
