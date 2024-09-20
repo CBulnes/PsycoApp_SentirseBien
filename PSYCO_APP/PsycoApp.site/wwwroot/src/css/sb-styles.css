@@ -45,7 +45,7 @@
     display: flex;
     flex-direction: column;
     width: 100%;
-    height: 20%;
+    height: 30%;
     justify-content: center;
     align-items: center;
     gap: 1rem;
@@ -62,7 +62,7 @@
 .sb-aside-list {
     display: flex;
     width: 100%;
-    height: 80%;
+    height: 70%;
     flex-direction: column;
     justify-content: space-between;
 }
@@ -223,6 +223,8 @@
 
 .sb-admninistrator {
     width: 85%;
+    height: 100%;
+    overflow: auto;
     transition: .3s;
 }
 
