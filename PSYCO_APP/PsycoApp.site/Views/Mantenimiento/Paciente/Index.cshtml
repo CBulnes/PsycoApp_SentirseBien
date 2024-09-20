@@ -9,12 +9,43 @@
 
 <!-- SB - STYLE -->
 
-<link rel="stylesheet" href="~/src/css/sb-pacientes.css" />
+<link rel="stylesheet" href="~/src/css/sb-pacientes.css?ver=005" />
 
-<div class="bd-example">
+<div class="sb-pa-container">
+    <div class="sb-pa-container-buscar">
+        <div class="sb-pa-container-buscar-title">
+            <p>Busqueda y Registro de Paciente</p>
+        </div>
+
+        <!-- Campo de búsqueda por nombre -->
+        <div class="sb-pa-container-buscador">
+            <div class="sb-pa-container-buscador-block">
+                <button type="button" onclick="mostrarFormularioAgregar()">
+                    <i class="fa fa-plus"></i>&nbsp;Agregar
+                </button>
+            </div>
+            <div class="sb-pa-container-buscador-block">
+                <div class="sb-pa-container-buscador-block-item">
+                    <span class="label-form">Nombre del Paciente: </span>
+                    <input id="txtNombre" name="Nombre" placeholder="Ingrese nombre para buscar" type="text" required />
+                    <button type="button" onclick="buscarPaciente()">
+                        <i class="fa fa-search"></i>&nbsp;Buscar
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Contenedor de la tabla -->
+        <div id="containerTabla" class="sb-pa-container-table">
+            @await Html.PartialAsync("~/Views/Mantenimiento/Paciente/_PacienteTabla.cshtml", Model.Model)
+        </div>
+    </div>
+</div>
+
+<div class="bd-example" style="display: none;">
     <div class="row">
         <div class="col-12">
-            <p style="color: #004A92; font-size: 20px;">Busca de Paciente</p>
+            <p></p>
         </div>
 
         <!-- Campo de búsqueda por nombre -->
@@ -145,7 +176,7 @@
 
             <div class="sb-frm-agregar-block">
                 <div class="sb-frm-agregar-block-item">
-                    <span class="label-form">Estado Civil</span><br />
+                    <span class="label-form">Estado Civil</span>
                     <select class="form-control" id="cboEstadoCivil" name="Estado" required>
                         <option value="-1">Seleccionar</option>
                         <option value="1">Casado</option>
@@ -155,7 +186,7 @@
             </div>
             <div class="sb-frm-agregar-block">
                 <div class="sb-frm-agregar-block-item">
-                    <span class="label-form">Sexo</span><br />
+                    <span class="label-form">Sexo</span>
                     <select class="form-control" id="cboSexo" name="Estado" required>
                         <option value="-1">Seleccionar</option>
                         <option value="1">Masculino</option>
@@ -226,6 +257,7 @@
         }
 
         function mostrarFormularioAgregar() {
+            $(".sb-admninistrator").css('overflow', 'hidden');
             $('#containerFormulario').css('display', 'flex');
             $('#containerFormulario input').val('');
             $('#containerFormulario select').val('-1');
@@ -244,6 +276,7 @@
                 $('#cboEstadoCivil').val(paciente.estadoCivil);
                 $('#cboSexo').val(paciente.sexo);
                 $('#containerFormulario').css('display', 'flex');
+                $(".sb-admninistrator").css('overflow', 'hidden');
             });
         }
 
@@ -280,18 +313,27 @@
                 contentType: 'application/json',
                 data: JSON.stringify(dataToSend.paciente),
                 success: function (response) {
-                    alert(response.message);
+                    Swal.fire({
+                        icon: "success",
+                        title: "Registro Completo!",
+                    });
                     $('#containerFormulario').hide();
+                    $(".sb-admninistrator").css('overflow', 'auto');
                     buscarPaciente(); // Actualiza la lista después de guardar
                 },
                 error: function (xhr) {
-                    alert('Error al guardar paciente.');
+                    Swal.fire({
+                        icon: "Error",
+                        title: "Oops...",
+                        text: "Debe rellenar todos los campos!",
+                    });
                 }
             });
         }
 
         function cancelarFormulario() {
             $('#containerFormulario').hide();
+            $(".sb-admninistrator").css('overflow', 'auto');
         }
     </script>
 }

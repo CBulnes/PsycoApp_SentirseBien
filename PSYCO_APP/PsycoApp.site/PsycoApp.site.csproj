@@ -19,6 +19,8 @@
   <ItemGroup>
     <Folder Include="Views\RecuperarContraseña\" />
     <Folder Include="wwwroot\img\" />
+    <Folder Include="wwwroot\src\plugin\sweetalert2\css\" />
+    <Folder Include="wwwroot\src\plugin\sweetalert2\js\" />
   </ItemGroup>
 
   <ItemGroup>
