@@ -42,7 +42,7 @@
     text-align: center;
 }
 
-#formPaciente {
+#formPaciente, #formPsicologo {
     display: flex;
     flex-direction: column;
     gap: 1rem;

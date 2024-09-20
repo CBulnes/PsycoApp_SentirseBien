@@ -143,15 +143,15 @@ namespace PsycoApp.site.Controllers.Mantenimiento
 
         [Route("/Mantenimiento/Psicologo/Eliminar")]
         [HttpPost]
-        public async Task<IActionResult> Eliminar(int id)
+        public async Task<IActionResult> Eliminar(int id, string estado)
         {
             string url = $"{apiUrl}/eliminar/{id}";
             var response = await DeleteFromApiAsync(url);
             if (response.IsSuccessStatusCode)
             {
-                return Ok(new { message = "Psicólogo eliminado correctamente" });
+                return Ok(new { message = "Psicólogo " + (estado == "1" ? "deshabilitado" : "habilitado") + " correctamente" });
             }
-            return StatusCode((int)response.StatusCode, "Error al eliminar psicólogo.");
+            return StatusCode((int)response.StatusCode, "Error al " + (estado == "1" ? "deshabilitar" : "habilitar") + " psicólogo.");
         }
 
         [Route("/Mantenimiento/Psicologo/Get/{id}")]

@@ -8,19 +8,18 @@
 }
 
 <!-- SB - STYLE -->
-
 <link rel="stylesheet" href="~/src/css/sb-pacientes.css" />
 
 <div class="bd-example">
     <div class="row">
         <div class="col-12">
-            <p style="color: #004A92; font-size: 20px;">Busca de Paciente</p>
+            <p style="color: #004A92; font-size: 20px;">Búsqueda y registro de pacientes</p>
         </div>
 
         <!-- Campo de búsqueda por nombre -->
         <div class="col-12">
             <div class="form-group">
-                <span class="label-form">Nombre del Paciente</span><br />
+                <span class="label-form">Nombre del paciente</span><br />
                 <input id="txtBuscarNombre" class="form-control" type="text" placeholder="Ingrese nombre para buscar" />
             </div>
             <button type="button" class="btn btn-doc second_color" style="color: #FFF; font-size: 12px;" onclick="buscarPaciente()">
@@ -42,22 +41,22 @@
                             <tr>
                                 <th class="text-center" style="width: 80px;">#</th>
                                 <th class="text-center">Paciente</th>
-                                <th class="text-center">Fecha Nacimiento</th>
+                                <th class="text-center">Fecha de nacimiento</th>
                                 <th class="text-center">Estado</th>
                                 <th class="text-center">Acción</th>
                             </tr>
                         </thead>
                         <tbody id="bdPacientes">
-                            @foreach (var paciente in Model.Model)
+                            @foreach (var paciente in pacientes.Select((item, index) => (item, index)))
                             {
                                 <tr>
-                                    <td class="text-center">@paciente.Id</td>
-                                    <td class="text-center">@paciente.Nombre</td>
-                                    <td class="text-center">@paciente.FechaNacimiento</td>
-                                    <td class="text-center">@paciente.Estado</td>
+                                    <td class="text-center">@(paciente.index + 1)</td>
+                                    <td class="text-center">@paciente.item.Nombre</td>
+                                    <td class="text-center">@paciente.item.FechaNacimiento.ToString().Substring(0, 10)</td>
+                                    <td class="text-center">@paciente.item.Estado</td>
                                     <td class="text-center">
-                                        <button class="btn btn-warning" onclick="editarPaciente(@paciente.Id)">Editar</button>
-                                        <button class="btn btn-danger" onclick="eliminarPaciente(@paciente.Id)">Eliminar</button>
+                                        <button class="btn btn-warning" onclick="editarPaciente(@paciente.item.Id)">Editar</button>
+                                        <button class="btn btn-danger" onclick="eliminarPaciente(@paciente.item.Id)">Eliminar</button>
                                     </td>
                                 </tr>
                             }
@@ -65,63 +64,62 @@
                     </table>
                 </div>
             </div>
-             <!-- Paginación -->
+            <!-- Paginación -->
 
-        <div class="pagination-container text-center">
-            <ul class="pagination">
-                @if (ViewBag.PageNumber > 1)
-                {
+            <div class="pagination-container text-center">
+                <ul class="pagination">
+                    @if (ViewBag.PageNumber > 1)
+                    {
+                        <li class="page-item">
+                            <a class="page-link" href="/Mantenimiento/Paciente?pageNumber=@(ViewBag.PageNumber - 1)&pageSize=@ViewBag.PageSize">
+                                Anterior
+                            </a>
+                        </li>
+                    }
+
+                    <li class="page-item active">
+                        <a class="page-link" href="#">@ViewBag.PageNumber</a>
+                    </li>
+
                     <li class="page-item">
-                        <a class="page-link" href="/Mantenimiento/Paciente?pageNumber=@(ViewBag.PageNumber - 1)&pageSize=@ViewBag.PageSize">
-                            Anterior
+                        <a class="page-link" href="/Mantenimiento/Paciente?pageNumber=@(ViewBag.PageNumber + 1)&pageSize=@ViewBag.PageSize">
+                            Siguiente
                         </a>
                     </li>
-                }
-
-                <li class="page-item active">
-                    <a class="page-link" href="#">@ViewBag.PageNumber</a>
-                </li>
-
-                <li class="page-item">
-                    <a class="page-link" href="/Mantenimiento/Paciente?pageNumber=@(ViewBag.PageNumber + 1)&pageSize=@ViewBag.PageSize">
-                        Siguiente
-                    </a>
-                </li>
-            </ul>
+                </ul>
+            </div>
         </div>
-        </div>
-       
+
     </div>
-
 </div>
 
 <!-- Contenedor de formulario para agregar/editar paciente -->
 <div id="containerFormulario" class="container sb-pa-container-agregar" style="display: none;">
     <div class="sb-pa-container-agregar-popup">
 
-        <p>Agregar Paciente</p>
+        <p>Agregar paciente</p>
 
         <form id="formPaciente">
             <input type="hidden" id="hdnPacienteId" name="Id" />
 
             <div class="sb-frm-agregar-block">
                 <div class="sb-frm-agregar-block-item">
-                    <span class="label-form">Nombres y Apellidos Completos</span>
+                    <span class="label-form">Nombres y Apellidos completos</span>
                     <input id="txtNombre" name="Nombre" class="form-control" type="text" required />
                 </div>
             </div>
 
             <div class="sb-frm-agregar-block">
                 <div class="sb-frm-agregar-block-item">
-                    <span class="label-form">Fecha de Nacimiento</span>
+                    <span class="label-form">Fecha de nacimiento</span>
                     <input id="txtFecha" name="FechaNacimiento" class="form-control" type="date" required />
                 </div>
             </div>
 
             <div class="sb-frm-agregar-block">
                 <div class="sb-frm-agregar-block-item">
-                    <span class="label-form">Estado Civil</span><br />
-                    <select class="form-control" id="cboEstadoCivil" name="Estado" required>
+                    <span class="label-form">Estado Civil</span>
+                    <select class="form-control" id="cboEstadoCivil" name="EstadoCivil" required>
                         <option value="-1">Seleccionar</option>
                         <option value="1">Casado</option>
                         <option value="2">Soltero</option>
@@ -130,8 +128,8 @@
             </div>
             <div class="sb-frm-agregar-block">
                 <div class="sb-frm-agregar-block-item">
-                    <span class="label-form">Sexo</span><br />
-                    <select class="form-control" id="cboSexo" name="Estado" required>
+                    <span class="label-form">Sexo</span>
+                    <select class="form-control" id="cboSexo" name="Sexo" required>
                         <option value="-1">Seleccionar</option>
                         <option value="1">Masculino</option>
                         <option value="2">Femenino</option>
@@ -162,7 +160,7 @@
 
             <div class="sb-frm-agregar-block">
                 <div class="sb-frm-agregar-block-item">
-                    <span class="label-form">Número de Documento</span>
+                    <span class="label-form">Número de documento</span>
                     <input id="txtDocumento" name="DocumentoNumero" class="form-control" type="text" required />
                 </div>
             </div>
@@ -182,8 +180,6 @@
     </div>
 </div>
 
-
-
 @section Scripts {
     <script>
         function buscarPaciente() {
@@ -191,19 +187,19 @@
             $.post('/Mantenimiento/Paciente/Buscar', { nombre: nombre }, function (data) {
                 let tableBody = $('#bdPacientes');
                 tableBody.empty();
-                data.forEach(paciente => {
+                data.forEach((paciente, index) => {
                     tableBody.append(`
-                                <tr>
-                                    <td class="text-center">${paciente.id}</td>
-                                    <td class="text-center">${paciente.nombre}</td>
-                                    <td class="text-center">${paciente.fechaNacimiento}</td>
-                                    <td class="text-center">${paciente.estado}</td>
-                                    <td class="text-center">
-                                        <button class="btn btn-warning btn-sm" onclick="editarPaciente(${paciente.id})">Editar</button>
-                                        <button class="btn btn-danger btn-sm" onclick="eliminarPaciente(${paciente.id})">Eliminar</button>
-                                    </td>
-                                </tr>
-                            `);
+                        <tr>
+                            <td class="text-center">${index + 1}</td>
+                            <td class="text-center">${paciente.nombre}</td>
+                            <td class="text-center">${formatFechaNacimiento(paciente.fechaNacimiento)}</td>
+                            <td class="text-center">${paciente.estado}</td>
+                            <td class="text-center">
+                                <button class="btn btn-warning" onclick="editarPaciente(${paciente.id})">Editar</button>
+                                <button class="btn btn-danger" onclick="eliminarPaciente(${paciente.id})">Eliminar</button>
+                            </td>
+                        </tr>
+                    `);
                 });
                 $('#containerTabla').show();
             });
@@ -277,12 +273,16 @@
         function cancelarFormulario() {
             $('#containerFormulario').hide();
         }
+
+        function formatFechaNacimiento(fecha) {
+            var dia = fecha.substring(8, 10);
+            var mes = fecha.substring(5, 7);
+            var año = fecha.substring(0, 4);
+            return dia + "/" + mes + "/" + año;
+        }
     </script>
 }
 
 @* Script sb-home *@
-
 <script src="~/src/js/sb-main.js?ver=002"></script>
-
 @* Script sb-home Fin *@
-

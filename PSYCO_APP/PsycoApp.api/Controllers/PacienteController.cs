@@ -45,6 +45,8 @@ namespace PsycoApp.api.Controllers
         [HttpGet("buscar")]
         public ActionResult Buscar([FromQuery] string nombre)
         {
+            if (string.IsNullOrEmpty(nombre))
+                nombre = "";
             try
             {
                 var pacientes = _pacienteBL.BuscarPaciente(nombre);
