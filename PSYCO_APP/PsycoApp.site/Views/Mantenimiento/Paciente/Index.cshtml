@@ -14,7 +14,7 @@
 <div class="sb-pa-container">
     <div class="sb-pa-container-buscar">
         <div class="sb-pa-container-buscar-title">
-            <p>Busqueda y Registro de Paciente</p>
+            <p>Búsqueda y registro de pacientes</p>
         </div>
 
         <!-- Campo de búsqueda por nombre -->
@@ -26,7 +26,7 @@
             </div>
             <div class="sb-pa-container-buscador-block">
                 <div class="sb-pa-container-buscador-block-item">
-                    <span class="label-form">Nombre del Paciente: </span>
+                    <span class="label-form">Nombre del paciente: </span>
                     <input id="txtBuscarNombre" name="Nombre" placeholder="Ingrese nombre para buscar" type="text" required />
                     <button type="button" onclick="buscarPaciente()">
                         <i class="fa fa-search"></i>&nbsp;Buscar
@@ -51,7 +51,7 @@
         <!-- Campo de búsqueda por nombre -->
         <div class="col-12">
             <div class="form-group">
-                <span class="label-form">Nombre del Paciente</span><br />
+                <span class="label-form">Nombre del paciente</span><br />
                 <input id="txtBuscarNombreD" class="form-control" type="text" placeholder="Ingrese nombre para buscar" />
             </div>
             <button type="button" class="btn btn-doc second_color" onclick="buscarPaciente()">
@@ -154,21 +154,21 @@
 <div id="containerFormulario" class="container sb-pa-container-agregar" style="display: none;">
     <div class="sb-pa-container-agregar-popup">
 
-        <p>Agregar Paciente</p>
+        <p>Agregar paciente</p>
 
         <form id="formPaciente">
             <input type="hidden" id="hdnPacienteId" name="Id" />
 
             <div class="sb-frm-agregar-block">
                 <div class="sb-frm-agregar-block-item">
-                    <span class="label-form">Nombres y Apellidos Completos</span>
+                    <span class="label-form">Nombres y apellidos completos</span>
                     <input id="txtNombre" name="Nombre" class="form-control" type="text" required />
                 </div>
             </div>
 
             <div class="sb-frm-agregar-block">
                 <div class="sb-frm-agregar-block-item">
-                    <span class="label-form">Fecha de Nacimiento</span>
+                    <span class="label-form">Fecha de nacimiento</span>
                     <input id="txtFecha" name="FechaNacimiento" class="form-control" type="date" required />
 
                 </div>
@@ -176,8 +176,8 @@
 
             <div class="sb-frm-agregar-block">
                 <div class="sb-frm-agregar-block-item">
-                    <span class="label-form">Estado Civil</span>
-                    <select class="form-control" id="cboEstadoCivil" name="Estado" required>
+                    <span class="label-form">Estado civil</span>
+                    <select class="form-control" id="cboEstadoCivil" name="EstadoCivil" required>
                         <option value="-1">Seleccionar</option>
                         <option value="1">Casado</option>
                         <option value="2">Soltero</option>
@@ -187,7 +187,7 @@
             <div class="sb-frm-agregar-block">
                 <div class="sb-frm-agregar-block-item">
                     <span class="label-form">Sexo</span>
-                    <select class="form-control" id="cboSexo" name="Estado" required>
+                    <select class="form-control" id="cboSexo" name="Sexo" required>
                         <option value="-1">Seleccionar</option>
                         <option value="1">Masculino</option>
                         <option value="2">Femenino</option>
@@ -218,7 +218,7 @@
 
             <div class="sb-frm-agregar-block">
                 <div class="sb-frm-agregar-block-item">
-                    <span class="label-form">Número de Documento</span>
+                    <span class="label-form">Número de documento</span>
                     <input id="txtDocumento" name="DocumentoNumero" class="form-control" type="text" required />
                 </div>
             </div>

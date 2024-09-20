@@ -7,7 +7,7 @@
             <th>Nombre</th>
             <th>Documento</th>
             <th>Estado</th>
-            <th>Fecha de Nacimiento</th>
+            <th>Fecha de nacimiento</th>
             <th>Teléfono</th>
             <th>Acciones</th>
         </tr>
@@ -15,18 +15,18 @@
     <tbody>
         @if (Model != null && Model.Any())
         {
-            foreach (var paciente in Model)
+            @foreach (var paciente in Model.Select((item, index) => (item, index)))
             {
                 <tr>
-                    <td></td>
-                    <td>@paciente.Nombre</td>
-                    <td>@paciente.DocumentoTipo - @paciente.DocumentoNumero</td>
+                    <td class="text-center">@(paciente.index + 1)</td>
+                    <td>@paciente.item.Nombre</td>
+                    <td>@paciente.item.DocumentoTipo - @paciente.item.DocumentoNumero</td>
                   <td>
-                    @if (@paciente.Estado == "1")
+                    @if (@paciente.item.Estado == "1")
                     {
                         <span>Registrado</span>
                     }
-                    else if (@paciente.Estado == "2")
+                        else if (@paciente.item.Estado == "2")
                     {
                         <span>Atendido</span>
                     }
@@ -35,12 +35,12 @@
                         <span>Desconocido</span> <!-- Por si hay otros estados no contemplados -->
                     }
                 </td>
-                    <td>@paciente.FechaNacimiento</td>
-                    <td>@paciente.Telefono</td>
+                    <td>@paciente.item.FechaNacimiento.ToString().Substring(0, 10)</td>
+                    <td>@paciente.item.Telefono</td>
                     <td>
                         <!-- Acciones como editar o eliminar -->
-                        <button class="btn btn-sm sb-pa-container-table-button-edit" onclick="editarPaciente(@paciente.Id)">Editar</button>
-                        <button class="btn btn-sm sb-pa-container-table-button-delet" onclick="eliminarPaciente(@paciente.Id)">Eliminar</button>
+                        <button class="btn btn-sm sb-pa-container-table-button-edit" onclick="editarPaciente(@paciente.item.Id)">Editar</button>
+                        <button class="btn btn-sm sb-pa-container-table-button-delet" onclick="eliminarPaciente(@paciente.item.Id)">Eliminar</button>
                     </td>
                 </tr>
             }

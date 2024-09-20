@@ -13,7 +13,7 @@
 <div class="sb-psi-container">
    <div class="sb-psi-container-buscar">
         <div class="sb-psi-container-buscar-title">
-            <p>Busqueda y Registro de psicólogos</p>
+            <p>Búsqueda y registro de psicólogos</p>
         </div>
 
         <!-- Campo de búsqueda por nombre -->
@@ -25,7 +25,7 @@
             </div>
             <div class="sb-psi-container-buscador-block">
                 <div class="sb-psi-container-buscador-block-item">
-                    <span class="label-form">Nombre del Psicólogos: </span>
+                    <span class="label-form">Nombre del psicólogo: </span>
                     <input id="txtBuscarNombre" name="Nombre" placeholder="Ingrese nombre para buscar" type="text" required />
                     <button type="button" onclick="buscarPsicologo()">
                         <i class="fa fa-search"></i>&nbsp;Buscar
@@ -40,9 +40,10 @@
                 <table class="table table-striped">
                         <thead>
                             <tr>
-                                <th class="text-center" style="width: 80px;">#</th>
-                                <th class="text-center">Psicólogo</th>
-                                <th class="text-center">Fecha Nacimiento</th>
+                            <th class="text-center" style="width: 80px;">N°</th>
+                                <th class="text-center">Nombre</th>
+                                <th class="text-center">Documento</th>
+                                <th class="text-center">Fecha de nacimiento</th>
                                 <th class="text-center">Estado</th>
                                 <th class="text-center">Acción</th>
                             </tr>
@@ -53,11 +54,12 @@
                                 <tr>
                                     <td class="text-center">@(psicologo.index + 1)</td>
                                     <td class="text-center">@psicologo.item.Nombre</td>
-                                    <td class="text-center">@psicologo.item.FechaNacimiento</td>
-                                    <td class="text-center">@psicologo.item.Estado</td>
+                                    <td class="text-center">@psicologo.item.DocumentoTipo - @psicologo.item.DocumentoNumero</td>
+                                    <td class="text-center">@psicologo.item.FechaNacimiento.ToString().Substring(0, 10)</td>
+                                    <td class="text-center">@(psicologo.item.Estado == "1" ? "Habilitado" : "Deshabilitado")</td>
                                     <td class="text-center ">
                                     <button class="btn btn-sm sb-psi-container-table-button-edit" onclick="editarPsicologo(@psicologo.item.Id)">Editar</button>
-                                    <button class="btn btn-sm sb-psi-container-table-button-delet" onclick="eliminarPsicologo(@psicologo.item.Id)">Eliminar</button>
+                                    <button class="btn btn-sm sb-psi-container-table-button-delet" onclick="eliminarPsicologo(@psicologo.item.Id, @psicologo.item.Estado)">@(psicologo.item.Estado == "1" ? "Deshabilitar" : "Habilitar")</button>
                                     </td>
                                 </tr>
                             }
@@ -100,7 +102,7 @@
 
     <div class="sb-psi-container-agregar-popup">
 
-        <p>Agregar Psicólogo</p>
+        <p>Agregar psicólogo</p>
 
         <form id="formPsicologo">
 
@@ -108,15 +110,15 @@
 
             <div class="sb-frm-psi-agregar-block">
                 <div class="sb-frm-psi-agregar-block-item">
-                    <span class="label-form">Nombres y Apellidos Completos</span>
+                    <span class="label-form">Nombres y apellidos completos</span>
                     <input id="txtNombre" name="Nombre" class="form-control" type="text" required />
                 </div>
             </div>
 
             <div class="sb-frm-psi-agregar-block">
                 <div class="sb-frm-psi-agregar-block-item">
-                    <span class="label-form">Fecha de Nacimiento</span>
-                    <input id="txtFecha" name="FechaNacimiento" class="form-control" type="text" required />
+                    <span class="label-form">Fecha de nacimiento</span>
+                    <input id="txtFecha" name="FechaNacimiento" class="form-control" type="date" required />
                 </div>
             </div>
 
@@ -154,11 +156,6 @@
             <div class="sb-frm-psi-agregar-block">
                 <div class="sb-frm-psi-agregar-block-item">
                     <span class="label-form">Distrito</span>
-                    @* <select class="form-control" id="cboDistrito" name="Distrito" required>
-                    <option value="-1">Seleccionar</option>
-                    <option value="150115">La Victoria</option>
-                    <option value="150116">Lince</option>
-                    </select> *@
                     @Html.DropDownList("cboDistrito", new SelectList(ubigeos, "CodUbigeo", "Distrito"), new { @class = "form-control" })
                 </div>
             </div>
@@ -176,7 +173,7 @@
 
             <div class="sb-frm-psi-agregar-block">
                 <div class="sb-frm-psi-agregar-block-item">
-                    <span class="label-form">Número de Documento</span>
+                    <span class="label-form">Número de documento</span>
                     <input id="txtDocumento" name="DocumentoNumero" class="form-control" type="text" required />
                 </div>
             </div>
@@ -196,7 +193,7 @@
                             <table class="table">
                                 <thead>
                                     <tr>
-                                        <th class="text-center" style="width: 80px;">#</th>
+                                        <th class="text-center" style="width: 80px;">N°</th>
                                         <th class="text-center">Grado de instrucción</th>
                                         <th class="text-center">Institución</th>
                                         <th class="text-center">Carrera/especialidad</th>
@@ -214,50 +211,27 @@
                 <button type="button" class="btn btn-success" onclick="guardarPsicologo()">Guardar</button>
                 <button type="button" class="btn btn-secondary" onclick="cancelarFormulario()">Cancelar</button>
             </div>
-
-
         </form>
 
     </div>
 
 </div>
 
-
-
-<div class="bd-example" style="display: none;">
-    <div class="row">
-        <div class="col-12">
-            <b style="color: #004A92; font-size: 20px;">Búsqueda y registro de psicólogos</b>
-        </div>
-
-        <div class="col-12">&nbsp;</div>
-
-        <!-- Campo de búsqueda por nombre -->
-        <div class="col-12">
-            <div class="form-group">
-                <span class="label-form">Nombre del psicólogo</span><br />
-                <input id="txtBuscarNombre" class="form-control" type="text" placeholder="Ingrese nombre para buscar" />
-            </div>
-            <button type="button" class="btn btn-doc second_color" style="color: #FFF; font-size: 12px;" onclick="buscarPsicologo()">
-                <i class="fa fa-search"></i>&nbsp;Buscar
-            </button>
-            <button type="button" class="btn btn-primary main_color" style="color: #FFF; font-size: 12px;" onclick="mostrarFormularioAgregar()">
-                <i class="fa fa-plus"></i>&nbsp;Agregar
-            </button>
-        </div>
-
-        <div class="col-12">&nbsp;</div>
-
-        <!-- Contenedor de la tabla que se mostrará al hacer clic en "Buscar" -->
-        
-
-
-    </div>
-</div>
-
 @section Scripts {
     <script>
         var global_estudios = [];
+
+        function resetearEstudios() {
+            global_estudios = [{
+                id: 0,
+                idPsicologo: 0,
+                gradoAcademico: -1,
+                institucion: -1,
+                carrera: -1
+            }];
+        }
+        resetearEstudios();
+
         function buscarPsicologo() {
             let nombre = document.getElementById('txtBuscarNombre').value;
             $.post('/Mantenimiento/Psicologo/Buscar', { nombre: nombre }, function (data) {
@@ -265,14 +239,15 @@
                 tableBody.empty();
                 data.forEach((psicologo, index) => {
                     tableBody.append(`
-                        <tr>
-                            <td class="text-center">${index+1}</td>
+                    <tr>
+                            <td class="text-center">${index + 1}</td>
                             <td class="text-center">${psicologo.nombre}</td>
-                            <td class="text-center">${psicologo.fechaNacimiento}</td>
-                            <td class="text-center">${psicologo.estado}</td>
+                            <td class="text-center">${psicologo.documentoTipo + ' - ' + psicologo.documentoNumero}</td>
+                            <td class="text-center">${formatFechaNacimiento(psicologo.fechaNacimiento)}</td>
+                            <td class="text-center">${psicologo.estado == "1" ? "Habilitado" : "Deshabilitado"}</td>
                             <td class="text-center">
-                                        <button class="btn btn-sm sb-psi-container-table-button-edit" onclick="editarPsicologo(${psicologo.id})">Editar</button>
-                                        <button class="btn btn-sm sb-psi-container-table-button-delet" onclick="eliminarPsicologo(${psicologo.id})">Eliminar</button>
+                                <button class="btn btn-sm sb-psi-container-table-button-edit" onclick="editarPsicologo(${psicologo.id})">Editar</button>
+                                <button class="btn btn-sm sb-psi-container-table-button-delet" onclick="eliminarPsicologo(${psicologo.id}, '${psicologo.estado}')">${psicologo.estado == "1" ? "Deshabilitar" : "Habilitar"}</button>
                             </td>
                         </tr>
                     `);
@@ -282,6 +257,7 @@
         }
 
         function mostrarFormularioAgregar() {
+            resetearEstudios();
             $(".sb-admninistrator").css('overflow', 'hidden');
             $('#containerFormulario').css('display', 'flex');
             $('#containerFormulario input').val('');
@@ -377,9 +353,9 @@
                 global_estudios[index].carrera = valor;
         }
 
-        function eliminarPsicologo(id) {
-            if (confirm('¿Estás seguro de que quieres eliminar este psicólogo?')) {
-                $.post(`/Mantenimiento/Psicologo/Eliminar`, { id: id }, function (response) {
+        function eliminarPsicologo(id, estado) {
+            if (confirm('¿Estás seguro de que quieres ' + (estado == '1' ? 'deshabilitar' : 'habilitar') + ' este psicólogo?')) {
+                $.post(`/Mantenimiento/Psicologo/Eliminar`, { id: id, estado: estado }, function (response) {
                     alert(response.message);
                     buscarPsicologo(); // Actualiza la lista después de eliminar
                 });
@@ -466,6 +442,13 @@
         function cancelarFormulario() {
             $('#containerFormulario').hide();
             $(".sb-admninistrator").css('overflow', 'auto');
+        }
+
+        function formatFechaNacimiento(fecha) {
+            var dia = fecha.substring(8, 10);
+            var mes = fecha.substring(5, 7);
+            var año = fecha.substring(0, 4);
+            return dia + "/" + mes + "/" + año;
         }
     </script>
 }
