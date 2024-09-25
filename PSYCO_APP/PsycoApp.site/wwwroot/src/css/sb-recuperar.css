@@ -241,7 +241,7 @@
 }
 
 .sb-recupass-form-block p a {
-    color: var(--colorbase);
+    color: var(--colorsecundario);
     font-size: 18px;
     font-weight: 600;
     font-family: "Poppins", sans-serif;
@@ -249,6 +249,109 @@
 }
 
 .sb-recupass-form-block p a:hover {
-    color: var(--colorsecundario);
+    color: rgba(52, 35, 146, 0.8);
 }
+
+/* Media Querys */
+
+@media (max-width: 1300px) {
+
+    .sb-recupass-container {
+        width: 900px;
+        height: 700px;
+    }
+
+    .sb-recupass-form-block.sb-lg-rec {
+        margin-top: 1rem;
+    }
+
+}
+
+@media (max-width: 900px) {
+
+    .sb-recupass-imagen {
+        display: none;
+    }
+
+    .sb-recupass-container {
+        width: 80%;
+        height: 70vh;
+        justify-content: center;
+    }
+
+    .sb-recupass-form {
+        width: 80%;
+        padding: 0;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .sb-recupass-form-block.sb-lg-btn {
+        width: 70%;
+    }
+}
+
+@media (max-width: 500px){
+
+    .sb-recupass-container {
+        height: 80vh;
+    }
+
+    .sb-recupass-form{
+        gap: 1.5rem;
+    }
+
+    .sb-recupass-form-block.sb-lg-cplt {
+        height: 2.6rem;
+    }
+
+    .sb-lg-input {
+        font-size: 14px;
+    }
+
+    .sb-lg-label {
+        font-size: 14px;
+    }
+
+    .sb-lg-input:focus ~ .sb-lg-label {
+        font-size: 13px;
+    }
+
+    .sb-lg-input:not(:placeholder-shown).sb-lg-input:not(:focus) ~ .sb-lg-label {
+        font-size: 13px;
+    }
+
+    .sb-recupass-form-block.sb-lg-btn button{
+        font-size: 14px;
+    }
+
+    .sb-recupass-form > p {
+        font-size: 45px;
+        line-height: 1;
+    }
+
+    .sb-recupass-form-block p {
+        text-align: center;
+        flex-direction: column;
+        font-size: 16px;
+    }
+
+    .sb-recupass-form-block p a{
+        font-size: 16px;
+    }
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
 
