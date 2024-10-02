@@ -47,5 +47,10 @@ namespace PsycoApp.BL
         {
             _psicologoDA.EliminarPsicologo(id);
         }
+
+        public List<entities.Psicologo> listar_psicologos_combo()
+        {
+            return _psicologoDA.listar_psicologos_combo();
+        }
     }
 }

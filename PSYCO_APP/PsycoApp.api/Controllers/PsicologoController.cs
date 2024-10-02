@@ -4,6 +4,7 @@ using PsycoApp.BL;
 using System.Collections.Generic;
 using System;
 using PsycoApp.entities;
+using PsycoApp.DA;
 
 namespace PsycoApp.api.Controllers
 {
@@ -100,6 +101,21 @@ namespace PsycoApp.api.Controllers
             {
                 return BadRequest(ex.Message);
             }
+        }
+
+        [HttpGet("listar_psicologos_combo")]
+        public ActionResult<List<entities.Psicologo>> listar_psicologos_combo()
+        {
+            List<entities.Psicologo> lista = new List<entities.Psicologo>();
+            try
+            {
+                lista = _psicologoBL.listar_psicologos_combo();
+            }
+            catch (Exception e)
+            {
+                lista.Clear();
+            }
+            return lista;
         }
     }
 }

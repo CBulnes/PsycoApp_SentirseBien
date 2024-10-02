@@ -849,10 +849,12 @@ function contenido_cita(dia, mes, año) {
                 html = '-';
             } else {
                 if (item.tipo == 'CITA') {
-                    var clase_estado = item.estado == 'REGISTRADO' ? 'div_cita_registrada' : 'div_cita_atendida';
+                    //var clase_estado = item.estado == 'CITADO' ? 'div_cita_registrada' : 'div_cita_atendida';
+                    var clase_estado = 'div_evt_' + item.estado.replace(' ','_').toLowerCase();
 
-                    html += '<div class="div_cita ' + clase_estado + '" data-id-cita="' + item.id_cita + '" data-id-especialista="' + item.id_doctor_asignado + '" data-fecha-cita="' + item.fecha_cita + '" data-hora-cita="' + item.hora_cita + '" data-estado="' + item.estado + '" onclick="ver_cita(this)">';
+                    html += '<div class="div_cita ' + clase_estado + '" data-id-cita="' + item.id_cita + '" data-id-especialista="' + item.id_doctor_asignado + '" data-id-paciente="' + item.id_paciente + '" data-fecha-cita="' + item.fecha_cita + '" data-hora-cita="' + item.hora_cita + '" data-estado="' + item.estado + '" onclick="ver_cita(this)">';
                     html += 'Especialista: ' + item.doctor_asignado + '<br/>';
+                    html += 'Paciente: ' + item.paciente + '<br/>';
                     html += 'Hora: ' + item.hora_cita;
                     html += '</div > ';
                 }

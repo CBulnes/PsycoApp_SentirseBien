@@ -24,7 +24,7 @@ namespace PsycoApp.DA
                 SqlCommand cmd = new SqlCommand(Procedures.sp_registrar_cita, cn);
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.Add("@id_cita", SqlDbType.Int).Value = oCita.id_cita;
-                cmd.Parameters.Add("@id_usuario", SqlDbType.Int).Value = oCita.id_usuario;
+                cmd.Parameters.Add("@id_paciente", SqlDbType.Int).Value = oCita.id_paciente;
                 cmd.Parameters.Add("@fecha_cita", SqlDbType.VarChar).Value = oCita.fecha_cita;
                 cmd.Parameters.Add("@hora_cita", SqlDbType.VarChar).Value = oCita.hora_cita;
                 cmd.Parameters.Add("@id_doctor", SqlDbType.Int).Value = oCita.id_doctor_asignado;
@@ -139,6 +139,8 @@ namespace PsycoApp.DA
                     cita.hora_cita = Convert.ToString(row["hora_cita"]);
                     cita.id_doctor_asignado = Convert.ToInt32(row["id_doctor_asignado"]);
                     cita.doctor_asignado = Convert.ToString(row["doctor_asignado"]);
+                    cita.id_paciente = Convert.ToInt32(row["id_paciente"]);
+                    cita.paciente = Convert.ToString(row["paciente"]);
                     cita.tipo = Convert.ToString(row["tipo"]);
                     lista.Add(cita);
                 }

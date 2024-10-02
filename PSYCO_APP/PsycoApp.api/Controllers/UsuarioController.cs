@@ -58,20 +58,5 @@ namespace PsycoApp.api.Controllers
             return respuesta;
         }
 
-        [HttpGet("listar_doctores")]
-        public ActionResult<List<Usuario>> listar_doctores()
-        {
-            List<Usuario> lista = new List<Usuario>();
-            try
-            {
-                lista = usuarioBL.listar_doctores();
-            }
-            catch (Exception e)
-            {
-                lista.Clear();
-            }
-            return lista;
-        }
-
     }
 }

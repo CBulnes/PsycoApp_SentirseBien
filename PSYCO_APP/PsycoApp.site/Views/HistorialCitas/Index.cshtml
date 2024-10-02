@@ -1,7 +1,8 @@
 ﻿@model dynamic
 @{
-    ViewData["Title"] = "Historial de citas";
+    var dynamicData = Model.DynamicData;
     var dHoy = DateTime.Now;
+    ViewData["Title"] = "Historial de citas";
 }
 
 <div class="bd-example">

@@ -9,7 +9,7 @@ namespace PsycoApp.utilities
     {
         public const string sp_validar_usuario = "SP_VALIDAR_USUARIO";
         public const string sp_actualizar_contraseña = "SP_ACTUALIZAR_CONTRASEÑA";
-        public const string sp_listar_doctores = "SP_LISTAR_DOCTORES";
+        public const string sp_listar_psicologos_combo = "SP_LISTAR_PSICOLOGOS_COMBO";
 
 
 

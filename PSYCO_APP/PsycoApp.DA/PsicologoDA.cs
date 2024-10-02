@@ -215,5 +215,35 @@ namespace PsycoApp.DA
                 _connection.Close();
             }
         }
+
+        public List<entities.Psicologo> listar_psicologos_combo()
+        {
+            List<entities.Psicologo> lista = new List<entities.Psicologo>();
+            try
+            {
+                cn.Open();
+                SqlCommand cmd = new SqlCommand(Procedures.sp_listar_psicologos_combo, cn);
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                SqlDataAdapter da = new SqlDataAdapter(cmd);
+                DataTable dt = new DataTable();
+                da.Fill(dt);
+
+                foreach (DataRow row in dt.Rows)
+                {
+                    entities.Psicologo item = new entities.Psicologo();
+                    item.Id = Convert.ToInt32(row["id_psicologo"]);
+                    item.Nombre = Convert.ToString(row["nombres"]);
+                    lista.Add(item);
+                }
+            }
+            catch (Exception e)
+            {
+                lista.Clear();
+            }
+            cn.Close();
+            return lista;
+        }
+
     }
 }

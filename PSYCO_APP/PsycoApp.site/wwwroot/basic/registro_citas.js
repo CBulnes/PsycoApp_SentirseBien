@@ -15,7 +15,8 @@ function cargar_citas() {
             lista_citas = data;
         },
         error: function (response) {
-            alertSecondary("Mensaje", "Ocurrió un error al obtener su registro de citas.");
+            //alertSecondary("Mensaje", "Ocurrió un error al obtener su registro de citas.");
+            alert("Ocurrió un error al obtener su registro de citas.");
             lista_citas = [];
         },
         complete: function () {
@@ -47,11 +48,12 @@ function validar_cambio_fecha() {
 function ver_cita(e) {
     var id_cita = $(e).attr('data-id-cita');
     var id_especialista = $(e).attr('data-id-especialista');
+    var id_paciente = $(e).attr('data-id-paciente');
     var hora_Cita = $(e).attr('data-hora-cita');
     var estado = $(e).attr('data-estado');
     var fecha_cita = $(e).attr('data-fecha-cita');
 
-    cargar_datos_cita(id_cita, id_especialista, fecha_cita, hora_Cita, estado);
+    cargar_datos_cita(id_cita, id_especialista, id_paciente, fecha_cita, hora_Cita, estado);
 }
 
 function ver_cuestionario(e) {
@@ -62,7 +64,8 @@ function ver_cuestionario(e) {
     //if (cuestionario == 2) {
 
         if (estado == 'ATENDIDO') {
-            alerta('El cuestionario seleccionado ya se ha aperturado', 'info');
+            //alerta('El cuestionario seleccionado ya se ha aperturado', 'info');
+            alert('El cuestionario seleccionado ya se ha aperturado');
             return;
         }
 
@@ -95,13 +98,15 @@ function ver_cuestionario(e) {
                     $('#ChatButton').trigger('click');
                 } else {
                     /*alertWarning("Atención", data.message);*/
-                    alerta(data.descripcion, 'info');
+                    //alerta(data.descripcion, 'info');
+                    alert(data.descripcion);
                     //$("#load_data").hide();
                 }
             },
             error: function (response) {
                 /*alertWarning("Atención", "Ocurrió un error al guardar la cita.");*/
-                alerta("Ocurrió un error atendiendo su solicitud.", 'info');
+                //alerta("Ocurrió un error atendiendo su solicitud.", 'info');
+                alert("Ocurrió un error atendiendo su solicitud.");
                 //$("#load_data").hide();
             },
             complete: function () {
@@ -110,12 +115,13 @@ function ver_cuestionario(e) {
     //}
 }
 
-function cargar_datos_cita(id_cita, id_doctor, fecha, hora, estado) {
+function cargar_datos_cita(id_cita, id_doctor, id_paciente, fecha, hora, estado) {
 
     $('#txtFecha').attr('data-fecha', fecha);
     $('#txtFecha').val(fecha_formato_ddmmyyyy(fecha));
     $('#txtHora').val(hora).attr('data-hora', hora);
     $('#cboDoctor').val(id_doctor).attr('data-id-doctor', id_doctor);//.change();
+    $('#cboPaciente').val(id_paciente).attr('data-id-paciente', id_paciente);//.change();
 
     if (id_cita == 0) {
         $('#txtFechaReasignar').val('');
@@ -143,7 +149,7 @@ function cargar_lista_doctores() {
         },
         success: function (data) {
             for (var item of data) {
-                html += '<option value="' + item.id_usuario + '">' + item.nombres + '</option>';
+                html += '<option value="' + item.id + '">' + item.nombre + '</option>';
             }
         },
         error: function (response) {
@@ -172,16 +178,26 @@ function guardar_cita() {
     }
     var hora = $('#txtHora').val();
     var doctor = $('#cboDoctor').val();
+    var paciente = $('#cboPaciente').val();
 
     if (hora == '') {
         /*alertSecondary("Mensaje", "Seleccione la hora para el registro de la cita.");*/
-        alerta("Seleccione la hora para el registro de la cita.", 'info');
+        //alerta("Seleccione la hora para el registro de la cita.", 'info');
+        alert("Seleccione la hora para el registro de la cita.");
         return;
     }
 
     if (doctor == '-1') {
         /*alertSecondary("Mensaje", "Seleccione el especialista.");*/
-        alerta("Seleccione el especialista.", 'info');
+        //alerta("Seleccione el especialista.", 'info');
+        alert("Seleccione el especialista.");
+        return;
+    }
+
+    if (paciente == '-1') {
+        /*alertSecondary("Mensaje", "Seleccione el especialista.");*/
+        //alerta("Seleccione el especialista.", 'info');
+        alert("Seleccione el paciente.");
         return;
     }
 
@@ -191,7 +207,8 @@ function guardar_cita() {
         estado_cita: 0,
         fecha_cita: fecha,
         hora_cita: hora,
-        id_doctor_asignado: doctor
+        id_doctor_asignado: doctor,
+        id_paciente: paciente
     };
 
     $.ajax({
@@ -202,7 +219,9 @@ function guardar_cita() {
             console.log(data);
             if (data.estado) {
                 /*alertSuccess("Muy bien", "Cita guardada exitosamente.");*/
-                alerta("Cita guardada exitosamente.", 'info');
+                //alerta("Cita guardada exitosamente.", 'info');
+                alert("Cita guardada exitosamente.");
+
                 //$("#load_data").hide();
                 //recargarInstruccion();
                 $('#txtHora').val('');
@@ -213,13 +232,15 @@ function guardar_cita() {
                 cargar_citas();
             } else {
                 /*alertWarning("Atención", data.message);*/
-                alerta(data.descripcion, 'info');
+                //alerta(data.descripcion, 'info');
+                alert(data.descripcion);
                 //$("#load_data").hide();
             }
         },
         error: function (response) {
             /*alertWarning("Atención", "Ocurrió un error al guardar la cita.");*/
-            alerta("Ocurrió un error al guardar la cita.", 'info');
+            //alerta("Ocurrió un error al guardar la cita.", 'info');
+            alert("Ocurrió un error al guardar la cita.");
             //$("#load_data").hide();
         },
         complete: function () {
@@ -232,7 +253,8 @@ function validateHhMm(e) {
 
     if (isValid) {
     } else {
-        alerta("El formato de hora ingresada es incorrecto.", 'info');
+        //alerta("El formato de hora ingresada es incorrecto.", 'info');
+        alert("El formato de hora ingresada es incorrecto.");
     }
 }
 
@@ -261,7 +283,7 @@ function disponibilidad_doctor() {
         type: "GET",
         data: null,
         beforeSend: function () {
-            $('#cboDoctor, #txtHora, #btnGuardarCita').removeAttr('disabled');
+            $('#cboDoctor, #txtHora, #btnGuardarCita, #cboPaciente').removeAttr('disabled');
             if (doctor == '-1') {
                 $('#divDisponibilidad').html('<tr><td colspan="2" class="text-center">Seleccione un especialista</td></tr>');
             }
@@ -282,7 +304,7 @@ function disponibilidad_doctor() {
         complete: function () {
             if (estado_ == 'ATENDIDO') {
                 $('#divDisponibilidad').html('<tr><td colspan="2" class="text-center">La cita ya ha sido atendida</td></tr>');
-                $('#cboDoctor, #txtHora, #btnGuardarCita').attr('disabled', true);
+                $('#cboDoctor, #txtHora, #btnGuardarCita,#cboPaciente').attr('disabled', true);
                 $('#txtFechaReasignar').val('');
                 $('#divReasignar').hide();
             } else {
@@ -336,7 +358,8 @@ function seleccionar_hora_disponible(e) {
     var hora = $(e).attr('data-hora');
 
     if (hora == '') {
-        alerta("Ya hay una cita registrada en el horario seleccionado.", 'info');
+        //alerta("Ya hay una cita registrada en el horario seleccionado.", 'info');
+        alert("Ya hay una cita registrada en el horario seleccionado.");
         $('#txtHora').val('');
         return;
     } else {

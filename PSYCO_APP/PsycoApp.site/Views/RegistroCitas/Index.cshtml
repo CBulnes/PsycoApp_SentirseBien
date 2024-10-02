@@ -1,17 +1,37 @@
 ﻿@model dynamic
 @{
-    ViewData["Title"] = "Registro de citas";
+    var dynamicData = Model.DynamicData;
     var dHoy = DateTime.Now;
+    ViewData["Title"] = "Agenda";
 }
-
-@*<script type="text/javascript" src="~/basic/call.js"></script>
-    <script type="text/javascript" src="~/basic/whatsapp.js"></script>
-    <script type="text/javascript" src="~/basic/atencion.js"></script>*@
 
 <div class="bd-example">
     <div class="row">
         <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
-            <b style="color: #004A92; font-size: 20px;">Registro de citas</b>
+            <b style="color: #004A92; font-size: 20px;">Agenda</b>
+        </div>
+        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">&nbsp;</div>
+        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+            <div class="row">
+                <div class="col-12 col-sm-12 col-md-2 col-lg-2 col-xl-2">
+                    <button type="button" class="evento_citado">Citado</button>
+                </div>
+                <div class="col-12 col-sm-12 col-md-2 col-lg-2 col-xl-2">
+                    <button type="button" class="evento_confirmado">Confirmado</button>
+                </div>
+                <div class="col-12 col-sm-12 col-md-2 col-lg-2 col-xl-2">
+                    <button type="button" class="evento_en_proceso">En proceso</button>
+                </div>
+                <div class="col-12 col-sm-12 col-md-2 col-lg-2 col-xl-2">
+                    <button type="button" class="evento_atendido">Atendido</button>
+                </div>
+                <div class="col-12 col-sm-12 col-md-2 col-lg-2 col-xl-2">
+                    <button type="button" class="evento_evaluacion">Evaluación</button>
+                </div>
+                <div class="col-12 col-sm-12 col-md-2 col-lg-2 col-xl-2">
+                    <button type="button" class="evento_taller">Taller</button>
+                </div>
+            </div>
         </div>
         <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">&nbsp;</div>
 
@@ -25,7 +45,7 @@
     <div class="modal-dialog modal-lg" role="document" style="height: 90%; display: grid; place-items: center;">
         <div class="modal-content" style="width: 100%;">
             <div class="modal-header second_color" style="background-color: transparent;">
-                <h5 class="modal-title" style="color: #FFFFFF;">Programación</h5>
+                <h5 class="modal-title" style="color: #FFFFFF;">Datos de cita</h5>
                 <button onclick="cerrar_modal_cita()" type="button" class="close" aria-label="Close" style="outline: none; cursor: pointer; color: #FFFFFF;">
                     <span>&times;</span>
                 </button>
@@ -49,6 +69,17 @@
                             </div>
                             <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
                                 <div class="form-group">
+                                    <span class="label-form">Especialista</span><br />
+                                    <div class="input-group">
+                                        <select class="form-control" id="cboDoctor" onchange="verificar_disponibilidad()">
+                                            <option value="-1">Seleccionar</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                <div class="form-group">
                                     <span class="label-form">Hora</span><br />
                                     <div class="input-group date" id="dtpicker1">
                                         <input type="text" class="form-control form-hora" id="txtHora" onkeydown="return false;" onchange="validateHhMm(this);" onpaste="validateHhMm(this);" maxlength="8" placeholder="Seleccionar hora" autocomplete="off" />
@@ -61,12 +92,16 @@
                             </div>
                             <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
                                 <div class="form-group">
-                                    <span class="label-form">Especialista</span><br />
-                                    <div class="input-group">
-                                        <select class="form-control" id="cboDoctor" onchange="verificar_disponibilidad()">
-                                            <option value="-1">Seleccionar</option>
-                                        </select>
-                                    </div>
+                                    <span class="label-form">Paciente</span><br />
+                                    <select class="form-control" id="cboPaciente">
+                                        <option value="-1">Seleccionar</option>
+                                        <option value="2">Lorenzo Lalo</option>
+                                        <option value="6">María Ramírez</option>
+                                        <option value="7">Juan Ramírez</option>
+                                        <option value="8">Ana Ramírez</option>
+                                        <option value="9">Pedro Ramírez</option>
+                                        <option value="10">Sofía Ramírez</option>
+                                    </select>
                                 </div>
                             </div>
 
