@@ -29,6 +29,67 @@ namespace PsycoApp.BL
             }
             return res_;
         }
+
+        public RespuestaUsuario confirmar_cita(Cita oCita, string main_path, string random_str)
+        {
+            RespuestaUsuario res_ = new RespuestaUsuario();
+            try
+            {
+                res_ = citaDA.confirmar_cita(oCita, main_path, random_str);
+            }
+            catch (Exception)
+            {
+                res_.estado = false;
+                res_.descripcion = "Ocurrió un error al confirmar la cita.";
+            }
+            return res_;
+        }
+
+        public RespuestaUsuario procesar_cita(Cita oCita, string main_path, string random_str)
+        {
+            RespuestaUsuario res_ = new RespuestaUsuario();
+            try
+            {
+                res_ = citaDA.procesar_cita(oCita, main_path, random_str);
+            }
+            catch (Exception)
+            {
+                res_.estado = false;
+                res_.descripcion = "Ocurrió un error al procesar la cita.";
+            }
+            return res_;
+        }
+
+        public RespuestaUsuario atender_cita(Cita oCita, string main_path, string random_str)
+        {
+            RespuestaUsuario res_ = new RespuestaUsuario();
+            try
+            {
+                res_ = citaDA.atender_cita(oCita, main_path, random_str);
+            }
+            catch (Exception)
+            {
+                res_.estado = false;
+                res_.descripcion = "Ocurrió un error al atender la cita.";
+            }
+            return res_;
+        }
+
+        public RespuestaUsuario cancelar_cita(Cita oCita, string main_path, string random_str)
+        {
+            RespuestaUsuario res_ = new RespuestaUsuario();
+            try
+            {
+                res_ = citaDA.cancelar_cita(oCita, main_path, random_str);
+            }
+            catch (Exception)
+            {
+                res_.estado = false;
+                res_.descripcion = "Ocurrió un error al cancelar la cita.";
+            }
+            return res_;
+        }
+
         public RespuestaUsuario registrar_cuestionario(Cita oCita, string main_path, string random_str)
         {
             RespuestaUsuario res_ = new RespuestaUsuario();

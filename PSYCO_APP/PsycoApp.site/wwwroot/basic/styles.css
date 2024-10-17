@@ -496,6 +496,7 @@ button.evento_citado, button.evento_confirmado, button.evento_en_proceso, button
     padding-top: 5px;
     padding-bottom: 5px;
     border-radius: 8px;
+    outline: none;
 }
 .evento_citado {
     background-color: #eb5151;

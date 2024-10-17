@@ -34,11 +34,10 @@ namespace PsycoApp.api.Controllers
 
         // POST api/values
         [HttpPost("registrar_cita")]
-        public RespuestaUsuario Post([FromBody] Cita oCita)
+        public RespuestaUsuario PostRegistrar([FromBody] Cita oCita)
         {
             RespuestaUsuario res_ = new RespuestaUsuario();
             random_str = ru.RandomString(8) + "|" + ru.CurrentDate();
-
             try
             {
                 res_ = citaBL.registrar_cita(oCita, main_path, random_str);
@@ -46,6 +45,74 @@ namespace PsycoApp.api.Controllers
             catch (Exception)
             {
                 res_.descripcion = "Ocurrió un error al registrar la cita";
+                res_.estado = false;
+            }
+            return res_;
+        }
+
+        [HttpPost("confirmar_cita")]
+        public RespuestaUsuario PostConfirmar([FromBody] Cita oCita)
+        {
+            RespuestaUsuario res_ = new RespuestaUsuario();
+            random_str = ru.RandomString(8) + "|" + ru.CurrentDate();
+            try
+            {
+                res_ = citaBL.confirmar_cita(oCita, main_path, random_str);
+            }
+            catch (Exception)
+            {
+                res_.descripcion = "Ocurrió un error al confirmar la cita";
+                res_.estado = false;
+            }
+            return res_;
+        }
+
+        [HttpPost("procesar_cita")]
+        public RespuestaUsuario PostProcesar([FromBody] Cita oCita)
+        {
+            RespuestaUsuario res_ = new RespuestaUsuario();
+            random_str = ru.RandomString(8) + "|" + ru.CurrentDate();
+            try
+            {
+                res_ = citaBL.procesar_cita(oCita, main_path, random_str);
+            }
+            catch (Exception)
+            {
+                res_.descripcion = "Ocurrió un error al procesar la cita";
+                res_.estado = false;
+            }
+            return res_;
+        }
+
+        [HttpPost("atender_cita")]
+        public RespuestaUsuario PostAtender([FromBody] Cita oCita)
+        {
+            RespuestaUsuario res_ = new RespuestaUsuario();
+            random_str = ru.RandomString(8) + "|" + ru.CurrentDate();
+            try
+            {
+                res_ = citaBL.atender_cita(oCita, main_path, random_str);
+            }
+            catch (Exception)
+            {
+                res_.descripcion = "Ocurrió un error al atender la cita";
+                res_.estado = false;
+            }
+            return res_;
+        }
+
+        [HttpPost("cancelar_cita")]
+        public RespuestaUsuario PostCancelar([FromBody] Cita oCita)
+        {
+            RespuestaUsuario res_ = new RespuestaUsuario();
+            random_str = ru.RandomString(8) + "|" + ru.CurrentDate();
+            try
+            {
+                res_ = citaBL.cancelar_cita(oCita, main_path, random_str);
+            }
+            catch (Exception)
+            {
+                res_.descripcion = "Ocurrió un error al cancelar la cita";
                 res_.estado = false;
             }
             return res_;

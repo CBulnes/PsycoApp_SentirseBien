@@ -5,6 +5,12 @@
     ViewData["Title"] = "Agenda";
 }
 
+<style>
+    input[type="text"]:disabled, select[disabled] {
+        background: #FFFFFF !important;
+    }
+</style>
+
 <div class="bd-example">
     <div class="row">
         <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
@@ -54,19 +60,20 @@
                 <div class="row">
                     <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
                         <div class="row">
-
                             <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
                                 <div class="form-group">
-                                    <span class="label-form">Fecha seleccionada</span><br />
+                                    <span class="label-form">Fecha cita</span><br />
                                     <input class="form-control" type="text" id="txtFecha" autocomplete="off" disabled="disabled" />
                                 </div>
                             </div>
-                            <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6" id="divReasignar">
+
+                            <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6" id="divReprogramar">
                                 <div class="form-group">
-                                    <span class="label-form">Fecha reasignar</span><br />
+                                    <span class="label-form">Fecha reprogramación</span><br />
                                     <input class="form-control" type="date" id="txtFechaReasignar" autocomplete="off" max="2050-12-31" min="2022-08-01" onkeydown="return false" />
                                 </div>
                             </div>
+
                             <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
                                 <div class="form-group">
                                     <span class="label-form">Especialista</span><br />
@@ -90,6 +97,9 @@
                                     </div>
                                 </div>
                             </div>
+                        </div>
+
+                        <div class="row">
                             <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
                                 <div class="form-group">
                                     <span class="label-form">Paciente</span><br />
@@ -104,7 +114,51 @@
                                     </select>
                                 </div>
                             </div>
+                            <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                <div class="form-group">
+                                    <span class="label-form">Teléfono</span><br />
+                                    <input class="form-control" type="text" id="txtTelefono" autocomplete="off" disabled="disabled" />
+                                </div>
+                            </div>
+                        </div>
 
+                        <div class="row">
+                            @* <div class="col-12 col-sm-12 col-md-6 col-lg-3 col-xl-3">
+                                <div class="form-group">
+                                    <span class="label-form">Moneda</span><br />
+                                    <input class="form-control" type="text" id="txtMoneda" autocomplete="off" disabled="disabled" />
+                                </div>
+                            </div> *@
+                            <div class="col-12 col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                                <div class="form-group">
+                                    <span class="label-form" id="spnPactado">Monto pactado </span><br />
+                                    <input class="form-control" type="text" id="txtMontoPactado" autocomplete="off" />
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                                <div class="form-group">
+                                    <span class="label-form" id="spnPagado">Monto pagado</span><br />
+                                    <input class="form-control" type="text" id="txtMontoPagado" autocomplete="off" disabled="disabled" />
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                                <div class="form-group">
+                                    <span class="label-form" id="spnPendiente">Monto pendiente</span><br />
+                                    <input class="form-control" type="text" id="txtMontoPendiente" autocomplete="off" disabled="disabled" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row" id="divEstado">
+                            <div class="col-12 col-sm-12 col-md-6 col-lg-4 col-xl-4">
+                                <div class="form-group">
+                                    <span class="label-form">Estado</span><br />
+                                    <button type="button" id="btnEstado"></button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row" id="divHorarios">
                             <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                 <div class="form-group">
                                     <table class="table table-responsive" style="display: inline-table;">
@@ -118,14 +172,16 @@
                                     </table>
                                 </div>
                             </div>
-
                         </div>
                     </div>
                 </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" onclick="cerrar_modal_cita()">Volver</button>
-                <button type="button" class="btn btn-primary main_color" onclick="guardar_cita()" id="btnGuardarCita">Guardar</button>
+                <button type="button" class="btn btn-primary main_color divConfirmar" onclick="guardar_cita()" id="btnGuardarCita">Guardar</button>
+                <button type="button" class="btn btn-primary main_color divConfirmar" onclick="confirmar_cita()" id="btnConfirmar">Confirmar</button>
+                <button type="button" class="btn btn-primary main_color" onclick="procesar_cita()" id="divProcesar">En proceso</button>
+                <button type="button" class="btn btn-primary main_color" onclick="atender_cita()" id="divAtender">Atender</button>
             </div>
         </div>
     </div>
@@ -139,5 +195,8 @@
     <script src="~/basic/moments.js?f=@dHoy.ToString("yyyyMMddhhmmss")"></script>
     <script src="~/basic/datetimepicker.js?f=@dHoy.ToString("yyyyMMddhhmmss")"></script>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/3.2.6/jquery.inputmask.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-maskmoney/3.0.2/jquery.maskMoney.min.js"></script>
     <script src="~/basic/registro_citas.js?f=@dHoy.ToString("yyyyMMddhhmmss")"></script>
+
 }

@@ -7,6 +7,8 @@ var estado_ = '';
 var person_img = path + '/images/user.png';
 
 function cargar_citas() {
+    $("#txtMontoPactado, #txtMontoPagado, #txtMontoPendiente").inputmask({ 'alias': 'numeric', allowMinus: false, digits: 2, max: 999.99 });
+
     $.ajax({
         url: '/RegistroCitas/CitasUsuario',
         type: "GET",
@@ -52,8 +54,17 @@ function ver_cita(e) {
     var hora_Cita = $(e).attr('data-hora-cita');
     var estado = $(e).attr('data-estado');
     var fecha_cita = $(e).attr('data-fecha-cita');
+    var telefono = $(e).attr('data-telefono');
+    var moneda = $(e).attr('data-moneda');
+    var monto_pactado = $(e).attr('data-monto-pactado');
+    var monto_pagado = $(e).attr('data-monto-pagado');
+    var monto_pendiente = $(e).attr('data-monto-pendiente');
 
-    cargar_datos_cita(id_cita, id_especialista, id_paciente, fecha_cita, hora_Cita, estado);
+    cargar_datos_cita(id_cita, id_especialista, id_paciente, fecha_cita, hora_Cita, estado, telefono, moneda, formatDecimal(monto_pactado), formatDecimal(monto_pagado), formatDecimal(monto_pendiente));
+}
+
+function formatDecimal(num) {
+    return (Math.round(num * 100) / 100).toFixed(2);
 }
 
 function ver_cuestionario(e) {
@@ -115,20 +126,54 @@ function ver_cuestionario(e) {
     //}
 }
 
-function cargar_datos_cita(id_cita, id_doctor, id_paciente, fecha, hora, estado) {
+function confirmarAbono(e) {
+    $(e).hide();
+    var pendiente = $('#txtMontoPendiente').val();
+    $('#txtMontoPagado').val(pendiente);
+    $('#txtMontoPendiente').val('0.00');
+}
 
+function cargar_datos_cita(id_cita, id_doctor, id_paciente, fecha, hora, estado, telefono, moneda, monto_pactado, monto_pagado, monto_pendiente) {
     $('#txtFecha').attr('data-fecha', fecha);
     $('#txtFecha').val(fecha_formato_ddmmyyyy(fecha));
     $('#txtHora').val(hora).attr('data-hora', hora);
     $('#cboDoctor').val(id_doctor).attr('data-id-doctor', id_doctor);//.change();
     $('#cboPaciente').val(id_paciente).attr('data-id-paciente', id_paciente);//.change();
+    $('#txtTelefono').val(telefono).attr('data-telefono', telefono);
+    //$('#txtMoneda').val(moneda).attr('data-moneda', moneda);
+    $('#txtMontoPactado').val(monto_pactado).attr('data-monto-pactado', monto_pactado);
+    $('#txtMontoPagado').val(monto_pagado).attr('data-monto-pagado', monto_pagado);
+    $('#txtMontoPendiente').val(monto_pendiente).attr('data-monto-pendiente', monto_pendiente);
+    $('#btnEstado').html(estado == '-' ? 'POR CITAR' : estado);
+
+    $('#btnEstado').attr('class', 'evento_' + (estado == '-' ? 'CITADO' : estado).toLowerCase().replace(' ', '_'));
+    $('#spnPactado').html('Monto pactado (' + moneda + ')');
+    $('#spnPagado').html('Monto pagado (' + moneda + ')');
+    var btnAbonar = (estado == 'EN PROCESO' ? '&nbsp;<img id="PagoPendiente" src="../images/warning.jpg" style="height: 15px; width: auto; cursor: pointer;" title="Confirmar abono" onclick="confirmarAbono(this)" />' : '');
+    $('#spnPendiente').html('Monto pendiente (' + moneda + ')' + btnAbonar);
+    
+    $('#cboDoctor, #cboPaciente, #txtHora, #txtMontoPactado').removeAttr('disabled');
 
     if (id_cita == 0) {
         $('#txtFechaReasignar').val('');
-        $('#divReasignar').hide();
+        $('#divHorarios, .divConfirmar').show();
+        $('#divReprogramar, #btnConfirmar, #divProcesar, #divAtender, #divEstado').hide();
     } else {
         $('#txtFechaReasignar').val(fecha);
-        $('#divReasignar').show();
+        $('#divEstado').show();
+
+        if (estado == 'CITADO') {
+            $('#divReprogramar, #divHorarios, #divConfirmar, #btnConfirmar').show();
+            $('#divProcesar, #divAtender').hide();
+        } else if (estado == 'CONFIRMADO') {
+            $('#divProcesar').show();
+            $('#divReprogramar, #divHorarios, .divConfirmar, #divAtender').hide();
+        } else if (estado == 'EN PROCESO') {
+            $('#divAtender').show();
+            $('#divReprogramar, #divHorarios, .divConfirmar, #divProcesar').hide();
+        } else if (estado == 'ATENDIDO') {
+            $('#divReprogramar, #divHorarios, .divConfirmar, #divProcesar, #divAtender').hide();
+        }
     }
 
     estado_ = estado;
@@ -170,6 +215,10 @@ $('#dtpicker1').datetimepicker({
     format: 'hh:00 A'
 });
 
+function isPrecise(num) {
+    return String(num).split(".")[1]?.length == 2;
+}
+
 function guardar_cita() {
     var fecha = $('#txtFecha').attr('data-fecha');
     var fecha_r = $('#txtFechaReasignar').val();
@@ -179,18 +228,19 @@ function guardar_cita() {
     var hora = $('#txtHora').val();
     var doctor = $('#cboDoctor').val();
     var paciente = $('#cboPaciente').val();
-
-    if (hora == '') {
-        /*alertSecondary("Mensaje", "Seleccione la hora para el registro de la cita.");*/
-        //alerta("Seleccione la hora para el registro de la cita.", 'info');
-        alert("Seleccione la hora para el registro de la cita.");
-        return;
-    }
+    var monto_pactado = $('#txtMontoPactado').val();
 
     if (doctor == '-1') {
         /*alertSecondary("Mensaje", "Seleccione el especialista.");*/
         //alerta("Seleccione el especialista.", 'info');
         alert("Seleccione el especialista.");
+        return;
+    }
+
+    if (hora == '') {
+        /*alertSecondary("Mensaje", "Seleccione la hora para el registro de la cita.");*/
+        //alerta("Seleccione la hora para el registro de la cita.", 'info');
+        alert("Seleccione la hora para el registro de la cita.");
         return;
     }
 
@@ -201,6 +251,20 @@ function guardar_cita() {
         return;
     }
 
+    if (monto_pactado == '') {
+        /*alertSecondary("Mensaje", "Seleccione el especialista.");*/
+        //alerta("Seleccione el especialista.", 'info');
+        alert("Ingrese el monto pactado.");
+        return;
+    }
+
+    if (monto_pactado == '0.00' || (monto_pactado != '' && !isPrecise(monto_pactado))) {
+        /*alertSecondary("Mensaje", "Seleccione el especialista.");*/
+        //alerta("Seleccione el especialista.", 'info');
+        alert("Ingrese un monto válido.");
+        return;
+    }
+
     var data_ = {
         id_cita: id_cita_,
         id_usuario: 0,
@@ -208,7 +272,8 @@ function guardar_cita() {
         fecha_cita: fecha,
         hora_cita: hora,
         id_doctor_asignado: doctor,
-        id_paciente: paciente
+        id_paciente: paciente,
+        monto_pactado: monto_pactado.replace('.', ',')
     };
 
     $.ajax({
@@ -248,6 +313,125 @@ function guardar_cita() {
     });
 }
 
+function confirmar_cita() {
+    $.ajax({
+        url: "/RegistroCitas/ConfirmarCita",
+        type: "POST",
+        data: { id_cita: id_cita_ },
+        success: function (data) {
+            if (data.estado) {
+                /*alertSuccess("Muy bien", "Cita guardada exitosamente.");*/
+                //alerta("Cita guardada exitosamente.", 'info');
+                alert("Cita confirmada exitosamente.");
+
+                //$("#load_data").hide();
+                //recargarInstruccion();
+                $('#txtHora').val('');
+                $('#cboDoctor').val('-1');
+                $('#mdl_cita').modal('hide');
+
+                $('.calendar-container').html('<div id="my-calendar"></div>');
+                cargar_citas();
+            } else {
+                /*alertWarning("Atención", data.message);*/
+                //alerta(data.descripcion, 'info');
+                alert(data.descripcion);
+                //$("#load_data").hide();
+            }
+        },
+        error: function (response) {
+            /*alertWarning("Atención", "Ocurrió un error al guardar la cita.");*/
+            //alerta("Ocurrió un error al guardar la cita.", 'info');
+            alert("Ocurrió un error al confirmar la cita.");
+            //$("#load_data").hide();
+        },
+        complete: function () {
+        }
+    });
+}
+
+function procesar_cita() {
+    $.ajax({
+        url: "/RegistroCitas/ProcesarCita",
+        type: "POST",
+        data: { id_cita: id_cita_ },
+        success: function (data) {
+            if (data.estado) {
+                /*alertSuccess("Muy bien", "Cita guardada exitosamente.");*/
+                //alerta("Cita guardada exitosamente.", 'info');
+                alert("Cita procesada exitosamente.");
+
+                //$("#load_data").hide();
+                //recargarInstruccion();
+                $('#txtHora').val('');
+                $('#cboDoctor').val('-1');
+                $('#mdl_cita').modal('hide');
+
+                $('.calendar-container').html('<div id="my-calendar"></div>');
+                cargar_citas();
+            } else {
+                /*alertWarning("Atención", data.message);*/
+                //alerta(data.descripcion, 'info');
+                alert(data.descripcion);
+                //$("#load_data").hide();
+            }
+        },
+        error: function (response) {
+            /*alertWarning("Atención", "Ocurrió un error al guardar la cita.");*/
+            //alerta("Ocurrió un error al guardar la cita.", 'info');
+            alert("Ocurrió un error al procesar la cita.");
+            //$("#load_data").hide();
+        },
+        complete: function () {
+        }
+    });
+}
+
+function atender_cita() {
+    var pagado = $('#txtMontoPagado').val();
+    if (pagado == '0.00') {
+        /*alertSecondary("Mensaje", "Seleccione el especialista.");*/
+        //alerta("Seleccione el especialista.", 'info');
+        alert("Primero debe confirmar el abono del monto pendiente.");
+        return;
+    }
+
+    $.ajax({
+        url: "/RegistroCitas/AtenderCita",
+        type: "POST",
+        data: { id_cita: id_cita_ },
+        success: function (data) {
+            if (data.estado) {
+                /*alertSuccess("Muy bien", "Cita guardada exitosamente.");*/
+                //alerta("Cita guardada exitosamente.", 'info');
+                alert("Cita atendida exitosamente.");
+
+                //$("#load_data").hide();
+                //recargarInstruccion();
+                $('#txtHora').val('');
+                $('#cboDoctor').val('-1');
+                $('#mdl_cita').modal('hide');
+
+                $('.calendar-container').html('<div id="my-calendar"></div>');
+                cargar_citas();
+            } else {
+                /*alertWarning("Atención", data.message);*/
+                //alerta(data.descripcion, 'info');
+                alert(data.descripcion);
+                //$("#load_data").hide();
+            }
+        },
+        error: function (response) {
+            /*alertWarning("Atención", "Ocurrió un error al guardar la cita.");*/
+            //alerta("Ocurrió un error al guardar la cita.", 'info');
+            alert("Ocurrió un error al atender la cita.");
+            //$("#load_data").hide();
+        },
+        complete: function () {
+        }
+    });
+}
+
 function validateHhMm(e) {
     var isValid = /^([0-1]?[0-9]|2[0-4]):([0-5][0-9])(:[0-5][0-9])?$/.test(e.value);
 
@@ -259,7 +443,7 @@ function validateHhMm(e) {
 }
 
 function verificar_disponibilidad() {
-    if ($('#divReasignar').is(':visible')) {
+    if ($('#divReprogramar').is(':visible')) {
         disponibilidad_reasignar_doctor();
     } else {
         disponibilidad_doctor();
@@ -268,7 +452,7 @@ function verificar_disponibilidad() {
     var id_doc = $('#cboDoctor').val();
     var id_doc_ant = $('#cboDoctor').attr('data-id-doctor');
 
-    if ((id_doc != id_doc_ant && $('#divReasignar').is(':visible')) || id_cita_ == 0) {
+    if ((id_doc != id_doc_ant && $('#divReprogramar').is(':visible')) || id_cita_ == 0) {
         $('#txtHora').val('').attr('data-hora', '');
     }
 }
@@ -306,13 +490,14 @@ function disponibilidad_doctor() {
                 $('#divDisponibilidad').html('<tr><td colspan="2" class="text-center">La cita ya ha sido atendida</td></tr>');
                 $('#cboDoctor, #txtHora, #btnGuardarCita,#cboPaciente').attr('disabled', true);
                 $('#txtFechaReasignar').val('');
-                $('#divReasignar').hide();
+                $('#divReprogramar').hide();
             } else {
                 if (doctor != '-1') {
                     $('#divDisponibilidad').html(html);
                 }
             }
             $('#mdl_cita').modal('show');
+            deshabilitar_campos();
         }
     });
 }
@@ -350,8 +535,18 @@ function disponibilidad_reasignar_doctor() {
             }
 
             $('#mdl_cita').modal('show');
+            deshabilitar_campos();
         }
     });
+}
+
+function deshabilitar_campos() {
+    if (estado_ != '-') {
+        $('#txtMontoPactado').attr('disabled', true);
+    }
+    if (estado_ == 'CONFIRMADO') {
+        $('#cboDoctor, #cboPaciente, #txtHora').attr('disabled', true);
+    }
 }
 
 function seleccionar_hora_disponible(e) {

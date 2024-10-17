@@ -18,5 +18,10 @@ namespace PsycoApp.entities
         public int id_paciente { get; set; } = 0;
         public string paciente { get; set; } = "";
         public string tipo { get; set; } = "";
+        public string telefono { get; set; } = "";
+        public string moneda { get; set; } = "";
+        public decimal monto_pactado { get; set; } = 0;
+        public decimal monto_pagado { get; set; } = 0;
+        public decimal monto_pendiente { get; set; } = 0;
     }
 }

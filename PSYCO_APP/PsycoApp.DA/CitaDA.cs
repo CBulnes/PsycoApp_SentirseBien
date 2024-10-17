@@ -28,6 +28,7 @@ namespace PsycoApp.DA
                 cmd.Parameters.Add("@fecha_cita", SqlDbType.VarChar).Value = oCita.fecha_cita;
                 cmd.Parameters.Add("@hora_cita", SqlDbType.VarChar).Value = oCita.hora_cita;
                 cmd.Parameters.Add("@id_doctor", SqlDbType.Int).Value = oCita.id_doctor_asignado;
+                cmd.Parameters.Add("@monto_pactado", SqlDbType.Decimal).Value = oCita.monto_pactado;
 
                 SqlDataAdapter da = new SqlDataAdapter(cmd);
                 DataTable dt = new DataTable();
@@ -44,6 +45,118 @@ namespace PsycoApp.DA
                 //LOG.registrarLog("(Excepcion " + random_str + ")[ERROR]->[CitaDA.cs / registrar_cita <> " + e.Message.ToString(), "ERROR", main_path);
                 res_.estado = false;
                 res_.descripcion = "Ocurrió un error al registrar la cita.";
+            }
+            cn.Close();
+            return res_;
+        }
+
+        public RespuestaUsuario confirmar_cita(Cita oCita, string main_path, string random_str)
+        {
+            RespuestaUsuario res_ = new RespuestaUsuario();
+            try
+            {
+                cn.Open();
+                SqlCommand cmd = new SqlCommand(Procedures.sp_confirmar_cita, cn);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Add("@id_cita", SqlDbType.Int).Value = oCita.id_cita;
+                SqlDataAdapter da = new SqlDataAdapter(cmd);
+                DataTable dt = new DataTable();
+                da.Fill(dt);
+                foreach (DataRow row in dt.Rows)
+                {
+                    res_.descripcion = Convert.ToString(row["rpta"]);
+                }
+                res_.estado = res_.descripcion == "OK" ? true : false;
+            }
+            catch (Exception e)
+            {
+                //LOG.registrarLog("(Excepcion " + random_str + ")[ERROR]->[CitaDA.cs / registrar_cita <> " + e.Message.ToString(), "ERROR", main_path);
+                res_.estado = false;
+                res_.descripcion = "Ocurrió un error al confirmar la cita.";
+            }
+            cn.Close();
+            return res_;
+        }
+
+        public RespuestaUsuario procesar_cita(Cita oCita, string main_path, string random_str)
+        {
+            RespuestaUsuario res_ = new RespuestaUsuario();
+            try
+            {
+                cn.Open();
+                SqlCommand cmd = new SqlCommand(Procedures.sp_procesar_cita, cn);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Add("@id_cita", SqlDbType.Int).Value = oCita.id_cita;
+                SqlDataAdapter da = new SqlDataAdapter(cmd);
+                DataTable dt = new DataTable();
+                da.Fill(dt);
+                foreach (DataRow row in dt.Rows)
+                {
+                    res_.descripcion = Convert.ToString(row["rpta"]);
+                }
+                res_.estado = res_.descripcion == "OK" ? true : false;
+            }
+            catch (Exception e)
+            {
+                //LOG.registrarLog("(Excepcion " + random_str + ")[ERROR]->[CitaDA.cs / registrar_cita <> " + e.Message.ToString(), "ERROR", main_path);
+                res_.estado = false;
+                res_.descripcion = "Ocurrió un error al procesar la cita.";
+            }
+            cn.Close();
+            return res_;
+        }
+
+        public RespuestaUsuario atender_cita(Cita oCita, string main_path, string random_str)
+        {
+            RespuestaUsuario res_ = new RespuestaUsuario();
+            try
+            {
+                cn.Open();
+                SqlCommand cmd = new SqlCommand(Procedures.sp_atender_cita, cn);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Add("@id_cita", SqlDbType.Int).Value = oCita.id_cita;
+                SqlDataAdapter da = new SqlDataAdapter(cmd);
+                DataTable dt = new DataTable();
+                da.Fill(dt);
+                foreach (DataRow row in dt.Rows)
+                {
+                    res_.descripcion = Convert.ToString(row["rpta"]);
+                }
+                res_.estado = res_.descripcion == "OK" ? true : false;
+            }
+            catch (Exception e)
+            {
+                //LOG.registrarLog("(Excepcion " + random_str + ")[ERROR]->[CitaDA.cs / registrar_cita <> " + e.Message.ToString(), "ERROR", main_path);
+                res_.estado = false;
+                res_.descripcion = "Ocurrió un error al atender la cita.";
+            }
+            cn.Close();
+            return res_;
+        }
+
+        public RespuestaUsuario cancelar_cita(Cita oCita, string main_path, string random_str)
+        {
+            RespuestaUsuario res_ = new RespuestaUsuario();
+            try
+            {
+                cn.Open();
+                SqlCommand cmd = new SqlCommand(Procedures.sp_cancelar_cita, cn);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Add("@id_cita", SqlDbType.Int).Value = oCita.id_cita;
+                SqlDataAdapter da = new SqlDataAdapter(cmd);
+                DataTable dt = new DataTable();
+                da.Fill(dt);
+                foreach (DataRow row in dt.Rows)
+                {
+                    res_.descripcion = Convert.ToString(row["rpta"]);
+                }
+                res_.estado = res_.descripcion == "OK" ? true : false;
+            }
+            catch (Exception e)
+            {
+                //LOG.registrarLog("(Excepcion " + random_str + ")[ERROR]->[CitaDA.cs / registrar_cita <> " + e.Message.ToString(), "ERROR", main_path);
+                res_.estado = false;
+                res_.descripcion = "Ocurrió un error al cancelar la cita.";
             }
             cn.Close();
             return res_;
@@ -142,6 +255,11 @@ namespace PsycoApp.DA
                     cita.id_paciente = Convert.ToInt32(row["id_paciente"]);
                     cita.paciente = Convert.ToString(row["paciente"]);
                     cita.tipo = Convert.ToString(row["tipo"]);
+                    cita.telefono = Convert.ToString(row["telefono"]);
+                    cita.moneda = Convert.ToString(row["moneda"]);
+                    cita.monto_pactado = Convert.ToDecimal(row["monto_pactado"]);
+                    cita.monto_pagado = Convert.ToDecimal(row["monto_pagado"]);
+                    cita.monto_pendiente = Convert.ToDecimal(row["monto_pendiente"]);
                     lista.Add(cita);
                 }
             }
