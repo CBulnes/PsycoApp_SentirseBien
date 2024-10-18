@@ -105,7 +105,7 @@ namespace PsycoApp.site.Controllers
         public async Task<RespuestaUsuario> RegistrarCita(Cita model)
         {
             string res = "";
-            model.id_usuario = Convert.ToInt32(HttpContext.Session.GetInt32("id_usuario"));
+            model.usuario = Convert.ToString(HttpContext.Session.GetString("login"));
 
             RespuestaUsuario res_ = new RespuestaUsuario();
             try
@@ -127,7 +127,7 @@ namespace PsycoApp.site.Controllers
         public async Task<RespuestaUsuario> ConfirmarCita(Cita model)
         {
             string res = "";
-            model.id_usuario = Convert.ToInt32(HttpContext.Session.GetInt32("id_usuario"));
+            model.usuario = Convert.ToString(HttpContext.Session.GetString("login"));
 
             RespuestaUsuario res_ = new RespuestaUsuario();
             try
@@ -149,7 +149,7 @@ namespace PsycoApp.site.Controllers
         public async Task<RespuestaUsuario> ProcesarCita(Cita model)
         {
             string res = "";
-            model.id_usuario = Convert.ToInt32(HttpContext.Session.GetInt32("id_usuario"));
+            model.usuario = Convert.ToString(HttpContext.Session.GetString("login"));
 
             RespuestaUsuario res_ = new RespuestaUsuario();
             try
@@ -171,7 +171,7 @@ namespace PsycoApp.site.Controllers
         public async Task<RespuestaUsuario> AtenderCita(Cita model)
         {
             string res = "";
-            model.id_usuario = Convert.ToInt32(HttpContext.Session.GetInt32("id_usuario"));
+            model.usuario = Convert.ToString(HttpContext.Session.GetString("login"));
 
             RespuestaUsuario res_ = new RespuestaUsuario();
             try
@@ -193,7 +193,7 @@ namespace PsycoApp.site.Controllers
         public async Task<RespuestaUsuario> CancelarCita(Cita model)
         {
             string res = "";
-            model.id_usuario = Convert.ToInt32(HttpContext.Session.GetInt32("id_usuario"));
+            model.usuario = Convert.ToString(HttpContext.Session.GetString("login"));
 
             RespuestaUsuario res_ = new RespuestaUsuario();
             try

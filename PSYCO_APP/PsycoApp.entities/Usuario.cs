@@ -19,5 +19,6 @@ namespace PsycoApp.entities
 		public string num_documento { get; set; } = "";
 		public string validacion { get; set; } = "";
 		public int test_actual { get; set; } = 0;
+		public string login { get; set; } = "";
 	}
 }

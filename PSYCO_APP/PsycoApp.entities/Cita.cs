@@ -23,5 +23,7 @@ namespace PsycoApp.entities
         public decimal monto_pactado { get; set; } = 0;
         public decimal monto_pagado { get; set; } = 0;
         public decimal monto_pendiente { get; set; } = 0;
+
+        public List<HistorialCita> historial { get; set; }
     }
 }

@@ -18,4 +18,11 @@ namespace PsycoApp.entities
         public string cuestionarios { get; set; } = "";
         public int id_cita { get; set; } = 0;
     }
+
+    public class HistorialCita
+    {
+        public string evento { get; set; } = "";
+        public string usuario { get; set; } = "";
+        public string fecha { get; set; } = "";
+    }
 }

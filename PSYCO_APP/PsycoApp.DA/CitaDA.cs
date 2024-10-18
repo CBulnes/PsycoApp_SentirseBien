@@ -29,6 +29,7 @@ namespace PsycoApp.DA
                 cmd.Parameters.Add("@hora_cita", SqlDbType.VarChar).Value = oCita.hora_cita;
                 cmd.Parameters.Add("@id_doctor", SqlDbType.Int).Value = oCita.id_doctor_asignado;
                 cmd.Parameters.Add("@monto_pactado", SqlDbType.Decimal).Value = oCita.monto_pactado;
+                cmd.Parameters.Add("@usuario", SqlDbType.VarChar).Value = oCita.usuario;
 
                 SqlDataAdapter da = new SqlDataAdapter(cmd);
                 DataTable dt = new DataTable();
@@ -59,6 +60,7 @@ namespace PsycoApp.DA
                 SqlCommand cmd = new SqlCommand(Procedures.sp_confirmar_cita, cn);
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.Add("@id_cita", SqlDbType.Int).Value = oCita.id_cita;
+                cmd.Parameters.Add("@usuario", SqlDbType.VarChar).Value = oCita.usuario;
                 SqlDataAdapter da = new SqlDataAdapter(cmd);
                 DataTable dt = new DataTable();
                 da.Fill(dt);
@@ -87,6 +89,7 @@ namespace PsycoApp.DA
                 SqlCommand cmd = new SqlCommand(Procedures.sp_procesar_cita, cn);
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.Add("@id_cita", SqlDbType.Int).Value = oCita.id_cita;
+                cmd.Parameters.Add("@usuario", SqlDbType.VarChar).Value = oCita.usuario;
                 SqlDataAdapter da = new SqlDataAdapter(cmd);
                 DataTable dt = new DataTable();
                 da.Fill(dt);
@@ -115,6 +118,7 @@ namespace PsycoApp.DA
                 SqlCommand cmd = new SqlCommand(Procedures.sp_atender_cita, cn);
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.Add("@id_cita", SqlDbType.Int).Value = oCita.id_cita;
+                cmd.Parameters.Add("@usuario", SqlDbType.VarChar).Value = oCita.usuario;
                 SqlDataAdapter da = new SqlDataAdapter(cmd);
                 DataTable dt = new DataTable();
                 da.Fill(dt);
@@ -143,6 +147,7 @@ namespace PsycoApp.DA
                 SqlCommand cmd = new SqlCommand(Procedures.sp_cancelar_cita, cn);
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.Add("@id_cita", SqlDbType.Int).Value = oCita.id_cita;
+                cmd.Parameters.Add("@usuario", SqlDbType.VarChar).Value = oCita.usuario;
                 SqlDataAdapter da = new SqlDataAdapter(cmd);
                 DataTable dt = new DataTable();
                 da.Fill(dt);

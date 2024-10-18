@@ -14,6 +14,7 @@ namespace PsycoApp.BL
     public class CitaBL
     {
         CitaDA citaDA = new CitaDA();
+        HistorialDA historialDA = new HistorialDA();
 
         public RespuestaUsuario registrar_cita(Cita oCita, string main_path, string random_str)
         {
@@ -125,6 +126,10 @@ namespace PsycoApp.BL
             try
             {
                 lista = citaDA.citas_usuario(id_usuario, main_path, random_str);
+                lista.ForEach(item =>
+                {
+                    item.historial = historialDA.listar_historial_cita(item.id_cita);
+                });
             }
             catch (Exception)
             {

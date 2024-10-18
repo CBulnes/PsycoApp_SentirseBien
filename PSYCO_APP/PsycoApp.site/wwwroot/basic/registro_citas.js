@@ -134,6 +134,9 @@ function confirmarAbono(e) {
 }
 
 function cargar_datos_cita(id_cita, id_doctor, id_paciente, fecha, hora, estado, telefono, moneda, monto_pactado, monto_pagado, monto_pendiente) {
+    $('#btnResumen').trigger('click');
+    $('#ulTabs').hide();
+
     $('#txtFecha').attr('data-fecha', fecha);
     $('#txtFecha').val(fecha_formato_ddmmyyyy(fecha));
     $('#txtHora').val(hora).attr('data-hora', hora);
@@ -159,6 +162,7 @@ function cargar_datos_cita(id_cita, id_doctor, id_paciente, fecha, hora, estado,
         $('#divHorarios, .divConfirmar').show();
         $('#divReprogramar, #btnConfirmar, #divProcesar, #divAtender, #divEstado').hide();
     } else {
+        $('#ulTabs').show();
         $('#txtFechaReasignar').val(fecha);
         $('#divEstado').show();
 
@@ -180,6 +184,22 @@ function cargar_datos_cita(id_cita, id_doctor, id_paciente, fecha, hora, estado,
     id_cita_ = id_cita;
 
     verificar_disponibilidad();
+    mostrar_historial(id_cita);
+}
+
+function mostrar_historial(id_cita) {
+    var historial = lista_citas.filter(x => x.id_cita == parseInt(id_cita))[0].historial;
+    var html = '';
+    for (var item of historial) {
+        html += '<div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">';
+        html += item.fecha;
+        html += '</div>';
+        html += '<div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">';
+        html += '<button type="button" class="evento_' + item.evento.toLowerCase().replace(' ', '_') + '">' + item.evento + '</button>';
+        html += item.usuario;
+        html += '</div>';
+    }
+    $('#divHistorial').html(html);
 }
 
 function cargar_lista_doctores() {

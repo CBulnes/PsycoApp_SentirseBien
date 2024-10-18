@@ -114,6 +114,37 @@ namespace PsycoApp.DA
             return lista;
         }
 
+        public List<HistorialCita> listar_historial_cita(int id_cita)
+        {
+            List<HistorialCita> lista = new List<HistorialCita>();
+            try
+            {
+                cn.Open();
+                SqlCommand cmd = new SqlCommand(Procedures.sp_listar_historial_cita, cn);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Add("@id_cita", SqlDbType.Int).Value = id_cita;
+
+                SqlDataAdapter da = new SqlDataAdapter(cmd);
+                DataTable dt = new DataTable();
+                da.Fill(dt);
+
+                foreach (DataRow row in dt.Rows)
+                {
+                    HistorialCita historial = new HistorialCita();
+                    historial.evento = Convert.ToString(row["evento"]);
+                    historial.usuario = Convert.ToString(row["usuario"]);
+                    historial.fecha = Convert.ToString(row["fecha"]);
+                    lista.Add(historial);
+                }
+            }
+            catch (Exception e)
+            {
+                lista.Clear();
+            }
+            cn.Close();
+            return lista;
+        }
+
 
     }
 }

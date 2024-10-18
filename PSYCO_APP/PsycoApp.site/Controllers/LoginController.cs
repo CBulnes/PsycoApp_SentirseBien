@@ -52,6 +52,7 @@ namespace PsycoApp.site.Controllers
                     HttpContext.Session.SetString("tipo_documento", usuario.tipo_documento);
                     HttpContext.Session.SetString("num_documento", usuario.num_documento);
                     HttpContext.Session.SetInt32("test_actual", usuario.test_actual);
+                    HttpContext.Session.SetString("login", usuario.login);
                     HttpContext.Session.SetInt32("flag_chat", 1);
                 }
             }

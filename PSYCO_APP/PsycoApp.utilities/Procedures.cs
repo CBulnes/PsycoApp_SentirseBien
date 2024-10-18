@@ -39,6 +39,7 @@ namespace PsycoApp.utilities
         public const string sp_registrar_historial_paciente = "SP_REGISTRAR_HISTORIAL_PACIENTE";
         public const string sp_registrar_estado_cuestionario = "SP_REGISTRAR_ESTADO_CUESTIONARIO";
         public const string sp_listar_historial_paciente = "SP_LISTAR_HISTORIAL_PACIENTE";
+        public const string sp_listar_historial_cita = "SP_LISTAR_HISTORIAL_CITA";
         public const string sp_registrar_cita = "SP_REGISTRAR_CITA";
         public const string sp_confirmar_cita = "SP_CONFIRMAR_CITA";
         public const string sp_procesar_cita = "SP_PROCESAR_CITA";
