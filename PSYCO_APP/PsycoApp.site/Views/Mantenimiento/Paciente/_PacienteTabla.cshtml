@@ -1,0 +1,78 @@
+﻿@model IEnumerable<PsycoApp.site.Models.Paciente>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Nº</th>
+            <th>Nombre</th>
+            <th>Documento</th>
+            <th>Estado</th>
+            <th>Fecha de nacimiento</th>
+            <th>Teléfono</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null && Model.Any())
+        {
+            @foreach (var paciente in Model.Select((item, index) => (item, index)))
+            {
+                <tr>
+                    <td class="text-center">@(paciente.index + 1)</td>
+                    <td>@paciente.item.Nombre</td>
+                    <td>@paciente.item.DocumentoTipo - @paciente.item.DocumentoNumero</td>
+                  <td>
+                    @if (@paciente.item.Estado == "1")
+                    {
+                        <span>Registrado</span>
+                    }
+                        else if (@paciente.item.Estado == "2")
+                    {
+                        <span>Atendido</span>
+                    }
+                    else
+                    {
+                        <span>Desconocido</span> <!-- Por si hay otros estados no contemplados -->
+                    }
+                </td>
+                    <td>@paciente.item.FechaNacimiento.ToString().Substring(0, 10)</td>
+                    <td>@paciente.item.Telefono</td>
+                    <td>
+                        <!-- Acciones como editar o eliminar -->
+                        <button class="btn btn-sm sb-pa-container-table-button-edit" onclick="editarPaciente(@paciente.item.Id)">Editar</button>
+                        <button class="btn btn-sm sb-pa-container-table-button-delet" onclick="eliminarPaciente(@paciente.item.Id)">Eliminar</button>
+                    </td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="6">No se encontraron pacientes.</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<!-- Controles de Paginación -->
+@if (ViewBag.PageNumber != null && ViewBag.PageSize != null)
+{
+    <nav aria-label="Paginación">
+        <ul class="pagination sb-pa-container-nav">
+            <li class="page-item @(ViewBag.PageNumber == 1 ? "disabled" : "")">
+                <a class="page-link" href="javascript:void(0)" onclick="buscarPaciente(@(ViewBag.PageNumber - 1))"><span>&#60;</span></a>
+            </li>
+
+            <!-- Aquí podrías agregar más lógica para mostrar números de página si es necesario -->
+            <li class="page-item">
+                <span class="page-link">
+                    @(ViewBag.PageNumber)
+                </span>
+            </li>
+
+            <li class="page-item @(Model.Count() < ViewBag.PageSize ? "disabled" : "")">
+                <a class="page-link" href="javascript:void(0)" onclick="buscarPaciente(@(ViewBag.PageNumber + 1))"><span>&#62;</span></a>
+            </li>
+        </ul>
+    </nav>
+}

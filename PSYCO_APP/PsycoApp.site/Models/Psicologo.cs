@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace PsycoApp.site.Models
 {
@@ -14,5 +15,15 @@ namespace PsycoApp.site.Models
         public string Direccion { get; set; }
         public string Distrito { get; set; }
         public string Estado { get; set; }
+        public List<Estudio> Estudios { get; set; }
+    }
+
+    public class Estudio
+    {
+        public int Id { get; set; }
+        public int IdPsicologo { get; set; }
+        public int GradoAcademico { get; set; }
+        public int Institucion { get; set; }
+        public int Carrera { get; set; }
     }
 }

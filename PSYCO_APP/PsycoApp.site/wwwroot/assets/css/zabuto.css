@@ -22,7 +22,7 @@
     border: 2px solid #f3f3f3;
     text-align: right;
     color: #333333 !important;
-    font-weight: bold;
+    /*font-weight: bold;*/
     width: 14.2% !important;
     height: 120px;
 }

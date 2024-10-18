@@ -51,14 +51,16 @@ namespace PsycoApp.DA
             return paciente;
         }
 
-        public List<Paciente> BuscarPaciente(string nombre)
+        public List<Paciente> BuscarPaciente(string nombre, int pageNumber = 1, int pageSize = 10)
         {
             var pacientes = new List<Paciente>();
 
-            using (var command = new SqlCommand("sp_buscar_paciente", _connection))
+            using (var command = new SqlCommand("sp_obtener_paciente_paginado", _connection))
             {
                 command.CommandType = CommandType.StoredProcedure;
                 command.Parameters.AddWithValue("@Nombre", nombre);
+                command.Parameters.AddWithValue("@NumeroPagina", pageNumber);
+                command.Parameters.AddWithValue("@TamanoPagina", pageSize);
 
                 _connection.Open();
                 using (var reader = command.ExecuteReader())

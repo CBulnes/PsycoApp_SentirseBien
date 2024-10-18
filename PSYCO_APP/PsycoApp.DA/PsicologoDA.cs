@@ -53,6 +53,33 @@ namespace PsycoApp.DA
             return psicologo;
         }
 
+        public List<Estudio> BuscarEstudiosPsicologo(int idPsicologo)
+        {
+            var estudios = new List<Estudio>();
+            using (var command = new SqlCommand(Procedures.listar_estudios_psicologo, _connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.Parameters.AddWithValue("@IdPsicologo", idPsicologo);
+                _connection.Open();
+                using (var reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        estudios.Add(new Estudio
+                        {
+                            Id = reader.GetInt32(0),
+                            IdPsicologo = reader.GetInt32(1),
+                            GradoAcademico = reader.GetInt32(2),
+                            Institucion = reader.GetInt32(3),
+                            Carrera = reader.GetInt32(4)
+                        });
+                    }
+                }
+                _connection.Close();
+            }
+            return estudios;
+        }
+
         public List<Psicologo> BuscarPsicologo(string nombre)
         {
             var psicologos = new List<Psicologo>();
@@ -89,13 +116,15 @@ namespace PsycoApp.DA
             return psicologos;
         }
 
-        public List<Psicologo> ListarPsicologos()
+        public List<Psicologo> ListarPsicologos(int pagina, int tamanoPagina)
         {
             var psicologos = new List<Psicologo>();
 
-            using (var command = new SqlCommand(Procedures.listar_psicologo, _connection))
+            using (var command = new SqlCommand(Procedures.listar_psicologos_paginado, _connection))
             {
                 command.CommandType = CommandType.StoredProcedure;
+                command.Parameters.AddWithValue("@Pagina", pagina);
+                command.Parameters.AddWithValue("@TamanoPagina", tamanoPagina);
 
                 _connection.Open();
 
@@ -127,6 +156,7 @@ namespace PsycoApp.DA
 
         public void AgregarPsicologo(Psicologo psicologo)
         {
+            DataTable dtEstudios = Helper.ToDataTable(psicologo.Estudios);
             using (var command = new SqlCommand(Procedures.agregar_psicologo, _connection))
             {
                 command.CommandType = CommandType.StoredProcedure;
@@ -140,6 +170,7 @@ namespace PsycoApp.DA
                 command.Parameters.AddWithValue("@Direccion", psicologo.Direccion);
                 command.Parameters.AddWithValue("@Distrito", psicologo.Distrito);
                 command.Parameters.AddWithValue("@Estado", psicologo.Estado);
+                command.Parameters.AddWithValue("@EstudiosPsicologo", dtEstudios);
 
                 _connection.Open();
                 command.ExecuteNonQuery();
@@ -149,6 +180,7 @@ namespace PsycoApp.DA
 
         public void ActualizarPsicologo(Psicologo psicologo)
         {
+            DataTable dtEstudios = Helper.ToDataTable(psicologo.Estudios);
             using (var command = new SqlCommand(Procedures.actualizar_psicologo, _connection))
             {
                 command.CommandType = CommandType.StoredProcedure;
@@ -163,6 +195,7 @@ namespace PsycoApp.DA
                 command.Parameters.AddWithValue("@Direccion", psicologo.Direccion);
                 command.Parameters.AddWithValue("@Distrito", psicologo.Distrito);
                 command.Parameters.AddWithValue("@Estado", psicologo.Estado);
+                command.Parameters.AddWithValue("@EstudiosPsicologo", dtEstudios);
 
                 _connection.Open();
                 command.ExecuteNonQuery();
@@ -182,5 +215,35 @@ namespace PsycoApp.DA
                 _connection.Close();
             }
         }
+
+        public List<entities.Psicologo> listar_psicologos_combo()
+        {
+            List<entities.Psicologo> lista = new List<entities.Psicologo>();
+            try
+            {
+                cn.Open();
+                SqlCommand cmd = new SqlCommand(Procedures.sp_listar_psicologos_combo, cn);
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                SqlDataAdapter da = new SqlDataAdapter(cmd);
+                DataTable dt = new DataTable();
+                da.Fill(dt);
+
+                foreach (DataRow row in dt.Rows)
+                {
+                    entities.Psicologo item = new entities.Psicologo();
+                    item.Id = Convert.ToInt32(row["id_psicologo"]);
+                    item.Nombre = Convert.ToString(row["nombres"]);
+                    lista.Add(item);
+                }
+            }
+            catch (Exception e)
+            {
+                lista.Clear();
+            }
+            cn.Close();
+            return lista;
+        }
+
     }
 }

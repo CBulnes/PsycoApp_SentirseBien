@@ -469,10 +469,56 @@ button.main_color {
     border-radius: 5px;
 }
 
-.div_cita_registrada {
+.div_evt_citado {
     background-color: #eb5151;
 }
 
-.div_cita_atendida {
-    background-color: #5d9ad9;
+.div_evt_confirmado {
+    background-color: #52a351;
+}
+
+.div_evt_en_proceso {
+    background-color: #d7cc50;
+}
+
+.div_evt_atendido {
+    background-color: #1c0ed0;
+}
+
+.div_cita.div_evt_en_proceso {
+    color: #171717;
+}
+
+/*leyendas agenda*/
+button.evento_citado, button.evento_confirmado, button.evento_en_proceso, button.evento_atendido, button.evento_evaluacion, button.evento_taller {
+    text-align: center;
+    width: 100%;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    border-radius: 8px;
+    outline: none;
+}
+.evento_citado {
+    background-color: #eb5151;
+    color: #ffffff;
+}
+.evento_confirmado {
+    background-color: #52a351;
+    color: #ffffff;
+}
+.evento_en_proceso {
+    background-color: #d7cc50;
+    color: #171717;
+}
+.evento_atendido {
+    background-color: #1c0ed0;
+    color: #ffffff;
+}
+.evento_evaluacion {
+    background-color: #880cb2;
+    color: #ffffff;
+}
+.evento_taller {
+    background-color: #603939;
+    color: #ffffff;
 }

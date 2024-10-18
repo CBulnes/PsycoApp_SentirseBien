@@ -13,10 +13,10 @@ namespace PsycoApp.site.Controllers
 {
     public class HistorialCitasController : Controller
     {
-        private string url_citas_doctor = Helper.GetUrlApi() + "/api/cita/citas_doctor";
-        private string url_historial_usuario = Helper.GetUrlApi() + "/api/cita/historial_usuario";
-        private string url_registrar_historial = Helper.GetUrlApi() + "/api/cita/registrar_historial";
-        private string url_registrar_estado_cuestionario = Helper.GetUrlApi() + "/api/cita/registrar_estado_cuestionario";
+        private readonly string url_citas_doctor = Helper.GetUrlApi() + "/api/cita/citas_doctor";
+        private readonly string url_historial_usuario = Helper.GetUrlApi() + "/api/cita/historial_usuario";
+        private readonly string url_registrar_historial = Helper.GetUrlApi() + "/api/cita/registrar_historial";
+        private readonly string url_registrar_estado_cuestionario = Helper.GetUrlApi() + "/api/cita/registrar_estado_cuestionario";
 
         private string url = "";
         dynamic obj = new System.Dynamic.ExpandoObject();
@@ -42,14 +42,13 @@ namespace PsycoApp.site.Controllers
                 obj.vista = "ATENCION";
                 obj.call_center_invitado = Helper.GetCallCenterInvitado();
 
-                if (obj.id_tipousuario == 1) //admin
+                var viewModelContainer = new ViewModelContainer<IEnumerable<PsycoApp.site.Models.Paciente>>
                 {
-                    return RedirectToAction("Index", "Home");
-                }
-                else //cliente
-                {
-                    return View("Index", obj);
-                }
+                    //Model = pacientesViewModel,
+                    DynamicData = obj
+                };
+
+                return View("Index", viewModelContainer);
             }
             else
             {

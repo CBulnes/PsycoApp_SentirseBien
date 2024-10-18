@@ -1,17 +1,65 @@
 ﻿@model dynamic
 @{
-    ViewData["Title"] = "Registro de citas";
+    var dynamicData = Model.DynamicData;
     var dHoy = DateTime.Now;
+    ViewData["Title"] = "Agenda";
 }
 
-@*<script type="text/javascript" src="~/basic/call.js"></script>
-    <script type="text/javascript" src="~/basic/whatsapp.js"></script>
-    <script type="text/javascript" src="~/basic/atencion.js"></script>*@
+<style>
+    input[type="text"]:disabled, select[disabled] {
+        background: #FFFFFF !important;
+    }
+
+    .nav-link {
+        width: 50%;
+        padding: 0px !important;
+    }
+
+        .nav-link > a {
+            width: 100%;
+            display: block;
+            text-align: center;
+            padding: .5rem 1rem;
+            border-radius: 10px 10px 0px 0px;
+        }
+
+            .nav-link > a.active {
+                background-color: #1656a0;
+                color: #ffffff;
+            }
+
+            .tab-pane.active{
+                background-color: #ffffff;
+            }
+</style>
 
 <div class="bd-example">
     <div class="row">
         <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
-            <b style="color: #004A92; font-size: 20px;">Registro de citas</b>
+            <b style="color: #004A92; font-size: 20px;">Agenda</b>
+        </div>
+        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">&nbsp;</div>
+        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+            <div class="row">
+                <div class="col-12 col-sm-12 col-md-2 col-lg-2 col-xl-2">
+                    <button type="button" class="evento_citado">Citado</button>
+                </div>
+                <div class="col-12 col-sm-12 col-md-2 col-lg-2 col-xl-2">
+                    <button type="button" class="evento_confirmado">Confirmado</button>
+                </div>
+                <div class="col-12 col-sm-12 col-md-2 col-lg-2 col-xl-2">
+                    <button type="button" class="evento_en_proceso">En proceso</button>
+                </div>
+                <div class="col-12 col-sm-12 col-md-2 col-lg-2 col-xl-2">
+                    <button type="button" class="evento_atendido">Atendido</button>
+                </div>
+                <div class="col-12 col-sm-12 col-md-2 col-lg-2 col-xl-2">
+                    <button type="button" class="evento_evaluacion">Evaluación</button>
+                </div>
+                <div class="col-12 col-sm-12 col-md-2 col-lg-2 col-xl-2">
+                    <button type="button" class="evento_taller">Taller</button>
+                </div>
+            </div>
         </div>
         <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">&nbsp;</div>
 
@@ -25,64 +73,143 @@
     <div class="modal-dialog modal-lg" role="document" style="height: 90%; display: grid; place-items: center;">
         <div class="modal-content" style="width: 100%;">
             <div class="modal-header second_color" style="background-color: transparent;">
-                <h5 class="modal-title" style="color: #FFFFFF;">Programación</h5>
+                <h5 class="modal-title" style="color: #FFFFFF;">Datos de cita</h5>
                 <button onclick="cerrar_modal_cita()" type="button" class="close" aria-label="Close" style="outline: none; cursor: pointer; color: #FFFFFF;">
                     <span>&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                <div class="row">
-                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                
+                <ul class="nav nav-tabs" id="ulTabs">
+                    <li class="nav-link"><a data-toggle="tab" href="#resumen" class="active" id="btnResumen">Resumen</a></li>
+                    <li class="nav-link"><a data-toggle="tab" href="#historial">Historial</a></li>
+                </ul>
+
+                <div class="tab-content">
+                    <!--resumen-->
+                    <div id="resumen" class="tab-pane fade show active">
                         <div class="row">
-
-                            <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                                <div class="form-group">
-                                    <span class="label-form">Fecha seleccionada</span><br />
-                                    <input class="form-control" type="text" id="txtFecha" autocomplete="off" disabled="disabled" />
-                                </div>
-                            </div>
-                            <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6" id="divReasignar">
-                                <div class="form-group">
-                                    <span class="label-form">Fecha reasignar</span><br />
-                                    <input class="form-control" type="date" id="txtFechaReasignar" autocomplete="off" max="2050-12-31" min="2022-08-01" onkeydown="return false" />
-                                </div>
-                            </div>
-                            <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                                <div class="form-group">
-                                    <span class="label-form">Hora</span><br />
-                                    <div class="input-group date" id="dtpicker1">
-                                        <input type="text" class="form-control form-hora" id="txtHora" onkeydown="return false;" onchange="validateHhMm(this);" onpaste="validateHhMm(this);" maxlength="8" placeholder="Seleccionar hora" autocomplete="off" />
-                                        <span class="input-group-append input-group-addon">
-                                            <span style="margin: 0 auto; display: flex; " class="input-group-text mdi mdi-clock">
-                                            </span>
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                                <div class="form-group">
-                                    <span class="label-form">Especialista</span><br />
-                                    <div class="input-group">
-                                        <select class="form-control" id="cboDoctor" onchange="verificar_disponibilidad()">
-                                            <option value="-1">Seleccionar</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-
                             <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                <div class="form-group">
-                                    <table class="table table-responsive" style="display: inline-table;">
-                                        <thead>
-                                            <tr>
-                                                <th class="text-center">Hora</th>
-                                                <th class="text-center">Estado</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody id="divDisponibilidad"></tbody>
-                                    </table>
+                                <div class="row">
+                                    <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                        <div class="form-group">
+                                            <span class="label-form">Fecha cita</span><br />
+                                            <input class="form-control" type="text" id="txtFecha" autocomplete="off" disabled="disabled" />
+                                        </div>
+                                    </div>
+
+                                    <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6" id="divReprogramar">
+                                        <div class="form-group">
+                                            <span class="label-form">Fecha reprogramación</span><br />
+                                            <input class="form-control" type="date" id="txtFechaReasignar" autocomplete="off" max="2050-12-31" min="2022-08-01" onkeydown="return false" />
+                                        </div>
+                                    </div>
+
+                                    <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                        <div class="form-group">
+                                            <span class="label-form">Especialista</span><br />
+                                            <div class="input-group">
+                                                <select class="form-control" id="cboDoctor" onchange="verificar_disponibilidad()">
+                                                    <option value="-1">Seleccionar</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                        <div class="form-group">
+                                            <span class="label-form">Hora</span><br />
+                                            <div class="input-group date" id="dtpicker1">
+                                                <input type="text" class="form-control form-hora" id="txtHora" onkeydown="return false;" onchange="validateHhMm(this);" onpaste="validateHhMm(this);" maxlength="8" placeholder="Seleccionar hora" autocomplete="off" />
+                                                <span class="input-group-append input-group-addon">
+                                                    <span style="margin: 0 auto; display: flex; " class="input-group-text mdi mdi-clock">
+                                                    </span>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                        <div class="form-group">
+                                            <span class="label-form">Paciente</span><br />
+                                            <select class="form-control" id="cboPaciente">
+                                                <option value="-1">Seleccionar</option>
+                                                <option value="2">Lorenzo Lalo</option>
+                                                <option value="6">María Ramírez</option>
+                                                <option value="7">Juan Ramírez</option>
+                                                <option value="8">Ana Ramírez</option>
+                                                <option value="9">Pedro Ramírez</option>
+                                                <option value="10">Sofía Ramírez</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                        <div class="form-group">
+                                            <span class="label-form">Teléfono</span><br />
+                                            <input class="form-control" type="text" id="txtTelefono" autocomplete="off" disabled="disabled" />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    @* <div class="col-12 col-sm-12 col-md-6 col-lg-3 col-xl-3">
+                                    <div class="form-group">
+                                    <span class="label-form">Moneda</span><br />
+                                    <input class="form-control" type="text" id="txtMoneda" autocomplete="off" disabled="disabled" />
+                                    </div>
+                                    </div> *@
+                                    <div class="col-12 col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                                        <div class="form-group">
+                                            <span class="label-form" id="spnPactado">Monto pactado </span><br />
+                                            <input class="form-control" type="text" id="txtMontoPactado" autocomplete="off" />
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                                        <div class="form-group">
+                                            <span class="label-form" id="spnPagado">Monto pagado</span><br />
+                                            <input class="form-control" type="text" id="txtMontoPagado" autocomplete="off" disabled="disabled" />
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                                        <div class="form-group">
+                                            <span class="label-form" id="spnPendiente">Monto pendiente</span><br />
+                                            <input class="form-control" type="text" id="txtMontoPendiente" autocomplete="off" disabled="disabled" />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row" id="divEstado">
+                                    <div class="col-12 col-sm-12 col-md-6 col-lg-4 col-xl-4">
+                                        <div class="form-group">
+                                            <span class="label-form">Estado</span><br />
+                                            <button type="button" id="btnEstado"></button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row" id="divHorarios">
+                                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                        <div class="form-group">
+                                            <table class="table table-responsive" style="display: inline-table;">
+                                                <thead>
+                                                    <tr>
+                                                        <th class="text-center">Hora</th>
+                                                        <th class="text-center">Estado</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="divDisponibilidad"></tbody>
+                                            </table>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
+                        </div>
+                    </div>
+                    <!--historial-->
+                    <div id="historial" class="tab-pane fade">
+                        <div class="row" id="divHistorial">
 
                         </div>
                     </div>
@@ -90,7 +217,10 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" onclick="cerrar_modal_cita()">Volver</button>
-                <button type="button" class="btn btn-primary main_color" onclick="guardar_cita()" id="btnGuardarCita">Guardar</button>
+                <button type="button" class="btn btn-primary main_color divConfirmar" onclick="guardar_cita()" id="btnGuardarCita">Guardar</button>
+                <button type="button" class="btn btn-primary main_color divConfirmar" onclick="confirmar_cita()" id="btnConfirmar">Confirmar</button>
+                <button type="button" class="btn btn-primary main_color" onclick="procesar_cita()" id="divProcesar">En proceso</button>
+                <button type="button" class="btn btn-primary main_color" onclick="atender_cita()" id="divAtender">Atender</button>
             </div>
         </div>
     </div>
@@ -104,5 +234,8 @@
     <script src="~/basic/moments.js?f=@dHoy.ToString("yyyyMMddhhmmss")"></script>
     <script src="~/basic/datetimepicker.js?f=@dHoy.ToString("yyyyMMddhhmmss")"></script>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/3.2.6/jquery.inputmask.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-maskmoney/3.0.2/jquery.maskMoney.min.js"></script>
     <script src="~/basic/registro_citas.js?f=@dHoy.ToString("yyyyMMddhhmmss")"></script>
+
 }

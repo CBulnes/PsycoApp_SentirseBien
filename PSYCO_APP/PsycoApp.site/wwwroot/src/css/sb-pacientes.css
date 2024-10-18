@@ -1,7 +1,153 @@
 ﻿
+/* Lista Administrador */
+
+.sb-pa-container {
+    display: flex;
+    flex-direction: column;
+    width: 1140px;
+    margin: 2rem;
+}
+
+.sb-pa-container-buscar {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 3rem;
+}
+
+.sb-pa-container-buscar-title p {
+    margin: 0;
+    font-size: 30px;
+    font-weight: 600;
+    color: var(--colorbase2);
+}
+
+.sb-pa-container-buscador {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.sb-pa-container-buscador-block > button {
+    display: flex;
+    align-items: center;
+    gap: .3rem;
+    background-color: var(--colorbase2);
+    border: 1px solid var(--colorbase2);
+    font-size: 16px;
+    font-weight: 500;
+    padding: .8rem 2.5rem;
+    color: #FFF;
+    cursor: pointer;
+    transition: .3s;
+}
+
+.sb-pa-container-buscador-block > button i {
+    color: #FFF;
+}
+
+.sb-pa-container-buscador-block > button:hover {
+    background-color: var(--colorsecundario);
+    border-color: var(--colorsecundario);
+}
+
+.sb-pa-container-buscador-block-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.sb-pa-container-buscador-block-item span {
+    font-weight: 400;
+    font-size: 18px;
+}
+
+.sb-pa-container-buscador-block-item input {
+    width: 19rem;
+    min-height: 38px;
+    border: 1px solid var(--colorbase2);
+    border-radius: .3rem;
+    padding: .5rem .75rem;
+    color: #000;
+}
+
+.sb-pa-container-buscador-block-item button {
+    display: flex;
+    align-items: center;
+    gap: .3rem;
+    font-size: 16px;
+    font-weight: 500;
+    padding: .8rem 2.5rem;
+    cursor: pointer;
+    background-color: #FFF;
+    border: 1px solid var(--colorbase2) !important;
+    color: var(--colorbase2) !important;
+    transition: .3s;
+}
+
+.sb-pa-container-buscador-block-item button i {
+    color: var(--colorbase2);
+}
+
+.sb-pa-container-buscador-block-item button:hover {
+    background-color: var(--colorbase2);
+    color: #FFF !important;
+}
+
+.sb-pa-container-buscador-block-item button:hover i {
+    color: #FFF !important;
+}
+
+/* Lista de Tabla */
+
+.sb-pa-container-table table {
+    border: 1px solid #e9ecef;
+}
+
+.sb-pa-container-table table thead tr th{
+    text-align: center;
+}
+
+.sb-pa-container-table table tbody tr td {
+    text-align: center;
+    vertical-align: baseline;
+}
+
+.sb-pa-container-table table tbody tr td .sb-pa-container-table-button-edit {
+    background-color: var(--colorbase2);
+    border-color: var(--colorbase2);
+    box-shadow: none;
+    color: #FFF !important;
+}
+
+.sb-pa-container-table table tbody tr td .sb-pa-container-table-button-edit:hover {
+    background-color: var(--colorsecundario);
+    border-color: var(--colorsecundario);
+    box-shadow: none;
+}
+
+.sb-pa-container-table table tbody tr td .sb-pa-container-table-button-delet {
+    background-color: #FFF;
+    color: var(--colorbase2) !important;
+    border-color: var(--colorbase2);
+    box-shadow: none;
+    font-weight: 600;
+}
+
+.sb-pa-container-table table tbody tr td .sb-pa-container-table-button-delet:hover {
+    color: #FFF !important;
+    background-color: var(--colorbase2) !important;
+}
+
+/* Lista de Paginado */
+
+
+
+
+/* Popup Agregar */
 .sb-pa-container-agregar {
     display: none;
-    position: absolute;
+    position: fixed;
     width: 100%;
     height: 100%;
     max-width: none;
@@ -14,7 +160,7 @@
 
 .sb-pa-container-agregar::before {
     content: "";
-    position: absolute;
+    position: fixed;
     z-index: -1;
     top: 0;
     bottom: 0;
@@ -25,14 +171,14 @@
 }
 
 .sb-pa-container-agregar-popup {
-    display: flex;
-    flex-direction: column;
     width: 600px;
+    height: auto;
+    max-height: 90vh;
     background-color: #FFF;
-    justify-content: center;
     border-radius: 1rem;
     padding: 3rem 3rem;
-    gap: 1rem;
+    transition: 0.4s linear;
+    overflow: auto;
 }
 
 .sb-pa-container-agregar-popup > p {

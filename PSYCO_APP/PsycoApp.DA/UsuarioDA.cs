@@ -40,6 +40,7 @@ namespace PsycoApp.DA
                     usuario.num_documento = Convert.ToString(row["num_documento"]);
                     usuario.validacion = Convert.ToString(row["validacion"]);
                     usuario.test_actual = Convert.ToInt32(row["test_actual"]);
+                    usuario.login = Convert.ToString(row["login"]);
                 }
             }
             catch (Exception e)
@@ -75,34 +76,6 @@ namespace PsycoApp.DA
             }
             cn.Close();
             return usuario;
-        }
-        public List<Usuario> listar_doctores()
-        {
-            List<Usuario> lista = new List<Usuario>();
-            try
-            {
-                cn.Open();
-                SqlCommand cmd = new SqlCommand(Procedures.sp_listar_doctores, cn);
-                cmd.CommandType = CommandType.StoredProcedure;
-
-                SqlDataAdapter da = new SqlDataAdapter(cmd);
-                DataTable dt = new DataTable();
-                da.Fill(dt);
-
-                foreach (DataRow row in dt.Rows)
-                {
-                    Usuario usuario = new Usuario();
-                    usuario.id_usuario = Convert.ToInt32(row["id_usuario"]);
-                    usuario.nombres = Convert.ToString(row["nombres"]);
-                    lista.Add(usuario);
-                }
-            }
-            catch (Exception e)
-            {
-                lista.Clear();
-            }
-            cn.Close();
-            return lista;
         }
 
     }

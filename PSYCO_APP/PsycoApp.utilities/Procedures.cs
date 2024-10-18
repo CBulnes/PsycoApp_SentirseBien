@@ -9,7 +9,7 @@ namespace PsycoApp.utilities
     {
         public const string sp_validar_usuario = "SP_VALIDAR_USUARIO";
         public const string sp_actualizar_contraseña = "SP_ACTUALIZAR_CONTRASEÑA";
-        public const string sp_listar_doctores = "SP_LISTAR_DOCTORES";
+        public const string sp_listar_psicologos_combo = "SP_LISTAR_PSICOLOGOS_COMBO";
 
 
 
@@ -39,7 +39,12 @@ namespace PsycoApp.utilities
         public const string sp_registrar_historial_paciente = "SP_REGISTRAR_HISTORIAL_PACIENTE";
         public const string sp_registrar_estado_cuestionario = "SP_REGISTRAR_ESTADO_CUESTIONARIO";
         public const string sp_listar_historial_paciente = "SP_LISTAR_HISTORIAL_PACIENTE";
+        public const string sp_listar_historial_cita = "SP_LISTAR_HISTORIAL_CITA";
         public const string sp_registrar_cita = "SP_REGISTRAR_CITA";
+        public const string sp_confirmar_cita = "SP_CONFIRMAR_CITA";
+        public const string sp_procesar_cita = "SP_PROCESAR_CITA";
+        public const string sp_atender_cita = "SP_ATENDER_CITA";
+        public const string sp_cancelar_cita = "SP_CANCELAR_CITA";
         public const string sp_registrar_cuestionario = "SP_REGISTRAR_CUESTIONARIO";
         public const string sp_listar_disponibilidad_doctor = "SP_LISTAR_DISPONIBILIDAD_DOCTOR";
         public const string sp_listar_citas_usuario = "SP_LISTAR_CITAS_USUARIO";
@@ -48,10 +53,13 @@ namespace PsycoApp.utilities
         #region "psicologos"
         public const string obtener_psicologo = "dbo.sp_obtener_psicologo";
         public const string buscar_psicologo = "dbo.sp_buscar_psicologo";
-        public const string listar_psicologo = "dbo.sp_listar_psicologos";
+        public const string listar_psicologos = "dbo.sp_listar_psicologos";                         //posiblemente deprecado
+        public const string listar_psicologos_paginado = "dbo.sp_listar_psicologos_paginado";
         public const string agregar_psicologo = "dbo.sp_agregar_psicologo";
         public const string actualizar_psicologo = "dbo.sp_actualizar_psicologo";
         public const string eliminar_psicologo = "dbo.sp_eliminar_psicologo";
+
+        public const string listar_estudios_psicologo = "dbo.sp_listar_estudios_psicologo";
         #endregion
 
         #region "ubigeo"

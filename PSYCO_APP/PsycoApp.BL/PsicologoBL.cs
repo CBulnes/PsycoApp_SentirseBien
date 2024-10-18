@@ -15,9 +15,9 @@ namespace PsycoApp.BL
             _psicologoDA = new PsicologoDA();
         }
 
-        public List<Psicologo> ListarPsicologos()
+        public List<Psicologo> ListarPsicologos(int pagina, int tamanoPagina)
         {
-            return _psicologoDA.ListarPsicologos();
+            return _psicologoDA.ListarPsicologos(pagina, tamanoPagina);
         }
 
         public void AgregarPsicologo(Psicologo psicologo)
@@ -31,7 +31,11 @@ namespace PsycoApp.BL
         
         public Psicologo BuscarPsicologoId(int id)
         {
-            return _psicologoDA.BuscarPsicologoId(id);
+            Psicologo psicologo = _psicologoDA.BuscarPsicologoId(id);
+            var estudios = _psicologoDA.BuscarEstudiosPsicologo(id);
+            var emptyEstudios = new List<Estudio>() { new Estudio() { Id = 0, IdPsicologo = psicologo.Id, GradoAcademico = -1, Institucion = -1, Carrera = -1 } };
+            psicologo.Estudios = estudios.Count > 0 ? estudios : emptyEstudios;
+            return psicologo;
         }
 
         public void ActualizarPsicologo(Psicologo psicologo)
@@ -42,6 +46,11 @@ namespace PsycoApp.BL
         public void EliminarPsicologo(int id)
         {
             _psicologoDA.EliminarPsicologo(id);
+        }
+
+        public List<entities.Psicologo> listar_psicologos_combo()
+        {
+            return _psicologoDA.listar_psicologos_combo();
         }
     }
 }

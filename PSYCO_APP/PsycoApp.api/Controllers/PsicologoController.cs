@@ -4,6 +4,7 @@ using PsycoApp.BL;
 using System.Collections.Generic;
 using System;
 using PsycoApp.entities;
+using PsycoApp.DA;
 
 namespace PsycoApp.api.Controllers
 {
@@ -14,12 +15,12 @@ namespace PsycoApp.api.Controllers
 
         PsicologoBL _psicologoBL = new PsicologoBL();
 
-        [HttpGet("listar")]
-        public ActionResult<List<Psicologo>> Listar()
+        [HttpGet("listar/{pagina}/{tamanoPagina}")]
+        public ActionResult<List<Psicologo>> Listar(int pagina = 1, int tamanoPagina = 100)
         {
             try
             {
-                return _psicologoBL.ListarPsicologos();
+                return _psicologoBL.ListarPsicologos(pagina, tamanoPagina);
             }
             catch (Exception ex)
             {
@@ -44,6 +45,8 @@ namespace PsycoApp.api.Controllers
         [HttpGet("buscar")]
         public ActionResult Buscar([FromQuery] string nombre)
         {
+            if (string.IsNullOrEmpty(nombre))
+                nombre = "";
             try
             {
                 var psicologos = _psicologoBL.BuscarPsicologo(nombre);
@@ -98,6 +101,21 @@ namespace PsycoApp.api.Controllers
             {
                 return BadRequest(ex.Message);
             }
+        }
+
+        [HttpGet("listar_psicologos_combo")]
+        public ActionResult<List<entities.Psicologo>> listar_psicologos_combo()
+        {
+            List<entities.Psicologo> lista = new List<entities.Psicologo>();
+            try
+            {
+                lista = _psicologoBL.listar_psicologos_combo();
+            }
+            catch (Exception e)
+            {
+                lista.Clear();
+            }
+            return lista;
         }
     }
 }

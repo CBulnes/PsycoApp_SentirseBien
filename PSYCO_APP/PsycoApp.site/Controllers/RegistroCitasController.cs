@@ -14,8 +14,12 @@ namespace PsycoApp.site.Controllers
     public class RegistroCitasController : Controller
     {
         private string url_centros_atencion = Helper.GetUrlApi() + "/api/centroatencion/listar_centros";
-        private string url_lista_doctores = Helper.GetUrlApi() + "/api/usuario/listar_doctores";
+        private string url_lista_psicologos = Helper.GetUrlApi() + "/api/psicologo/listar_psicologos_combo";
         private string url_registrar_cita = Helper.GetUrlApi() + "/api/cita/registrar_cita";
+        private string url_confirmar_cita = Helper.GetUrlApi() + "/api/cita/confirmar_cita";
+        private string url_procesar_cita = Helper.GetUrlApi() + "/api/cita/procesar_cita";
+        private string url_atender_cita = Helper.GetUrlApi() + "/api/cita/atender_cita";
+        private string url_cancelar_cita = Helper.GetUrlApi() + "/api/cita/cancelar_cita";
         private string url_disponibilidad_doctor = Helper.GetUrlApi() + "/api/cita/disponibilidad_doctor";
         private string url_citas_usuario = Helper.GetUrlApi() + "/api/cita/citas_usuario";
 
@@ -43,14 +47,13 @@ namespace PsycoApp.site.Controllers
                 obj.vista = "ATENCION";
                 obj.call_center_invitado = Helper.GetCallCenterInvitado();
 
-                if (obj.id_tipousuario == 1) //admin
+                var viewModelContainer = new ViewModelContainer<IEnumerable<PsycoApp.site.Models.Paciente>>
                 {
-                    return RedirectToAction("Index", "Home");
-                }
-                else //cliente
-                {
-                    return View("Index", obj);
-                }
+                    //Model = pacientesViewModel,
+                    DynamicData = obj
+                };
+
+                return View("Index", viewModelContainer);
             }
             else
             {
@@ -78,15 +81,15 @@ namespace PsycoApp.site.Controllers
         }
 
         [HttpGet]
-        public ActionResult<List<Usuario>> listar_doctores()
+        public ActionResult<List<entities.Psicologo>> listar_doctores()
         {
-            List<Usuario> lista = new List<Usuario>();
+            List<entities.Psicologo> lista = new List<entities.Psicologo>();
             string res = "";
             try
             {
-                url = url_lista_doctores;
+                url = url_lista_psicologos;
                 res = ApiCaller.consume_endpoint_method(url, null, "GET");
-                lista = JsonConvert.DeserializeObject<List<Usuario>>(res);
+                lista = JsonConvert.DeserializeObject<List<entities.Psicologo>>(res);
             }
             catch (Exception ex)
             {
@@ -102,7 +105,7 @@ namespace PsycoApp.site.Controllers
         public async Task<RespuestaUsuario> RegistrarCita(Cita model)
         {
             string res = "";
-            model.id_usuario = Convert.ToInt32(HttpContext.Session.GetInt32("id_usuario"));
+            model.usuario = Convert.ToString(HttpContext.Session.GetString("login"));
 
             RespuestaUsuario res_ = new RespuestaUsuario();
             try
@@ -116,6 +119,94 @@ namespace PsycoApp.site.Controllers
             {
                 res_.estado = false;
                 res_.descripcion = "Ocurrió un error al registrar la cita.";
+            }
+            return res_;
+        }
+
+        [HttpPost]
+        public async Task<RespuestaUsuario> ConfirmarCita(Cita model)
+        {
+            string res = "";
+            model.usuario = Convert.ToString(HttpContext.Session.GetString("login"));
+
+            RespuestaUsuario res_ = new RespuestaUsuario();
+            try
+            {
+                url = url_confirmar_cita;
+                obj = (dynamic)model;
+                res = ApiCaller.consume_endpoint_method(url, obj, "POST");
+                res_ = JsonConvert.DeserializeObject<RespuestaUsuario>(res);
+            }
+            catch (Exception)
+            {
+                res_.estado = false;
+                res_.descripcion = "Ocurrió un error al confirmar la cita.";
+            }
+            return res_;
+        }
+
+        [HttpPost]
+        public async Task<RespuestaUsuario> ProcesarCita(Cita model)
+        {
+            string res = "";
+            model.usuario = Convert.ToString(HttpContext.Session.GetString("login"));
+
+            RespuestaUsuario res_ = new RespuestaUsuario();
+            try
+            {
+                url = url_procesar_cita;
+                obj = (dynamic)model;
+                res = ApiCaller.consume_endpoint_method(url, obj, "POST");
+                res_ = JsonConvert.DeserializeObject<RespuestaUsuario>(res);
+            }
+            catch (Exception)
+            {
+                res_.estado = false;
+                res_.descripcion = "Ocurrió un error al procesar la cita.";
+            }
+            return res_;
+        }
+
+        [HttpPost]
+        public async Task<RespuestaUsuario> AtenderCita(Cita model)
+        {
+            string res = "";
+            model.usuario = Convert.ToString(HttpContext.Session.GetString("login"));
+
+            RespuestaUsuario res_ = new RespuestaUsuario();
+            try
+            {
+                url = url_atender_cita;
+                obj = (dynamic)model;
+                res = ApiCaller.consume_endpoint_method(url, obj, "POST");
+                res_ = JsonConvert.DeserializeObject<RespuestaUsuario>(res);
+            }
+            catch (Exception)
+            {
+                res_.estado = false;
+                res_.descripcion = "Ocurrió un error al atender la cita.";
+            }
+            return res_;
+        }
+
+        [HttpPost]
+        public async Task<RespuestaUsuario> CancelarCita(Cita model)
+        {
+            string res = "";
+            model.usuario = Convert.ToString(HttpContext.Session.GetString("login"));
+
+            RespuestaUsuario res_ = new RespuestaUsuario();
+            try
+            {
+                url = url_cancelar_cita;
+                obj = (dynamic)model;
+                res = ApiCaller.consume_endpoint_method(url, obj, "POST");
+                res_ = JsonConvert.DeserializeObject<RespuestaUsuario>(res);
+            }
+            catch (Exception)
+            {
+                res_.estado = false;
+                res_.descripcion = "Ocurrió un error al cancelar la cita.";
             }
             return res_;
         }

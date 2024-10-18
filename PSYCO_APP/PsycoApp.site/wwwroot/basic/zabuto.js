@@ -849,10 +849,12 @@ function contenido_cita(dia, mes, año) {
                 html = '-';
             } else {
                 if (item.tipo == 'CITA') {
-                    var clase_estado = item.estado == 'REGISTRADO' ? 'div_cita_registrada' : 'div_cita_atendida';
+                    //var clase_estado = item.estado == 'CITADO' ? 'div_cita_registrada' : 'div_cita_atendida';
+                    var clase_estado = 'div_evt_' + item.estado.replace(' ','_').toLowerCase();
 
-                    html += '<div class="div_cita ' + clase_estado + '" data-id-cita="' + item.id_cita + '" data-id-especialista="' + item.id_doctor_asignado + '" data-fecha-cita="' + item.fecha_cita + '" data-hora-cita="' + item.hora_cita + '" data-estado="' + item.estado + '" onclick="ver_cita(this)">';
-                    html += 'Especialista: ' + item.doctor_asignado + '<br/>';
+                    html += '<div class="div_cita ' + clase_estado + '" data-id-cita="' + item.id_cita + '" data-id-especialista="' + item.id_doctor_asignado + '" data-id-paciente="' + item.id_paciente + '" data-fecha-cita="' + item.fecha_cita + '" data-hora-cita="' + item.hora_cita + '" data-estado="' + item.estado + '" data-telefono="' + item.telefono + '" data-moneda="' + item.moneda + '" data-monto-pactado="' + item.monto_pactado + '" data-monto-pagado="' + item.monto_pagado + '" data-monto-pendiente="' + item.monto_pendiente + '" onclick="ver_cita(this)">';
+                    //html += 'Especialista: ' + item.doctor_asignado + '<br/>';
+                    html += 'Paciente: ' + item.paciente + '<br/>';
                     html += 'Hora: ' + item.hora_cita;
                     html += '</div > ';
                 }
@@ -866,7 +868,7 @@ function contenido_cita(dia, mes, año) {
     }
 
     if (html != '-') {
-        html += '<button data-id-cita="0" data-id-especialista="-1" data-fecha-cita="' + fecha + '" data-hora-cita="" data-estado="-" onclick="ver_cita(this)" class="btn btn-primary main_color">+</button>';
+        html += '<button data-id-cita="0" data-id-especialista="-1" data-id-paciente="-1" data-fecha-cita="' + fecha + '" data-hora-cita="" data-estado="-" data-telefono="--" data-moneda="S/." data-monto-pactado="0.00" data-monto-pagado="0.00" data-monto-pendiente="0.00" onclick="ver_cita(this)" class="btn btn-primary main_color">+</button>';
     }
 
     return html;
@@ -938,5 +940,4 @@ function validar_feriado(dia, mes, año) {
     } else {
         return 'class_feriado';
     }
-
 }

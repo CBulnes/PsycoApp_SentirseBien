@@ -18,11 +18,11 @@ namespace PsycoApp.site.Controllers.Mantenimiento
         private readonly string apiUrlUbigeo = Helper.GetUrlApi() + "/api/ubigeo";
 
         [Route("Mantenimiento/Psicologo")]
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int pageNumber = 1, int pageSize = 10)
         {
             if (!string.IsNullOrEmpty(HttpContext.Session.GetString("nombres") as string))
             {
-                string url = $"{apiUrl}/listar";
+                string url = $"{apiUrl}/listar/{pageNumber}/{pageSize}";
                 var psicologos = await GetFromApiAsync<List<PsycoApp.entities.Psicologo>>(url);
                 var psicologosViewModel = psicologos.Select(p => new PsycoApp.site.Models.Psicologo
                 {
@@ -36,6 +36,14 @@ namespace PsycoApp.site.Controllers.Mantenimiento
                     Direccion = p.Direccion,
                     Distrito = p.Distrito,
                     Telefono = p.Telefono
+                    //Estudios = p.Estudios.Select(q => new PsycoApp.site.Models.Estudio
+                    //{
+                    //    Id = q.Id,
+                    //    IdPsicologo = q.IdPsicologo,
+                    //    GradoAcademico = q.GradoAcademico,
+                    //    Institucion = q.Institucion,
+                    //    Carrera = q.Carrera
+                    //}).ToList()
                 }).ToList();
 
                 url = $"{apiUrlUbigeo}/listar";
@@ -70,6 +78,9 @@ namespace PsycoApp.site.Controllers.Mantenimiento
                     Model = psicologosViewModel,
                     DynamicData = obj
                 };
+
+                ViewBag.PageNumber = pageNumber;
+                ViewBag.PageSize = pageSize;
 
                 if (obj.id_tipousuario == 1) //admin
                 {
@@ -132,15 +143,15 @@ namespace PsycoApp.site.Controllers.Mantenimiento
 
         [Route("/Mantenimiento/Psicologo/Eliminar")]
         [HttpPost]
-        public async Task<IActionResult> Eliminar(int id)
+        public async Task<IActionResult> Eliminar(int id, string estado)
         {
             string url = $"{apiUrl}/eliminar/{id}";
             var response = await DeleteFromApiAsync(url);
             if (response.IsSuccessStatusCode)
             {
-                return Ok(new { message = "Psicólogo eliminado correctamente" });
+                return Ok(new { message = "Psicólogo " + (estado == "1" ? "deshabilitado" : "habilitado") + " correctamente" });
             }
-            return StatusCode((int)response.StatusCode, "Error al eliminar psicólogo.");
+            return StatusCode((int)response.StatusCode, "Error al " + (estado == "1" ? "deshabilitar" : "habilitar") + " psicólogo.");
         }
 
         [Route("/Mantenimiento/Psicologo/Get/{id}")]
