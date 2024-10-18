@@ -65,30 +65,30 @@
                     </table>
                 </div>
             </div>
-             <!-- Paginación -->
+            <!-- Paginación -->
 
-        <div class="pagination-container text-center">
-            <ul class="pagination">
-                @if (ViewBag.PageNumber > 1)
-                {
+            <div class="pagination-container text-center">
+                <ul class="pagination">
+                    @if (ViewBag.PageNumber > 1)
+                    {
+                        <li class="page-item">
+                            <a class="page-link" href="/Mantenimiento/Paciente?pageNumber=@(ViewBag.PageNumber - 1)&pageSize=@ViewBag.PageSize">
+                                Anterior
+                            </a>
+                        </li>
+                    }
+
+                    <li class="page-item active">
+                        <a class="page-link" href="#">@ViewBag.PageNumber</a>
+                    </li>
+
                     <li class="page-item">
-                        <a class="page-link" href="/Mantenimiento/Paciente?pageNumber=@(ViewBag.PageNumber - 1)&pageSize=@ViewBag.PageSize">
-                            Anterior
+                        <a class="page-link" href="/Mantenimiento/Paciente?pageNumber=@(ViewBag.PageNumber + 1)&pageSize=@ViewBag.PageSize">
+                            Siguiente
                         </a>
                     </li>
-                }
-
-                <li class="page-item active">
-                    <a class="page-link" href="#">@ViewBag.PageNumber</a>
-                </li>
-
-                <li class="page-item">
-                    <a class="page-link" href="/Mantenimiento/Paciente?pageNumber=@(ViewBag.PageNumber + 1)&pageSize=@ViewBag.PageSize">
-                        Siguiente
-                    </a>
-                </li>
-            </ul>
-        </div>
+                </ul>
+            </div>
         </div>
        
     </div>
