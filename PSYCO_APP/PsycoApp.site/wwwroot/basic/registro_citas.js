@@ -206,13 +206,13 @@ function mostrar_historial(id_cita) {
     var historial = lista_citas.filter(x => x.id_cita == parseInt(id_cita))[0].historial;
     var html = '';
     for (var item of historial) {
-        html += '<div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">';
-        html += item.fecha;
+        html += '<div class="sb-reg-citas-popup-tab-historial-block"><div class="sb-reg-citas-popup-tab-historial-block-item">';
+        html += '<p>' + item.fecha + '</p>';
         html += '</div>';
-        html += '<div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">';
+        html += '<div class="sb-reg-citas-popup-tab-historial-block-item-2">';
         html += '<button type="button" class="evento_' + item.evento.toLowerCase().replace(' ', '_') + '">' + item.evento + '</button>';
-        html += item.usuario;
-        html += '</div>';
+        html += '<div class="sb-reg-citas-historial-user" ><p>Usuario: </p><span>' + item.usuario +'</span></div>';
+        html += '</div></div>';
     }
     $('#divHistorial').html(html);
 }

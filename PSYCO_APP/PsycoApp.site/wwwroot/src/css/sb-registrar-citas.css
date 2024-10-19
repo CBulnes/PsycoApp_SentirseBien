@@ -179,17 +179,50 @@
     background-color: var(--colorbase2) !important;
 }
 
+.sb-reg-citas-popup-tab-historial {
+    display: flex;
+    flex-direction: column;
+}
 
+.sb-reg-citas-popup-tab-historial-block {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid var(--colorbase2);
+    border-radius: .4rem;
+    padding: .5rem;
+}
 
+.sb-reg-citas-popup-tab-historial-block-item, .sb-reg-citas-popup-tab-historial-block-item-2 {
+    display: flex;
+    width: 50%;
+    justify-content: center;
+    align-items: center;
+}
 
+.sb-reg-citas-popup-tab-historial-block-item-2{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-content: center;
+    gap: .5rem;
+}
 
+.sb-reg-citas-popup-tab-historial-block-item p, .sb-reg-citas-popup-tab-historial-block-item-2 p {
+    margin: 0;
+    font-weight: 600;
+}
 
+.sb-reg-citas-historial-user{
+    display: flex;
+    gap: .5rem;
+}
 
-
-
-
-
-
+.sb-reg-citas-historial-user p, .sb-reg-citas-historial-user span {
+    margin: 0;
+    font-weight: 600;
+}
 
 
 
