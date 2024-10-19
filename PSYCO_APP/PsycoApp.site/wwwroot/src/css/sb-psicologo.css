@@ -126,18 +126,19 @@
     box-shadow: none;
 }
 
-        .sb-psi-container-table div table tbody tr td .sb-psi-container-table-button-delet {
-            background-color: #FFF;
-            color: var(--colorbase2) !important;
-            border-color: var(--colorbase2);
-            box-shadow: none;
-            font-weight: 600;
-        }
+    .sb-psi-container-table div table tbody tr td .sb-psi-container-table-button-delet {
+        width: 100px;
+        background-color: #FFF;
+        color: var(--colorbase2) !important;
+        border-color: var(--colorbase2);
+        box-shadow: none;
+        font-weight: 600;
+    }
 
-            .sb-psi-container-table div table tbody tr td .sb-psi-container-table-button-delet:hover {
-                color: #FFF !important;
-                background-color: var(--colorbase2) !important;
-            }
+        .sb-psi-container-table div table tbody tr td .sb-psi-container-table-button-delet:hover {
+            color: #FFF !important;
+            background-color: var(--colorbase2) !important;
+        }
 
 /* Popup Agregar */
 

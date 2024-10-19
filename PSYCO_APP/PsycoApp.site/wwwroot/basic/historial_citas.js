@@ -368,7 +368,12 @@ function seleccionar_hora_disponible(e) {
     var hora = $(e).attr('data-hora');
 
     if (hora == '') {
-        alerta("Ya hay una cita registrada en el horario seleccionado.", 'info');
+        Swal.fire({
+            icon: "Error",
+            title: "Oops...",
+            text: "Ya hay una cita registrada en el horario seleccionado.",
+        });
+        //alerta("Ya hay una cita registrada en el horario seleccionado.", 'info');
         $('#txtHora').val('');
         return;
     } else {

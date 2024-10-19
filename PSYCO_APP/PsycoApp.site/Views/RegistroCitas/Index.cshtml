@@ -33,179 +33,165 @@
             }
 </style>
 
-<div class="bd-example">
-    <div class="row">
-        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
-            <b style="color: #004A92; font-size: 20px;">Agenda</b>
-        </div>
-        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">&nbsp;</div>
-        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
-            <div class="row">
-                <div class="col-12 col-sm-12 col-md-2 col-lg-2 col-xl-2">
-                    <button type="button" class="evento_citado">Citado</button>
-                </div>
-                <div class="col-12 col-sm-12 col-md-2 col-lg-2 col-xl-2">
-                    <button type="button" class="evento_confirmado">Confirmado</button>
-                </div>
-                <div class="col-12 col-sm-12 col-md-2 col-lg-2 col-xl-2">
-                    <button type="button" class="evento_en_proceso">En proceso</button>
-                </div>
-                <div class="col-12 col-sm-12 col-md-2 col-lg-2 col-xl-2">
-                    <button type="button" class="evento_atendido">Atendido</button>
-                </div>
-                <div class="col-12 col-sm-12 col-md-2 col-lg-2 col-xl-2">
-                    <button type="button" class="evento_evaluacion">Evaluación</button>
-                </div>
-                <div class="col-12 col-sm-12 col-md-2 col-lg-2 col-xl-2">
-                    <button type="button" class="evento_taller">Taller</button>
-                </div>
-            </div>
-        </div>
-        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">&nbsp;</div>
+<!-- SB - STYLE -->
 
-        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 table-responsive calendar-container">
-            <div id="my-calendar"></div>
+<link rel="stylesheet" href="~/src/css/sb-registrar-citas.css" />
+
+<div class="sb-reg-citas-container">
+    <div class="sb-reg-citas-title">
+        <p>Registro de Citas</p>
+    </div>
+
+    <div class="sb-reg-citas-list-colores">
+        <div class="sb-reg-citas-color-citado">
+            <p>Citado</p>
+        </div>
+        <div class="sb-reg-citas-color-confirmado">
+            <p>Confirmado</p>
+        </div>
+        <div class="sb-reg-citas-color-en_proceso">
+            <p>En proceso</p>
+        </div>
+        <div class="sb-reg-citas-color-atendido">
+            <p>Atendido</p>
+        </div>
+        <div class="sb-reg-citas-color-evaluacion">
+            <p>Evaluación</p>
+        </div>
+        <div class="sb-reg-citas-color-taller">
+            <p>Taller</p>
         </div>
     </div>
+
+    <div class="sb-reg-citas-table-calendar table-responsive calendar-container">
+        <div id="my-calendar"></div>
+    </div>
+
+
 </div>
 
 <div id="mdl_cita" class="modal" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="true">
     <div class="modal-dialog modal-lg" role="document" style="height: 90%; display: grid; place-items: center;">
-        <div class="modal-content" style="width: 100%;">
-            <div class="modal-header second_color" style="background-color: transparent;">
-                <h5 class="modal-title" style="color: #FFFFFF;">Datos de cita</h5>
-                <button onclick="cerrar_modal_cita()" type="button" class="close" aria-label="Close" style="outline: none; cursor: pointer; color: #FFFFFF;">
-                    <span>&times;</span>
-                </button>
+        <div class="modal-content sb-reg-citas-popup-container" >
+            <div class="modal-header sb-reg-citas-popup-title">
+                <h5 class="modal-title" >Datos de cita</h5>
             </div>
-            <div class="modal-body">
+            <div class="modal-body sb-reg-citas-popup-body">
                 
-                <ul class="nav nav-tabs" id="ulTabs">
-                    <li class="nav-link"><a data-toggle="tab" href="#resumen" class="active" id="btnResumen">Resumen</a></li>
-                    <li class="nav-link"><a data-toggle="tab" href="#historial">Historial</a></li>
+                <ul class="nav nav-tabs sb-reg-citas-popup-body-tabs" id="ulTabs">
+                    <li class="nav-link sb-reg-citas-popup-body-tabs-resumen"><a data-toggle="tab" href="#resumen" class="active" id="btnResumen"><p>Resumen</p></a></li>
+                    <li class="nav-link sb-reg-citas-popup-body-tabs-historial"><a data-toggle="tab" href="#historial"><p>Historial</p></a></li>
                 </ul>
 
                 <div class="tab-content">
                     <!--resumen-->
                     <div id="resumen" class="tab-pane fade show active">
-                        <div class="row">
-                            <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                <div class="row">
-                                    <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                                        <div class="form-group">
-                                            <span class="label-form">Fecha cita</span><br />
-                                            <input class="form-control" type="text" id="txtFecha" autocomplete="off" disabled="disabled" />
-                                        </div>
-                                    </div>
 
-                                    <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6" id="divReprogramar">
-                                        <div class="form-group">
-                                            <span class="label-form">Fecha reprogramación</span><br />
-                                            <input class="form-control" type="date" id="txtFechaReasignar" autocomplete="off" max="2050-12-31" min="2022-08-01" onkeydown="return false" />
-                                        </div>
-                                    </div>
-
-                                    <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                                        <div class="form-group">
-                                            <span class="label-form">Especialista</span><br />
-                                            <div class="input-group">
-                                                <select class="form-control" id="cboDoctor" onchange="verificar_disponibilidad()">
-                                                    <option value="-1">Seleccionar</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                                        <div class="form-group">
-                                            <span class="label-form">Hora</span><br />
-                                            <div class="input-group date" id="dtpicker1">
-                                                <input type="text" class="form-control form-hora" id="txtHora" onkeydown="return false;" onchange="validateHhMm(this);" onpaste="validateHhMm(this);" maxlength="8" placeholder="Seleccionar hora" autocomplete="off" />
-                                                <span class="input-group-append input-group-addon">
-                                                    <span style="margin: 0 auto; display: flex; " class="input-group-text mdi mdi-clock">
-                                                    </span>
-                                                </span>
-                                            </div>
-                                        </div>
-                                    </div>
+                        <div class="sb-reg-citas-popup-tab-panel">
+                            <div class="sb-reg-citas-popup-tab-panel-block">
+                                <div class="sb-reg-citas-popup-tab-panel-block-item">
+                                    <span class="label-form">Fecha cita</span>
+                                    <input id="txtFecha" class="form-control" type="text" autocomplete="off" disabled="disabled" />
                                 </div>
+                            </div>
 
-                                <div class="row">
-                                    <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                                        <div class="form-group">
-                                            <span class="label-form">Paciente</span><br />
-                                            <select class="form-control" id="cboPaciente">
-                                                <option value="-1">Seleccionar</option>
-                                                <option value="2">Lorenzo Lalo</option>
-                                                <option value="6">María Ramírez</option>
-                                                <option value="7">Juan Ramírez</option>
-                                                <option value="8">Ana Ramírez</option>
-                                                <option value="9">Pedro Ramírez</option>
-                                                <option value="10">Sofía Ramírez</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                                        <div class="form-group">
-                                            <span class="label-form">Teléfono</span><br />
-                                            <input class="form-control" type="text" id="txtTelefono" autocomplete="off" disabled="disabled" />
-                                        </div>
-                                    </div>
+                            <div class="sb-reg-citas-popup-tab-panel-block">
+                                <div class="sb-reg-citas-popup-tab-panel-block-item">
+                                    <span class="label-form">Fecha reprogramación</span>
+                                    <input class="form-control" type="date" id="txtFechaReasignar" autocomplete="off" max="2050-12-31" min="2022-08-01" onkeydown="return false" />
                                 </div>
+                            </div>
 
-                                <div class="row">
-                                    @* <div class="col-12 col-sm-12 col-md-6 col-lg-3 col-xl-3">
-                                    <div class="form-group">
-                                    <span class="label-form">Moneda</span><br />
-                                    <input class="form-control" type="text" id="txtMoneda" autocomplete="off" disabled="disabled" />
-                                    </div>
-                                    </div> *@
-                                    <div class="col-12 col-sm-12 col-md-4 col-lg-4 col-xl-4">
-                                        <div class="form-group">
-                                            <span class="label-form" id="spnPactado">Monto pactado </span><br />
-                                            <input class="form-control" type="text" id="txtMontoPactado" autocomplete="off" />
-                                        </div>
-                                    </div>
-                                    <div class="col-12 col-sm-12 col-md-4 col-lg-4 col-xl-4">
-                                        <div class="form-group">
-                                            <span class="label-form" id="spnPagado">Monto pagado</span><br />
-                                            <input class="form-control" type="text" id="txtMontoPagado" autocomplete="off" disabled="disabled" />
-                                        </div>
-                                    </div>
-                                    <div class="col-12 col-sm-12 col-md-4 col-lg-4 col-xl-4">
-                                        <div class="form-group">
-                                            <span class="label-form" id="spnPendiente">Monto pendiente</span><br />
-                                            <input class="form-control" type="text" id="txtMontoPendiente" autocomplete="off" disabled="disabled" />
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="row" id="divEstado">
-                                    <div class="col-12 col-sm-12 col-md-6 col-lg-4 col-xl-4">
-                                        <div class="form-group">
-                                            <span class="label-form">Estado</span><br />
-                                            <button type="button" id="btnEstado"></button>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="row" id="divHorarios">
-                                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                        <div class="form-group">
-                                            <table class="table table-responsive" style="display: inline-table;">
-                                                <thead>
-                                                    <tr>
-                                                        <th class="text-center">Hora</th>
-                                                        <th class="text-center">Estado</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody id="divDisponibilidad"></tbody>
-                                            </table>
-                                        </div>
+                            <div class="sb-reg-citas-popup-tab-panel-block">
+                                <div class="sb-reg-citas-popup-tab-panel-block-item">
+                                    <span class="label-form">Especialista</span>
+                                    <div class="input-group">
+                                        <select class="form-control" id="cboDoctor" onchange="verificar_disponibilidad()">
+                                            <option value="-1">Seleccionar</option>
+                                        </select>
                                     </div>
                                 </div>
                             </div>
+
+                            <div class="sb-reg-citas-popup-tab-panel-block">
+                                <div class="sb-reg-citas-popup-tab-panel-block-item">
+                                    <span class="label-form">Hora</span>
+                                    <div class="input-group date" id="dtpicker1">
+                                        <input type="text" class="form-control form-hora" id="txtHora" onkeydown="return false;" onchange="validateHhMm(this);" onpaste="validateHhMm(this);" maxlength="8" placeholder="Seleccionar hora" autocomplete="off" />
+                                        <span class="input-group-append input-group-addon">
+                                            <span style="margin: 0 auto; display: flex; " class="input-group-text mdi mdi-clock">
+                                            </span>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="sb-reg-citas-popup-tab-panel-block">
+                                <div class="sb-reg-citas-popup-tab-panel-block-item">
+                                    <span class="label-form">Paciente</span>
+                                    <select class="form-control" id="cboPaciente">
+                                        <option value="-1">Seleccionar</option>
+                                        <option value="2">Lorenzo Lalo</option>
+                                        <option value="6">María Ramírez</option>
+                                        <option value="7">Juan Ramírez</option>
+                                        <option value="8">Ana Ramírez</option>
+                                        <option value="9">Pedro Ramírez</option>
+                                        <option value="10">Sofía Ramírez</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="sb-reg-citas-popup-tab-panel-block">
+                                <div class="sb-reg-citas-popup-tab-panel-block-item">
+                                    <span class="label-form">Teléfono</span>
+                                    <input class="form-control" type="text" id="txtTelefono" autocomplete="off" disabled="disabled" />
+                                </div>
+                            </div>
+
+                            <div class="sb-reg-citas-popup-tab-panel-block">
+                                <div class="sb-reg-citas-popup-tab-panel-block-item">
+                                    <span class="label-form" id="spnPactado">Monto pactado </span>
+                                    <input class="form-control" type="text" id="txtMontoPactado" autocomplete="off" />
+                                </div>
+                            </div>
+
+                            <div class="sb-reg-citas-popup-tab-panel-block">
+                                <div class="sb-reg-citas-popup-tab-panel-block-item">
+                                    <span class="label-form" id="spnPagado">Monto pagado</span>
+                                    <input class="form-control" type="text" id="txtMontoPagado" autocomplete="off" disabled="disabled" />
+                                </div>
+                            </div>
+
+                            <div class="sb-reg-citas-popup-tab-panel-block">
+                                <div class="sb-reg-citas-popup-tab-panel-block-item">
+                                    <span class="label-form" id="spnPendiente">Monto pendiente</span>
+                                    <input class="form-control" type="text" id="txtMontoPendiente" autocomplete="off" disabled="disabled" />
+                                </div>
+                            </div>
+
+                            <div class="sb-reg-citas-popup-tab-panel-block" id="divEstado">
+                                <div class="sb-reg-citas-popup-tab-panel-block-item">
+                                    <span class="label-form">Estado</span>
+                                    <button type="button" id="btnEstado"></button>
+                                </div>
+                            </div>
+
+                            <div class="sb-reg-citas-popup-tab-panel-block" id="divHorarios">
+                                <div class="sb-reg-citas-popup-tab-panel-block-item">
+                                    <table class="table table-responsive" style="display: inline-table;">
+                                        <thead>
+                                            <tr>
+                                                <th class="text-center">Hora</th>
+                                                <th class="text-center">Estado</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="divDisponibilidad"></tbody>
+                                    </table>
+                                </div>
+                            </div>
+
                         </div>
+
                     </div>
                     <!--historial-->
                     <div id="historial" class="tab-pane fade">
@@ -216,11 +202,11 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" onclick="cerrar_modal_cita()">Volver</button>
-                <button type="button" class="btn btn-primary main_color divConfirmar" onclick="guardar_cita()" id="btnGuardarCita">Guardar</button>
-                <button type="button" class="btn btn-primary main_color divConfirmar" onclick="confirmar_cita()" id="btnConfirmar">Confirmar</button>
-                <button type="button" class="btn btn-primary main_color" onclick="procesar_cita()" id="divProcesar">En proceso</button>
-                <button type="button" class="btn btn-primary main_color" onclick="atender_cita()" id="divAtender">Atender</button>
+                <button type="button" class="btn btn-secondary sb-reg-citas-popup-button-volver" onclick="cerrar_modal_cita()">Volver</button>
+                <button type="button" class="btn btn-primary main_color divConfirmar sb-reg-citas-popup-button" onclick="guardar_cita()" id="btnGuardarCita">Guardar</button>
+                <button type="button" class="btn btn-primary main_color divConfirmar sb-reg-citas-popup-button" onclick="confirmar_cita()" id="btnConfirmar">Confirmar</button>
+                <button type="button" class="btn btn-primary main_color sb-reg-citas-popup-button" onclick="procesar_cita()" id="divProcesar">En proceso</button>
+                <button type="button" class="btn btn-primary main_color sb-reg-citas-popup-button" onclick="atender_cita()" id="divAtender">Atender</button>
             </div>
         </div>
     </div>
