@@ -2,7 +2,7 @@
 .sb-reg-citas-container {
     display: flex;
     flex-direction: column;
-    width: 1140px;
+    width: 100%;
     padding: 2rem;
     gap: 2rem;
 }

@@ -1,0 +1,65 @@
+﻿@model IEnumerable<PsycoApp.site.Models.CuadreCaja>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Nº</th>
+            <th>Paciente</th>
+            <th>Fecha&nbsp;transacción</th>
+            <th>Estado&nbsp;cita</th>
+            <th>Servicio</th>
+            <th>Forma&nbsp;de&nbsp;pago</th>
+            <th>Detalle&nbsp;de&nbsp;transferencia</th>
+            <th>Importe</th>
+            <th>Estado&nbsp;de&nbsp;orden</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null && Model.Any())
+        {
+            @foreach (var pago in Model.Select((item, index) => (item, index)))
+            {
+                <tr>
+                    <td class="text-center">@(pago.index + 1)</td>
+                    <td>@pago.item.paciente</td>
+                    <td>@pago.item.fecha_transaccion</td>
+                    <td>@pago.item.estado_cita</td>
+                    <td>@pago.item.servicio</td>
+                    <td>@pago.item.forma_pago</td>
+                    <td>@pago.item.detalle_transferencia</td>
+                    <td>@pago.item.importe</td>
+                    <td>@pago.item.estado_orden</td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="6">No se encontraron registros.</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<!-- Controles de Paginación -->
+@if (ViewBag.PageNumber != null && ViewBag.PageSize != null)
+{
+    <nav aria-label="Paginación">
+        <ul class="pagination sb-pa-container-nav">
+            <li class="page-item @(ViewBag.PageNumber == 1 ? "disabled" : "")">
+                <a class="page-link" href="javascript:void(0)" onclick="buscarPago(@(ViewBag.PageNumber - 1))"><span>&#60;</span></a>
+            </li>
+
+            <!-- Aquí podrías agregar más lógica para mostrar números de página si es necesario -->
+            <li class="page-item">
+                <span class="page-link">
+                    @(ViewBag.PageNumber)
+                </span>
+            </li>
+
+            <li class="page-item @(Model.Count() < ViewBag.PageSize ? "disabled" : "")">
+                <a class="page-link" href="javascript:void(0)" onclick="buscarPago(@(ViewBag.PageNumber + 1))"><span>&#62;</span></a>
+            </li>
+        </ul>
+    </nav>
+}

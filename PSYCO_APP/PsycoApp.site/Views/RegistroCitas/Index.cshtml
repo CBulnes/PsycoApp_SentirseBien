@@ -1,6 +1,7 @@
 ﻿@model dynamic
 @{
     var dynamicData = Model.DynamicData;
+    var productos = Model.Model;
     var dHoy = DateTime.Now;
     ViewData["Title"] = "Agenda";
 }
@@ -63,18 +64,33 @@
         </div>
     </div>
 
+    <div class="row">
+        <div class="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
+            <span class="label-form">Paciente</span>
+            <select class="form-control" id="cboPacienteFiltro" onchange="recargar_citas()">
+                <option value="-1">Seleccionar</option>
+                <option value="2">Lorenzo Lalo</option>
+                <option value="6">María Ramírez</option>
+                <option value="7">Juan Ramírez</option>
+                <option value="8">Ana Ramírez</option>
+                <option value="9">Pedro Ramírez</option>
+                <option value="10">Sofía Ramírez</option>
+            </select>
+        </div>
+    </div>
+
     <div class="sb-reg-citas-table-calendar table-responsive calendar-container">
         <div id="my-calendar"></div>
     </div>
 
-
 </div>
 
+<!--MODAL CITA-->
 <div id="mdl_cita" class="modal" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="true">
     <div class="modal-dialog modal-lg" role="document" style="height: 90%; display: grid; place-items: center;">
         <div class="modal-content sb-reg-citas-popup-container" >
             <div class="modal-header sb-reg-citas-popup-title">
-                <h5 class="modal-title" >Datos de cita</h5>
+                <h5 class="modal-title">Datos de cita</h5>
             </div>
             <div class="modal-body sb-reg-citas-popup-body">
                 
@@ -95,7 +111,7 @@
                                 </div>
                             </div>
 
-                            <div class="sb-reg-citas-popup-tab-panel-block">
+                            <div class="sb-reg-citas-popup-tab-panel-block" id="divReprogramar">
                                 <div class="sb-reg-citas-popup-tab-panel-block-item">
                                     <span class="label-form">Fecha reprogramación</span>
                                     <input class="form-control" type="date" id="txtFechaReasignar" autocomplete="off" max="2050-12-31" min="2022-08-01" onkeydown="return false" />
@@ -150,19 +166,39 @@
 
                             <div class="sb-reg-citas-popup-tab-panel-block">
                                 <div class="sb-reg-citas-popup-tab-panel-block-item">
-                                    <span class="label-form" id="spnPactado">Monto pactado </span>
-                                    <input class="form-control" type="text" id="txtMontoPactado" autocomplete="off" />
+                                    <span class="label-form">Servicio</span>
+                                    <div class="input-group">
+                                        <select class="form-control" id="cboServicio">
+                                            <option value="-1">Seleccionar</option>
+                                            @foreach (var prod in productos)
+                                            {
+                                                <option value="@prod.Id">@prod.Alias</option>
+                                            }
+                                        </select>
+                                        <div class="input-group-append">
+                                            <span class="input-group-text" id="basic-addon2" style="height: 100%; display: block;">
+                                                <img id="PagoPendiente" src="../images/warning.jpg" style="height: 15px; width: auto; cursor: pointer; margin: 10px 6px 10px 6px;" title="Verificar pagos" onclick="form_pago()" />
+                                            </span>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
 
-                            <div class="sb-reg-citas-popup-tab-panel-block">
+                            <div class="sb-reg-citas-popup-tab-panel-block divMonto">
+                                <div class="sb-reg-citas-popup-tab-panel-block-item">
+                                    <span class="label-form" id="spnPactado">Monto pactado</span>
+                                    <input class="form-control" type="text" id="txtMontoPactado" autocomplete="off" disabled="disabled" />
+                                </div>
+                            </div>
+
+                            <div class="sb-reg-citas-popup-tab-panel-block divMonto">
                                 <div class="sb-reg-citas-popup-tab-panel-block-item">
                                     <span class="label-form" id="spnPagado">Monto pagado</span>
                                     <input class="form-control" type="text" id="txtMontoPagado" autocomplete="off" disabled="disabled" />
                                 </div>
                             </div>
 
-                            <div class="sb-reg-citas-popup-tab-panel-block">
+                            <div class="sb-reg-citas-popup-tab-panel-block divMonto">
                                 <div class="sb-reg-citas-popup-tab-panel-block-item">
                                     <span class="label-form" id="spnPendiente">Monto pendiente</span>
                                     <input class="form-control" type="text" id="txtMontoPendiente" autocomplete="off" disabled="disabled" />
@@ -207,6 +243,124 @@
                 <button type="button" class="btn btn-primary main_color divConfirmar sb-reg-citas-popup-button" onclick="confirmar_cita()" id="btnConfirmar">Confirmar</button>
                 <button type="button" class="btn btn-primary main_color sb-reg-citas-popup-button" onclick="procesar_cita()" id="divProcesar">En proceso</button>
                 <button type="button" class="btn btn-primary main_color sb-reg-citas-popup-button" onclick="atender_cita()" id="divAtender">Atender</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--MODAL PAGO-->
+<div id="mdl_pago" class="modal" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="true">
+    <div class="modal-dialog modal-md" role="document" style="height: 90%; display: grid; place-items: center;">
+        <div class="modal-content sb-reg-citas-popup-container" >
+            <div class="modal-header sb-reg-citas-popup-title">
+                <h5 class="modal-title">Registrar pago</h5>
+            </div>
+            <div class="modal-body sb-reg-citas-popup-body">
+                
+                <div class="sb-reg-citas-popup-tab-panel">
+                    <div class="sb-reg-citas-popup-tab-panel-block" style="display: none;">
+                        <input class="form-control" type="text" id="txtIdCita" />
+                    </div>
+
+                    <div class="sb-reg-citas-popup-tab-panel-block">
+                        <div class="sb-reg-citas-popup-tab-panel-block-item">
+                            <span class="label-form">Fecha de pago</span>
+                            <input id="txtFechaPago" class="form-control" type="text" autocomplete="off" disabled="disabled" />
+                        </div>
+                    </div>
+
+                    <div class="sb-reg-citas-popup-tab-panel-block">
+                        <div class="sb-reg-citas-popup-tab-panel-block-item">
+                            <span class="label-form">Paciente</span>
+                            <input class="form-control" type="text" id="txtPaciente" autocomplete="off" disabled="disabled" />
+                        </div>
+                    </div>
+
+                    <div class="sb-reg-citas-popup-tab-panel-block">
+                        <div class="sb-reg-citas-popup-tab-panel-block-item">
+                            <span class="label-form">Forma de pago</span>
+                            <select class="form-control" id="cboFormaPago" onchange="validarSiEsTransferencia()">
+                                <option value="-1">Seleccionar</option>
+                                <option value="1">Transferencia</option>
+                                <option value="2">Depósito</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="sb-reg-citas-popup-tab-panel-block" id="divDetalleTransferencia">
+                        <div class="sb-reg-citas-popup-tab-panel-block-item">
+                            <span class="label-form">Detalle de transferencia</span>
+                            <select class="form-control" id="cboDetalleTransferencia">
+                                <option value="-1">Seleccionar</option>
+                                <option value="1">BCP - Ahorros S/.</option>
+                                <option value="2">BBVA - Ahorros S/.</option>
+                                <option value="3">Interbank - Ahorros S/.</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="sb-reg-citas-popup-tab-panel-block">
+                        <div class="sb-reg-citas-popup-tab-panel-block-item">
+                            <span class="label-form">Importe de pago (S/.)</span>
+                            <input class="form-control" type="text" id="txtMonto1" autocomplete="off" onkeyup="validarDiferenciaPago()" />
+                        </div>
+                    </div>
+
+                    <div class="sb-reg-citas-popup-tab-panel-block">
+                        <div class="sb-reg-citas-popup-tab-panel-block-item">
+                            <span class="label-form">Monto pendiente (S/.)</span>
+                            <input class="form-control" type="text" id="txtMonto2" autocomplete="off" disabled="disabled" />
+                        </div>
+                    </div>
+
+                    <div class="sb-reg-citas-popup-tab-panel-block">
+                        <div class="sb-reg-citas-popup-tab-panel-block-item">
+                            <span class="label-form">Diferencia (S/.)</span>
+                            <input class="form-control" type="text" id="txtMonto3" autocomplete="off" disabled="disabled" />
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary sb-reg-citas-popup-button-volver" onclick="cerrar_modal_pago()">Volver</button>
+                <button type="button" class="btn btn-primary main_color sb-reg-citas-popup-button" onclick="guardar_pago()">Aceptar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--MODAL OTROS PAGOS PENDIENTES-->
+<div id="mdl_otros_pagos_pendientes" class="modal" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="true">
+    <div class="modal-dialog modal-lg" role="document" style="height: 90%; display: grid; place-items: center; max-width: fit-content;">
+        <div class="modal-content sb-reg-citas-popup-container" style=" width: fit-content;">
+            <div class="modal-header sb-reg-citas-popup-title">
+                <h5 class="modal-title">Pagos pendientes</h5>
+            </div>
+            <div class="modal-body sb-reg-citas-popup-body">
+                
+                <div class="sb-reg-citas-popup-tab-panel">
+                    <table class="table table-responsive" style="display: inline-table;">
+                        <thead id="headPagosPendientes">
+                            <tr>
+                                <th>Servicio</th>
+                                <th>Fecha&nbsp;cita</th>
+                                <th>Estado</th>
+                                <th>Usuario&nbsp;registra</th>
+                                <th>Fecha&nbsp;registra</th>
+                                <th>Monto&nbsp;pactado</th>
+                                <th>Monto&nbsp;pagado</th>
+                                <th>Monto&nbsp;pendiente</th>
+                                <th>Acción</th>
+                            </tr>
+                        </thead>
+                        <tbody id="bodyPagosPendientes"></tbody>
+                    </table>
+                </div>
+                
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary sb-reg-citas-popup-button-volver" onclick="cerrar_modal_pagos_pendientes()">Volver</button>
             </div>
         </div>
     </div>

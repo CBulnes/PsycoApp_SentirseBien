@@ -29,6 +29,7 @@ namespace PsycoApp.DA
                 cmd.Parameters.Add("@hora_cita", SqlDbType.VarChar).Value = oCita.hora_cita;
                 cmd.Parameters.Add("@id_doctor", SqlDbType.Int).Value = oCita.id_doctor_asignado;
                 cmd.Parameters.Add("@monto_pactado", SqlDbType.Decimal).Value = oCita.monto_pactado;
+                cmd.Parameters.Add("@id_servicio", SqlDbType.Int).Value = oCita.id_servicio;
                 cmd.Parameters.Add("@usuario", SqlDbType.VarChar).Value = oCita.usuario;
 
                 SqlDataAdapter da = new SqlDataAdapter(cmd);
@@ -233,7 +234,7 @@ namespace PsycoApp.DA
             return lista;
         }
 
-        public List<Cita> citas_usuario(int id_usuario, string main_path, string random_str)
+        public List<Cita> citas_usuario(int id_usuario, int id_paciente, string main_path, string random_str)
         {
             List<Cita> lista = new List<Cita>();
             try
@@ -242,6 +243,7 @@ namespace PsycoApp.DA
                 SqlCommand cmd = new SqlCommand(Procedures.sp_listar_citas_usuario, cn);
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.Add("@id_usuario", SqlDbType.Int).Value = id_usuario;
+                cmd.Parameters.Add("@id_paciente", SqlDbType.Int).Value = id_paciente;
 
                 SqlDataAdapter da = new SqlDataAdapter(cmd);
                 DataTable dt = new DataTable();
@@ -265,6 +267,7 @@ namespace PsycoApp.DA
                     cita.monto_pactado = Convert.ToDecimal(row["monto_pactado"]);
                     cita.monto_pagado = Convert.ToDecimal(row["monto_pagado"]);
                     cita.monto_pendiente = Convert.ToDecimal(row["monto_pendiente"]);
+                    cita.id_servicio = Convert.ToInt32(row["id_servicio"]);
                     lista.Add(cita);
                 }
             }

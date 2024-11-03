@@ -8,6 +8,7 @@ using PsycoApp.entities;
 using PsycoApp.utilities;
 using Newtonsoft.Json;
 using Microsoft.AspNetCore.Http;
+using System.Net.Http;
 
 namespace PsycoApp.site.Controllers
 {
@@ -22,13 +23,14 @@ namespace PsycoApp.site.Controllers
         private string url_cancelar_cita = Helper.GetUrlApi() + "/api/cita/cancelar_cita";
         private string url_disponibilidad_doctor = Helper.GetUrlApi() + "/api/cita/disponibilidad_doctor";
         private string url_citas_usuario = Helper.GetUrlApi() + "/api/cita/citas_usuario";
+        private string url_productos_combo = Helper.GetUrlApi() + "/api/producto/listar_productos_combo";
 
         private string url = "";
         dynamic obj = new System.Dynamic.ExpandoObject();
 
         RespuestaCentroAtencion oRespuesta = new RespuestaCentroAtencion();
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
             if (!string.IsNullOrEmpty(HttpContext.Session.GetString("nombres") as string))
             {
@@ -47,9 +49,19 @@ namespace PsycoApp.site.Controllers
                 obj.vista = "ATENCION";
                 obj.call_center_invitado = Helper.GetCallCenterInvitado();
 
-                var viewModelContainer = new ViewModelContainer<IEnumerable<PsycoApp.site.Models.Paciente>>
+                var productos = await GetFromApiAsync<List<PsycoApp.entities.Producto>>(url_productos_combo);
+                var productosViewModel = productos.Select(p => new PsycoApp.site.Models.Producto
                 {
-                    //Model = pacientesViewModel,
+                    Id = p.Id,
+                    Nombre = p.Nombre,
+                    Alias = p.Alias,
+                    Precio = p.Precio,
+                    Color = p.Color
+                }).ToList();
+
+                var viewModelContainer = new ViewModelContainer<IEnumerable<PsycoApp.site.Models.Producto>>
+                {
+                    Model = productosViewModel,
                     DynamicData = obj
                 };
 
@@ -59,6 +71,13 @@ namespace PsycoApp.site.Controllers
             {
                 return RedirectToAction("Index", "Login");
             }
+        }
+
+        private async Task<T> GetFromApiAsync<T>(string url)
+        {
+            using var client = new HttpClient();
+            var response = await client.GetStringAsync(url);
+            return JsonConvert.DeserializeObject<T>(response);
         }
 
         [HttpPost]
@@ -234,14 +253,14 @@ namespace PsycoApp.site.Controllers
         [HttpGet]
         //[AllowAnonymous]
         //[ResponseCache(NoStore = true, Duration = 0)]
-        public async Task<List<Cita>> CitasUsuario()
+        public async Task<List<Cita>> CitasUsuario(int idPaciente)
         {
             int id_usuario = Convert.ToInt32(HttpContext.Session.GetInt32("id_usuario"));
             List<Cita> lista = new List<Cita>();
             string res = "";
             try
             {
-                url = url_citas_usuario + "/" + id_usuario;
+                url = url_citas_usuario + "/" + id_usuario + "/" + idPaciente;
                 res = ApiCaller.consume_endpoint_method(url, null, "GET");
                 lista = JsonConvert.DeserializeObject<List<Cita>>(res);
             }

@@ -1,0 +1,64 @@
+﻿@model ViewModelContainer<IEnumerable<PsycoApp.site.Models.CuadreCaja>>
+
+@{
+    var dynamicData = Model.DynamicData;
+    var pacientes = Model.Model;
+    ViewData["Title"] = "cuadre de caja";
+}
+
+<!-- SB - STYLE -->
+
+<link rel="stylesheet" href="~/src/css/sb-pacientes.css?ver=005" />
+
+<div class="sb-pa-container" style="width: 96%;">
+    <div class="sb-pa-container-buscar">
+        <div class="sb-pa-container-buscar-title">
+            <p>Cuadre de caja</p>
+        </div>
+
+        @* <div class="sb-pa-container-buscador">
+            <div class="sb-pa-container-buscador-block">
+                <button type="button" onclick="mostrarFormularioAgregar()">
+                    <i class="fa fa-plus"></i>&nbsp;Agregar
+                </button>
+            </div>
+            <div class="sb-pa-container-buscador-block">
+                <div class="sb-pa-container-buscador-block-item">
+                    <span class="label-form">Nombre del paciente: </span>
+                    <input id="txtBuscarNombre" name="Nombre" placeholder="Ingrese nombre para buscar" type="text" required />
+                    <button type="button" onclick="buscarPaciente()">
+                        <i class="fa fa-search"></i>&nbsp;Buscar
+                    </button>
+                </div>
+            </div>
+        </div> *@
+
+        <!-- Contenedor de la tabla -->
+        <div id="containerTabla" class="sb-pa-container-table">
+            @await Html.PartialAsync("~/Views/Caja/_CajaTabla.cshtml", Model.Model)
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function buscarPago(pageNumber = 1) {
+            let pageSize = 10; // Número de registros por página
+            $.post('/Caja/Buscar', { pageNumber: pageNumber, pageSize: pageSize })
+                .done(function (data) {
+                    // Actualizar solo el contenido de la tabla
+                    $('#containerTabla').html(data);
+                })
+                .fail(function () {
+                    alert('Error en la búsqueda de registros.');
+                });
+        }
+    </script>
+}
+
+@* Script sb-home *@
+
+<script src="~/src/js/sb-main.js?ver=002"></script>
+
+@* Script sb-home Fin *@
+

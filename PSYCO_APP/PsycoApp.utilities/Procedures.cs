@@ -10,6 +10,7 @@ namespace PsycoApp.utilities
         public const string sp_validar_usuario = "SP_VALIDAR_USUARIO";
         public const string sp_actualizar_contraseña = "SP_ACTUALIZAR_CONTRASEÑA";
         public const string sp_listar_psicologos_combo = "SP_LISTAR_PSICOLOGOS_COMBO";
+        public const string sp_listar_productos_combo = "SP_LISTAR_PRODUCTOS_COMBO";
 
 
 
@@ -66,5 +67,11 @@ namespace PsycoApp.utilities
         public const string listar_ubigeos = "dbo.sp_listar_ubigeos";
         #endregion
 
+        #region "caja"
+
+        public const string sp_registrar_pago = "SP_REGISTRAR_PAGO";
+        public const string sp_pagos_pendientes = "SP_LISTAR_PAGOS_PENDIENTES";
+        public const string sp_cuadre_caja = "SP_LISTAR_CUADRE_CAJA";
+        #endregion
     }
 }

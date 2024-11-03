@@ -120,12 +120,12 @@ namespace PsycoApp.BL
             return lista;
         }
 
-        public List<Cita> citas_usuario(int id_usuario, string main_path, string random_str)
+        public List<Cita> citas_usuario(int id_usuario, int id_paciente, string main_path, string random_str)
         {
             List<Cita> lista = new List<Cita>();
             try
             {
-                lista = citaDA.citas_usuario(id_usuario, main_path, random_str);
+                lista = citaDA.citas_usuario(id_usuario, id_paciente, main_path, random_str);
                 lista.ForEach(item =>
                 {
                     item.historial = historialDA.listar_historial_cita(item.id_cita);
