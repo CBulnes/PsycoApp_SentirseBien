@@ -83,5 +83,22 @@ namespace PsycoApp.api.Controllers
             return lista;
         }
 
+        [HttpGet("listar_resumen_caja/{usuario}/{mes}/{anio}")]
+        public List<CuadreCaja> listar_resumen_caja(string usuario, int mes = -1, int anio = -1)
+        {
+            List<CuadreCaja> lista = new List<CuadreCaja>();
+            random_str = ru.RandomString(8) + "|" + ru.CurrentDate();
+
+            try
+            {
+                lista = cajaBL.listar_resumen_caja(usuario, mes, anio);
+            }
+            catch (Exception)
+            {
+                lista.Clear();
+            }
+            return lista;
+        }
+
     }
 }

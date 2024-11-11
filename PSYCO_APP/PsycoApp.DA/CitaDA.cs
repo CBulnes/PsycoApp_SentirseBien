@@ -280,7 +280,7 @@ namespace PsycoApp.DA
             return lista;
         }
 
-        public List<Cita> citas_doctor(int id_usuario, string fecha, int id_estado)
+        public List<Cita> citas_doctor(string usuario, string fecha, int id_estado, int ver_sin_reserva)
         {
             List<Cita> lista = new List<Cita>();
             try
@@ -288,9 +288,10 @@ namespace PsycoApp.DA
                 cn.Open();
                 SqlCommand cmd = new SqlCommand(Procedures.sp_listar_citas_doctor, cn);
                 cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.Add("@id_usuario", SqlDbType.Int).Value = id_usuario;
+                cmd.Parameters.Add("@usuario", SqlDbType.VarChar).Value = usuario;
                 cmd.Parameters.Add("@fecha", SqlDbType.VarChar).Value = fecha;
                 cmd.Parameters.Add("@id_estado", SqlDbType.Int).Value = id_estado;
+                cmd.Parameters.Add("@ver_sin_reserva", SqlDbType.Int).Value = ver_sin_reserva;
 
                 SqlDataAdapter da = new SqlDataAdapter(cmd);
                 DataTable dt = new DataTable();

@@ -17,6 +17,7 @@ namespace PsycoApp.site.Controllers
         private readonly string apiUrl = Helper.GetUrlApi() + "/api/caja"; // URL base de la API
         private string url_registrar_pago = Helper.GetUrlApi() + "/api/caja/registrar_pago";
         private string url_listar_pagos_pendientes = Helper.GetUrlApi() + "/api/caja/listar_pagos_pendientes";
+        private string url_listar_resumen_caja = Helper.GetUrlApi() + "/api/caja/listar_resumen_caja";
 
         private string url = "";
         dynamic obj = new System.Dynamic.ExpandoObject();
@@ -157,6 +158,25 @@ namespace PsycoApp.site.Controllers
                 url = url_listar_pagos_pendientes + "/" + idPaciente;
                 res = ApiCaller.consume_endpoint_method(url, null, "GET");
                 lista = JsonConvert.DeserializeObject<List<PagosPendientes>>(res);
+            }
+            catch (Exception)
+            {
+                lista.Clear();
+            }
+            return lista;
+        }
+
+        [HttpGet]
+        public async Task<List<entities.CuadreCaja>> ListarResumenCaja(int mes, int anio)
+        {
+            List<entities.CuadreCaja> lista = new List<entities.CuadreCaja>();
+            string res = "";
+            string usuario = Convert.ToString(HttpContext.Session.GetString("login"));
+            try
+            {
+                url = url_listar_resumen_caja + "/" + usuario + "/" + mes + "/" + anio;
+                res = ApiCaller.consume_endpoint_method(url, null, "GET");
+                lista = JsonConvert.DeserializeObject<List<entities.CuadreCaja>>(res);
             }
             catch (Exception)
             {

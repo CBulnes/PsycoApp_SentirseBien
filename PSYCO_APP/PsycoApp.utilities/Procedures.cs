@@ -72,6 +72,7 @@ namespace PsycoApp.utilities
         public const string sp_registrar_pago = "SP_REGISTRAR_PAGO";
         public const string sp_pagos_pendientes = "SP_LISTAR_PAGOS_PENDIENTES";
         public const string sp_cuadre_caja = "SP_LISTAR_CUADRE_CAJA";
+        public const string sp_resumen_caja = "SP_LISTAR_CAJA_MES_USUARIO";
         #endregion
     }
 }

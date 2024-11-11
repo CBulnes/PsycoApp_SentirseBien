@@ -13,9 +13,10 @@ function cargar_historial() {
     var fecha = $('#txtFecha').val();
     var id_estado = $('#cboEstado').val();
     var i = 1;
+    var ver_sin_reserva = $('#cboVerSinReserva').val();
 
     $.ajax({
-        url: '/HistorialCitas/CitasDoctor?fecha=' + (fecha == '' ? '-' : fecha) + '&id_estado=' + id_estado,
+        url: '/HistorialCitas/CitasDoctor?fecha=' + (fecha == '' ? '-' : fecha) + '&id_estado=' + id_estado + '&ver_sin_reserva=' + ver_sin_reserva,
         type: "GET",
         data: {},
         beforeSend: function () {
@@ -37,7 +38,7 @@ function cargar_historial() {
                     html += '<td class="text-center text-tbl">' + fecha_formato_ddmmyyyy(item.fecha_cita) + '</td>';
                     html += '<td class="text-center text-tbl">' + item.hora_cita + '</td>';
                     html += '<td class="text-center text-tbl">' + accion_estado(item.estado) + '</td>';
-                    html += '<td class="text-center text-tbl">' + accion_cita(item.estado, item.id_usuario, item.fecha_cita, item.id_cita) + '</td>';
+                    //html += '<td class="text-center text-tbl">' + accion_cita(item.estado, item.id_usuario, item.fecha_cita, item.id_cita) + '</td>';
                     html += '</tr>';
                     i++;
                 }

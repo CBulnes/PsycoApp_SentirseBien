@@ -16,26 +16,95 @@
             <p>Cuadre de caja</p>
         </div>
 
-        @* <div class="sb-pa-container-buscador">
+        <div class="sb-pa-container-buscador">
             <div class="sb-pa-container-buscador-block">
-                <button type="button" onclick="mostrarFormularioAgregar()">
-                    <i class="fa fa-plus"></i>&nbsp;Agregar
+                <button type="button" onclick="verResumenCaja(true)">
+                    <i class="fa fa-search"></i>&nbsp;Ver&nbsp;resumen
                 </button>
             </div>
-            <div class="sb-pa-container-buscador-block">
-                <div class="sb-pa-container-buscador-block-item">
-                    <span class="label-form">Nombre del paciente: </span>
-                    <input id="txtBuscarNombre" name="Nombre" placeholder="Ingrese nombre para buscar" type="text" required />
-                    <button type="button" onclick="buscarPaciente()">
-                        <i class="fa fa-search"></i>&nbsp;Buscar
-                    </button>
-                </div>
-            </div>
-        </div> *@
+        </div>
 
         <!-- Contenedor de la tabla -->
         <div id="containerTabla" class="sb-pa-container-table">
             @await Html.PartialAsync("~/Views/Caja/_CajaTabla.cshtml", Model.Model)
+        </div>
+    </div>
+</div>
+
+<div id="mdl_resumen_caja" class="modal" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="true">
+    <div class="modal-dialog modal-lg" role="document" style="height: 90%; display: grid; place-items: center; width: 100%;">
+        <div class="modal-content" style="width: 100%;">
+            <div class="modal-header second_color">
+                <h5 class="modal-title" style="color: #FFFFFF;">Resumen de caja</h5>
+                <button onclick="cerrarModalResumen()" type="button" class="close" aria-label="Close" style="outline: none; cursor: pointer; color: #FFFFFF;">
+                    <span>&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                        <div class="row">
+
+                            <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                <div class="row">
+                                    <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6">
+                                        <div class="form-group">
+                                            <span class="label-form">Mes</span><br />
+                                            <select class="form-control cbo-search" id="cboMes" onchange="verResumenCaja(false)">
+                                                <option value="-1">Todos</option>
+                                                <option value="1">Enero</option>
+                                                <option value="2">Febrero</option>
+                                                <option value="3">Marzo</option>
+                                                <option value="4">Abril</option>
+                                                <option value="5">Mayo</option>
+                                                <option value="6">Junio</option>
+                                                <option value="7">Julio</option>
+                                                <option value="8">Agosto</option>
+                                                <option value="9">Setiembre</option>
+                                                <option value="10">Octubre</option>
+                                                <option value="11">Noviembre</option>
+                                                <option value="12">Diciembre</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6">
+                                        <div class="form-group">
+                                            <span class="label-form">Año</span><br />
+                                            <select class="form-control cbo-search" id="cboAño" onchange="verResumenCaja(false)">
+                                                <option value="-1">Todos</option>
+                                                <option value="2023">2023</option>
+                                                <option value="2024">2024</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th class="text-center" style="width: 80px;">#</th>
+                                            <th class="text-center">
+                                                Importe
+                                            </th>
+                                            <th class="text-center">
+                                                Usuario
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="bdResumen">
+                                    </tbody>
+                                </table>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="cerrarModalResumen();">Volver</button>
+            </div>
         </div>
     </div>
 </div>
@@ -52,6 +121,39 @@
                 .fail(function () {
                     alert('Error en la búsqueda de registros.');
                 });
+        }
+
+        function verResumenCaja(recargar){
+            if (recargar) {
+                $('#cboMes').val(-1);
+                $('#cboAño').val(-1);
+            }
+
+            var mes = $('#cboMes').val();
+            var anio = $('#cboAño').val();
+            var html = '';
+            var contador = 1;
+
+            $.get('/Caja/ListarResumenCaja?mes=' + mes + "&anio=" + anio)
+                .done(function (data) {
+                    for (var item of data){
+                        html += '<tr>';
+                        html += '<td>' + contador + '</td>';
+                        html += '<td>' + item.importe + '</td>';
+                        html += '<td>' + item.usuario + '</td>';
+                        html += '</tr>';
+                        contador++;
+                    }
+                    $('#bdResumen').html(html);
+                    $('#mdl_resumen_caja').modal('show');
+                })
+                .fail(function () {
+                    alert('Error en la búsqueda de registros.');
+                });
+        }
+
+        function cerrarModalResumen() {
+            $('#mdl_resumen_caja').modal('hide')
         }
     </script>
 }

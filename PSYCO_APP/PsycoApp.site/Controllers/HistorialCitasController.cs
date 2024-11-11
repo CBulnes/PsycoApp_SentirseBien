@@ -57,14 +57,14 @@ namespace PsycoApp.site.Controllers
         }
 
         [HttpGet]
-        public async Task<List<Cita>> CitasDoctor(string fecha, int id_estado)
+        public async Task<List<Cita>> CitasDoctor(string fecha, int id_estado, int ver_sin_reserva)
         {
-            int id_usuario = Convert.ToInt32(HttpContext.Session.GetInt32("id_usuario"));
+            string usuario = HttpContext.Session.GetString("login").ToString();
             List<Cita> lista = new List<Cita>();
             string res = "";
             try
             {
-                url = url_citas_doctor + "/" + id_usuario + "/" + fecha + "/" + id_estado;
+                url = url_citas_doctor + "/" + usuario + "/" + fecha + "/" + id_estado + "/" + ver_sin_reserva;
                 res = ApiCaller.consume_endpoint_method(url, null, "GET");
                 lista = JsonConvert.DeserializeObject<List<Cita>>(res);
             }

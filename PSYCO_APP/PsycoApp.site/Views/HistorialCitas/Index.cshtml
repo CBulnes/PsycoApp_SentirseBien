@@ -22,23 +22,35 @@
                 <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
                     @*style="padding-left: 0px; padding-right: 0px;">*@
                     <div class="row">
-                        <div class="col-6 col-sm-6 col-md-4 col-lg-4 col-xl-4">
+                        <div class="col-6 col-sm-6 col-md-3 col-lg-3 col-xl-3">
                             <div class="form-group">
                                 <span class="label-form">Fecha</span><br />
                                 <input id="txtFecha" class="form-control" type="date" max="2050-12-31" />
                             </div>
                         </div>
-                        <div class="col-6 col-sm-6 col-md-4 col-lg-4 col-xl-4">
+                        <div class="col-6 col-sm-6 col-md-3 col-lg-3 col-xl-3">
                             <div class="form-group">
                                 <span class="label-form">Estado</span><br />
                                 <select class="form-control cbo-search" id="cboEstado">
                                     <option value="-1">Seleccionar</option>
-                                    <option value="1">Registrado</option>
-                                    <option value="2">Atendido</option>
+                                    <option value="1">Citado</option>
+                                    <option value="2">Confirmado</option>
+                                    <option value="3">En proceso</option>
+                                    <option value="4">Atendido</option>
+                                    <option value="5">Cancelado </option>
                                 </select>
                             </div>
                         </div>
-                        <div class="col-6 col-sm-6 col-md-4 col-lg-4 col-xl-4">
+                        <div class="col-6 col-sm-6 col-md-3 col-lg-3 col-xl-3">
+                            <div class="form-group">
+                                <span class="label-form">Ver registros</span><br />
+                                <select class="form-control cbo-search" id="cboVerSinReserva">
+                                    <option value="1">Sin reserva en 15 días</option>
+                                    <option value="2">Todos</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-6 col-sm-6 col-md-3 col-lg-3 col-xl-3">
                             <div class="form-group">
                                 <span class="label-form">&nbsp;</span><br />
                                 <button type="button" class="btn btn-doc second_color" style="color: #FFF; font-size: 12px; width: 100%;" onclick="cargar_historial()">
@@ -75,9 +87,9 @@
                                 <th class="text-center">
                                     Estado
                                 </th>
-                                <th class="text-center">
+                                @* <th class="text-center">
                                     Acción
-                                </th>
+                                </th> *@
                             </tr>
                         </thead>
                         <tbody id="bdCitas">

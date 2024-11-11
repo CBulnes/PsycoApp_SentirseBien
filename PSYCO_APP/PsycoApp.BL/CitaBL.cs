@@ -138,12 +138,12 @@ namespace PsycoApp.BL
             return lista;
         }
 
-        public List<Cita> citas_doctor(int id_usuario, string fecha, int id_estado)
+        public List<Cita> citas_doctor(string usuario, string fecha, int id_estado, int ver_sin_reserva)
         {
             List<Cita> lista = new List<Cita>();
             try
             {
-                lista = citaDA.citas_doctor(id_usuario, fecha, id_estado);
+                lista = citaDA.citas_doctor(usuario, fecha, id_estado, ver_sin_reserva);
             }
             catch (Exception)
             {

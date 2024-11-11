@@ -58,5 +58,19 @@ namespace PsycoApp.BL
             return lista;
         }
 
+        public List<CuadreCaja> listar_resumen_caja(string usuario, int mes, int año)
+        {
+            List<CuadreCaja> lista = new List<CuadreCaja>();
+            try
+            {
+                lista = cajaDA.listar_resumen_caja(usuario, mes, año);
+            }
+            catch (Exception)
+            {
+                lista.Clear();
+            }
+            return lista;
+        }
+
     }
 }

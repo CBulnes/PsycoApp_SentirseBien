@@ -123,5 +123,37 @@ namespace PsycoApp.DA
             return lista;
         }
 
+        public List<CuadreCaja> listar_resumen_caja(string usuario, int mes, int año)
+        {
+            List<CuadreCaja> lista = new List<CuadreCaja>();
+            try
+            {
+                cn.Open();
+                SqlCommand cmd = new SqlCommand(Procedures.sp_resumen_caja, cn);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Add("@usuario", SqlDbType.VarChar).Value = usuario;
+                cmd.Parameters.Add("@mes", SqlDbType.Int).Value = mes;
+                cmd.Parameters.Add("@año", SqlDbType.Int).Value = año;
+
+                SqlDataAdapter da = new SqlDataAdapter(cmd);
+                DataTable dt = new DataTable();
+                da.Fill(dt);
+
+                foreach (DataRow row in dt.Rows)
+                {
+                    CuadreCaja item = new CuadreCaja();
+                    item.usuario = Convert.ToString(row["usuario"]);
+                    item.importe = Convert.ToString(row["importe"]);
+                    lista.Add(item);
+                }
+            }
+            catch (Exception e)
+            {
+                lista.Clear();
+            }
+            cn.Close();
+            return lista;
+        }
+
     }
 }
