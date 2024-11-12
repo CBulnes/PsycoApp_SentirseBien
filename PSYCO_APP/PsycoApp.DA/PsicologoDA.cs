@@ -36,6 +36,7 @@ namespace PsycoApp.DA
                         {
                             Id = (int)reader["Id"],
                             Nombre = (string)reader["Nombre"],
+                            Apellido = (string)reader["Apellido"],
                             FechaNacimiento = (DateTime)reader["FechaNacimiento"],
                             DocumentoTipo = (string)reader["DocumentoTipo"],
                             DocumentoNumero = (string)reader["DocumentoNumero"],
@@ -43,7 +44,8 @@ namespace PsycoApp.DA
                             Especialidad = (int)reader["Especialidad"],
                             Distrito = (string)reader["Distrito"],
                             Direccion = (string)reader["Direccion"],
-                            Estado = (string)reader["Estado"]
+                            Estado = (string)reader["Estado"],
+                            Refrigerio = (string)reader["Refrigerio"]
                         };
                     }
                 }
@@ -98,10 +100,12 @@ namespace PsycoApp.DA
                         {
                             Id = (int)reader["Id"],
                             Nombre = (string)reader["Nombre"],
+                            Apellido = (string)reader["Apellido"],
                             FechaNacimiento = (DateTime)reader["FechaNacimiento"],
                             DocumentoTipo = (string)reader["DocumentoTipo"],
                             DocumentoNumero = (string)reader["DocumentoNumero"],
                             Telefono = (string)reader["Telefono"],
+                            Refrigerio = (string)reader["Refrigerio"],
                             Especialidad = (int)reader["Especialidad"],
                             Direccion = (string)reader["Direccion"],
                             Distrito = (string)reader["Distrito"],
@@ -136,14 +140,16 @@ namespace PsycoApp.DA
                         {
                             Id = reader.GetInt32(0),
                             Nombre = reader.GetString(1),
-                            FechaNacimiento = reader.GetDateTime(2),
-                            DocumentoTipo = reader.GetString(3),
-                            DocumentoNumero = reader.GetString(4),
-                            Telefono = reader.GetString(5),
-                            Especialidad = reader.GetInt32(6),
-                            Direccion = reader.GetString(7),
-                            Distrito = reader.GetString(8),
-                            Estado = reader.GetString(9)
+                            Apellido = reader.GetString(2),
+                            FechaNacimiento = reader.GetDateTime(3),
+                            DocumentoTipo = reader.GetString(4),
+                            DocumentoNumero = reader.GetString(5),
+                            Telefono = reader.GetString(6),
+                            Refrigerio = reader.GetString(7),
+                            Especialidad = reader.GetInt32(8),
+                            Direccion = reader.GetString(9),
+                            Distrito = reader.GetString(10),
+                            Estado = reader.GetString(11)
                         });
                     }
                 }
@@ -162,10 +168,12 @@ namespace PsycoApp.DA
                 command.CommandType = CommandType.StoredProcedure;
 
                 command.Parameters.AddWithValue("@Nombre", psicologo.Nombre);
+                command.Parameters.AddWithValue("@Apellido", psicologo.Apellido);
                 command.Parameters.AddWithValue("@FechaNacimiento", psicologo.FechaNacimiento);
                 command.Parameters.AddWithValue("@DocumentoTipo", psicologo.DocumentoTipo);
                 command.Parameters.AddWithValue("@DocumentoNumero", psicologo.DocumentoNumero);
                 command.Parameters.AddWithValue("@Telefono", psicologo.Telefono);
+                command.Parameters.AddWithValue("@Refrigerio", psicologo.Refrigerio);
                 command.Parameters.AddWithValue("@Especialidad", psicologo.Especialidad);
                 command.Parameters.AddWithValue("@Direccion", psicologo.Direccion);
                 command.Parameters.AddWithValue("@Distrito", psicologo.Distrito);
@@ -187,10 +195,12 @@ namespace PsycoApp.DA
 
                 command.Parameters.AddWithValue("@Id", psicologo.Id);
                 command.Parameters.AddWithValue("@Nombre", psicologo.Nombre);
+                command.Parameters.AddWithValue("@Apellido", psicologo.Apellido);
                 command.Parameters.AddWithValue("@FechaNacimiento", psicologo.FechaNacimiento);
                 command.Parameters.AddWithValue("@DocumentoTipo", psicologo.DocumentoTipo);
                 command.Parameters.AddWithValue("@DocumentoNumero", psicologo.DocumentoNumero);
                 command.Parameters.AddWithValue("@Telefono", psicologo.Telefono);
+                command.Parameters.AddWithValue("@Refrigerio", psicologo.Refrigerio);
                 command.Parameters.AddWithValue("@Especialidad", psicologo.Especialidad);
                 command.Parameters.AddWithValue("@Direccion", psicologo.Direccion);
                 command.Parameters.AddWithValue("@Distrito", psicologo.Distrito);

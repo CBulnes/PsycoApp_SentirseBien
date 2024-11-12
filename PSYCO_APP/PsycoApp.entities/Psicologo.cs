@@ -8,10 +8,12 @@ namespace PsycoApp.entities
     {
         public int Id { get; set; }
         public string Nombre { get; set; }
+        public string Apellido { get; set; }
         public DateTime FechaNacimiento { get; set; }
         public string DocumentoTipo { get; set; }
         public string DocumentoNumero { get; set; }
         public string Telefono { get; set; }
+        public string Refrigerio { get; set; }
         public int Especialidad { get; set; }
         public string Direccion { get; set; }
         public string Distrito { get; set; }
