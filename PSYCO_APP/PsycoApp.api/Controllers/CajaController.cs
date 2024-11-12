@@ -66,15 +66,15 @@ namespace PsycoApp.api.Controllers
             return lista;
         }
 
-        [HttpGet("listar_cuadre_caja/{usuario}/{pagina}/{tamanoPagina}")]
-        public List<CuadreCaja> listar_cuadre_caja(string usuario, int pagina = 1, int tamanoPagina = 100)
+        [HttpGet("listar_cuadre_caja/{usuario}/{pagina}/{tamanoPagina}/{mes}/{anio}")]
+        public List<CuadreCaja> listar_cuadre_caja(string usuario, int pagina = 1, int tamanoPagina = 100, int mes = -1, int anio = -1)
         {
             List<CuadreCaja> lista = new List<CuadreCaja>();
             random_str = ru.RandomString(8) + "|" + ru.CurrentDate();
 
             try
             {
-                lista = cajaBL.listar_cuadre_caja(usuario, pagina, tamanoPagina);
+                lista = cajaBL.listar_cuadre_caja(usuario, pagina, tamanoPagina, mes, anio);
             }
             catch (Exception)
             {
@@ -83,15 +83,32 @@ namespace PsycoApp.api.Controllers
             return lista;
         }
 
-        [HttpGet("listar_resumen_caja/{usuario}/{mes}/{anio}")]
-        public List<CuadreCaja> listar_resumen_caja(string usuario, int mes = -1, int anio = -1)
+        [HttpGet("resumen_caja_x_usuario/{usuario}/{mes}/{anio}")]
+        public List<CuadreCaja> resumen_caja_x_usuario(string usuario, int mes = -1, int anio = -1)
         {
             List<CuadreCaja> lista = new List<CuadreCaja>();
             random_str = ru.RandomString(8) + "|" + ru.CurrentDate();
 
             try
             {
-                lista = cajaBL.listar_resumen_caja(usuario, mes, anio);
+                lista = cajaBL.resumen_caja_x_usuario(usuario, mes, anio);
+            }
+            catch (Exception)
+            {
+                lista.Clear();
+            }
+            return lista;
+        }
+
+        [HttpGet("resumen_caja_x_forma_pago/{usuario}/{mes}/{anio}")]
+        public List<CuadreCaja> resumen_caja_x_forma_pago(string usuario, int mes = -1, int anio = -1)
+        {
+            List<CuadreCaja> lista = new List<CuadreCaja>();
+            random_str = ru.RandomString(8) + "|" + ru.CurrentDate();
+
+            try
+            {
+                lista = cajaBL.resumen_caja_x_forma_pago(usuario, mes, anio);
             }
             catch (Exception)
             {

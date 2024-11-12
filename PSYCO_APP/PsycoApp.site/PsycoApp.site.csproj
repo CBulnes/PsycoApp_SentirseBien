@@ -6,6 +6,20 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Controllers\Caja_Controller.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Remove="Views\Caja\Index_.cshtml" />
+    <Content Remove="Views\Caja\_CajaTabla.cshtml" />
+    <Content Remove="wwwroot\basic\caja_.js" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="wwwroot\basic\caja.js" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="IBM.Watson.Assistant.v2" Version="4.5.0" />
     <PackageReference Include="IBM.Watson.Common" Version="4.5.0" />
     <PackageReference Include="IBM.WatsonDeveloperCloud" Version="2.16.0" />

@@ -39,14 +39,12 @@ namespace PsycoApp.site.Controllers
                 obj.vista = "REPORTE";
                 obj.call_center_invitado = Helper.GetCallCenterInvitado();
 
-                if (obj.id_tipousuario == 1) //admin
+                var viewModelContainer = new ViewModelContainer<IEnumerable<PsycoApp.site.Models.Psicologo>>
                 {
-                    return View("Index", obj);
-                }
-                else //cliente
-                {
-                    return RedirectToAction("Index", "Home");
-                }
+                    DynamicData = obj
+                };
+
+                return View("Index", viewModelContainer);
             }
             else
             {

@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using PsycoApp.site.Models;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
 using PsycoApp.entities;
 using PsycoApp.utilities;
+using Newtonsoft.Json;
+using Microsoft.AspNetCore.Http;
 using System.Net.Http;
 
 namespace PsycoApp.site.Controllers
@@ -21,18 +21,15 @@ namespace PsycoApp.site.Controllers
 
         private string url = "";
         dynamic obj = new System.Dynamic.ExpandoObject();
-        private string url_reporte = Helper.GetUrlApi() + "/api/reporte";
-
-        List<ReporteNPS> listaReporteNPS = new List<ReporteNPS>();
 
         [Route("Caja")]
-        public async Task<IActionResult> Index(int pageNumber = 1, int pageSize = 10, int mes = -1, int anio = -1)
+        public async Task<IActionResult> Index(int pageNumber = 1, int pageSize = 10)
         {
             if (!string.IsNullOrEmpty(HttpContext.Session.GetString("nombres") as string))
             {
                 var usuario = Convert.ToString(HttpContext.Session.GetString("login"));
                 // Construir la URL para la API dependiendo de si hay un término de búsqueda
-                string url = $"{apiUrl}/listar_cuadre_caja/{usuario}/{pageNumber}/{pageSize}/{mes}/{anio}";
+                string url = $"{apiUrl}/listar_cuadre_caja/{usuario}/{pageNumber}/{pageSize}";
 
                 var registros = await GetFromApiAsync<List<PsycoApp.entities.CuadreCaja>>(url);
                 var pacientesViewModel = registros.Select(p => new PsycoApp.site.Models.CuadreCaja
@@ -60,6 +57,7 @@ namespace PsycoApp.site.Controllers
                 obj.tipo_documento = HttpContext.Session.GetString("tipo_documento");
                 obj.num_documento = HttpContext.Session.GetString("num_documento");
                 obj.vista = "CAJA";
+                obj.call_center_invitado = Helper.GetCallCenterInvitado();
 
                 var viewModelContainer = new ViewModelContainer<IEnumerable<PsycoApp.site.Models.CuadreCaja>>
                 {
@@ -81,12 +79,11 @@ namespace PsycoApp.site.Controllers
 
         [Route("/Caja/Buscar")]
         [HttpPost]
-        public async Task<IActionResult> Buscar(int pageNumber = 1, int pageSize = 10, int mes = -1, int anio = -1)
+        public async Task<IActionResult> Buscar(int pageNumber = 1, int pageSize = 10)
         {
             var usuario = Convert.ToString(HttpContext.Session.GetString("login"));
-            string url = $"{apiUrl}/listar_cuadre_caja/{usuario}/{pageNumber}/{pageSize}/{mes}/{anio}";
-
-            var registros = await GetFromApiAsync<List<PsycoApp.entities.CuadreCaja>>(url);
+            string url = $"{apiUrl}/listar_cuadre_caja?usuario={usuario}&pageNumber={pageNumber}&pageSize={pageSize}";
+            var registros = await GetFromApiAsync<List<entities.CuadreCaja>>(url);
 
             dynamic obj = new System.Dynamic.ExpandoObject();
             string path = $"{this.Request.Scheme}://{this.Request.Host}{this.Request.PathBase}";
@@ -100,8 +97,7 @@ namespace PsycoApp.site.Controllers
             obj.id_tipousuario = HttpContext.Session.GetInt32("id_tipousuario");
             obj.tipo_documento = HttpContext.Session.GetString("tipo_documento");
             obj.num_documento = HttpContext.Session.GetString("num_documento");
-            obj.vista = "CAJA";
-
+            obj.vista = "HOME";
             var viewModelContainer = new ViewModelContainer<IEnumerable<PsycoApp.site.Models.CuadreCaja>>
             {
                 Model = registros.Select(p => new PsycoApp.site.Models.CuadreCaja
@@ -120,27 +116,7 @@ namespace PsycoApp.site.Controllers
 
             ViewBag.PageNumber = pageNumber;
             ViewBag.PageSize = pageSize;
-
-            return PartialView("~/Views/Caja/_PacienteTabla.cshtml", viewModelContainer);
-        }
-
-        [HttpGet]
-        public ActionResult<List<ReporteNPS>> reporte_nps(InputVisita oInputReporte)
-        {
-            string res = "";
-            try
-            {
-                url = url_reporte + "/reporte_nps/" + oInputReporte.año + "/" + oInputReporte.mes;
-
-                res = ApiCaller.consume_endpoint_method(url, null, "GET");
-                listaReporteNPS = JsonConvert.DeserializeObject<List<ReporteNPS>>(res);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                //oRespuestaPV.descripcion = ex.Message.ToString();
-            }
-            return listaReporteNPS;
+            return PartialView("~/Views/Caja/_PacienteTabla.cshtml", viewModelContainer.Model);
         }
 
         private async Task<T> GetFromApiAsync<T>(string url)
@@ -227,5 +203,6 @@ namespace PsycoApp.site.Controllers
             }
             return lista;
         }
+
     }
 }

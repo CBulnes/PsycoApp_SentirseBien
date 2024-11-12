@@ -72,7 +72,26 @@ namespace PsycoApp.utilities
         public const string sp_registrar_pago = "SP_REGISTRAR_PAGO";
         public const string sp_pagos_pendientes = "SP_LISTAR_PAGOS_PENDIENTES";
         public const string sp_cuadre_caja = "SP_LISTAR_CUADRE_CAJA";
-        public const string sp_resumen_caja = "SP_LISTAR_CAJA_MES_USUARIO";
+        public const string sp_resumen_caja_x_usuario = "SP_LISTAR_CAJA_MES_USUARIO";
+        public const string sp_resumen_caja_x_forma_pago = "SP_LISTAR_CAJA_MES_FORMA_PAGO";
         #endregion
+    }
+
+    public class Endpoints
+    {
+        public static string apiUrl = Helper.GetUrlApi();
+
+        public class Caja
+        {
+            public const string url_registrar_pago = "/caja/registrar_pago";
+            public const string url_listar_pagos_pendientes = "/caja/listar_pagos_pendientes";
+            public const string url_resumen_caja_x_usuario = "/caja/resumen_caja_x_usuario";
+            public const string url_resumen_caja_x_forma_pago = "/caja/resumen_caja_x_forma_pago";
+        }
+
+        public class Paciente
+        {
+            public const string url_base = "/paciente";
+        }
     }
 }

@@ -6,6 +6,7 @@ namespace PsycoApp.entities
 {
     public class CuadreCaja
     {
+        public int cantidad { get; set; } = 0;
         public string usuario { get; set; } = "";
         public string paciente { get; set; } = "";
         public string fecha_transaccion { get; set; } = "";

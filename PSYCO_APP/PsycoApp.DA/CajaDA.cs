@@ -85,7 +85,7 @@ namespace PsycoApp.DA
             return lista;
         }
 
-        public List<CuadreCaja> listar_cuadre_caja(string usuario, int pagina, int tamanoPagina)
+        public List<CuadreCaja> listar_cuadre_caja(string usuario, int pagina, int tamanoPagina, int mes, int anio)
         {
             List<CuadreCaja> lista = new List<CuadreCaja>();
             try
@@ -96,6 +96,8 @@ namespace PsycoApp.DA
                 cmd.Parameters.Add("@usuario", SqlDbType.VarChar).Value = usuario;
                 cmd.Parameters.Add("@pagina", SqlDbType.Int).Value = pagina;
                 cmd.Parameters.Add("@tamanoPagina", SqlDbType.Int).Value = tamanoPagina;
+                cmd.Parameters.Add("@mes", SqlDbType.Int).Value = mes;
+                cmd.Parameters.Add("@anio", SqlDbType.Int).Value = anio;
 
                 SqlDataAdapter da = new SqlDataAdapter(cmd);
                 DataTable dt = new DataTable();
@@ -123,13 +125,13 @@ namespace PsycoApp.DA
             return lista;
         }
 
-        public List<CuadreCaja> listar_resumen_caja(string usuario, int mes, int año)
+        public List<CuadreCaja> resumen_caja_x_usuario(string usuario, int mes, int año)
         {
             List<CuadreCaja> lista = new List<CuadreCaja>();
             try
             {
                 cn.Open();
-                SqlCommand cmd = new SqlCommand(Procedures.sp_resumen_caja, cn);
+                SqlCommand cmd = new SqlCommand(Procedures.sp_resumen_caja_x_usuario, cn);
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.Add("@usuario", SqlDbType.VarChar).Value = usuario;
                 cmd.Parameters.Add("@mes", SqlDbType.Int).Value = mes;
@@ -144,6 +146,40 @@ namespace PsycoApp.DA
                     CuadreCaja item = new CuadreCaja();
                     item.usuario = Convert.ToString(row["usuario"]);
                     item.importe = Convert.ToString(row["importe"]);
+                    lista.Add(item);
+                }
+            }
+            catch (Exception e)
+            {
+                lista.Clear();
+            }
+            cn.Close();
+            return lista;
+        }
+
+        public List<CuadreCaja> resumen_caja_x_forma_pago(string usuario, int mes, int año)
+        {
+            List<CuadreCaja> lista = new List<CuadreCaja>();
+            try
+            {
+                cn.Open();
+                SqlCommand cmd = new SqlCommand(Procedures.sp_resumen_caja_x_forma_pago, cn);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Add("@usuario", SqlDbType.VarChar).Value = usuario;
+                cmd.Parameters.Add("@mes", SqlDbType.Int).Value = mes;
+                cmd.Parameters.Add("@año", SqlDbType.Int).Value = año;
+
+                SqlDataAdapter da = new SqlDataAdapter(cmd);
+                DataTable dt = new DataTable();
+                da.Fill(dt);
+
+                foreach (DataRow row in dt.Rows)
+                {
+                    CuadreCaja item = new CuadreCaja();
+                    item.cantidad = Convert.ToInt32(row["cantidad"]);
+                    item.importe = Convert.ToString(row["importe"]);
+                    item.forma_pago = Convert.ToString(row["forma_pago"]);
+                    item.detalle_transferencia = Convert.ToString(row["detalle_transferencia"]);
                     lista.Add(item);
                 }
             }

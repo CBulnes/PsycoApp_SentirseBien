@@ -1,7 +1,9 @@
 ﻿@model dynamic
 @using PsycoApp.utilities; 
 @{
+    var dynamicData = Model.DynamicData;
     ViewData["Title"] = "Reportes";
+    var dHoy = DateTime.Now;
 }
     <!--nps-->
     <div class="row" style="background-color: #FFF; margin-top: 30px;">
@@ -37,7 +39,7 @@
                 <div class="col-lg-4">
                     <div class="card">
                         <div class="card-body">
-                            <h4 class="card-title">&nbsp;</h4>
+                            <h4 class="card-title">2</h4>
                             <div class="flot-chart">
                                 <div class="flot-chart-content" id="indicador_nps"></div>
                             </div>
@@ -48,7 +50,7 @@
                 <div class="col-lg-4">
                     <div class="card">
                         <div class="card-body">
-                            <h4 class="card-title">&nbsp;</h4>
+                            <h4 class="card-title">3</h4>
                             <div class="flot-chart">
                                 <div id="tabla_nps"></div>
                             </div>
@@ -59,7 +61,7 @@
                 <div class="col-lg-4 hide-element">
                     <div class="card">
                         <div class="card-body">
-                            <h4 class="card-title">&nbsp;</h4>
+                            <h4 class="card-title">4</h4>
                             <div class="flot-chart">
                                 <div id="tabla_resultados_flujo"></div>
                             </div>

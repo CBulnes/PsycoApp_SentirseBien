@@ -462,7 +462,7 @@
 
         <aside class="left-sidebar second_color" data-scroll-to-active="true">
             <div class="scroll-sidebar">
-                <div class="user-profile main_color" style="background: url(assets/images/background/user-info_.jpg) no-repeat;">
+                <div class="user-profile main_color">
                     <div class="profile-img">
                         @*<img src="assets/images/users/profile.png" alt="user" />*@
                         <img src="~/images/user.png" alt="user" />
@@ -752,41 +752,35 @@
     <script type="text/javascript" src="~/basic/check_timeout_session.js?f=@dHoy.ToString("yyyyMMddhhmmss")"></script>
     <script type="text/javascript" src="~/basic/layout.js?f=@dHoy.ToString("yyyyMMddhhmmss")"></script>
     @{
-        if (Model.DynamicData.id_tipousuario == 1) //admin
+        if (Model.DynamicData.vista == "HOME")
         {
-            if (Model.DynamicData.vista == "HOME")
-            {
 
-            }
-            else if (Model.DynamicData.vista == "REPORTE")
-            {
-                <script src="~/assets/plugins/flot/excanvas.js"></script>
-                <script src="~/assets/plugins/flot/jquery.flot.js"></script>
-                <script src="~/assets/plugins/flot/jquery.flot.pie.js"></script>
-                <script src="~/assets/plugins/flot.tooltip/js/jquery.flot.tooltip.min.js"></script>
-
-                <script src="~/assets/plugins/raphael/raphael-min.js"></script>
-                <script src="~/assets/plugins/morrisjs/morris.js"></script>
-
-                <script type="text/javascript" src="~/basic/reporte.js?f=@dHoy.ToString("yyyyMMddhhmmss")"></script>
-
-                <script src="~/assets/plugins/echarts/echarts-all.js"></script>
-                <script type="text/javascript" src="~/basic/visitas.js?f=@dHoy.ToString("yyyyMMddhhmmss")"></script>
-            }
         }
-        else // 2 cliente - 0 invitado
+        else if (Model.DynamicData.vista == "CAJA")
         {
-            <script type="text/javascript" src="~/basic/voz.js?f=@dHoy.ToString("yyyyMMddhhmmss")"></script>
-            <script type="text/javascript" src="~/basic/call.js?f=@dHoy.ToString("yyyyMMddhhmmss")"></script>
-            <script type="text/javascript" src="~/basic/whatsapp.js?f=@dHoy.ToString("yyyyMMddhhmmss")"></script>
-            <script type="text/javascript" src="~/basic/chat.js?f=@dHoy.ToString("yyyyMMddhhmmss")"></script>
-            if (Model.DynamicData.vista == "ATENCION")
-            {
-                <script type="text/javascript" src="~/basic/atencion.js?f=@dHoy.ToString("yyyyMMddhhmmss")"></script>
-            }
-            <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-            <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+            <script src="~/assets/plugins/flot/excanvas.js"></script>
+            <script src="~/assets/plugins/flot/jquery.flot.js"></script>
+            <script src="~/assets/plugins/flot/jquery.flot.pie.js"></script>
+            <script src="~/assets/plugins/flot.tooltip/js/jquery.flot.tooltip.min.js"></script>
+
+            <script src="~/assets/plugins/raphael/raphael-min.js"></script>
+            <script src="~/assets/plugins/morrisjs/morris.js"></script>
+
+            <script type="text/javascript" src="~/basic/caja.js?f=@dHoy.ToString("yyyyMMddhhmmss")"></script>
+
+            <script src="~/assets/plugins/echarts/echarts-all.js"></script>
         }
+        
+        // <script type="text/javascript" src="~/basic/voz.js?f=@dHoy.ToString("yyyyMMddhhmmss")"></script>
+        // <script type="text/javascript" src="~/basic/call.js?f=@dHoy.ToString("yyyyMMddhhmmss")"></script>
+        // <script type="text/javascript" src="~/basic/whatsapp.js?f=@dHoy.ToString("yyyyMMddhhmmss")"></script>
+        // <script type="text/javascript" src="~/basic/chat.js?f=@dHoy.ToString("yyyyMMddhhmmss")"></script>
+        // if (Model.DynamicData.vista == "ATENCION")
+        // {
+        //     <script type="text/javascript" src="~/basic/atencion.js?f=@dHoy.ToString("yyyyMMddhhmmss")"></script>
+        // }
+        // <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+        // <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     }
     @RenderSection("scripts", required: false)
 

@@ -44,12 +44,12 @@ namespace PsycoApp.BL
             return lista;
         }
 
-        public List<CuadreCaja> listar_cuadre_caja(string usuario, int pagina, int tamanoPagina)
+        public List<CuadreCaja> listar_cuadre_caja(string usuario, int pagina, int tamanoPagina, int mes, int anio)
         {
             List<CuadreCaja> lista = new List<CuadreCaja>();
             try
             {
-                lista = cajaDA.listar_cuadre_caja(usuario, pagina, tamanoPagina);
+                lista = cajaDA.listar_cuadre_caja(usuario, pagina, tamanoPagina, mes, anio);
             }
             catch (Exception)
             {
@@ -58,12 +58,26 @@ namespace PsycoApp.BL
             return lista;
         }
 
-        public List<CuadreCaja> listar_resumen_caja(string usuario, int mes, int año)
+        public List<CuadreCaja> resumen_caja_x_usuario(string usuario, int mes, int año)
         {
             List<CuadreCaja> lista = new List<CuadreCaja>();
             try
             {
-                lista = cajaDA.listar_resumen_caja(usuario, mes, año);
+                lista = cajaDA.resumen_caja_x_usuario(usuario, mes, año);
+            }
+            catch (Exception)
+            {
+                lista.Clear();
+            }
+            return lista;
+        }
+
+        public List<CuadreCaja> resumen_caja_x_forma_pago(string usuario, int mes, int año)
+        {
+            List<CuadreCaja> lista = new List<CuadreCaja>();
+            try
+            {
+                lista = cajaDA.resumen_caja_x_forma_pago(usuario, mes, año);
             }
             catch (Exception)
             {
