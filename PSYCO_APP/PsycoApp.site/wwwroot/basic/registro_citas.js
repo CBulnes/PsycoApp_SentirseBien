@@ -741,6 +741,52 @@ function atender_cita() {
     });
 }
 
+function cancelar_cita() {
+    $.ajax({
+        url: "/RegistroCitas/CancelarCita",
+        type: "POST",
+        data: { id_cita: id_cita_ },
+        success: function (data) {
+            if (data.estado) {
+                /*alertSuccess("Muy bien", "Cita guardada exitosamente.");*/
+                //alerta("Cita guardada exitosamente.", 'info');
+                //alert("Cita atendida exitosamente.");
+                Swal.fire({
+                    icon: "success",
+                    text: "Cita cancelada exitosamente.",
+                });
+
+                //$("#load_data").hide();
+                //recargarInstruccion();
+                $('#txtHora').val('');
+                $('#cboDoctor, #cboPaciente, #cboServicio').val('-1');
+                $('#mdl_cita').modal('hide');
+
+                $('.calendar-container').html('<div id="my-calendar"></div>');
+                cargar_citas();
+            } else {
+                /*alertWarning("Atención", data.message);*/
+                //alerta(data.descripcion, 'info');
+                alert(data.descripcion);
+                //$("#load_data").hide();
+            }
+        },
+        error: function (response) {
+            /*alertWarning("Atención", "Ocurrió un error al guardar la cita.");*/
+            //alerta("Ocurrió un error al guardar la cita.", 'info');
+            //alert("Ocurrió un error al atender la cita.");
+            Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: "Ocurrió un error al cancelar la cita.",
+            });
+            //$("#load_data").hide();
+        },
+        complete: function () {
+        }
+    });
+}
+
 function validateHhMm(e) {
     var isValid = /^([0-1]?[0-9]|2[0-4]):([0-5][0-9])(:[0-5][0-9])?$/.test(e.value);
 
