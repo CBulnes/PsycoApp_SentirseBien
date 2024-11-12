@@ -35,6 +35,7 @@ namespace PsycoApp.DA
                         {
                             Id = (int)reader["Id"],
                             Nombre = (string)reader["Nombre"],
+                            Apellido = (string)reader["Apellido"],
                             FechaNacimiento = (DateTime)reader["FechaNacimiento"],
                             DocumentoTipo = (string)reader["DocumentoTipo"],
                             DocumentoNumero = (string)reader["DocumentoNumero"],
@@ -71,6 +72,7 @@ namespace PsycoApp.DA
                         {
                             Id = (int)reader["Id"],
                             Nombre = (string)reader["Nombre"],
+                            Apellido = (string)reader["Apellido"],
                             FechaNacimiento = (DateTime)reader["FechaNacimiento"],
                             DocumentoTipo = (string)reader["DocumentoTipo"],
                             DocumentoNumero = (string)reader["DocumentoNumero"],
@@ -110,13 +112,14 @@ namespace PsycoApp.DA
                         {
                             Id = reader.GetInt32(0),
                             Nombre = reader.GetString(1),
-                            FechaNacimiento = reader.GetDateTime(2),
-                            DocumentoTipo = reader.GetString(3),
-                            DocumentoNumero = reader.GetString(4),
-                            Telefono = reader.GetString(5),
-                            EstadoCivil = reader.GetString(6),
-                            Sexo = reader.GetString(7),
-                            Estado = reader.GetString(8)
+                            Apellido = reader.GetString(2),
+                            FechaNacimiento = reader.GetDateTime(3),
+                            DocumentoTipo = reader.GetString(4),
+                            DocumentoNumero = reader.GetString(5),
+                            Telefono = reader.GetString(6),
+                            EstadoCivil = reader.GetString(7),
+                            Sexo = reader.GetString(8),
+                            Estado = reader.GetString(9)
                         });
                     }
                 }
@@ -133,6 +136,7 @@ namespace PsycoApp.DA
                 command.CommandType = CommandType.StoredProcedure;
 
                 command.Parameters.AddWithValue("@Nombre", paciente.Nombre);
+                command.Parameters.AddWithValue("@Apellido", paciente.Apellido);
                 command.Parameters.AddWithValue("@FechaNacimiento", paciente.FechaNacimiento);
                 command.Parameters.AddWithValue("@DocumentoTipo", paciente.DocumentoTipo);
                 command.Parameters.AddWithValue("@DocumentoNumero", paciente.DocumentoNumero);
@@ -155,6 +159,7 @@ namespace PsycoApp.DA
 
                 command.Parameters.AddWithValue("@Id", paciente.Id);
                 command.Parameters.AddWithValue("@Nombre", paciente.Nombre);
+                command.Parameters.AddWithValue("@Apellido", paciente.Apellido);
                 command.Parameters.AddWithValue("@FechaNacimiento", paciente.FechaNacimiento);
                 command.Parameters.AddWithValue("@DocumentoTipo", paciente.DocumentoTipo);
                 command.Parameters.AddWithValue("@DocumentoNumero", paciente.DocumentoNumero);

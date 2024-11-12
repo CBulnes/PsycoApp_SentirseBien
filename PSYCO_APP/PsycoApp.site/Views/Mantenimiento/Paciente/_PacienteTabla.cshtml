@@ -19,16 +19,16 @@
             {
                 <tr>
                     <td class="text-center">@(paciente.index + 1)</td>
-                    <td>@paciente.item.Nombre</td>
+                    <td>@paciente.item.Nombre @paciente.item.Apellido</td>
                     <td>@paciente.item.DocumentoTipo - @paciente.item.DocumentoNumero</td>
                   <td>
                     @if (@paciente.item.Estado == "1")
                     {
-                        <span>Registrado</span>
+                        <span>Habilitado</span>
                     }
-                        else if (@paciente.item.Estado == "2")
+                        else if (@paciente.item.Estado == "0")
                     {
-                        <span>Atendido</span>
+                        <span>Deshabilitado</span>
                     }
                     else
                     {
@@ -40,7 +40,7 @@
                     <td>
                         <!-- Acciones como editar o eliminar -->
                         <button class="btn btn-sm sb-pa-container-table-button-edit" onclick="editarPaciente(@paciente.item.Id)">Editar</button>
-                        <button class="btn btn-sm sb-pa-container-table-button-delet" onclick="eliminarPaciente(@paciente.item.Id)">Eliminar</button>
+                        <button class="btn btn-sm sb-psi-container-table-button-delet" onclick="eliminarPaciente(@paciente.item.Id, @paciente.item.Estado)">@(paciente.item.Estado == "1" ? "Deshabilitar" : "Habilitar")</button>
                     </td>
                 </tr>
             }

@@ -33,6 +33,7 @@ namespace PsycoApp.site.Controllers.Mantenimiento
                 {
                     Id = p.Id,
                     Nombre = p.Nombre,
+                    Apellido = p.Apellido,
                     DocumentoNumero = p.DocumentoNumero,
                     Estado = p.Estado,
                     DocumentoTipo = p.DocumentoTipo,
@@ -102,6 +103,7 @@ namespace PsycoApp.site.Controllers.Mantenimiento
                 {
                     Id = p.Id,
                     Nombre = p.Nombre,
+                    Apellido = p.Apellido,
                     DocumentoNumero = p.DocumentoNumero,
                     Estado = p.Estado,
                     DocumentoTipo = p.DocumentoTipo,
