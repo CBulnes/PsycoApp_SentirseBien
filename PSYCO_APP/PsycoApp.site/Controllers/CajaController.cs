@@ -83,45 +83,52 @@ namespace PsycoApp.site.Controllers
         [HttpPost]
         public async Task<IActionResult> Buscar(int pageNumber = 1, int pageSize = 10, int mes = -1, int anio = -1)
         {
-            var usuario = Convert.ToString(HttpContext.Session.GetString("login"));
-            string url = $"{apiUrl}/listar_cuadre_caja/{usuario}/{pageNumber}/{pageSize}/{mes}/{anio}";
-
-            var registros = await GetFromApiAsync<List<PsycoApp.entities.CuadreCaja>>(url);
-
-            dynamic obj = new System.Dynamic.ExpandoObject();
-            string path = $"{this.Request.Scheme}://{this.Request.Host}{this.Request.PathBase}";
-            obj.path = path;
-            obj.call_center = Helper.GetCallCenter();
-            obj.horario_atencion = Helper.GetHorario();
-            obj.whatsapp = Helper.GetWhatsapp();
-            obj.nombres = HttpContext.Session.GetString("nombres");
-            obj.apellidos = HttpContext.Session.GetString("apellidos");
-            obj.id_usuario = HttpContext.Session.GetInt32("id_usuario");
-            obj.id_tipousuario = HttpContext.Session.GetInt32("id_tipousuario");
-            obj.tipo_documento = HttpContext.Session.GetString("tipo_documento");
-            obj.num_documento = HttpContext.Session.GetString("num_documento");
-            obj.vista = "CAJA";
-
-            var viewModelContainer = new ViewModelContainer<IEnumerable<PsycoApp.site.Models.CuadreCaja>>
+            if (!string.IsNullOrEmpty(HttpContext.Session.GetString("nombres") as string))
             {
-                Model = registros.Select(p => new PsycoApp.site.Models.CuadreCaja
+                var usuario = Convert.ToString(HttpContext.Session.GetString("login"));
+                string url = $"{apiUrl}/listar_cuadre_caja/{usuario}/{pageNumber}/{pageSize}/{mes}/{anio}";
+
+                var registros = await GetFromApiAsync<List<PsycoApp.entities.CuadreCaja>>(url);
+
+                dynamic obj = new System.Dynamic.ExpandoObject();
+                string path = $"{this.Request.Scheme}://{this.Request.Host}{this.Request.PathBase}";
+                obj.path = path;
+                obj.call_center = Helper.GetCallCenter();
+                obj.horario_atencion = Helper.GetHorario();
+                obj.whatsapp = Helper.GetWhatsapp();
+                obj.nombres = HttpContext.Session.GetString("nombres");
+                obj.apellidos = HttpContext.Session.GetString("apellidos");
+                obj.id_usuario = HttpContext.Session.GetInt32("id_usuario");
+                obj.id_tipousuario = HttpContext.Session.GetInt32("id_tipousuario");
+                obj.tipo_documento = HttpContext.Session.GetString("tipo_documento");
+                obj.num_documento = HttpContext.Session.GetString("num_documento");
+                obj.vista = "CAJA";
+
+                var viewModelContainer = new ViewModelContainer<IEnumerable<PsycoApp.site.Models.CuadreCaja>>
                 {
-                    paciente = p.paciente,
-                    fecha_transaccion = p.fecha_transaccion,
-                    estado_cita = p.estado_cita,
-                    servicio = p.servicio,
-                    forma_pago = p.forma_pago,
-                    detalle_transferencia = p.detalle_transferencia,
-                    importe = p.importe,
-                    estado_orden = p.estado_orden
-                }).ToList(),
-                DynamicData = obj
-            };
+                    Model = registros.Select(p => new PsycoApp.site.Models.CuadreCaja
+                    {
+                        paciente = p.paciente,
+                        fecha_transaccion = p.fecha_transaccion,
+                        estado_cita = p.estado_cita,
+                        servicio = p.servicio,
+                        forma_pago = p.forma_pago,
+                        detalle_transferencia = p.detalle_transferencia,
+                        importe = p.importe,
+                        estado_orden = p.estado_orden
+                    }).ToList(),
+                    DynamicData = obj
+                };
 
-            ViewBag.PageNumber = pageNumber;
-            ViewBag.PageSize = pageSize;
+                ViewBag.PageNumber = pageNumber;
+                ViewBag.PageSize = pageSize;
 
-            return PartialView("~/Views/Caja/_PacienteTabla.cshtml", viewModelContainer);
+                return PartialView("~/Views/Caja/_CajaTabla.cshtml", viewModelContainer.Model);
+            }
+            else
+            {
+                return RedirectToAction("Index", "Login");
+            }
         }
 
         [HttpGet]
