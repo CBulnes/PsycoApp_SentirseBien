@@ -45,5 +45,11 @@ namespace PsycoApp.BL
         {
             _pacienteDA.EliminarPaciente(id);
         }
+
+        public List<entities.Paciente> listar_pacientes_combo()
+        {
+            return _pacienteDA.listar_pacientes_combo();
+        }
+
     }
 }

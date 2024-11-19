@@ -234,7 +234,7 @@ namespace PsycoApp.DA
             return lista;
         }
 
-        public List<Cita> citas_usuario(int id_usuario, int id_paciente, string main_path, string random_str)
+        public List<Cita> citas_usuario(int id_usuario, int id_paciente, int id_doctor, string main_path, string random_str)
         {
             List<Cita> lista = new List<Cita>();
             try
@@ -244,6 +244,7 @@ namespace PsycoApp.DA
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.Add("@id_usuario", SqlDbType.Int).Value = id_usuario;
                 cmd.Parameters.Add("@id_paciente", SqlDbType.Int).Value = id_paciente;
+                cmd.Parameters.Add("@id_doctor", SqlDbType.Int).Value = id_doctor;
 
                 SqlDataAdapter da = new SqlDataAdapter(cmd);
                 DataTable dt = new DataTable();

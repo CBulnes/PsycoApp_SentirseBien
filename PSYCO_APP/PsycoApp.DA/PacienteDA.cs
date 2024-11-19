@@ -5,6 +5,7 @@ using System.Data;
 using System.Text;
 using PsycoApp.entities;
 using PsycoApp.DA.SQLConnector;
+using PsycoApp.utilities;
 
 namespace PsycoApp.DA
 {
@@ -186,5 +187,35 @@ namespace PsycoApp.DA
                 _connection.Close();
             }
         }
+
+        public List<entities.Paciente> listar_pacientes_combo()
+        {
+            List<entities.Paciente> lista = new List<entities.Paciente>();
+            try
+            {
+                cn.Open();
+                SqlCommand cmd = new SqlCommand(Procedures.sp_listar_pacientes_combo, cn);
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                SqlDataAdapter da = new SqlDataAdapter(cmd);
+                DataTable dt = new DataTable();
+                da.Fill(dt);
+
+                foreach (DataRow row in dt.Rows)
+                {
+                    entities.Paciente item = new entities.Paciente();
+                    item.Id = Convert.ToInt32(row["id_paciente"]);
+                    item.Nombre = Convert.ToString(row["nombres"]);
+                    lista.Add(item);
+                }
+            }
+            catch (Exception e)
+            {
+                lista.Clear();
+            }
+            cn.Close();
+            return lista;
+        }
+
     }
 }

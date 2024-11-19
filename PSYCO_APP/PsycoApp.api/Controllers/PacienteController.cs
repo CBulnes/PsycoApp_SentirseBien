@@ -102,5 +102,20 @@ namespace PsycoApp.api.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+        [HttpGet("listar_pacientes_combo")]
+        public ActionResult<List<entities.Paciente>> listar_pacientes_combo()
+        {
+            List<entities.Paciente> lista = new List<entities.Paciente>();
+            try
+            {
+                lista = _pacienteBL.listar_pacientes_combo();
+            }
+            catch (Exception e)
+            {
+                lista.Clear();
+            }
+            return lista;
+        }
     }
 }

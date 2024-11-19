@@ -16,9 +16,10 @@ function cargar_citas() {
     $("#txtMontoPactado, #txtMontoPagado, #txtMontoPendiente").inputmask({ 'alias': 'numeric', allowMinus: false, digits: 2, max: 999.99 });
 
     var filtroPaciente = $('#cboPacienteFiltro').val();
+    var filtroDoctor = $('#cboDoctorFiltro').val();
 
     $.ajax({
-        url: '/RegistroCitas/CitasUsuario?idPaciente=' + filtroPaciente,
+        url: '/RegistroCitas/CitasUsuario?idPaciente=' + filtroPaciente + '&idDoctor=' + filtroDoctor,
         type: "GET",
         data: {},
         success: function (data) {
@@ -449,6 +450,31 @@ function mostrar_historial(id_cita) {
     $('#divHistorial').html(html);
 }
 
+function cargar_lista_pacientes() {
+    var html = '';
+    $.ajax({
+        url: "/RegistroCitas/listar_pacientes",
+        type: "GET",
+        data: {},
+        async: false,
+        beforeSend: function () {
+            html += '<option value="-1">Seleccionar</option>';
+        },
+        success: function (data) {
+            for (var item of data) {
+                html += '<option value="' + item.id + '">' + item.nombre + '</option>';
+            }
+        },
+        error: function (response) {
+            html = '<option value="-1">Seleccionar</option>';
+        },
+        complete: function () {
+            $('#cboPaciente').html(html);
+            $('#cboPacienteFiltro').html(html);
+        }
+    });
+}
+cargar_lista_pacientes();
 function cargar_lista_doctores() {
     var html = '';
     $.ajax({
@@ -469,6 +495,7 @@ function cargar_lista_doctores() {
         },
         complete: function () {
             $('#cboDoctor').html(html);
+            $('#cboDoctorFiltro').html(html);
         }
     });
 }

@@ -16,6 +16,7 @@ namespace PsycoApp.site.Controllers
     {
         private string url_centros_atencion = Helper.GetUrlApi() + "/api/centroatencion/listar_centros";
         private string url_lista_psicologos = Helper.GetUrlApi() + "/api/psicologo/listar_psicologos_combo";
+        private string url_lista_pacientes = Helper.GetUrlApi() + "/api/paciente/listar_pacientes_combo";
         private string url_registrar_cita = Helper.GetUrlApi() + "/api/cita/registrar_cita";
         private string url_confirmar_cita = Helper.GetUrlApi() + "/api/cita/confirmar_cita";
         private string url_procesar_cita = Helper.GetUrlApi() + "/api/cita/procesar_cita";
@@ -109,6 +110,25 @@ namespace PsycoApp.site.Controllers
                 url = url_lista_psicologos;
                 res = ApiCaller.consume_endpoint_method(url, null, "GET");
                 lista = JsonConvert.DeserializeObject<List<entities.Psicologo>>(res);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                lista.Clear();
+            }
+            return lista;
+        }
+
+        [HttpGet]
+        public ActionResult<List<entities.Paciente>> listar_pacientes()
+        {
+            List<entities.Paciente> lista = new List<entities.Paciente>();
+            string res = "";
+            try
+            {
+                url = url_lista_pacientes;
+                res = ApiCaller.consume_endpoint_method(url, null, "GET");
+                lista = JsonConvert.DeserializeObject<List<entities.Paciente>>(res);
             }
             catch (Exception ex)
             {
@@ -253,14 +273,14 @@ namespace PsycoApp.site.Controllers
         [HttpGet]
         //[AllowAnonymous]
         //[ResponseCache(NoStore = true, Duration = 0)]
-        public async Task<List<Cita>> CitasUsuario(int idPaciente)
+        public async Task<List<Cita>> CitasUsuario(int idPaciente, int idDoctor)
         {
             int id_usuario = Convert.ToInt32(HttpContext.Session.GetInt32("id_usuario"));
             List<Cita> lista = new List<Cita>();
             string res = "";
             try
             {
-                url = url_citas_usuario + "/" + id_usuario + "/" + idPaciente;
+                url = url_citas_usuario + "/" + id_usuario + "/" + idPaciente + "/" + idDoctor;
                 res = ApiCaller.consume_endpoint_method(url, null, "GET");
                 lista = JsonConvert.DeserializeObject<List<Cita>>(res);
             }
