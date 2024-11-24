@@ -45,7 +45,7 @@ namespace PsycoApp.DA
             }
             catch (Exception e)
             {
-                usuario.validacion = "Ocurrió un error al validar sus credenciales";
+                usuario.validacion = e.Message;
             }
             cn.Close();
             return usuario;

@@ -1,4 +1,4 @@
-﻿using Common.Logger;
+﻿//using Common.Logger;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -34,7 +34,7 @@ namespace PsycoApp.utilities
                 {
                     System.IO.Directory.CreateDirectory(path);
                 }
-                Log.Write(path + "log-", msg);
+                //Log.Write(path + "log-", msg);
             }
         }
 

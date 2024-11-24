@@ -31,6 +31,8 @@ namespace PsycoApp.api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddApplicationInsightsTelemetry(Configuration["APPLICATIONINSIGHTS_CONNECTION_STRING"]);
+            
             services.AddControllers();
 
             string semilla = "PsycoApp2024";
@@ -63,11 +65,11 @@ namespace PsycoApp.api
                 });
             });
 
-            services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Psyco App", Version = "1.0" });
-                c.ResolveConflictingActions(apiDescriptions => apiDescriptions.First());
-            });
+            //services.AddSwaggerGen(c =>
+            //{
+            //    c.SwaggerDoc("v1", new OpenApiInfo { Title = "Psyco App", Version = "1.0" });
+            //    c.ResolveConflictingActions(apiDescriptions => apiDescriptions.First());
+            //});
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -79,8 +81,8 @@ namespace PsycoApp.api
             }
 
             // swagger
-            app.UseSwagger();
-            app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "App V1"));
+            //app.UseSwagger();
+            //app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "App V1"));
 
             //app.UseHttpsRedirection();
 
