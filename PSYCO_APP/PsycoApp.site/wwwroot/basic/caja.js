@@ -60,6 +60,7 @@ function getResumenTipoPago(mes, anio) {
 
     $.get('/Caja/ListarResumenCajaPorFormaPago?mes=' + mes + "&anio=" + anio)
         .done(function (data) {
+            console.log('caja');
             var data_resumen = [];
             if (data.length > 0) {
                 data_resumen = data;
@@ -143,13 +144,21 @@ function update() {
 update();
 
 function generar_grafico(data_nps) {
+
     $('#reporte_nps').empty();
     var data_nps_dona = [];
     var i = 0;
+    data_nps.forEach(item => {
+        if (item.detalle_transferencia) {
+            console.log(item.detalle_transferencia);
+            item.detalle_transferencia = item.detalle_transferencia.replace(/^S\//, ' ');
+            item.detalle_transferencia = item.detalle_transferencia.replace(/S\/\./g, ' ').trim();
+        }
+    });
     for (var item of data_nps) {
         i++;
         var item_ = {
-            label: item.forma_pago + (item.detalle_transferencia == '' ? '' : (' - ') + item.detalle_transferencia),
+            label: item.forma_pago + (item.detalle_transferencia == '' ? '' : (' - ') + item.detalle_transferencia+' ' + item.importe),
             data: parseInt(item.cantidad),
             color: colors[i]
         };

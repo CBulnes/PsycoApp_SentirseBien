@@ -63,7 +63,7 @@ if (id_tipousuario == 1) {
 
 function generar_grafico(id_grafico, array_data) {
     var myChart01 = echarts.init(document.getElementById(id_grafico));
-
+    console.log(array_data);
     var tipos = [];
     var meses = [];
     var colecciones = [];

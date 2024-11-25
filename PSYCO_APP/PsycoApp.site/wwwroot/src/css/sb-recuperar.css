@@ -15,6 +15,7 @@
     filter: blur(1.5rem);
 }
 
+
 .sb-recupass-bg img {
     width: 100%;
     height: 100%;
@@ -250,5 +251,27 @@
 
 .sb-recupass-form-block p a:hover {
     color: var(--colorsecundario);
+}
+@media screen and (width <= 800px) {
+    .sb-recupass-container {
+        width: 85%;
+    }
+
+    .sb-recupass-imagen {
+        display: none;
+    }
+
+    .sb-recupass-form {
+        width: 100%;
+    }
+
+        .sb-recupass-form > p {
+            text-align: center;
+        }
+
+    .sb-recupass-form-block p {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
 }
 

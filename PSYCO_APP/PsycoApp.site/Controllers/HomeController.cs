@@ -59,20 +59,19 @@ namespace PsycoApp.site.Controllers
                 obj.num_documento = HttpContext.Session.GetString("num_documento");
                 obj.vista = "HOME";
                 obj.call_center_invitado = Helper.GetCallCenterInvitado();
-
                 string vista = "";
-                if (obj.id_tipousuario == 1) //admin
-                {
+                //if (obj.id_tipousuario == 1) //admin
+                //{
                     vista = "IndexAdmin";
-                }
-                if (obj.id_tipousuario == 2) //cliente
-                {
-                    vista = "Index";
-                }
-                if (obj.id_tipousuario == 3) //doctor
-                {
-                    vista = "IndexDoctor";
-                }
+                //}
+                //if (obj.id_tipousuario == 2) //cliente
+                //{
+                //    vista = "Index";
+                //}
+                //if (obj.id_tipousuario == 3) //doctor
+                //{
+                //    vista = "IndexDoctor";
+                //}
                 var viewModelContainer = new ViewModelContainer<List<PsycoApp.site.Models.Paciente>>
                 {
                     DynamicData = obj
