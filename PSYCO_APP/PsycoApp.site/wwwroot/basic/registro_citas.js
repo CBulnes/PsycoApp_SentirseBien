@@ -431,6 +431,7 @@ function cargar_datos_cita(id_cita, id_doctor, id_paciente, fecha, hora, estado,
     estado_ = estado;
     id_cita_ = id_cita;
 
+    verificar_si_es_psicologo();
     verificar_disponibilidad();
     mostrar_historial(id_cita);
 }
@@ -496,10 +497,19 @@ function cargar_lista_doctores() {
         complete: function () {
             $('#cboDoctor').html(html);
             $('#cboDoctorFiltro').html(html);
+
+            verificar_si_es_psicologo();
         }
     });
 }
 cargar_lista_doctores();
+
+function verificar_si_es_psicologo() {
+    if (id_tipousuario == 4) {
+        $('#cboDoctorFiltro, #cboDoctor').attr('disabled', true);
+        $('#cboDoctorFiltro, #cboDoctor').val(id_psicologo);
+    }
+}
 
 function cerrar_modal_cita() {
     $('#mdl_cita').modal('hide');

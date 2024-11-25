@@ -5,6 +5,11 @@
     var dHoy = DateTime.Now;
 }
 <link rel="stylesheet" href="~/src/css/sb-pacientes.css?ver=005" />
+<style>
+    .yourTableClass tr:nth-child(4n+1) td, .yourTableClass tr:nth-child(4n+3) td {
+        background: #c5ffcf;
+    }
+</style>
 
 <div class="sb-pa-container" style="width: 96%;">
     <div class="sb-pa-container-buscar">
@@ -75,14 +80,14 @@
             <div class="col-lg-6">
                 <div class="card">
                     <div class="card-body">
-                        <table class="table">
+                        <table class="table table-hover yourTableClass">
                             <thead>
-                                <tr>
-                                    <th class="text-center" style="width: 80px;">#</th>
-                                    <th class="text-center">
+                                <tr class="bg-success">
+                                    <th class="text-center" style="width: 80px; color: #FFFFFF;">#</th>
+                                    <th class="text-center" style="color: #FFFFFF;">
                                         Importe
                                     </th>
-                                    <th class="text-center">
+                                    <th class="text-center" style="color: #FFFFFF;">
                                         Usuario
                                     </th>
                                 </tr>

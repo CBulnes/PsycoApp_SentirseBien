@@ -48,6 +48,7 @@ namespace PsycoApp.site.Controllers
                     HttpContext.Session.SetString("nombres", usuario.nombres);
                     HttpContext.Session.SetString("apellidos", usuario.apellidos);
                     HttpContext.Session.SetInt32("id_tipousuario", usuario.id_tipousuario);
+                    HttpContext.Session.SetInt32("id_psicologo", usuario.id_psicologo);
                     HttpContext.Session.SetString("tipousuario", usuario.tipousuario.ToUpper());
                     HttpContext.Session.SetString("tipo_documento", usuario.tipo_documento);
                     HttpContext.Session.SetString("num_documento", usuario.num_documento);

@@ -34,6 +34,7 @@ namespace PsycoApp.site.Controllers
                 obj.apellidos = HttpContext.Session.GetString("apellidos");
                 obj.id_usuario = HttpContext.Session.GetInt32("id_usuario");
                 obj.id_tipousuario = HttpContext.Session.GetInt32("id_tipousuario");
+                obj.id_psicologo = HttpContext.Session.GetInt32("id_psicologo");
                 obj.tipo_documento = HttpContext.Session.GetString("tipo_documento");
                 obj.num_documento = HttpContext.Session.GetString("num_documento");
                 obj.vista = "REPORTE";

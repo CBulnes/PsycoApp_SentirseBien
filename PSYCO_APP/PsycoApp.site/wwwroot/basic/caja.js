@@ -35,9 +35,9 @@ function verResumenUsuario(recargar) {
             if (data.length > 0) {
                 for (var item of data) {
                     html += '<tr>';
-                    html += '<td>' + contador + '</td>';
+                    html += '<td class="text-center">' + contador + '</td>';
                     html += '<td>' + item.importe + '</td>';
-                    html += '<td>' + item.usuario + '</td>';
+                    html += '<td class="text-center">' + item.usuario + '</td>';
                     html += '</tr>';
                     contador++;
                 }
@@ -158,7 +158,7 @@ function generar_grafico(data_nps) {
     for (var item of data_nps) {
         i++;
         var item_ = {
-            label: item.forma_pago + (item.detalle_transferencia == '' ? '' : (' - ') + item.detalle_transferencia+' ' + item.importe),
+            label: item.forma_pago + (item.detalle_transferencia == '' ? '' : (' - ') + item.detalle_transferencia) + ' - ' + item.importe,
             data: parseInt(item.cantidad),
             color: colors[i]
         };

@@ -35,6 +35,7 @@ namespace PsycoApp.DA
                     usuario.nombres = Convert.ToString(row["nombres"]);
                     usuario.apellidos = Convert.ToString(row["apellidos"]);
                     usuario.id_tipousuario = Convert.ToInt32(row["id_tipousuario"]);
+                    usuario.id_psicologo = Convert.ToInt32(row["id_psicologo"]);
                     usuario.tipousuario = Convert.ToString(row["tipousuario"]);                    
                     usuario.tipo_documento = Convert.ToString(row["tipo_documento"]);
                     usuario.num_documento = Convert.ToString(row["num_documento"]);
