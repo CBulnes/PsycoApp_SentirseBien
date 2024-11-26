@@ -42,6 +42,7 @@ namespace PsycoApp.DA
                     usuario.validacion = Convert.ToString(row["validacion"]);
                     usuario.test_actual = Convert.ToInt32(row["test_actual"]);
                     usuario.login = Convert.ToString(row["login"]);
+                    usuario.id_sede = Convert.ToInt32(row["id_sede"]);
                 }
             }
             catch (Exception e)

@@ -711,6 +711,33 @@
         </div>
     </div>
 
+    <div id="mdl_sede" class="modal" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="true">
+        <div class="modal-dialog modal-md" role="document" style="height: 90%; display: grid; place-items: center;">
+            <div class="modal-content sb-reg-citas-popup-container">
+                <div class="modal-header sb-reg-citas-popup-title">
+                    <h5 class="modal-title">Selección de sede</h5>
+                </div>
+                <div class="modal-body sb-reg-citas-popup-body">
+
+                    <div class="sb-reg-citas-popup-tab-panel">
+
+                        <div class="sb-reg-citas-popup-tab-panel-block">
+                            <div class="sb-reg-citas-popup-tab-panel-block-item">
+                                <span class="label-form">Sede</span>
+                                <select class="form-control" id="cboSedeChange"></select>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary main_color sb-reg-citas-popup-button" onclick="guardar_sede()">Aceptar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- JS FUNCTIONS -->
     <script src="~/assets/plugins/bootstrap/js/popper.min.js"></script>
     <script src="~/assets/plugins/bootstrap/js/bootstrap.min.js"></script>
@@ -790,7 +817,79 @@
     @{
         if (Model.DynamicData.vista == "HOME")
         {
+            <script>
+                function guardar_sede() {
+                    var id_sede = $('#cboSedeChange').val();
 
+                    if (id_sede == -1){
+                        Swal.fire({
+                            icon: "error",
+                            title: "Oops...",
+                            text: "Seleccione la sede en la que se encuentra."
+                        });
+                        return;
+                    }
+
+                    $.ajax({
+                        url: "/RegistroCitas/guardar_sede_sesion?id_sede=" + id_sede,
+                        type: "GET",
+                        data: {},
+                        async: false,
+                        success: function (data) {
+                            if (data.estado){
+                                Swal.fire({
+                                    icon: "success",
+                                    text: "Sede guardada exitosamente."
+                                });
+                                $('#mdl_sede').modal('hide');
+                            } else {
+                                Swal.fire({
+                                    icon: "error",
+                                    title: "Oops...",
+                                    text: data.descripcion
+                                });
+                            }
+                        },
+                        error: function (response) {
+                            Swal.fire({
+                                icon: "error",
+                                title: "Oops...",
+                                text: "Ocurrió un error al guardar la sede."
+                            });
+                        }
+                    });
+                }
+
+                function validar_sede_usuario(){
+                    var html = '';
+                    var data_ = '';
+                    $.ajax({
+                        url: "/RegistroCitas/listar_sedes_x_usuario",
+                        type: "GET",
+                        data: {},
+                        async: false,
+                        beforeSend: function () {
+                            html += '<option value="-1">Seleccionar</option>';
+                        },
+                        success: function (data) {
+                            data_ = data;
+                            for (var item of data_) {
+                                html += '<option value="' + item.id + '">' + item.nombre + '</option>';
+                            }
+                        },
+                        error: function (response) {
+                            html = '<option value="-1">Seleccionar</option>';
+                        },
+                        complete: function () {
+                            if (data_.length > 0){
+                                $('#cboSedeChange').html(html);
+                                $('#mdl_sede').modal('show');
+                            }
+                        }
+                    });
+                }
+                validar_sede_usuario();
+            </script>
         }
         else if (Model.DynamicData.vista == "CAJA")
         {

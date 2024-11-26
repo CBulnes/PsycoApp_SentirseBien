@@ -14,6 +14,8 @@ namespace PsycoApp.entities
         public string DocumentoNumero { get; set; }
         public string Telefono { get; set; }
         public string Refrigerio { get; set; }
+        public int IdSedePrincipal { get; set; }
+        public int IdSedeSecundaria { get; set; }
         public int Especialidad { get; set; }
         public string Direccion { get; set; }
         public string Distrito { get; set; }

@@ -53,6 +53,11 @@ namespace PsycoApp.utilities
         public const string sp_listar_citas_doctor = "SP_LISTAR_CITAS_DOCTOR";
 
         #region "psicologos"
+        public const string listar_sedes_x_usuario = "dbo.SP_LISTAR_SEDES_X_USUARIO";
+        public const string listar_sedes_combo = "dbo.SP_LISTAR_SEDES_COMBO";
+        #endregion
+
+        #region "psicologos"
         public const string obtener_psicologo = "dbo.sp_obtener_psicologo";
         public const string buscar_psicologo = "dbo.sp_buscar_psicologo";
         public const string listar_psicologos = "dbo.sp_listar_psicologos";                         //posiblemente deprecado

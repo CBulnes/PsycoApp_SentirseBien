@@ -45,7 +45,9 @@ namespace PsycoApp.DA
                             Distrito = (string)reader["Distrito"],
                             Direccion = (string)reader["Direccion"],
                             Estado = (string)reader["Estado"],
-                            Refrigerio = (string)reader["Refrigerio"]
+                            Refrigerio = (string)reader["Refrigerio"],
+                            IdSedePrincipal = (int)reader["IdSedePrincipal"],
+                            IdSedeSecundaria = (int)reader["IdSedeSecundaria"]
                         };
                     }
                 }
@@ -174,6 +176,8 @@ namespace PsycoApp.DA
                 command.Parameters.AddWithValue("@DocumentoNumero", psicologo.DocumentoNumero);
                 command.Parameters.AddWithValue("@Telefono", psicologo.Telefono);
                 command.Parameters.AddWithValue("@Refrigerio", psicologo.Refrigerio);
+                command.Parameters.AddWithValue("@IdSedePrincipal", psicologo.IdSedePrincipal);
+                command.Parameters.AddWithValue("@IdSedeSecundaria", psicologo.IdSedeSecundaria);
                 command.Parameters.AddWithValue("@Especialidad", psicologo.Especialidad);
                 command.Parameters.AddWithValue("@Direccion", psicologo.Direccion);
                 command.Parameters.AddWithValue("@Distrito", psicologo.Distrito);
@@ -201,6 +205,8 @@ namespace PsycoApp.DA
                 command.Parameters.AddWithValue("@DocumentoNumero", psicologo.DocumentoNumero);
                 command.Parameters.AddWithValue("@Telefono", psicologo.Telefono);
                 command.Parameters.AddWithValue("@Refrigerio", psicologo.Refrigerio);
+                command.Parameters.AddWithValue("@IdSedePrincipal", psicologo.IdSedePrincipal);
+                command.Parameters.AddWithValue("@IdSedeSecundaria", psicologo.IdSedeSecundaria);
                 command.Parameters.AddWithValue("@Especialidad", psicologo.Especialidad);
                 command.Parameters.AddWithValue("@Direccion", psicologo.Direccion);
                 command.Parameters.AddWithValue("@Distrito", psicologo.Distrito);
@@ -244,6 +250,65 @@ namespace PsycoApp.DA
                     entities.Psicologo item = new entities.Psicologo();
                     item.Id = Convert.ToInt32(row["id_psicologo"]);
                     item.Nombre = Convert.ToString(row["nombres"]);
+                    lista.Add(item);
+                }
+            }
+            catch (Exception e)
+            {
+                lista.Clear();
+            }
+            cn.Close();
+            return lista;
+        }
+
+        public List<entities.Sede> listar_sedes_x_usuario_combo(int id_usuario)
+        {
+            List<entities.Sede> lista = new List<entities.Sede>();
+            try
+            {
+                cn.Open();
+                SqlCommand cmd = new SqlCommand(Procedures.listar_sedes_x_usuario, cn);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@id_usuario", id_usuario);
+
+                SqlDataAdapter da = new SqlDataAdapter(cmd);
+                DataTable dt = new DataTable();
+                da.Fill(dt);
+
+                foreach (DataRow row in dt.Rows)
+                {
+                    entities.Sede item = new entities.Sede();
+                    item.Id = Convert.ToInt32(row["Id_Sede"]);
+                    item.Nombre = Convert.ToString(row["Nombre"]);
+                    lista.Add(item);
+                }
+            }
+            catch (Exception e)
+            {
+                lista.Clear();
+            }
+            cn.Close();
+            return lista;
+        }
+
+        public List<entities.Sede> listar_sedes_combo()
+        {
+            List<entities.Sede> lista = new List<entities.Sede>();
+            try
+            {
+                cn.Open();
+                SqlCommand cmd = new SqlCommand(Procedures.listar_sedes_combo, cn);
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                SqlDataAdapter da = new SqlDataAdapter(cmd);
+                DataTable dt = new DataTable();
+                da.Fill(dt);
+
+                foreach (DataRow row in dt.Rows)
+                {
+                    entities.Sede item = new entities.Sede();
+                    item.Id = Convert.ToInt32(row["Id_Sede"]);
+                    item.Nombre = Convert.ToString(row["Nombre"]);
                     lista.Add(item);
                 }
             }

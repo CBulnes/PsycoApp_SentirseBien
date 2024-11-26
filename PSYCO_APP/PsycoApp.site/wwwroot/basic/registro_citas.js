@@ -408,23 +408,23 @@ function cargar_datos_cita(id_cita, id_doctor, id_paciente, fecha, hora, estado,
     if (id_cita == 0) {
         $('#txtFechaReasignar').val('');
         $('#divHorarios, .divConfirmar').show();
-        $('#divReprogramar, #btnConfirmar, #divProcesar, #divAtender, #divEstado').hide();
+        $('#divReprogramar, #btnConfirmar, #divProcesar, #divAtender, #divEstado, #btnCancelar').hide();
     } else {
         $('#ulTabs').show();
         $('#txtFechaReasignar').val(fecha);
         $('#divEstado').show();
 
         if (estado == 'CITADO') {
-            $('#divReprogramar, #divHorarios, #divConfirmar, #btnConfirmar').show();
+            $('#divReprogramar, #divHorarios, #divConfirmar, #btnConfirmar, #btnCancelar').show();
             $('#divProcesar, #divAtender').hide();
         } else if (estado == 'CONFIRMADO') {
-            $('#divProcesar').show();
+            $('#divProcesar, #btnCancelar').show();
             $('#divReprogramar, #divHorarios, .divConfirmar, #divAtender').hide();
         } else if (estado == 'EN PROCESO') {
-            $('#divAtender').show();
+            $('#divAtender, #btnCancelar').show();
             $('#divReprogramar, #divHorarios, .divConfirmar, #divProcesar').hide();
         } else if (estado == 'ATENDIDO') {
-            $('#divReprogramar, #divHorarios, .divConfirmar, #divProcesar, #divAtender').hide();
+            $('#divReprogramar, #divHorarios, .divConfirmar, #divProcesar, #divAtender, #btnCancelar').hide();
         }
     }
 
