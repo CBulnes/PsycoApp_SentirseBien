@@ -438,7 +438,10 @@
         function eliminarPsicologo(id, estado) {
             if (confirm('¿Estás seguro de que quieres ' + (estado == '1' ? 'deshabilitar' : 'habilitar') + ' este psicólogo?')) {
                 $.post(`/Mantenimiento/Psicologo/Eliminar`, { id: id, estado: estado }, function (response) {
-                    alert(response.message);
+                    Swal.fire({
+                        icon: "success",
+                        text: response.message,
+                    });
                     buscarPsicologo(); // Actualiza la lista después de eliminar
                 });
             }
@@ -452,13 +455,16 @@
                 institucion: -1,
                 carrera: -1
             });
-            console.log(global_estudios);
             listarEstudios(global_estudios, idPsicologo);
         }
 
         function eliminarEstudio(idFila, index, idPsicologo) {
             if ($('.rowTbl').length == 1){
-                alert('debes tener al menos un estudio');
+                Swal.fire({
+                    icon: "warning",
+                    title: "Oops...",
+                    text: "Se debe registrar al menos un estudio.",
+                });
                 return;
             }
             $('#' + idFila).remove();
@@ -505,13 +511,20 @@
                 contentType: 'application/json',
                 data: JSON.stringify(dataToSend.psicologo),
                 success: function (response) {
-                    alert(response.message);
+                    Swal.fire({
+                        icon: "success",
+                        text: response.message,
+                    });
                     $('#containerFormulario').hide();
                     $(".sb-admninistrator").css('overflow', 'auto');
                     buscarPsicologo(); // Actualiza la lista después de guardar
                 },
                 error: function (xhr) {
-                    alert('Error al guardar psicólogo.');
+                    Swal.fire({
+                        icon: "Error",
+                        title: "Oops...",
+                        text: "Ocurrió un error al guardar el psicólogo.",
+                    });
                 }
             });
         }

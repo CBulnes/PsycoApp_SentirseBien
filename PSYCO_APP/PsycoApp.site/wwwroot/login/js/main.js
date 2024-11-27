@@ -46,9 +46,12 @@ $('#btn_ing').on('click', function () {
                     $('.preloader').addClass('hide-element');
                     if (response.estado) {
                         window.location.href = path + '/Home';
-                        //show_toast('warning', response.descripcion);
                     } else {
-                        alerta(response.descripcion, 'info');
+                        Swal.fire({
+                            icon: "Error",
+                            title: "Oops...",
+                            text: response.descripcion,
+                        });
                     }
                 }
             });

@@ -19,7 +19,11 @@ function obtener_data_nps(año) {
                 var data_nps = response;
                 pie_nps(data_nps);
             } else {
-                alerta('No hay datos para mostrar', 'info');
+                Swal.fire({
+                    icon: "warning",
+                    title: "Oops...",
+                    text: "No hay datos para mostrar.",
+                });
                 $('#div_graficos').addClass('hide-element');
                 $('.preloader').addClass('hide-element');
             }

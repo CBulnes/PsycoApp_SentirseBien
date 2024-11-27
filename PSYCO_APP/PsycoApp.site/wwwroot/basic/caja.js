@@ -11,7 +11,11 @@ function buscarPago(pageNumber = 1) {
             verResumenUsuario(false);
         })
         .fail(function () {
-            alert('Error en la búsqueda de registros.');
+            Swal.fire({
+                icon: "Error",
+                title: "Oops...",
+                text: "Ocurrió un error al obtener los registros.",
+            });
         });
 }
 verResumenUsuario(true);
@@ -50,27 +54,53 @@ function verResumenUsuario(recargar) {
             getResumenTipoPago(mes, anio);
         })
         .fail(function () {
-            alert('Error en la búsqueda de registros.');
+            Swal.fire({
+                icon: "Error",
+                title: "Oops...",
+                text: "Ocurrió un error al obtener los registros.",
+            });
             getResumenTipoPago(mes, anio);
         });
 }
 
 function getResumenTipoPago(mes, anio) {
     data_resumen = [];
+    var html = '';
+    var contador = 1;
 
     $.get('/Caja/ListarResumenCajaPorFormaPago?mes=' + mes + "&anio=" + anio)
         .done(function (data) {
-            console.log('caja');
             var data_resumen = [];
+
             if (data.length > 0) {
                 data_resumen = data;
+
+                for (var item of data_resumen) {
+                    html += '<tr>';
+                    html += '<td class="text-center">' + contador + '</td>';
+                    html += '<td class="text-center">' + item.cantidad + '</td>';
+                    html += '<td>' + item.importe + '</td>';
+                    html += '<td class="text-center">' + item.forma_pago + '</td>';
+                    html += '<td class="text-center">' + item.detalle_transferencia + '</td>';
+                    html += '</tr>';
+                    contador++;
+                }
             } else {
-                data_resumen = [{'cantidad': 1, 'forma_pago': 'Sin registros', 'detalle_transferencia': ''}]
+                data_resumen = [{ 'cantidad': 1, 'forma_pago': 'Sin registros', 'detalle_transferencia': '' }];
+
+                html += '<tr>';
+                html += '<td style="text-align: center;" colspan="5">No hay datos para mostrar</td>';
+                html += '</tr>';
             }
+            $('#bdResumen2').html(html);
             generar_grafico(data_resumen);
         })
         .fail(function () {
-            alert('Error en la búsqueda de registros.');
+            Swal.fire({
+                icon: "Error",
+                title: "Oops...",
+                text: "Ocurrió un error al obtener los registros.",
+            });
             $('.preloader').addClass('hide-element');
         });
 }
