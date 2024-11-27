@@ -7,6 +7,18 @@
 }
 
 <style>
+    .select2-container .select2-dropdown {
+        position: absolute !important;
+        visibility: visible !important;
+        display: block !important;
+        z-index: 9999 !important; /* Asegura que esté sobre otros elementos */
+    }
+
+    .select2-container--open .select2-dropdown--below {
+        top: 100% !important; /* Asegura que se posicione debajo del input */
+        left: 0 !important;
+        width: 100% !important;
+    }
     input[type="text"]:disabled, select[disabled] {
         background: #FFFFFF !important;
     }
@@ -37,7 +49,7 @@
 <!-- SB - STYLE -->
 
 <link rel="stylesheet" href="~/src/css/sb-registrar-citas.css" />
-
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css" />
 <div class="sb-reg-citas-container">
     <div class="sb-reg-citas-title">
         <p>Registro de Citas</p>
@@ -67,15 +79,15 @@
     <div class="row">
         <div class="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
             <span class="label-form">Paciente</span>
-            <select class="form-control" id="cboPacienteFiltro" onchange="recargar_citas()">
-                <option value="-1">Seleccionar</option>
+            <select class="form-control" id="cboPacienteFiltro" onchange="recargar_citas()" data-placeholder="Elija Paciente">
+                <option value="-1">Todos</option>
             </select>
         </div>
 
         <div class="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
             <span class="label-form">Especialista</span>
-            <select class="form-control" id="cboDoctorFiltro" onchange="recargar_citas()">
-                <option value="-1">Seleccionar</option>
+            <select class="form-control" id="cboDoctorFiltro" onchange="recargar_citas()" data-placeholder="Eija Doctor">
+                <option value="-1">Todos</option>
             </select>
         </div>
     </div>
@@ -361,15 +373,17 @@
 </div>
 
 @section Scripts{
+  
     <link rel="stylesheet" href="~/assets/css/zabuto.css" />
     <link rel="stylesheet" href="~/assets/css/datetimepicker.css" />
 
     <script src="~/basic/zabuto.js?f=@dHoy.ToString("yyyyMMddhhmmss")"></script>
     <script src="~/basic/moments.js?f=@dHoy.ToString("yyyyMMddhhmmss")"></script>
     <script src="~/basic/datetimepicker.js?f=@dHoy.ToString("yyyyMMddhhmmss")"></script>
-
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/3.2.6/jquery.inputmask.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-maskmoney/3.0.2/jquery.maskMoney.min.js"></script>
     <script src="~/basic/registro_citas.js?f=@dHoy.ToString("yyyyMMddhhmmss")"></script>
+    <script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
+
 
 }

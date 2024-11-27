@@ -7,6 +7,35 @@ var estado_ = '';
 var person_img = path + '/images/user.png';
 var recargar_pagos_pendientes = false;
 
+
+document.addEventListener('DOMContentLoaded', function () {
+    const element = document.querySelector('#cboDoctorFiltro');
+    const choices = new Choices(element, {
+        placeholder: true,
+        searchPlaceholderValue: "Buscar...",
+        itemSelectText: "Todos",
+    });
+    const elementT = document.querySelector('#cboPacienteFiltro');
+    const choicesT = new Choices(elementT, {
+        placeholder: true,
+        searchPlaceholderValue: "Buscar...",
+        itemSelectText: "Todos",
+    });
+});
+$(document).ready(function () {
+    const element = document.querySelector('#cboDoctorFiltro');
+    const choices = new Choices(element, {
+        placeholder: true,
+        searchPlaceholderValue: "Buscar...",
+        itemSelectText: "Todos",
+    });
+    const elementT = document.querySelector('#cboPacienteFiltro');
+    const choicesT = new Choices(elementT, {
+        placeholder: true,
+        searchPlaceholderValue: "Buscar...",
+        itemSelectText: "Todos",
+    });
+});
 function recargar_citas() {
     $('.calendar-container').html('<div id="my-calendar"></div>');
     cargar_citas();
