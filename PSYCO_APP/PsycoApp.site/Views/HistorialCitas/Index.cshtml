@@ -5,7 +5,90 @@
     ViewData["Title"] = "Historial de citas";
 }
 
-<div class="bd-example">
+<!-- SB - STYLE -->
+
+<link rel="stylesheet" href="~/src/css/sb-historial-citas.css" />
+
+<div class="sb-his-citas-container">
+
+    <div class="sb-his-citas-title">
+        <p>Historial de citas</p>
+    </div>
+
+    <div class="sb-his-citas-list">
+        <div class="sb-his-citas-item">
+            <div class="form-group">
+                <span class="label-form">Fecha</span>
+                <input id="txtFecha" class="form-control" type="date" max="2050-12-31" />
+            </div>
+        </div>
+
+        <div class="sb-his-citas-item">
+            <div class="form-group">
+                <span class="label-form">Estado</span>
+                <select class="form-control cbo-search" id="cboEstado">
+                    <option value="-1">Seleccionar</option>
+                    <option value="1">Citado</option>
+                    <option value="2">Confirmado</option>
+                    <option value="3">En proceso</option>
+                    <option value="4">Atendido</option>
+                    <option value="5">Cancelado </option>
+                </select>
+            </div>
+        </div>
+
+        <div class="sb-his-citas-item">
+            <div class="form-group">
+                <span class="label-form">Ver registros</span>
+                <select class="form-control cbo-search" id="cboVerSinReserva">
+                    <option value="1">Sin reserva en 15 días</option>
+                    <option value="2">Todos</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="sb-his-citas-item">
+            <div class="form-group">
+                <button type="button" class="btn btn-doc" onclick="cargar_historial()">
+                    <i class="fa fa-search"></i>&nbsp;Buscar
+                </button>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="sb-his-citas-table-calendar">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th class="text-center" style="width: 80px;">#</th>
+                    <th class="text-center">
+                        Paciente
+                    </th>
+                    <th class="text-center">
+                        Fecha
+                    </th>
+                    <th class="text-center">
+                        Hora
+                    </th>
+                    <th class="text-center">
+                        Estado
+                    </th>
+                    @* <th class="text-center">
+                    Acción
+                    </th> *@
+                </tr>
+            </thead>
+            <tbody id="bdCitas">
+            </tbody>
+        </table>
+    </div>
+
+
+</div>
+
+
+<div class="bd-example" style="display:none;">
     <div class="row">
 
         <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">

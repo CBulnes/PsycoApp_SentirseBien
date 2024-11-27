@@ -225,7 +225,60 @@
 }
 
 
+@media screen and (width <= 950px){
 
+    .sb-reg-citas-container {
+        gap: 1rem;
+        overflow: auto;
+    }
+
+    .sb-reg-citas-list-colores{
+        flex-wrap: wrap;
+    }
+
+    .sb-reg-citas-list-filtro {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+        .sb-reg-citas-list-filtro > div {
+            display: flex;
+            flex-direction: column;
+            gap: .5rem;
+        }
+
+    .sb-reg-citas-list-colores > div {
+        width: 7rem;
+        justify-content: space-evenly;
+    }
+
+        .sb-reg-citas-list-colores > div p {
+            font-size: 14px;
+        }
+
+    ::-webkit-scrollbar {
+        display: none;
+    }
+
+    .sb-reg-citas-title p{
+        font-size: 20px;
+    }
+
+    .sb-reg-citas-list-filtro > div > span {
+        font-size: 14px;
+    }
+
+    .sb-reg-citas-list-filtro > div > select {
+        font-size: 14px;
+    }
+
+    .sb-reg-citas-list-filtro > div > select > option {
+        font-size: 14px;
+    }
+
+
+}
 
 
 
