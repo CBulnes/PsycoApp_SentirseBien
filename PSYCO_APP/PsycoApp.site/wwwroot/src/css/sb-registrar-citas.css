@@ -229,6 +229,7 @@
 @media screen and (width <= 950px){
 
     .sb-reg-citas-container {
+        padding: 1rem;
         gap: 1rem;
         overflow: auto;
     }
@@ -302,6 +303,11 @@
         font-size: 14px;
     }
 
+    .sb-reg-citas-popup-btn {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: .3rem 0;
+    }
 
 
 }

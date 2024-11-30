@@ -1,2 +1,175 @@
-﻿body {
+﻿/* Lista Administrador */
+
+.sb-his-citas-container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    padding: 2rem;
+    gap: 2rem;
+}
+
+.sb-his-citas-title p {
+    margin: 0;
+    font-size: 30px;
+    font-weight: 600;
+    color: var(--colorbase2);
+}
+
+.sb-his-citas-list {
+    display: flex;
+    width: 100%;
+    gap: 1rem;
+}
+
+.sb-his-citas-item {
+    display: flex;
+    width: calc(50% / 3);
+    gap: 1rem;
+}
+
+    .sb-his-citas-item .form-group {
+        display: flex;
+        width: 100%;
+        flex-direction: column;
+        gap: .5rem;
+        margin: 0;
+    }
+
+.sb-his-citas-item-button {
+    justify-content: flex-end;
+    margin-bottom: 3px !important;
+}
+
+.sb-pa-container-buscador-block-item button {
+    display: flex;
+    align-items: center;
+    gap: .3rem;
+    font-size: 16px;
+    font-weight: 500;
+    padding: .8rem 2.5rem;
+    cursor: pointer;
+    background-color: #FFF;
+    border: 1px solid var(--colorbase2) !important;
+    color: var(--colorbase2) !important;
+    transition: .3s;
+}
+
+    .sb-pa-container-buscador-block-item button i {
+        color: var(--colorbase2);
+    }
+
+    .sb-pa-container-buscador-block-item button:hover {
+        background-color: var(--colorbase2);
+        color: #FFF !important;
+    }
+
+        .sb-pa-container-buscador-block-item button:hover i {
+            color: #FFF !important;
+        }
+
+.sb-his-citas-item-button button {
+    display: flex;
+    width: fit-content;
+    align-items: center;
+    gap: .3rem;
+    font-size: 16px;
+    font-weight: 500;
+    padding: .6rem 2rem;
+    cursor: pointer;
+    background-color: #FFF;
+    border: 1px solid var(--colorbase2) !important;
+    color: var(--colorbase2) !important;
+    transition: .3s;
+}
+
+    .sb-his-citas-item-button button i {
+        color: var(--colorbase2);
+    }
+
+    .sb-his-citas-item-button button:hover {
+        background-color: var(--colorbase2);
+        color: #FFF !important;
+    }
+
+        .sb-his-citas-item-button button:hover i {
+            color: #FFF !important;
+        }
+
+/* Lista de Tabla */
+
+.sb-his-citas-table-calendar table {
+    border: 1px solid #e9ecef;
+}
+
+    .sb-his-citas-table-calendar table thead tr th {
+        text-align: center;
+        font-size: 1rem;
+    }
+
+    .sb-his-citas-table-calendar table tbody tr td {
+        text-align: center;
+        vertical-align: baseline;
+        font-size: 1rem;
+    }
+
+@media screen and (width <= 950px){
+
+    ::-webkit-scrollbar {
+        display: none;
+    }
+
+    .sb-his-citas-container {
+        width: 100%;
+        gap: 1rem;
+        overflow: auto;
+        padding: 1rem;
+        margin: 0;
+    }
+
+    .sb-his-citas-title p{
+        font-size: 20px;
+    }
+
+    .sb-his-citas-list{
+        flex-direction: column;
+    }
+
+    .sb-his-citas-item {
+        width: 100%;
+    }
+
+    .sb-his-citas-item .form-group span{
+        font-size: 14px;
+    }
+
+    .sb-his-citas-item .form-group input {
+        font-size: 14px;
+    }
+
+    .sb-his-citas-item .form-group select {
+        font-size: 14px;
+    }
+
+    .sb-his-citas-item .form-group select option {
+        font-size: 14px;
+    }
+
+        .sb-his-citas-item .form-group > button {
+            font-size: 14px;
+            padding: .6rem 1.6rem;
+        }
+
+    .sb-his-citas-table-calendar table thead tr th {
+        font-size: 14px;
+    }
+
+    .sb-his-citas-table-calendar table tbody tr td {
+        font-size: 14px;
+    }
+
+    .sb-his-citas-table-calendar {
+        overflow: scroll;
+    }
+
+
 }
