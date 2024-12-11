@@ -243,7 +243,7 @@ function listar_pagos_pendientes(id_paciente) {
                     html += '<td>' + item.monto_pactado + '</td>';
                     html += '<td>' + item.monto_pagado + '</td>';
                     html += '<td>' + item.monto_pendiente + '</td>';
-                    html += '<td><button type="button" class="btn btn-primary main_color sb-reg-citas-popup-button" id="' + item.id_cita + '" pactado="' + item.monto_pactado + '" pagado="' + item.monto_pagado + '" pendiente="' + item.monto_pendiente + '" onclick="ver_datos_pago_pendiente(this)">Pagar</button></td>';
+                    html += '<td><div class="sb-reg-citas-tb-td"><button type="button" class="btn btn-primary main_color sb-reg-citas-popup-button" id="' + item.id_cita + '" pactado="' + item.monto_pactado + '" pagado="' + item.monto_pagado + '" pendiente="' + item.monto_pendiente + '" onclick="ver_datos_pago_pendiente(this)">Pagar</button></div></td>';
                     html += '</tr>';
                 }
                 $('#headPagosPendientes').show();

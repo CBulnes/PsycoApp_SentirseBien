@@ -20,7 +20,7 @@
             @foreach (var pago in Model.Select((item, index) => (item, index)))
             {
                 <tr>
-                    <td class="text-center">@(pago.index + 1)</td>
+                    <td>@(pago.index + 1)</td>
                     <td>@pago.item.paciente</td>
                     <td>@pago.item.fecha_transaccion</td>
                     <td>@pago.item.estado_cita</td>

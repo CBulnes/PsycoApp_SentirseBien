@@ -58,8 +58,10 @@
                                     <td class="text-center">@psicologo.item.FechaNacimiento.ToString().Substring(0, 10)</td>
                                     <td class="text-center">@(psicologo.item.Estado == "1" ? "Habilitado" : "Deshabilitado")</td>
                                     <td class="text-center ">
-                                    <button class="btn btn-sm sb-psi-container-table-button-edit" onclick="editarPsicologo(@psicologo.item.Id)">Editar</button>
-                                    <button class="btn btn-sm sb-psi-container-table-button-delet" onclick="eliminarPsicologo(@psicologo.item.Id, @psicologo.item.Estado)">@(psicologo.item.Estado == "1" ? "Deshabilitar" : "Habilitar")</button>
+                                        <div class="sb-psi-container-tble-td">
+                                            <button class="btn btn-sm sb-psi-container-table-button-edit" onclick="editarPsicologo(@psicologo.item.Id)">Editar</button>
+                                            <button class="btn btn-sm sb-psi-container-table-button-delet" onclick="eliminarPsicologo(@psicologo.item.Id, @psicologo.item.Estado)">@(psicologo.item.Estado == "1" ? "Deshabilitar" : "Habilitar")</button>
+                                        </div>
                                     </td>
                                 </tr>
                             }
@@ -203,7 +205,7 @@
                 <div class="sb-frm-psi-agregar-block-item">
                     <span class="label-form">Estudios</span>
                     <div class="row">
-                        <div class="col-12">
+                        <div class="col-12 sb-frm-psi-agregar-popuptable">
                             <table class="table">
                                 <thead>
                                     <tr>

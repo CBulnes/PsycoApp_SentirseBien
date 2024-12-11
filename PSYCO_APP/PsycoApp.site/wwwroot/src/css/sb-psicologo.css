@@ -3,9 +3,8 @@
 .sb-psi-container {
     display: flex;
     flex-direction: column;
-    /*width: 1140px;*/
-    width: 96%;
-    margin: 2rem;
+    width: 100%;
+    padding: 2rem;
     gap: 2rem;
 }
 
@@ -234,3 +233,138 @@
     .sb-frm-psi-agregar-block-item > span {
         font-weight: 400;
     }
+
+@media screen and (width <= 950px) {
+
+    ::-webkit-scrollbar {
+        display: none;
+    }
+
+    .sb-psi-container {
+        width: 100%;
+        gap: 1rem;
+        overflow: auto;
+        padding: 1rem;
+        margin: 0; 
+    }
+
+    .sb-psi-container-buscar{
+        gap: 1rem;
+    }
+
+    .sb-psi-container-buscar-title p {
+        font-size: 20px;
+    }
+
+    .sb-psi-container-buscador-block > button {
+        font-size: 14px;
+        padding: .6rem 1.6rem;
+    }
+
+    .sb-psi-container-buscador-block-item {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .sb-psi-container-buscador-block-item span{
+        font-size: 14px;
+    }
+
+        .sb-psi-container-buscador-block-item input {
+            font-size: 14px;
+            padding: .5rem;
+        }
+
+        .sb-psi-container-buscador-block-item button {
+            font-size: 14px;
+            padding: .6rem 1.6rem;
+        }
+
+
+    .sb-psi-container-table div table thead tr th {
+        font-size: 14px;
+        line-height: 1.2;
+    }
+
+    .sb-psi-container-table div table tbody tr td {
+        font-size: 14px;
+        line-height: 1.2;
+    }
+
+    .sb-psi-container-tble-td {
+        display: flex;
+        flex-direction: column;
+        gap: .5rem;
+    }
+
+    .sb-reg-citas-container {
+        padding: 1rem;
+        gap: 1rem;
+        overflow: auto;
+    }
+
+    .sb-psi-container-agregar-popup {
+        width: 96%;
+    }
+
+        .sb-psi-container-agregar-popup > p{
+            font-size: 20px;
+        }
+
+    .sb-frm-psi-agregar-block-item > span{
+        font-size: 14px;
+    }
+
+    .sb-frm-psi-agregar-block-item > input {
+        font-size: 14px;
+    }
+
+    .sb-frm-psi-agregar-block-item > select {
+        font-size: 14px;
+    }
+
+    .sb-frm-psi-agregar-block-item > select > option {
+        font-size: 14px;
+    }
+
+    .sb-frm-psi-agregar-block-item > row{
+        margin: 0;
+    }
+
+    .sb-psi-container-table {
+        overflow: scroll;
+    }
+
+    .sb-frm-psi-agregar-popuptable {
+        padding: 0;
+        overflow: scroll;
+    }
+
+    .sb-frm-psi-agregar-popuptable .table th {
+        font-size: 14px;
+    }
+
+    .sb-frm-psi-agregar-popuptable .table td {
+        font-size: 14px;
+    }
+
+    .sb-frm-psi-agregar-popuptable .table td select{
+        font-size: 14px;
+    }
+
+        .sb-frm-psi-agregar-popuptable .table td select option {
+            font-size: 14px;
+        }
+
+    .sb-frm-psi-agregar-block-button .btn-success, .sb-frm-psi-agregar-block-button .btn-secondary {
+        font-size: 14px;
+    }
+
+    .sb-frm-psi-agregar-block-button{
+        margin: 0;
+    }
+
+
+}
+
+
