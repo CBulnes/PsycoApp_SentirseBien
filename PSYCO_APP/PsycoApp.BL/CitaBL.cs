@@ -46,21 +46,6 @@ namespace PsycoApp.BL
             return res_;
         }
 
-        public RespuestaUsuario procesar_cita(Cita oCita, string main_path, string random_str)
-        {
-            RespuestaUsuario res_ = new RespuestaUsuario();
-            try
-            {
-                res_ = citaDA.procesar_cita(oCita, main_path, random_str);
-            }
-            catch (Exception)
-            {
-                res_.estado = false;
-                res_.descripcion = "Ocurrió un error al procesar la cita.";
-            }
-            return res_;
-        }
-
         public RespuestaUsuario atender_cita(Cita oCita, string main_path, string random_str)
         {
             RespuestaUsuario res_ = new RespuestaUsuario();

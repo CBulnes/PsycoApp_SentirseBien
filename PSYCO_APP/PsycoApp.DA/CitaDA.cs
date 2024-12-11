@@ -82,35 +82,6 @@ namespace PsycoApp.DA
             return res_;
         }
 
-        public RespuestaUsuario procesar_cita(Cita oCita, string main_path, string random_str)
-        {
-            RespuestaUsuario res_ = new RespuestaUsuario();
-            try
-            {
-                cn.Open();
-                SqlCommand cmd = new SqlCommand(Procedures.sp_procesar_cita, cn);
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.Add("@id_cita", SqlDbType.Int).Value = oCita.id_cita;
-                cmd.Parameters.Add("@usuario", SqlDbType.VarChar).Value = oCita.usuario;
-                SqlDataAdapter da = new SqlDataAdapter(cmd);
-                DataTable dt = new DataTable();
-                da.Fill(dt);
-                foreach (DataRow row in dt.Rows)
-                {
-                    res_.descripcion = Convert.ToString(row["rpta"]);
-                }
-                res_.estado = res_.descripcion == "OK" ? true : false;
-            }
-            catch (Exception e)
-            {
-                //LOG.registrarLog("(Excepcion " + random_str + ")[ERROR]->[CitaDA.cs / registrar_cita <> " + e.Message.ToString(), "ERROR", main_path);
-                res_.estado = false;
-                res_.descripcion = "Ocurrió un error al procesar la cita.";
-            }
-            cn.Close();
-            return res_;
-        }
-
         public RespuestaUsuario atender_cita(Cita oCita, string main_path, string random_str)
         {
             RespuestaUsuario res_ = new RespuestaUsuario();
