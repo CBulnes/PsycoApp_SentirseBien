@@ -40,13 +40,19 @@ function validar_registro() {
         success: function (response) {
             $('.preloader').addClass('hide-element');
             if (response.estado) {
-                alerta('Contraseña actualizada, redireccionando...', 'success');
+                Swal.fire({
+                    icon: "success",
+                    text: "Contraseña actualizada, redireccionando...",
+                });
                 setTimeout(function () {
                     window.location.href = path + '/Login';
                 }, 3000);
-                //show_toast('warning', response.descripcion);
             } else {
-                alerta(response.descripcion, 'info');
+                Swal.fire({
+                    icon: "Error",
+                    title: "Oops...",
+                    text: response.descripcion,
+                });
             }
         }
     });

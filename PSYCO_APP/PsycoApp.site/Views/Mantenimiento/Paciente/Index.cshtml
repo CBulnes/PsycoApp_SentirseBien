@@ -201,7 +201,11 @@
                     $('#containerTabla').html(data);
                 })
                 .fail(function () {
-                    alert('Error en la búsqueda de pacientes.');
+                    Swal.fire({
+                        icon: "Error",
+                        title: "Oops...",
+                        text: "Error en la búsqueda de pacientes.",
+                    });
                 });
         }
 
@@ -233,7 +237,10 @@
         function eliminarPaciente(id) {
             if (confirm('¿Estás seguro de que quieres eliminar este paciente?')) {
                 $.post(`/Mantenimiento/Paciente/Eliminar`, { id: id }, function (response) {
-                    alert(response.message);
+                    Swal.fire({
+                        icon: "success",
+                        text: response.message,
+                    });
                     buscarPaciente(); // Actualiza la lista después de eliminar
                 });
             }
@@ -265,7 +272,7 @@
                 success: function (response) {
                     Swal.fire({
                         icon: "success",
-                        title: "Registro Completo!",
+                        title: "Registro completo.",
                     });
                     $('#containerFormulario').hide();
                     $(".sb-admninistrator").css('overflow', 'auto');

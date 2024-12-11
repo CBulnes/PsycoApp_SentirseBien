@@ -469,6 +469,10 @@ button.main_color {
     border-radius: 5px;
 }
 
+.div_evt_taller {
+    background-color: #603939;
+}
+
 .div_evt_citado {
     background-color: #eb5151;
 }

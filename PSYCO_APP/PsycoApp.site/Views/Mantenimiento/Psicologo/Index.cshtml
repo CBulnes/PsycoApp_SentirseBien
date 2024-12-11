@@ -189,6 +189,20 @@
 
             <div class="sb-frm-psi-agregar-block">
                 <div class="sb-frm-psi-agregar-block-item">
+                    <span class="label-form">Sede principal</span>
+                    <select class="form-control" id="cboSedePrincipal" name="SedePrincipal" required></select>
+                </div>
+            </div>
+
+            <div class="sb-frm-psi-agregar-block">
+                <div class="sb-frm-psi-agregar-block-item">
+                    <span class="label-form">Sede opcional</span>
+                    <select class="form-control" id="cboSedeSecundaria" name="SedeSecundaria"></select>
+                </div>
+            </div>
+
+            <div class="sb-frm-psi-agregar-block">
+                <div class="sb-frm-psi-agregar-block-item">
                     <span class="label-form">Estudios</span>
                     <div class="row">
                         <div class="col-12 sb-frm-psi-agregar-popuptable">
@@ -259,6 +273,31 @@
         cargarCombo(estados, 'cboEstado');
         cargarCombo(horarios, 'cboRefrigerio');
 
+        function cargarSedes() {
+            var html = '';
+            $.ajax({
+                type: 'GET',
+                url: 'RegistroCitas/listar_sedes',
+                contentType: 'application/json',
+                data: {},
+                beforeSend: function () {
+                    html += '<option value="-1">Seleccionar</option>';
+                },
+                success: function (response) {
+                    for (var item of response) {
+                        html += '<option value="' + item.id_sede + '">' + item.nombre + '</option>';
+                    }
+                },
+                error: function (xhr) {
+                    html = '<option value="-1">Seleccionar</option>';
+                },
+                complete: function(){
+                    $('#cboSedePrincipal, #cboSedeSecundaria').html(html);
+                }
+            });
+        }
+        cargarSedes();
+
         var global_estudios = [];
 
         function resetearEstudios() {
@@ -321,6 +360,8 @@
                 $('#txtDireccion').val(psicologo.direccion);
                 $('#cboDistrito').val(psicologo.distrito);
                 $('#cboRefrigerio').val(psicologo.refrigerio);
+                $('#cboSedePrincipal').val(psicologo.id_sede_principal);
+                $('#cboSedeSecundaria').val(psicologo.id_sede_secundaria);
 
                 listarEstudios(psicologo.estudios, psicologo.id);
                 global_estudios = psicologo.estudios;
@@ -399,7 +440,10 @@
         function eliminarPsicologo(id, estado) {
             if (confirm('¿Estás seguro de que quieres ' + (estado == '1' ? 'deshabilitar' : 'habilitar') + ' este psicólogo?')) {
                 $.post(`/Mantenimiento/Psicologo/Eliminar`, { id: id, estado: estado }, function (response) {
-                    alert(response.message);
+                    Swal.fire({
+                        icon: "success",
+                        text: response.message,
+                    });
                     buscarPsicologo(); // Actualiza la lista después de eliminar
                 });
             }
@@ -413,13 +457,16 @@
                 institucion: -1,
                 carrera: -1
             });
-            console.log(global_estudios);
             listarEstudios(global_estudios, idPsicologo);
         }
 
         function eliminarEstudio(idFila, index, idPsicologo) {
             if ($('.rowTbl').length == 1){
-                alert('debes tener al menos un estudio');
+                Swal.fire({
+                    icon: "warning",
+                    title: "Oops...",
+                    text: "Se debe registrar al menos un estudio.",
+                });
                 return;
             }
             $('#' + idFila).remove();
@@ -440,13 +487,24 @@
                 Especialidad: parseInt($('#cboEspecialidad').val()),
                 Direccion: $('#txtDireccion').val(),
                 Distrito: $('#cboDistrito').val(),
-                Refrigerio: $('#cboRefrigerio').val()
+                Refrigerio: $('#cboRefrigerio').val(),
+                IdSedePrincipal: $('#cboSedePrincipal').val(),
+                IdSedeSecundaria: $('#cboSedeSecundaria').val()
             };
             psicologo.estudios = obtenerEstudiosGuardar(psicologo.Id);
 
             let dataToSend = {
                 psicologo: psicologo // Enviar dentro de un objeto "psicologo"
             };
+
+            if (psicologo.IdSedeSecundaria == -1 && psicologo.IdSedePrincipal == psicologo.IdSedeSecundaria) {
+                Swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    text: "La sede principal y la opcional no pueden ser las mismas.",
+                });
+                return;
+            }
 
             let url = psicologo.Id ? '/Mantenimiento/Psicologo/Editar' : '/Mantenimiento/Psicologo/Agregar';
             $.ajax({
@@ -455,13 +513,20 @@
                 contentType: 'application/json',
                 data: JSON.stringify(dataToSend.psicologo),
                 success: function (response) {
-                    alert(response.message);
+                    Swal.fire({
+                        icon: "success",
+                        text: response.message,
+                    });
                     $('#containerFormulario').hide();
                     $(".sb-admninistrator").css('overflow', 'auto');
                     buscarPsicologo(); // Actualiza la lista después de guardar
                 },
                 error: function (xhr) {
-                    alert('Error al guardar psicólogo.');
+                    Swal.fire({
+                        icon: "Error",
+                        title: "Oops...",
+                        text: "Ocurrió un error al guardar el psicólogo.",
+                    });
                 }
             });
         }

@@ -7,6 +7,34 @@ var estado_ = '';
 var person_img = path + '/images/user.png';
 var recargar_pagos_pendientes = false;
 
+document.addEventListener('DOMContentLoaded', function () {
+    const element = document.querySelector('#cboDoctorFiltro');
+    const choices = new Choices(element, {
+        placeholder: true,
+        searchPlaceholderValue: "Buscar...",
+        itemSelectText: "Todos",
+    });
+    const elementT = document.querySelector('#cboPacienteFiltro');
+    const choicesT = new Choices(elementT, {
+        placeholder: true,
+        searchPlaceholderValue: "Buscar...",
+        itemSelectText: "Todos",
+    });
+});
+$(document).ready(function () {
+    const element = document.querySelector('#cboDoctorFiltro');
+    const choices = new Choices(element, {
+        placeholder: true,
+        searchPlaceholderValue: "Buscar...",
+        itemSelectText: "Todos",
+    });
+    const elementT = document.querySelector('#cboPacienteFiltro');
+    const choicesT = new Choices(elementT, {
+        placeholder: true,
+        searchPlaceholderValue: "Buscar...",
+        itemSelectText: "Todos",
+    });
+});
 function recargar_citas() {
     $('.calendar-container').html('<div id="my-calendar"></div>');
     cargar_citas();
@@ -26,8 +54,6 @@ function cargar_citas() {
             lista_citas = data;
         },
         error: function (response) {
-            //alertSecondary("Mensaje", "Ocurrió un error al obtener su registro de citas.");
-            //alert("Ocurrió un error al obtener su registro de citas.");
             Swal.fire({
                 icon: "Error",
                 title: "Oops...",
@@ -90,8 +116,6 @@ function ver_cuestionario(e) {
     //if (cuestionario == 2) {
 
         if (estado == 'ATENDIDO') {
-            //alerta('El cuestionario seleccionado ya se ha aperturado', 'info');
-            //alert('El cuestionario seleccionado ya se ha aperturado');
             Swal.fire({
                 icon: "Error",
                 title: "Oops...",
@@ -128,16 +152,14 @@ function ver_cuestionario(e) {
 
                     $('#ChatButton').trigger('click');
                 } else {
-                    /*alertWarning("Atención", data.message);*/
-                    //alerta(data.descripcion, 'info');
-                    alert(data.descripcion);
-                    //$("#load_data").hide();
+                    Swal.fire({
+                        icon: "Error",
+                        title: "Oops...",
+                        text: data.descripcion,
+                    });
                 }
             },
             error: function (response) {
-                /*alertWarning("Atención", "Ocurrió un error al guardar la cita.");*/
-                //alerta("Ocurrió un error atendiendo su solicitud.", 'info');
-                //alert("Ocurrió un error atendiendo su solicitud.");
                 Swal.fire({
                     icon: "Error",
                     title: "Oops...",
@@ -276,17 +298,29 @@ function guardar_pago() {
     var importe = $('#txtMonto1').val();
 
     if (id_forma_pago == -1) {
-        alert('Seleccione una forma de pago.');
+        Swal.fire({
+            icon: "warning",
+            title: "Oops...",
+            text: "Seleccione una forma de pago.",
+        });
         return;
     }
 
     if (id_forma_pago == 1 && id_detalle_transferencia == -1) {
-        alert('Seleccione el detalle de transferencia.');
+        Swal.fire({
+            icon: "warning",
+            title: "Oops...",
+            text: "Seleccione el detalle de transferencia.",
+        });
         return;
     }
 
     if (importe == '0.00' || (importe != '' && !isPrecise(importe))) {
-        alert('Para registrar el pago debe ingresar un importe de pago válido.');
+        Swal.fire({
+            icon: "warning",
+            title: "Oops...",
+            text: "Para registrar el pago debe ingresar un importe de pago válido.",
+        });
         return;
     }
 
@@ -347,7 +381,11 @@ function validarDiferenciaPago() {
     var diferencia;
 
     if (parseFloat(importe) > parseFloat(pendiente)) {
-        alert('El importe de pago no puede ser mayor al monto pendiente.');
+        Swal.fire({
+            icon: "warning",
+            title: "Oops...",
+            text: "El importe de pago no puede ser mayor al monto pendiente.",
+        });
         $('#txtMonto1').val(pendiente);
         diferencia = formatDecimal('0.00');
     } else {
@@ -408,23 +446,23 @@ function cargar_datos_cita(id_cita, id_doctor, id_paciente, fecha, hora, estado,
     if (id_cita == 0) {
         $('#txtFechaReasignar').val('');
         $('#divHorarios, .divConfirmar').show();
-        $('#divReprogramar, #btnConfirmar, #divProcesar, #divAtender, #divEstado').hide();
+        $('#divReprogramar, #btnConfirmar, #divProcesar, #divAtender, #divEstado, #btnCancelar, #divPagoPendiente').hide();
     } else {
         $('#ulTabs').show();
         $('#txtFechaReasignar').val(fecha);
         $('#divEstado').show();
 
         if (estado == 'CITADO') {
-            $('#divReprogramar, #divHorarios, #divConfirmar, #btnConfirmar').show();
+            $('#divReprogramar, #divHorarios, #divConfirmar, #btnConfirmar, #btnCancelar, #divPagoPendiente').show();
             $('#divProcesar, #divAtender').hide();
         } else if (estado == 'CONFIRMADO') {
-            $('#divProcesar').show();
+            $('#divProcesar, #btnCancelar, #divPagoPendiente').show();
             $('#divReprogramar, #divHorarios, .divConfirmar, #divAtender').hide();
         } else if (estado == 'EN PROCESO') {
-            $('#divAtender').show();
+            $('#divAtender, #btnCancelar, #divPagoPendiente').show();
             $('#divReprogramar, #divHorarios, .divConfirmar, #divProcesar').hide();
         } else if (estado == 'ATENDIDO') {
-            $('#divReprogramar, #divHorarios, .divConfirmar, #divProcesar, #divAtender').hide();
+            $('#divReprogramar, #divHorarios, .divConfirmar, #divProcesar, #divAtender, #btnCancelar, #divPagoPendiente').hide();
         }
     }
 
@@ -535,9 +573,6 @@ function guardar_cita() {
     var id_servicio = $('#cboServicio').val();
 
     if (doctor == '-1') {
-        /*alertSecondary("Mensaje", "Seleccione el especialista.");*/
-        //alerta("Seleccione el especialista.", 'info');
-        //alert("Seleccione el especialista.");
         Swal.fire({
             icon: "warning",
             title: "Oops...",
@@ -547,9 +582,6 @@ function guardar_cita() {
     }
 
     if (hora == '') {
-        /*alertSecondary("Mensaje", "Seleccione la hora para el registro de la cita.");*/
-        //alerta("Seleccione la hora para el registro de la cita.", 'info');
-        //alert("Seleccione la hora para el registro de la cita.");
         Swal.fire({
             icon: "warning",
             title: "Oops...",
@@ -559,9 +591,6 @@ function guardar_cita() {
     }
 
     if (paciente == '-1') {
-        /*alertSecondary("Mensaje", "Seleccione el especialista.");*/
-        //alerta("Seleccione el especialista.", 'info');
-        //alert("Seleccione el paciente.");
         Swal.fire({
             icon: "warning",
             title: "Oops...",
@@ -571,9 +600,6 @@ function guardar_cita() {
     }
 
     if (id_servicio == '-1') {
-        /*alertSecondary("Mensaje", "Seleccione el especialista.");*/
-        //alerta("Seleccione el especialista.", 'info');
-        //alert("Seleccione el paciente.");
         Swal.fire({
             icon: "warning",
             title: "Oops...",
@@ -599,11 +625,7 @@ function guardar_cita() {
         type: "POST", //(idRegistro > 0 ? "PUT" : "POST"),
         data: data_,
         success: function (data) {
-            console.log(data);
             if (data.estado) {
-                /*alertSuccess("Muy bien", "Cita guardada exitosamente.");*/
-                //alerta("Cita guardada exitosamente.", 'info');
-                //alert("Cita guardada exitosamente.");
                 Swal.fire({
                     icon: "success",
                     text: "Cita guardada exitosamente.",
@@ -618,16 +640,15 @@ function guardar_cita() {
                 $('.calendar-container').html('<div id="my-calendar"></div>');
                 cargar_citas();
             } else {
-                /*alertWarning("Atención", data.message);*/
-                //alerta(data.descripcion, 'info');
-                alert(data.descripcion);
+                Swal.fire({
+                    icon: "Error",
+                    title: "Oops...",
+                    text: data.descripcion,
+                });
                 //$("#load_data").hide();
             }
         },
         error: function (response) {
-            /*alertWarning("Atención", "Ocurrió un error al guardar la cita.");*/
-            //alerta("Ocurrió un error al guardar la cita.", 'info');
-            //alert("Ocurrió un error al guardar la cita.");
             Swal.fire({
                 icon: "error",
                 title: "Oops...",
@@ -647,9 +668,6 @@ function confirmar_cita() {
         data: { id_cita: id_cita_ },
         success: function (data) {
             if (data.estado) {
-                /*alertSuccess("Muy bien", "Cita guardada exitosamente.");*/
-                //alerta("Cita guardada exitosamente.", 'info');
-                //alert("Cita confirmada exitosamente.");
                 Swal.fire({
                     icon: "success",
                     text: "Cita confirmada exitosamente.",
@@ -664,16 +682,15 @@ function confirmar_cita() {
                 $('.calendar-container').html('<div id="my-calendar"></div>');
                 cargar_citas();
             } else {
-                /*alertWarning("Atención", data.message);*/
-                //alerta(data.descripcion, 'info');
-                alert(data.descripcion);
+                Swal.fire({
+                    icon: "Error",
+                    title: "Oops...",
+                    text: data.descripcion,
+                });
                 //$("#load_data").hide();
             }
         },
         error: function (response) {
-            /*alertWarning("Atención", "Ocurrió un error al guardar la cita.");*/
-            //alerta("Ocurrió un error al guardar la cita.", 'info');
-            //alert("Ocurrió un error al confirmar la cita.");
             Swal.fire({
                 icon: "error",
                 title: "Oops...",
@@ -693,9 +710,6 @@ function procesar_cita() {
         data: { id_cita: id_cita_ },
         success: function (data) {
             if (data.estado) {
-                /*alertSuccess("Muy bien", "Cita guardada exitosamente.");*/
-                //alerta("Cita guardada exitosamente.", 'info');
-                //alert("Cita procesada exitosamente.");
                 Swal.fire({
                     icon: "success",
                     text: "Cita procesada exitosamente.",
@@ -710,16 +724,15 @@ function procesar_cita() {
                 $('.calendar-container').html('<div id="my-calendar"></div>');
                 cargar_citas();
             } else {
-                /*alertWarning("Atención", data.message);*/
-                //alerta(data.descripcion, 'info');
-                alert(data.descripcion);
+                Swal.fire({
+                    icon: "Error",
+                    title: "Oops...",
+                    text: data.descripcion,
+                });
                 //$("#load_data").hide();
             }
         },
         error: function (response) {
-            /*alertWarning("Atención", "Ocurrió un error al guardar la cita.");*/
-            //alerta("Ocurrió un error al guardar la cita.", 'info');
-            //alert("Ocurrió un error al procesar la cita.");
             Swal.fire({
                 icon: "error",
                 title: "Oops...",
@@ -739,9 +752,6 @@ function atender_cita() {
         data: { id_cita: id_cita_ },
         success: function (data) {
             if (data.estado) {
-                /*alertSuccess("Muy bien", "Cita guardada exitosamente.");*/
-                //alerta("Cita guardada exitosamente.", 'info');
-                //alert("Cita atendida exitosamente.");
                 Swal.fire({
                     icon: "success",
                     text: "Cita atendida exitosamente.",
@@ -756,16 +766,15 @@ function atender_cita() {
                 $('.calendar-container').html('<div id="my-calendar"></div>');
                 cargar_citas();
             } else {
-                /*alertWarning("Atención", data.message);*/
-                //alerta(data.descripcion, 'info');
-                alert(data.descripcion);
+                Swal.fire({
+                    icon: "Error",
+                    title: "Oops...",
+                    text: data.descripcion,
+                });
                 //$("#load_data").hide();
             }
         },
         error: function (response) {
-            /*alertWarning("Atención", "Ocurrió un error al guardar la cita.");*/
-            //alerta("Ocurrió un error al guardar la cita.", 'info');
-            //alert("Ocurrió un error al atender la cita.");
             Swal.fire({
                 icon: "error",
                 title: "Oops...",
@@ -785,9 +794,6 @@ function cancelar_cita() {
         data: { id_cita: id_cita_ },
         success: function (data) {
             if (data.estado) {
-                /*alertSuccess("Muy bien", "Cita guardada exitosamente.");*/
-                //alerta("Cita guardada exitosamente.", 'info');
-                //alert("Cita atendida exitosamente.");
                 Swal.fire({
                     icon: "success",
                     text: "Cita cancelada exitosamente.",
@@ -802,16 +808,15 @@ function cancelar_cita() {
                 $('.calendar-container').html('<div id="my-calendar"></div>');
                 cargar_citas();
             } else {
-                /*alertWarning("Atención", data.message);*/
-                //alerta(data.descripcion, 'info');
-                alert(data.descripcion);
+                Swal.fire({
+                    icon: "Error",
+                    title: "Oops...",
+                    text: data.descripcion,
+                });
                 //$("#load_data").hide();
             }
         },
         error: function (response) {
-            /*alertWarning("Atención", "Ocurrió un error al guardar la cita.");*/
-            //alerta("Ocurrió un error al guardar la cita.", 'info');
-            //alert("Ocurrió un error al atender la cita.");
             Swal.fire({
                 icon: "error",
                 title: "Oops...",
@@ -829,8 +834,6 @@ function validateHhMm(e) {
 
     if (isValid) {
     } else {
-        //alerta("El formato de hora ingresada es incorrecto.", 'info');
-        //alert("El formato de hora ingresada es incorrecto.");
         Swal.fire({
             icon: "error",
             title: "Oops...",
@@ -950,8 +953,6 @@ function seleccionar_hora_disponible(e) {
     var hora = $(e).attr('data-hora');
 
     if (hora == '') {
-        //alerta("Ya hay una cita registrada en el horario seleccionado.", 'info');
-        //alert("Ya hay una cita registrada en el horario seleccionado.");
         Swal.fire({
             icon: "Error",
             title: "Oops...",

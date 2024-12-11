@@ -117,5 +117,35 @@ namespace PsycoApp.api.Controllers
             }
             return lista;
         }
+
+        [HttpGet("listar_sedes_x_usuario_combo/{id_usuario}")]
+        public ActionResult<List<entities.Sede>> listar_sedes_x_usuario_combo(int id_usuario)
+        {
+            List<entities.Sede> lista = new List<entities.Sede>();
+            try
+            {
+                lista = _psicologoBL.listar_sedes_x_usuario_combo(id_usuario);
+            }
+            catch (Exception e)
+            {
+                lista.Clear();
+            }
+            return lista;
+        }
+
+        [HttpGet("listar_sedes")]
+        public ActionResult<List<entities.Sede>> listar_sedes_combo()
+        {
+            List<entities.Sede> lista = new List<entities.Sede>();
+            try
+            {
+                lista = _psicologoBL.listar_sedes_combo();
+            }
+            catch (Exception e)
+            {
+                lista.Clear();
+            }
+            return lista;
+        }
     }
 }

@@ -30,6 +30,7 @@ namespace PsycoApp.DA
                 cmd.Parameters.Add("@id_doctor", SqlDbType.Int).Value = oCita.id_doctor_asignado;
                 cmd.Parameters.Add("@monto_pactado", SqlDbType.Decimal).Value = oCita.monto_pactado;
                 cmd.Parameters.Add("@id_servicio", SqlDbType.Int).Value = oCita.id_servicio;
+                cmd.Parameters.Add("@id_sede", SqlDbType.Int).Value = oCita.id_sede;
                 cmd.Parameters.Add("@usuario", SqlDbType.VarChar).Value = oCita.usuario;
 
                 SqlDataAdapter da = new SqlDataAdapter(cmd);
@@ -269,6 +270,7 @@ namespace PsycoApp.DA
                     cita.monto_pagado = Convert.ToDecimal(row["monto_pagado"]);
                     cita.monto_pendiente = Convert.ToDecimal(row["monto_pendiente"]);
                     cita.id_servicio = Convert.ToInt32(row["id_servicio"]);
+                    cita.esTaller = Convert.ToBoolean(row["esTaller"]);
                     lista.Add(cita);
                 }
             }

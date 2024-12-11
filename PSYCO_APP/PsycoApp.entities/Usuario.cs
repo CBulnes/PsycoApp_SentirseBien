@@ -15,6 +15,7 @@ namespace PsycoApp.entities
 		public string apellidos { get; set; } = "";
 		public int id_tipousuario { get; set; } = 0;
 		public int id_psicologo { get; set; } = 0;
+		public int id_sede { get; set; } = 0;
 		public string tipousuario { get; set; } = "";
 		public string tipo_documento { get; set; } = "";
 		public string num_documento { get; set; } = "";

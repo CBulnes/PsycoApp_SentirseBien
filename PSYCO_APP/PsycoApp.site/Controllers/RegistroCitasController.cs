@@ -25,6 +25,8 @@ namespace PsycoApp.site.Controllers
         private string url_disponibilidad_doctor = Helper.GetUrlApi() + "/api/cita/disponibilidad_doctor";
         private string url_citas_usuario = Helper.GetUrlApi() + "/api/cita/citas_usuario";
         private string url_productos_combo = Helper.GetUrlApi() + "/api/producto/listar_productos_combo";
+        private string url_combo_sedes_x_usuario = Helper.GetUrlApi() + "/api/psicologo/listar_sedes_x_usuario_combo";
+        private string url_combo_sedes = Helper.GetUrlApi() + "/api/psicologo/listar_sedes";
 
         private string url = "";
         dynamic obj = new System.Dynamic.ExpandoObject();
@@ -146,6 +148,7 @@ namespace PsycoApp.site.Controllers
         {
             string res = "";
             model.usuario = Convert.ToString(HttpContext.Session.GetString("login"));
+            model.id_sede = Convert.ToInt32(HttpContext.Session.GetInt32("id_sede"));
 
             RespuestaUsuario res_ = new RespuestaUsuario();
             try
@@ -287,6 +290,67 @@ namespace PsycoApp.site.Controllers
             }
             catch (Exception)
             {
+                lista.Clear();
+            }
+            return lista;
+        }
+
+        [HttpGet]
+        public ActionResult<List<entities.Sede>> listar_sedes_x_usuario()
+        {
+            int id_usuario = Convert.ToInt32(HttpContext.Session.GetInt32("id_usuario"));
+            int id_sede = Convert.ToInt32(HttpContext.Session.GetInt32("id_sede"));
+            List<entities.Sede> lista = new List<entities.Sede>();
+            string res = "";
+            try
+            {
+                url = url_combo_sedes_x_usuario + "/" + id_usuario;
+                res = ApiCaller.consume_endpoint_method(url, null, "GET");
+                lista = JsonConvert.DeserializeObject<List<entities.Sede>>(res);
+
+                if (id_sede > 0) lista.Clear();
+                if (lista.Count == 1) HttpContext.Session.SetInt32("id_sede", lista[0].Id);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                lista.Clear();
+            }
+            return lista;
+        }
+
+        [HttpGet]
+        public ActionResult<RespuestaUsuario> guardar_sede_sesion(int id_sede)
+        {
+            var res = new RespuestaUsuario();
+            try
+            {
+                HttpContext.Session.SetInt32("id_sede", id_sede);
+                res.estado = true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                res.estado = false;
+                res.descripcion = "Ocurrió un error al guardar la sede";
+            }
+            return res;
+        }
+
+        [HttpGet]
+        public ActionResult<List<entities.Sede>> listar_sedes()
+        {
+            List<entities.Sede> lista = new List<entities.Sede>();
+            string res = "";
+            try
+            {
+                url = url_combo_sedes;
+                res = ApiCaller.consume_endpoint_method(url, null, "GET");
+                lista = JsonConvert.DeserializeObject<List<entities.Sede>>(res);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
                 lista.Clear();
             }
             return lista;
