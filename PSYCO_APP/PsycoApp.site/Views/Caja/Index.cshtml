@@ -5,6 +5,8 @@
     var dHoy = DateTime.Now;
 }
 <link rel="stylesheet" href="~/src/css/sb-pacientes.css?ver=005" />
+<link rel="stylesheet" href="~/src/css/sb-caja.css?ver=005" />
+
 <style>
     .yourTableClass tr:nth-child(4n+1) td, .yourTableClass tr:nth-child(4n+3) td {
         background: #c5ffcf;
@@ -18,38 +20,30 @@
         </div>
 
         <div class="sb-pa-container-buscador">
-            <div class="col-lg-12">
-                <div class="row">
-                    <div class="col-xs-12 col-sm-6 col-lg-3 col-xl-3">
-                        <div class="form-group">
-                            <label>Año:</label>
-                            <select class="input100 custom-select col-12" id="cboAnio" style="padding: 0 25px 0 25px;" onchange="buscarPago(1); verResumenUsuario(false)">
-                                <option value="-1">Todos</option>
-                                <option value="2024">2024</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-xs-12 col-sm-6 col-lg-3 col-xl-3">
-                        <div class="form-group">
-                            <label>Mes:</label>
-                            <select class="input100 custom-select col-12" id="cboMes" style="padding: 0 25px 0 25px;" onchange="buscarPago(1); verResumenUsuario(false)">
-                                <option value="-1">Todos</option>
-                                <option value="1">Enero</option>
-                                <option value="2">Febrero</option>
-                                <option value="3">Marzo</option>
-                                <option value="4">Abril</option>
-                                <option value="5">Mayo</option>
-                                <option value="6">Junio</option>
-                                <option value="7">Julio</option>
-                                <option value="8">Agosto</option>
-                                <option value="9">Setiembre</option>
-                                <option value="10">Octubre</option>
-                                <option value="11">Noviembre</option>
-                                <option value="12">Diciembre</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
+            <div class="sb-pa-container-buscador-block-item">
+                <label>Año:</label>
+                <select class="input100 custom-select col-12" id="cboAnio" style="padding: 0 25px 0 25px;" onchange="buscarPago(1); verResumenUsuario(false)">
+                    <option value="-1">Todos</option>
+                    <option value="2024">2024</option>
+                </select>
+            </div>
+            <div class="sb-pa-container-buscador-block-item">
+                <label>Mes:</label>
+                <select class="input100 custom-select col-12" id="cboMes" style="padding: 0 25px 0 25px;" onchange="buscarPago(1); verResumenUsuario(false)">
+                    <option value="-1">Todos</option>
+                    <option value="1">Enero</option>
+                    <option value="2">Febrero</option>
+                    <option value="3">Marzo</option>
+                    <option value="4">Abril</option>
+                    <option value="5">Mayo</option>
+                    <option value="6">Junio</option>
+                    <option value="7">Julio</option>
+                    <option value="8">Agosto</option>
+                    <option value="9">Setiembre</option>
+                    <option value="10">Octubre</option>
+                    <option value="11">Noviembre</option>
+                    <option value="12">Diciembre</option>
+                </select>
             </div>
         </div>
 
@@ -60,7 +54,6 @@
     </div>
 </div>
 
-<!--nps-->
 <div class="row" style="background-color: #FFF;">
     <div class="card-body">
 
@@ -132,5 +125,22 @@
             </div>
 
         </div>
+    </div>
+    <div class="sb-caja-container-table">
+        <table class="table table-hover yourTableClass">
+            <thead>
+                <tr class="bg-success">
+                    <th class="text-center" style="width: 80px; color: #FFFFFF;">#</th>
+                    <th class="text-center" style="color: #FFFFFF;">
+                        Importe
+                    </th>
+                    <th class="text-center" style="color: #FFFFFF;">
+                        Usuario
+                    </th>
+                </tr>
+            </thead>
+            <tbody id="bdResumen">
+            </tbody>
+        </table>
     </div>
 </div>

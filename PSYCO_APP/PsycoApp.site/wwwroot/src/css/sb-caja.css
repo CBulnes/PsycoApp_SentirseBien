@@ -1,0 +1,102 @@
+﻿.sb-pa-container-buscar{
+    gap: 2rem;
+}
+
+.sb-pa-container-buscador-block-item {
+    width: 20%;
+}
+
+.sb-pa-container-buscador-block-item label{
+    margin: 0; 
+}
+
+.sb-caja-container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    padding: 2rem;
+    gap: 2rem;
+}
+
+.sb-caja-container-title p {
+    margin: 0;
+    font-size: 30px;
+    font-weight: 600;
+    color: var(--colorbase2);
+}
+
+.sb-pa-container-table div table thead tr th {
+    text-align: center;
+    line-height: 1.2;
+}
+
+.sb-pa-container-table div table tbody tr td {
+    text-align: center;
+    vertical-align: baseline;
+    line-height: 1.2;
+}
+
+.sb-pa-container-table {
+    overflow: scroll;
+}
+
+.sb-pa-container-table::-webkit-scrollbar {
+    display: none;
+}
+
+.sb-caja-container-canvas, .sb-caja-container-table {
+    width: 100%;
+    max-width: 1000px;
+}
+
+.sb-caja-container-table table thead tr th {
+    text-align: center;
+}
+
+.sb-caja-container-table table tbody tr td {
+    text-align: center;
+    vertical-align: baseline;
+}
+
+
+@media screen and (width <= 950px){
+
+    .sb-pa-container-buscar{
+        gap: 1rem;
+    }
+
+    .sb-pa-container-buscador-block-item{
+        width: 80%;
+        flex-direction: row;
+        align-items: center;
+    }
+
+    .sb-pa-container-buscador-block-item label {
+        font-size: 14px;
+    }
+
+    .sb-pa-container-buscador-block-item select {
+        font-size: 14px;
+        line-height: 1;
+    }
+
+    .sb-pa-container-buscador-block-item select option {
+        font-size: 14px;
+        line-height: 1;
+    }
+
+    .sb-pa-container-table table thead tr th {
+        font-size: 14px;
+        vertical-align: middle;
+    }
+
+    .sb-pa-container-table table tbody tr td {
+        font-size: 14px;
+        vertical-align: middle;
+    }
+
+
+
+
+
+}

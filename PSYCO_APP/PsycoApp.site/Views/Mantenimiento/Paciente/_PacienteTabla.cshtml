@@ -38,9 +38,11 @@
                     <td>@paciente.item.FechaNacimiento.ToString().Substring(0, 10)</td>
                     <td>@paciente.item.Telefono</td>
                     <td>
-                        <!-- Acciones como editar o eliminar -->
-                        <button class="btn btn-sm sb-pa-container-table-button-edit" onclick="editarPaciente(@paciente.item.Id)">Editar</button>
-                        <button class="btn btn-sm sb-psi-container-table-button-delet" onclick="eliminarPaciente(@paciente.item.Id, @paciente.item.Estado)">@(paciente.item.Estado == "1" ? "Deshabilitar" : "Habilitar")</button>
+                        <div class="sb-pa-container-tble-td">
+                            <!-- Acciones como editar o eliminar -->
+                            <button class="btn btn-sm sb-pa-container-table-button-edit" onclick="editarPaciente(@paciente.item.Id)">Editar</button>
+                            <button class="btn btn-sm sb-psi-container-table-button-delet" onclick="eliminarPaciente(@paciente.item.Id, @paciente.item.Estado)">@(paciente.item.Estado == "1" ? "Deshabilitar" : "Habilitar")</button>
+                        </div>
                     </td>
                 </tr>
             }
