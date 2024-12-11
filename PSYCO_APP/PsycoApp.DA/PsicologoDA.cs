@@ -46,6 +46,8 @@ namespace PsycoApp.DA
                             Direccion = (string)reader["Direccion"],
                             Estado = (string)reader["Estado"],
                             Refrigerio = (string)reader["Refrigerio"],
+                            InicioLabores = (string)reader["InicioLabores"],
+                            FinLabores = (string)reader["FinLabores"],
                             IdSedePrincipal = (int)reader["IdSedePrincipal"],
                             IdSedeSecundaria = (int)reader["IdSedeSecundaria"]
                         };
@@ -176,6 +178,8 @@ namespace PsycoApp.DA
                 command.Parameters.AddWithValue("@DocumentoNumero", psicologo.DocumentoNumero);
                 command.Parameters.AddWithValue("@Telefono", psicologo.Telefono);
                 command.Parameters.AddWithValue("@Refrigerio", psicologo.Refrigerio);
+                command.Parameters.AddWithValue("@InicioLabores", psicologo.InicioLabores);
+                command.Parameters.AddWithValue("@FinLabores", psicologo.FinLabores);
                 command.Parameters.AddWithValue("@IdSedePrincipal", psicologo.IdSedePrincipal);
                 command.Parameters.AddWithValue("@IdSedeSecundaria", psicologo.IdSedeSecundaria);
                 command.Parameters.AddWithValue("@Especialidad", psicologo.Especialidad);
@@ -205,6 +209,8 @@ namespace PsycoApp.DA
                 command.Parameters.AddWithValue("@DocumentoNumero", psicologo.DocumentoNumero);
                 command.Parameters.AddWithValue("@Telefono", psicologo.Telefono);
                 command.Parameters.AddWithValue("@Refrigerio", psicologo.Refrigerio);
+                command.Parameters.AddWithValue("@InicioLabores", psicologo.InicioLabores);
+                command.Parameters.AddWithValue("@FinLabores", psicologo.FinLabores);
                 command.Parameters.AddWithValue("@IdSedePrincipal", psicologo.IdSedePrincipal);
                 command.Parameters.AddWithValue("@IdSedeSecundaria", psicologo.IdSedeSecundaria);
                 command.Parameters.AddWithValue("@Especialidad", psicologo.Especialidad);

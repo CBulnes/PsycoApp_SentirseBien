@@ -44,7 +44,6 @@ namespace PsycoApp.utilities
         public const string sp_listar_historial_cita = "SP_LISTAR_HISTORIAL_CITA";
         public const string sp_registrar_cita = "SP_REGISTRAR_CITA";
         public const string sp_confirmar_cita = "SP_CONFIRMAR_CITA";
-        public const string sp_procesar_cita = "SP_PROCESAR_CITA";
         public const string sp_atender_cita = "SP_ATENDER_CITA";
         public const string sp_cancelar_cita = "SP_CANCELAR_CITA";
         public const string sp_registrar_cuestionario = "SP_REGISTRAR_CUESTIONARIO";

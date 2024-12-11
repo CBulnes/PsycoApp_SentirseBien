@@ -62,9 +62,9 @@
         <div class="sb-reg-citas-color-confirmado">
             <p>Confirmado</p>
         </div>
-        <div class="sb-reg-citas-color-en_proceso">
+        @* <div class="sb-reg-citas-color-en_proceso">
             <p>En proceso</p>
-        </div>
+        </div> *@
         <div class="sb-reg-citas-color-atendido">
             <p>Atendido</p>
         </div>
@@ -142,7 +142,7 @@
                                 </div>
                             </div>
 
-                            <div class="sb-reg-citas-popup-tab-panel-block">
+                            <div class="sb-reg-citas-popup-tab-panel-block" style="display: none !important;">
                                 <div class="sb-reg-citas-popup-tab-panel-block-item">
                                     <span class="label-form">Hora</span>
                                     <div class="input-group date" id="dtpicker1">
@@ -246,7 +246,6 @@
                 <button type="button" class="btn btn-secondary sb-reg-citas-popup-button-volver" onclick="cerrar_modal_cita()">Volver</button>
                 <button type="button" class="btn btn-primary main_color divConfirmar sb-reg-citas-popup-button" onclick="guardar_cita()" id="btnGuardarCita">Guardar</button>
                 <button type="button" class="btn btn-primary main_color divConfirmar sb-reg-citas-popup-button" onclick="confirmar_cita()" id="btnConfirmar">Confirmar</button>
-                <button type="button" class="btn btn-primary main_color sb-reg-citas-popup-button" onclick="procesar_cita()" id="divProcesar">En proceso</button>
                 <button type="button" class="btn btn-primary main_color sb-reg-citas-popup-button" onclick="atender_cita()" id="divAtender">Atender</button>
                 <button type="button" class="btn btn-primary main_color sb-reg-citas-popup-button" style="background-color: #eb5151 !important;" onclick="cancelar_cita()" id="btnCancelar">Cancelar</button>
             </div>

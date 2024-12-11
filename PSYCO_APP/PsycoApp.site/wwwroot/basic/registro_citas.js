@@ -446,7 +446,7 @@ function cargar_datos_cita(id_cita, id_doctor, id_paciente, fecha, hora, estado,
     if (id_cita == 0) {
         $('#txtFechaReasignar').val('');
         $('#divHorarios, .divConfirmar').show();
-        $('#divReprogramar, #btnConfirmar, #divProcesar, #divAtender, #divEstado, #btnCancelar, #divPagoPendiente').hide();
+        $('#divReprogramar, #btnConfirmar, #divAtender, #divEstado, #btnCancelar, #divPagoPendiente').hide();
     } else {
         $('#ulTabs').show();
         $('#txtFechaReasignar').val(fecha);
@@ -454,15 +454,15 @@ function cargar_datos_cita(id_cita, id_doctor, id_paciente, fecha, hora, estado,
 
         if (estado == 'CITADO') {
             $('#divReprogramar, #divHorarios, #divConfirmar, #btnConfirmar, #btnCancelar, #divPagoPendiente').show();
-            $('#divProcesar, #divAtender').hide();
+            $('#divAtender').hide();
         } else if (estado == 'CONFIRMADO') {
-            $('#divProcesar, #btnCancelar, #divPagoPendiente').show();
-            $('#divReprogramar, #divHorarios, .divConfirmar, #divAtender').hide();
-        } else if (estado == 'EN PROCESO') {
+        //    $('#btnCancelar, #divPagoPendiente').show();
+        //    $('#divReprogramar, #divHorarios, .divConfirmar, #divAtender').hide();
+        //} else if (estado == 'EN PROCESO') {
             $('#divAtender, #btnCancelar, #divPagoPendiente').show();
-            $('#divReprogramar, #divHorarios, .divConfirmar, #divProcesar').hide();
+            $('#divReprogramar, #divHorarios, .divConfirmar').hide();
         } else if (estado == 'ATENDIDO') {
-            $('#divReprogramar, #divHorarios, .divConfirmar, #divProcesar, #divAtender, #btnCancelar, #divPagoPendiente').hide();
+            $('#divReprogramar, #divHorarios, .divConfirmar, #divAtender, #btnCancelar, #divPagoPendiente').hide();
         }
     }
 
@@ -695,48 +695,6 @@ function confirmar_cita() {
                 icon: "error",
                 title: "Oops...",
                 text: "Ocurrió un error al confirmar la cita.",
-            });
-            //$("#load_data").hide();
-        },
-        complete: function () {
-        }
-    });
-}
-
-function procesar_cita() {
-    $.ajax({
-        url: "/RegistroCitas/ProcesarCita",
-        type: "POST",
-        data: { id_cita: id_cita_ },
-        success: function (data) {
-            if (data.estado) {
-                Swal.fire({
-                    icon: "success",
-                    text: "Cita procesada exitosamente.",
-                });
-
-                //$("#load_data").hide();
-                //recargarInstruccion();
-                $('#txtHora').val('');
-                $('#cboDoctor, #cboPaciente, #cboServicio').val('-1');
-                $('#mdl_cita').modal('hide');
-
-                $('.calendar-container').html('<div id="my-calendar"></div>');
-                cargar_citas();
-            } else {
-                Swal.fire({
-                    icon: "Error",
-                    title: "Oops...",
-                    text: data.descripcion,
-                });
-                //$("#load_data").hide();
-            }
-        },
-        error: function (response) {
-            Swal.fire({
-                icon: "error",
-                title: "Oops...",
-                text: "Ocurrió un error al procesar la cita.",
             });
             //$("#load_data").hide();
         },

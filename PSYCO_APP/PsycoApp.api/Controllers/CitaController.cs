@@ -67,23 +67,6 @@ namespace PsycoApp.api.Controllers
             return res_;
         }
 
-        [HttpPost("procesar_cita")]
-        public RespuestaUsuario PostProcesar([FromBody] Cita oCita)
-        {
-            RespuestaUsuario res_ = new RespuestaUsuario();
-            random_str = ru.RandomString(8) + "|" + ru.CurrentDate();
-            try
-            {
-                res_ = citaBL.procesar_cita(oCita, main_path, random_str);
-            }
-            catch (Exception)
-            {
-                res_.descripcion = "Ocurrió un error al procesar la cita";
-                res_.estado = false;
-            }
-            return res_;
-        }
-
         [HttpPost("atender_cita")]
         public RespuestaUsuario PostAtender([FromBody] Cita oCita)
         {

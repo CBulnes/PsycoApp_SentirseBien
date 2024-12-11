@@ -810,6 +810,11 @@ function fecha_actual() {
     return yyyy + '-' + mm + '-' + dd;
 }
 
+function parseDate(dateString) {
+    const [year, month, day] = dateString.split('-');
+    return new Date(year, month - 1, day);
+}
+
 function contenido_cita(dia, mes, año) {
     var html = '';
     var date;
@@ -868,7 +873,9 @@ function contenido_cita(dia, mes, año) {
     }
 
     if (html != '-') {
-        html += '<button data-id-cita="0" data-id-especialista="-1" data-id-paciente="-1" data-fecha-cita="' + fecha + '" data-hora-cita="" data-estado="-" data-telefono="--" data-moneda="S/." data-monto-pactado="0.00" data-monto-pagado="0.00" data-monto-pendiente="0.00" data-id-servicio="-1" onclick="ver_cita(this)" class="btn btn-primary main_color">+</button>';
+        if (parseDate(fecha) >= parseDate(fecha_actual())) {
+            html += '<button data-id-cita="0" data-id-especialista="-1" data-id-paciente="-1" data-fecha-cita="' + fecha + '" data-hora-cita="" data-estado="-" data-telefono="--" data-moneda="S/." data-monto-pactado="0.00" data-monto-pagado="0.00" data-monto-pendiente="0.00" data-id-servicio="-1" onclick="ver_cita(this)" class="btn btn-primary main_color">+</button>';
+        }
     }
 
     return html;
