@@ -107,11 +107,14 @@
 
 .sb-pa-container-table table thead tr th{
     text-align: center;
+    font-size: 14px;
 }
 
-.sb-pa-container-table table tbody tr td {
+.sb-pa-container-table table tbody tr td, .sb-pa-container-table table tbody tr td span {
     text-align: center;
     vertical-align: baseline;
+    font-size: 14px;
+    line-height: 1.2;
 }
 
 .sb-pa-container-table table tbody tr td .sb-pa-container-table-button-edit {

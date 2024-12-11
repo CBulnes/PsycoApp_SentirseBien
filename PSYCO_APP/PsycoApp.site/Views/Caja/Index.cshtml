@@ -13,7 +13,7 @@
     }
 </style>
 
-<div class="sb-pa-container" style="width: 96%;">
+<div class="sb-pa-container">
     <div class="sb-pa-container-buscar">
         <div class="sb-pa-container-buscar-title">
             <p>Cuadre de caja</p>
@@ -51,10 +51,66 @@
         <div id="containerTabla" class="sb-pa-container-table">
             @await Html.PartialAsync("~/Views/Caja/_CajaTabla.cshtml", Model.Model)
         </div>
+
+        <div class="sb-pa-container-resume">
+            <div class="sb-pa-container-resume-title">
+                <p>Resumen</p>
+            </div>
+            <div class="sb-pa-container-resume-report">
+                <div class="sb-pa-container-resume-report-item">
+                    <div class="flot-chart">
+                        <div class="flot-chart-content" id="reporte_nps"></div>
+                    </div>
+
+                </div>
+                <div class="sb-pa-container-resume-report-item">
+                    <div class="sb-pa-container-resume-report-item-table">
+                        <table class="table table-hover yourTableClass">
+                            <thead>
+                                <tr class="bg-success">
+                                    <th class="text-center" style="width: 80px; color: #FFFFFF;">#</th>
+                                    <th class="text-center" style="color: #FFFFFF;">
+                                        Importe
+                                    </th>
+                                    <th class="text-center" style="color: #FFFFFF;">
+                                        Usuario
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody id="bdResumen">
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="sb-pa-container-resume-report-item-table">
+                        <table class="table table-hover yourTableClass">
+                            <thead>
+                                <tr class="bg-success">
+                                    <th class="text-center" style="width: 80px; color: #FFFFFF;">#</th>
+                                    <th class="text-center" style="color: #FFFFFF;">
+                                        Cantidad
+                                    </th>
+                                    <th class="text-center" style="color: #FFFFFF;">
+                                        Monto
+                                    </th>
+                                    <th class="text-center" style="color: #FFFFFF;">
+                                        Forma pago
+                                    </th>
+                                    <th class="text-center" style="color: #FFFFFF;">
+                                        Detalle pago
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody id="bdResumen2">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
-<div class="row" style="background-color: #FFF;">
+<div class="row" style="background-color: #FFF; display: none;">
     <div class="card-body">
 
         <div class="row">
@@ -64,7 +120,7 @@
                     <div class="card-body">
                         <h4 class="card-title">Resumen</h4>
                         <div class="flot-chart">
-                            <div class="flot-chart-content" id="reporte_nps"></div>
+                            @* <div class="flot-chart-content" id="reporte_nps"></div> *@
                         </div>
                     </div>
                 </div>

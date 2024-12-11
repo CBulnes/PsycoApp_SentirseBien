@@ -332,6 +332,33 @@
     display: none;
 }
 
+@media screen and (width <= 1440px){
+    .sb-aside-item-bloc svg {
+        width: 20px;
+        height: 20px;
+    }
+
+    .sb-aside-item-bloc > p {
+        font-size: 12px;
+    }
+
+    .sb-aside-logoff-bloc svg {
+        width: 20px;
+        height: 20px;
+    }
+
+    .sb-aside-logoff-bloc p {
+        font-size: 12px;
+    }
+
+    .sb-aside-item-bloc{
+        padding: 1rem .5rem;
+    }
+    .sb-aside-logoff-bloc {
+        padding: 1rem .5rem;
+    }
+}
+
 @media screen and (width <= 950px) {
 
     .sb-main-hm{
