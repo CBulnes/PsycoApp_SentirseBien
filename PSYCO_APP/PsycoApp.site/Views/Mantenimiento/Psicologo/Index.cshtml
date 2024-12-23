@@ -60,6 +60,7 @@
                                     <td class="text-center ">
                                         <div class="sb-psi-container-tble-td">
                                             <button class="btn btn-sm sb-psi-container-table-button-edit" onclick="editarPsicologo(@psicologo.item.Id)">Editar</button>
+                                            <button class="btn btn-sm sb-psi-container-table-button-edit" onclick="modalHorarios(@psicologo.item.Id)">Horarios</button>
                                             <button class="btn btn-sm sb-psi-container-table-button-delet" onclick="eliminarPsicologo(@psicologo.item.Id, @psicologo.item.Estado)">@(psicologo.item.Estado == "1" ? "Deshabilitar" : "Habilitar")</button>
                                         </div>
                                     </td>
@@ -201,13 +202,13 @@
             </div>
 
             <div class="row">
-                <div class="col-4">
+                <div class="col-4" id="divHorario1">
                     <div class="sb-frm-psi-agregar-block-item">
                         <span class="label-form">Inicio labores</span>
                         <select class="form-control" id="cboHorario1" name="cboHorario1" required></select>
                     </div>
                 </div>
-                <div class="col-4">
+                <div class="col-4" id="divHorario2">
                     <div class="sb-frm-psi-agregar-block-item">
                         <span class="label-form">Fin labores</span>
                         <select class="form-control" id="cboHorario2" name="cboHorario2" required></select>
@@ -217,6 +218,14 @@
                     <div class="sb-frm-psi-agregar-block-item">
                         <span class="label-form">Refrigerio</span>
                         <select class="form-control" id="cboRefrigerio" name="Refrigerio" required></select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row" id="divDescHorario">
+                <div class="col-12">
+                    <div class="sb-frm-psi-agregar-block-item">
+                        <span class="label-form" style="font-style: italic; font-size: 12px;">(*) El horario seleccionado será registrado automáticamente para el mes actual.</span>
                     </div>
                 </div>
             </div>
@@ -253,8 +262,70 @@
 
 </div>
 
+<!--modal horarios-->
+<div id="mdl_horarios" class="modal" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="true">
+    <div class="modal-dialog modal-lg" role="document" style="height: 90%; display: grid; place-items: center; max-width: fit-content;">
+        <div class="modal-content sb-reg-citas-popup-container" style=" width: fit-content;">
+            <div class="modal-header sb-reg-citas-popup-title">
+                <h5 class="modal-title">Horarios</h5>
+            </div>
+            <div class="modal-body sb-reg-citas-popup-body">
+                <input id="hdnIdPsicologo" type="hidden" />
+                
+                <div class="sb-reg-citas-popup-tab-panel">
+                    <div class="row">
+                        <div class="col-4">
+                            <div class="sb-frm-psi-agregar-block-item">
+                                <span class="label-form">Desde</span>
+                                <input id="txtInicio" name="txtInicio" class="form-control" type="date" required />
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="sb-frm-psi-agregar-block-item">
+                                <span class="label-form">Hasta</span>
+                                <input id="txtFin" name="txtFin" class="form-control" type="date" required />
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="sb-frm-psi-agregar-block-item">
+                                <span class="label-form">&nbsp;</span>
+                                <button type="button" class="btn btn-secondary sb-reg-citas-popup-button-volver" onclick="listarHorarios()">Buscar</button>
+                            </div>
+                        </div>
+
+                        <div class="col-12">
+                            <div class="sb-frm-psi-agregar-block-item">
+                                <table style="width: 100%;">
+                                    <thead>
+                                        <tr>
+                                            <th>Fecha</th>
+                                            <th>Inicio</th>
+                                            <th>Fin</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="bdHorarios">
+                                        <tr>
+                                            <td>Realice la búsqueda de horarios.</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary sb-reg-citas-popup-button-volver" onclick="guardarHorarios()">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 @section Scripts {
     <script>
+        var horarios_psicologo = [];
+
         var horarios = [
             { id: '-1', valor: 'Seleccionar' },
             { id: '07:00', valor: '07:00 AM' },
@@ -322,7 +393,6 @@
                     html += '<option value="-1">Seleccionar</option>';
                 },
                 success: function (response) {
-                    debugger;
                     for (var item of response) {
                         html += '<option value="' + item.id + '">' + item.nombre + '</option>';
                     }
@@ -365,6 +435,7 @@
                             <td class="text-center">${psicologo.estado == "1" ? "Habilitado" : "Deshabilitado"}</td>
                             <td class="text-center">
                                 <button class="btn btn-sm sb-psi-container-table-button-edit" onclick="editarPsicologo(${psicologo.id})">Editar</button>
+                                <button class="btn btn-sm sb-psi-container-table-button-edit" onclick="editarHorarios(${psicologo.id})">Horarios</button>
                                 <button class="btn btn-sm sb-psi-container-table-button-delet" onclick="eliminarPsicologo(${psicologo.id}, '${psicologo.estado}')">${psicologo.estado == "1" ? "Deshabilitar" : "Habilitar"}</button>
                             </td>
                         </tr>
@@ -382,10 +453,14 @@
             $('#containerFormulario select').val('-1');
             $('#containerFormulario select#cboRefrigerio').val('12:00');
 
+            $('#divDescHorario, #divHorario1, #divHorario2').removeClass('hide-element');
+
             listarEstudios([{ id: 0, idPsicologo: 0, gradoAcademico: -1, institucion: -1, carrera: -1 }], 0);
         }
 
         function editarPsicologo(id) {
+            $('#divDescHorario, #divHorario1, #divHorario2').addClass('hide-element');
+
             $.get(`/Mantenimiento/Psicologo/Get/${id}`, function (psicologo) {
                 $('#hdnPsicologoId').val(psicologo.id);
                 $('#txtNombre').val(psicologo.nombre);
@@ -410,6 +485,159 @@
                 $(".sb-admninistrator").css('overflow', 'hidden');
                 $('#containerFormulario').css('display', 'flex');
             });
+        }
+
+        function modalHorarios(id) {
+            $('#hdnIdPsicologo').val(id);
+            $('#bdHorarios').html('<tr><td colspan="3">Realice la búsqueda de horarios.</td></tr>');
+            $('#mdl_horarios').modal('show');
+        }
+
+        function listarHorarios() {
+            var id = $('#hdnIdPsicologo').val();
+            var inicio = $('#txtInicio').val();
+            var fin = $('#txtFin').val();
+
+            if (inicio == '') {
+                Swal.fire({
+                    icon: "warning",
+                    title: "Oops...",
+                    text: "Seleccione la fecha de inicio.",
+                });
+                return;
+            }
+            if (fin == '') {
+                Swal.fire({
+                    icon: "warning",
+                    title: "Oops...",
+                    text: "Seleccione la fecha de fin.",
+                });
+                return;
+            }
+
+            $.get(`/Mantenimiento/Psicologo/horarios_psicologo/${id}/${inicio}/${fin}`, function (data) {
+                horarios_psicologo = data;
+                var html = '';
+                for (var item of data){
+                    html += '<tr>';
+                    html += '<td>' + item.nombreDia + ' ' + item.fecha + '</td>';
+                    html += '<td>' + comboHorario(item.orden, item.id, item.inicio, 'Inicio') + '</td>';
+                    html += '<td>' + comboHorario(item.orden, item.id, item.fin, 'Fin') + '</td>';
+                    html += '</tr>';
+                }
+                $('#bdHorarios').html(html);
+            });
+        }
+
+        function comboHorario(orden, id, horario, tipo){
+            var html = `<select id="cbo${tipo}${orden}" onchange="actualizarLista('#cbo${tipo}${orden}')" class="cboHorario cbo${tipo}" data-id="${id}" data-orden="${orden}">`;
+            for (var item of horarios){
+                html += '<option ' + (horario == item.id ? 'selected' : '') + ' value="' + item.id + '">' + item.valor + '</option>'
+            }
+            html += '</select>';
+            return html;
+        }
+
+        function actualizarLista(ordenId) {
+            var orden = $(ordenId).attr('data-orden');
+            var id = $(ordenId).attr('data-id');
+            var tipo = '';
+
+            if ($(ordenId).hasClass('cboInicio')) {
+                tipo = 'inicio';
+            }
+            if ($(ordenId).hasClass('cboFin')) {
+                tipo = 'fin';
+            }
+
+            var valor = $(ordenId).val();
+
+            for (var item of horarios_psicologo) {
+                if (item.orden == orden) {
+                    if (tipo == 'inicio') {
+                        item.inicio = valor;
+                    }
+                    if (tipo == 'fin') {
+                        item.fin = valor;
+                    }
+                }
+            }
+        }
+
+        function guardarHorarios() {
+            var error = '';
+            for (var item of horarios_psicologo){
+                var inicio = item.inicio;
+                var fin = item.fin;
+
+                if ((inicio != '-1' && fin == '-1') || (inicio == '-1' && fin != '-1')){
+                    if (error == ''){
+                        error = "ERROR";
+                    }
+                }
+            }
+
+            if (error == 'ERROR'){
+                Swal.fire({
+                    icon: "warning",
+                    title: "Oops...",
+                    text: "Verifique el registro de los horarios para continuar.",
+                });
+                return;
+            }
+
+            var id_psicologo = $('#hdnIdPsicologo').val();
+            var lista_enviar = [];
+            for (var item of horarios_psicologo) {
+                if (item.inicio != '-1' && item.fin != '-1'){
+                    lista_enviar.push({ Fecha: item.fecha, Inicio: item.inicio, Fin: item.fin, Id: item.id, IdPsicologo: parseInt(id_psicologo) });
+                }
+            }
+
+            $.ajax({
+                type: 'POST',
+                url: '/Mantenimiento/Psicologo/GuardarHorarios',
+                contentType: 'application/json',
+                data: JSON.stringify(lista_enviar),
+                success: function (response) {
+                    if (response.estado) {
+                        Swal.fire({
+                            icon: "success",
+                            text: "Horarios guardados correctamente."
+                        });
+                        listarHorarios();
+                    } else {
+                        Swal.fire({
+                            icon: "warning",
+                            title: "Oops...",
+                            text: response.descripcion
+                        });
+                    }
+                },
+                error: function (xhr) {
+                    Swal.fire({
+                        icon: "warning",
+                        title: "Oops...",
+                        text: "Ocurrió un error al guardar los horarios."
+                    });
+                }
+            })
+
+            // $.post(`/Mantenimiento/Psicologo/GuardarHorarios`, lista_enviar, function (response) {
+            //     if (response.estado){
+            //         Swal.fire({
+            //             icon: "success",
+            //             text: "Horarios guardados correctamente."
+            //         });
+            //         listarHorarios();
+            //     } else {
+            //         Swal.fire({
+            //             icon: "warning",
+            //             title: "Oops...",
+            //             text: response.descripcion
+            //         });
+            //     }
+            // });
         }
 
         function listarEstudios(estudios, idPsicologo){

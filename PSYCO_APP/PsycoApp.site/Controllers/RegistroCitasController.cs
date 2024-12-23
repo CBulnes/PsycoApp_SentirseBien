@@ -26,6 +26,7 @@ namespace PsycoApp.site.Controllers
         private string url_productos_combo = Helper.GetUrlApi() + "/api/producto/listar_productos_combo";
         private string url_combo_sedes_x_usuario = Helper.GetUrlApi() + "/api/psicologo/listar_sedes_x_usuario_combo";
         private string url_combo_sedes = Helper.GetUrlApi() + "/api/psicologo/listar_sedes";
+        private string url_fechas_semana = Helper.GetUrlApi() + "/api/cita/dias_x_semana_mes";
 
         private string url = "";
         dynamic obj = new System.Dynamic.ExpandoObject();
@@ -324,6 +325,25 @@ namespace PsycoApp.site.Controllers
                 url = url_combo_sedes;
                 res = ApiCaller.consume_endpoint_method(url, null, "GET");
                 lista = JsonConvert.DeserializeObject<List<entities.Sede>>(res);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                lista.Clear();
+            }
+            return lista;
+        }
+
+        [HttpGet]
+        public ActionResult<List<entities.Semana>> ver_fechas_por_semana(int mes, int año, int semana)
+        {
+            List<entities.Semana> lista = new List<entities.Semana>();
+            string res = "";
+            try
+            {
+                url = url_fechas_semana + "/" + semana + "/" + mes + "/" + año;
+                res = ApiCaller.consume_endpoint_method(url, null, "GET");
+                lista = JsonConvert.DeserializeObject<List<entities.Semana>>(res);
             }
             catch (Exception ex)
             {

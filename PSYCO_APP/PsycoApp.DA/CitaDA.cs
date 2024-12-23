@@ -293,5 +293,40 @@ namespace PsycoApp.DA
             return lista;
         }
 
+        public List<entities.Semana> dias_x_semana_mes(int semana, int mes, int año)
+        {
+            List<entities.Semana> lista = new List<entities.Semana>();
+            try
+            {
+                cn.Open();
+                SqlCommand cmd = new SqlCommand(Procedures.sp_listar_dias_semana_mes, cn);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Add("@numSemana", SqlDbType.Int).Value = semana;
+                cmd.Parameters.Add("@mes", SqlDbType.Int).Value = mes;
+                cmd.Parameters.Add("@año", SqlDbType.Int).Value = año;
+
+                SqlDataAdapter da = new SqlDataAdapter(cmd);
+                DataTable dt = new DataTable();
+                da.Fill(dt);
+
+                foreach (DataRow row in dt.Rows)
+                {
+                    entities.Semana item = new entities.Semana();
+                    item.Id = Convert.ToInt32(row["Id"]);
+                    item.NumeroSemana = Convert.ToInt32(row["NumeroSemana"]);
+                    item.Fecha = Convert.ToString(row["Fecha"]);
+                    item.NombreDia = Convert.ToString(row["NombreDia"]);
+                    item.NumeroDia = Convert.ToInt32(row["NumeroDia"]);
+                    lista.Add(item);
+                }
+            }
+            catch (Exception e)
+            {
+                lista.Clear();
+            }
+            cn.Close();
+            return lista;
+        }
+
     }
 }

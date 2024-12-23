@@ -62,5 +62,37 @@ namespace PsycoApp.BL
         {
             return _psicologoDA.listar_sedes_combo();
         }
+
+        public List<entities.Horario> horarios_psicologo(int id_psicologo, string inicio, string fin)
+        {
+            List<entities.Horario> lista = new List<entities.Horario>();
+            try
+            {
+                lista = _psicologoDA.horarios_psicologo(id_psicologo, inicio, fin);
+            }
+            catch (Exception)
+            {
+                lista.Clear();
+            }
+            return lista;
+        }
+
+        public RespuestaUsuario guardar_horarios_psicologo(List<entities.Horario> lista)
+        {
+            var res = new RespuestaUsuario();
+            try
+            {
+                foreach (var item in lista)
+                {
+                    res = _psicologoDA.guardar_horarios_psicologo_v2(item);
+                }
+            }
+            catch (Exception)
+            {
+                res.estado = false;
+                res.descripcion = "Ocurrió un error al guardar los horarios.";
+            }
+            return res;
+        }
     }
 }

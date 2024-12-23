@@ -147,5 +147,36 @@ namespace PsycoApp.api.Controllers
             }
             return lista;
         }
+
+        [HttpGet("horarios_psicologo/{id_psicologo}/{inicio}/{fin}")]
+        public List<entities.Horario> horarios_psicologo(int id_psicologo, string inicio, string fin)
+        {
+            List<entities.Horario> res_ = new List<entities.Horario>();
+            try
+            {
+                res_ = _psicologoBL.horarios_psicologo(id_psicologo, inicio, fin);
+            }
+            catch (Exception)
+            {
+                res_.Clear();
+            }
+            return res_;
+        }
+
+        [HttpPost("guardar_horarios_psicologo")]
+        public RespuestaUsuario guardar_horarios_psicologo(List<entities.Horario> lista)
+        {
+            var res_ = new RespuestaUsuario();
+            try
+            {
+                res_ = _psicologoBL.guardar_horarios_psicologo(lista);
+            }
+            catch (Exception)
+            {
+                res_.estado = false;
+                res_.descripcion = "Ocurrió un error al guardar los horarios.";
+            }
+            return res_;
+        }
     }
 }

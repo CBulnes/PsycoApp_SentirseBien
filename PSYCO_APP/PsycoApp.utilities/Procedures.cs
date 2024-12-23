@@ -50,6 +50,10 @@ namespace PsycoApp.utilities
         public const string sp_listar_disponibilidad_doctor = "SP_LISTAR_DISPONIBILIDAD_DOCTOR";
         public const string sp_listar_citas_usuario = "SP_LISTAR_CITAS_USUARIO";
         public const string sp_listar_citas_doctor = "SP_LISTAR_CITAS_DOCTOR";
+        public const string sp_listar_dias_semana_mes = "SP_LISTAR_DIAS_X_SEMANA_MES";
+        public const string sp_listar_horario_psicologo = "SP_LISTAR_HORARIO_PSICOLOGO";
+        public const string sp_guardar_horario_psicologo = "SP_GUARDAR_HORARIO_PSICOLOGO";
+        public const string sp_guardar_horario_psicologo_v2 = "SP_GUARDAR_HORARIO_PSICOLOGO_V2";
 
         #region "psicologos"
         public const string listar_sedes_x_usuario = "dbo.SP_LISTAR_SEDES_X_USUARIO";

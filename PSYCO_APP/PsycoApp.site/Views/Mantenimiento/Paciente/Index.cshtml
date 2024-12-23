@@ -217,7 +217,6 @@
         }
 
         function editarPaciente(id) {
-            console.log(2);
             $.get(`/Mantenimiento/Paciente/Get/${id}`, function (paciente) {
                 $('#hdnPacienteId').val(paciente.id);
                 $('#txtNombre').val(paciente.nombre);

@@ -9,6 +9,7 @@ using PsycoApp.entities;
 using PsycoApp.utilities;
 using Microsoft.AspNetCore.Http;
 using System.Net.Http;
+using System.Security.Policy;
 
 namespace PsycoApp.site.Controllers.Mantenimiento
 {
@@ -16,6 +17,8 @@ namespace PsycoApp.site.Controllers.Mantenimiento
     {
         private readonly string apiUrl = Helper.GetUrlApi() + "/api/psicologo";
         private readonly string apiUrlUbigeo = Helper.GetUrlApi() + "/api/ubigeo";
+        private string url_horarios_psicologo = Helper.GetUrlApi() + "/api/psicologo/horarios_psicologo";
+        private string url_guardar_horarios_psicologo = Helper.GetUrlApi() + "/api/psicologo/guardar_horarios_psicologo";
 
         [Route("Mantenimiento/Psicologo")]
         public async Task<IActionResult> Index(int pageNumber = 1, int pageSize = 10)
@@ -204,6 +207,46 @@ namespace PsycoApp.site.Controllers.Mantenimiento
         {
             using var client = new HttpClient();
             return await client.DeleteAsync(url);
+        }
+
+        [Route("/Mantenimiento/Psicologo/horarios_psicologo/{id}/{inicio}/{fin}")]
+        [HttpGet]
+        public ActionResult<List<entities.Horario>> horarios_psicologo(int id, string inicio, string fin)
+        {
+            List<entities.Horario> lista = new List<entities.Horario>();
+            string res = "";
+            try
+            {
+                string url = url_horarios_psicologo + "/" + id + "/" + inicio + "/" + fin;
+                res = ApiCaller.consume_endpoint_method(url, null, "GET");
+                lista = JsonConvert.DeserializeObject<List<entities.Horario>>(res);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                lista.Clear();
+            }
+            return lista;
+        }
+
+        [Route("/Mantenimiento/Psicologo/GuardarHorarios")]
+        [HttpPost]
+        public ActionResult<RespuestaUsuario> GuardarHorarios([FromBody] List<entities.Horario> lista)
+        {
+            var res = new RespuestaUsuario();
+            string restring = "";
+            try
+            {
+                string url = url_guardar_horarios_psicologo;
+                restring = ApiCaller.consume_endpoint_method(url, lista, "POST");
+                res = JsonConvert.DeserializeObject<RespuestaUsuario>(restring);
+            }
+            catch (Exception ex)
+            {
+                res.estado = false;
+                res.descripcion = "Ocurrió un error al guardar los horarios.";
+            }
+            return res;
         }
 
     }

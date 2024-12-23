@@ -425,7 +425,7 @@ function cargar_datos_cita(id_cita, id_doctor, id_paciente, fecha, hora, estado,
 
     $('#txtFecha').attr('data-fecha', fecha).val(fecha_formato_ddmmyyyy(fecha));
     $('#txtHora').val(hora).attr('data-hora', hora);
-    $('#cboDoctor').val(id_doctor).attr('data-id-doctor', id_doctor);
+     $('#cboDoctor').val(id_doctor).attr('data-id-doctor', id_doctor);
     $('#cboPaciente').val(id_paciente).attr('data-id-paciente', id_paciente);
     $('#txtTelefono').val(telefono).attr('data-telefono', telefono);
     $('#txtMontoPactado').val(monto_pactado).attr('data-monto-pactado', monto_pactado);
@@ -923,4 +923,113 @@ function seleccionar_hora_disponible(e) {
         hora = hora.replace(' pm', ' PM');
         $('#txtHora').val(hora);
     }
+}
+
+/* funciones vista semanal */
+var mes_ = '';
+var año_ = '';
+var semanasMes = [];
+
+var weeksCount = function (year, month_number) {
+    var firstOfMonth = new Date(year, month_number - 1, 1);
+    var day = firstOfMonth.getDay() || 6;
+    day = day === 1 ? 0 : day;
+    if (day) { day-- }
+    var diff = 7 - day;
+    var lastOfMonth = new Date(year, month_number, 0);
+    var lastDate = lastOfMonth.getDate();
+    if (lastOfMonth.getDay() === 1) {
+        diff--;
+    }
+    var result = Math.ceil((lastDate - diff) / 7);
+    return result + 1;
+};
+
+$('.btn-vista').on('click', function () {
+    var tipo = '';
+    if (!$(this).hasClass('active')) {
+        $('.btn-vista').removeClass('active');
+        $(this).addClass('active');
+        tipo = $(this).attr('data-tipo');
+
+        if (tipo == 'MENSUAL') {
+            $(".my-calendar").removeClass('hide-element');
+            $(".my-calendar2").addClass('hide-element');
+        } else if (tipo == 'SEMANAL') {
+            $(".my-calendar").addClass('hide-element');
+            $(".my-calendar2").removeClass('hide-element');
+
+            mes_ = parseInt($('#cbo_seleccion_mes').val()) + 1;
+            año_ = $('#cbo_seleccion_mes').attr('data-año');
+
+            semanasMes = [];
+
+            var html_ = '';
+            for (let i = 1; i < weeksCount(año_, mes_) + 1; i++) {
+                semanasMes.push({ texto: 'semana ' + i, valor: i });
+                html_ += '<option value="' + i + '">' + 'Semana ' + i + '</option>';
+            }
+            $('#cboSemanaFiltro').html(html_);
+
+            recargar_vista_semanal(mes_, año_, 1);
+        }
+    }
+})
+
+function recargar_vista_semanal(mes, año, semana) {
+    var data_horas = [
+        '08:00',
+        '09:00',
+        '10:00',
+        '11:00',
+        '12:00',
+        '13:00',
+        '14:00',
+        '15:00',
+        '16:00',
+        '17:00',
+        '18:00',
+        '19:00',
+        '20:00',
+        '21:00',
+        '22:00'
+    ];
+
+    $.ajax({
+        url: "/RegistroCitas/ver_fechas_por_semana?mes=" + mes + "&año=" + año + "&semana=" + semana,
+        type: "GET",
+        data: null,
+        beforeSend: function () {
+            
+        },
+        success: function (data) {
+            var html_hd = '<th style="width: 12.5%;"></th>';
+            var html_bd = '';
+
+            for (var item of data) {
+                html_hd += '<th style="width: 12.5%;">' + (item.fecha == '' ? '-' : item.fecha) + '</th>';
+            }
+            $('#hdTblSemanal > tr').html(html_hd);
+            
+            for (var item of data_horas) {
+                html_bd += '<tr>';
+                html_bd += '<td style="min-height: 50px;">' + item + '</td>';
+                html_bd += '<td style="min-height: 50px;"></td>';
+                html_bd += '<td style="min-height: 50px;"></td>';
+                html_bd += '<td style="min-height: 50px;"></td>';
+                html_bd += '<td style="min-height: 50px;"></td>';
+                html_bd += '<td style="min-height: 50px;"></td>';
+                html_bd += '<td style="min-height: 50px;"></td>';
+                html_bd += '<td style="min-height: 50px;"></td>';
+                html_bd += '</tr>';
+            }
+            $('#bdTblSemanal').html(html_bd);
+        },
+        error: function (response) {
+            
+        },
+        complete: function () {
+            
+        }
+    });
 }

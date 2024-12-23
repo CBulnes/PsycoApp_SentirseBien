@@ -51,6 +51,11 @@
 <link rel="stylesheet" href="~/src/css/sb-registrar-citas.css" />
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css" />
 <div class="sb-reg-citas-container">
+    <div class="btn-group" role="group" aria-label="Basic example" style="display: none;">
+        <button type="button" class="btn btn-secondary btn-vista active" data-tipo="MENSUAL">Mensual</button>
+        <button type="button" class="btn btn-secondary btn-vista" data-tipo="SEMANAL">Semanal</button>
+    </div>
+
     <div class="sb-reg-citas-title">
         <p>Registro de Citas</p>
     </div>
@@ -93,7 +98,28 @@
     </div>
 
     <div class="sb-reg-citas-table-calendar table-responsive calendar-container">
-        <div id="my-calendar"></div>
+        <div id="my-calendar" class="my-calendar"></div>
+
+        <div id="my-calendar2" class="my-calendar2 hide-element">
+            <div class="row sb-reg-citas-list-filtro">
+                <div class="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
+                    <span class="label-form">N° de semana</span>
+                    <select class="form-control" id="cboSemanaFiltro" onchange="recargar_vista_semanal()"></select>
+                </div>
+            </div>
+
+            <div class="row sb-reg-citas-list-filtro">
+                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                    <table id="tblSemanal" style="width: 100%;">
+                        <thead id="hdTblSemanal">
+                            <tr></tr>
+                        </thead>
+                        <tbody id="bdTblSemanal">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
     </div>
 
 </div>

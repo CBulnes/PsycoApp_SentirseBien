@@ -6,6 +6,7 @@ using System.Text;
 using PsycoApp.entities;
 using PsycoApp.DA.SQLConnector;
 using PsycoApp.utilities;
+using System.Collections;
 
 namespace PsycoApp.DA
 {
@@ -324,6 +325,97 @@ namespace PsycoApp.DA
             }
             cn.Close();
             return lista;
+        }
+
+        public List<entities.Horario> horarios_psicologo(int id_psicologo, string inicio, string fin)
+        {
+            List<entities.Horario> lista = new List<entities.Horario>();
+            try
+            {
+                cn.Open();
+                SqlCommand cmd = new SqlCommand(Procedures.sp_listar_horario_psicologo, cn);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Add("@id_psicologo", SqlDbType.Int).Value = id_psicologo;
+                cmd.Parameters.Add("@inicio", SqlDbType.VarChar).Value = inicio;
+                cmd.Parameters.Add("@fin", SqlDbType.VarChar).Value = fin;
+
+                SqlDataAdapter da = new SqlDataAdapter(cmd);
+                DataTable dt = new DataTable();
+                da.Fill(dt);
+
+                foreach (DataRow row in dt.Rows)
+                {
+                    entities.Horario item = new entities.Horario();
+                    item.Orden = Convert.ToInt32(row["Orden"]);
+                    item.Id = Convert.ToInt32(row["Id"]);
+                    item.Fecha = Convert.ToString(row["Fecha"]);
+                    item.NombreDia = Convert.ToString(row["NombreDia"]);
+                    item.Inicio = Convert.ToString(row["Inicio"]);
+                    item.Fin = Convert.ToString(row["Fin"]);
+                    lista.Add(item);
+                }
+            }
+            catch (Exception e)
+            {
+                lista.Clear();
+            }
+            cn.Close();
+            return lista;
+        }
+
+        public RespuestaUsuario guardar_horarios_psicologo(List<entities.Horario> lista)
+        {
+            var res = new RespuestaUsuario();
+            DataTable dtHorarios = Helper.ToDataTable(lista);
+            using (var command = new SqlCommand(Procedures.sp_guardar_horario_psicologo, _connection))
+            {
+                try
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.AddWithValue("@HorariosPsicologo", dtHorarios);
+                    _connection.Open();
+                    command.ExecuteNonQuery();
+                    res.estado = true;
+                }
+                catch (Exception)
+                {
+                    res.estado = false;
+                    res.descripcion = "Ocurrió un error al guardar los horarios.";
+                }
+                finally
+                {
+                    _connection.Close();
+                }
+            }
+            return res;
+        }
+
+        public RespuestaUsuario guardar_horarios_psicologo_v2(entities.Horario item)
+        {
+            var res = new RespuestaUsuario();
+            try
+            {
+                cn.Open();
+                SqlCommand cmd = new SqlCommand(Procedures.sp_guardar_horario_psicologo_v2, cn);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Add("@Id", SqlDbType.Int).Value = item.Id;
+                cmd.Parameters.Add("@IdPsicologo", SqlDbType.Int).Value = item.IdPsicologo;
+                cmd.Parameters.Add("@Fecha", SqlDbType.VarChar).Value = item.Fecha;
+                cmd.Parameters.Add("@Inicio", SqlDbType.VarChar).Value = item.Inicio;
+                cmd.Parameters.Add("@Fin", SqlDbType.VarChar).Value = item.Fin;
+
+                SqlDataAdapter da = new SqlDataAdapter(cmd);
+                DataTable dt = new DataTable();
+                da.Fill(dt);
+                res.estado = true;
+            }
+            catch (Exception e)
+            {
+                res.estado = false;
+                res.descripcion = "Ocurrió un error al guardar los horarios.";
+            }
+            cn.Close();
+            return res;
         }
 
     }

@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using PsycoApp.BL;
+using PsycoApp.DA;
 using PsycoApp.entities;
 using PsycoApp.utilities;
 
@@ -201,20 +202,19 @@ namespace PsycoApp.api.Controllers
             return res_;
         }
 
-        [HttpPost("registrar_estado_cuestionario")]
-        public RespuestaUsuario RegistrarEstadoCuestionario([FromBody] HistorialPaciente oHistorial)
+        [HttpGet("dias_x_semana_mes/{semana}/{mes}/{año}")]
+        public List<entities.Semana> dias_x_semana_mes(int semana, int mes, int año)
         {
-            RespuestaUsuario res_ = new RespuestaUsuario();
+            List<entities.Semana> res_ = new List<entities.Semana>();
             random_str = ru.RandomString(8) + "|" + ru.CurrentDate();
 
             try
             {
-                res_ = historialBL.registrar_estado_cuestionario(oHistorial);
+                res_ = citaBL.dias_x_semana_mes(semana, mes, año);
             }
             catch (Exception)
             {
-                res_.descripcion = "Ocurrió un error atendiendo su solicitud.";
-                res_.estado = false;
+                res_.Clear();
             }
             return res_;
         }

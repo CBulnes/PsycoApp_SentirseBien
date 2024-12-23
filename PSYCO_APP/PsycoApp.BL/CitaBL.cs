@@ -137,5 +137,19 @@ namespace PsycoApp.BL
             return lista;
         }
 
+        public List<entities.Semana> dias_x_semana_mes(int semana, int mes, int año)
+        {
+            List<entities.Semana> lista = new List<entities.Semana>();
+            try
+            {
+                lista = citaDA.dias_x_semana_mes(semana, mes, año);
+            }
+            catch (Exception)
+            {
+                lista.Clear();
+            }
+            return lista;
+        }
+
     }
 }
