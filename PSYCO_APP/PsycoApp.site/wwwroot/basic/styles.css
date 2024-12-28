@@ -460,6 +460,7 @@ button.main_color {
 }
 
 .div_cita {
+    cursor: pointer;
     font-weight: 500;
     padding: 5px;
     text-align: left;

@@ -971,28 +971,45 @@ $('.btn-vista').on('click', function () {
             }
             $('#cboSemanaFiltro').html(html_);
 
-            recargar_vista_semanal(mes_, año_, 1);
+            listar_vista_semanal(mes_, año_, 1);
         }
     }
 })
 
-function recargar_vista_semanal(mes, año, semana) {
+function recargar_vista_semanal() {
+    mes_ = parseInt($('#cbo_seleccion_mes').val()) + 1;
+    año_ = $('#cbo_seleccion_mes').attr('data-año');
+    var semana = $('#cboSemanaFiltro').val();
+    listar_vista_semanal(mes_, año_, semana);
+}
+
+function listar_vista_semanal(mes, año, semana) {
     var data_horas = [
-        '08:00',
-        '09:00',
-        '10:00',
-        '11:00',
-        '12:00',
-        '13:00',
-        '14:00',
-        '15:00',
-        '16:00',
-        '17:00',
-        '18:00',
-        '19:00',
-        '20:00',
-        '21:00',
-        '22:00'
+        '08:00 AM',
+        '09:00 AM',
+        '10:00 AM',
+        '11:00 AM',
+        '12:00 PM',
+        '01:00 PM',
+        '02:00 PM',
+        '03:00 PM',
+        '04:00 PM',
+        '05:00 PM',
+        '06:00 PM',
+        '07:00 PM',
+        '08:00 PM',
+        '09:00 PM',
+        '10:00 PM'
+    ];
+
+    var dias = [
+        'Lun',
+        'Mar',
+        'Mier',
+        'Jue',
+        'Vie',
+        'Sáb',
+        'Dom'
     ];
 
     $.ajax({
@@ -1000,27 +1017,32 @@ function recargar_vista_semanal(mes, año, semana) {
         type: "GET",
         data: null,
         beforeSend: function () {
-            
+            $('#trigger_seleccion_mes').html($('#cbo_seleccion_mes').html());
         },
-        success: function (data) {
+        success: function (response) {
             var html_hd = '<th style="width: 12.5%;"></th>';
             var html_bd = '';
+            var i = 0;
 
-            for (var item of data) {
-                html_hd += '<th style="width: 12.5%;">' + (item.fecha == '' ? '-' : item.fecha) + '</th>';
+            for (var dia of response) {
+                html_hd += '<th style="width: 12.5%;" class="' + (dia.fecha == '' ? 'header-semanal dia_inhabilitado' : 'header-semanal') + '">';
+                html_hd += (dia.fecha == '' ? dias[i] : dias[i] + ' ' + fecha_formato_ddmmyyyy(dia.fecha) + '&nbsp;');
+                html_hd += ver_btn_nueva_cita(dia.fecha);
+                html_hd += '</th>';
+                i++;
             }
             $('#hdTblSemanal > tr').html(html_hd);
             
-            for (var item of data_horas) {
+            for (var hora of data_horas) {
                 html_bd += '<tr>';
-                html_bd += '<td style="min-height: 50px;">' + item + '</td>';
-                html_bd += '<td style="min-height: 50px;"></td>';
-                html_bd += '<td style="min-height: 50px;"></td>';
-                html_bd += '<td style="min-height: 50px;"></td>';
-                html_bd += '<td style="min-height: 50px;"></td>';
-                html_bd += '<td style="min-height: 50px;"></td>';
-                html_bd += '<td style="min-height: 50px;"></td>';
-                html_bd += '<td style="min-height: 50px;"></td>';
+                html_bd += '<td>' + hora + '</td>';
+                html_bd += '<td class="' + (response[0].fecha == '' ? 'dia_inhabilitado' : '') + '">' + (response[0].fecha == '' ? '' : enviar_datos_zabuto(response[0].fecha, hora)) + '</td>';
+                html_bd += '<td class="' + (response[1].fecha == '' ? 'dia_inhabilitado' : '') + '">' + (response[1].fecha == '' ? '' : enviar_datos_zabuto(response[1].fecha, hora)) + '</td>';
+                html_bd += '<td class="' + (response[2].fecha == '' ? 'dia_inhabilitado' : '')  + '">' + (response[2].fecha == '' ? '' : enviar_datos_zabuto(response[2].fecha, hora)) + '</td>';
+                html_bd += '<td class="' + (response[3].fecha == '' ? 'dia_inhabilitado' : '')  + '">' + (response[3].fecha == '' ? '' : enviar_datos_zabuto(response[3].fecha, hora)) + '</td>';
+                html_bd += '<td class="' + (response[4].fecha == '' ? 'dia_inhabilitado' : '')  + '">' + (response[4].fecha == '' ? '' : enviar_datos_zabuto(response[4].fecha, hora)) + '</td>';
+                html_bd += '<td class="' + (response[5].fecha == '' ? 'dia_inhabilitado' : '')  + '">' + (response[5].fecha == '' ? '' : enviar_datos_zabuto(response[5].fecha, hora)) + '</td>';
+                html_bd += '<td class="' + (response[6].fecha == '' ? 'dia_inhabilitado' : '')  + '">' + (response[6].fecha == '' ? '' : enviar_datos_zabuto(response[6].fecha, hora)) + '</td>';
                 html_bd += '</tr>';
             }
             $('#bdTblSemanal').html(html_bd);
@@ -1033,3 +1055,43 @@ function recargar_vista_semanal(mes, año, semana) {
         }
     });
 }
+
+function ver_btn_nueva_cita(fecha){
+    var dia_ = parseInt(fecha.slice(-2));
+    var mes_ = parseInt(fecha.substring(0, 7).slice(-2));
+    var año_ = parseInt(fecha.substring(0, 4));
+
+    if (mes_ == 12) {
+        mes_--;
+    }
+
+    var html = contenido_cita(dia_, mes_, año_, null);
+    html = html.includes('btn_nueva_cita') ? html : '';
+    return html;
+}
+
+function enviar_datos_zabuto(fecha, hora) {
+    var dia_ = parseInt(fecha.slice(-2));
+    var mes_ = parseInt(fecha.substring(0, 7).slice(-2));
+    var año_ = parseInt(fecha.substring(0, 4));
+
+    if (mes_ == 12) {
+        mes_--;
+    }
+
+    var html = contenido_cita(dia_, mes_, año_, hora);
+    html = (html == '-' ? '' : (html.includes('btn_nueva_cita') ? '' : html));
+    return html;
+}
+
+$('.trigger_mes_anterior').on('click', function () {
+    $('.nav_mes_anterior').trigger('click');
+    $('#trigger_seleccion_mes').html($('#cbo_seleccion_mes').html());
+    $('.btn-vista').trigger('click');
+})
+
+$('.trigger_mes_siguiente').on('click', function () {
+    $('.nav_mes_siguiente').trigger('click');
+    $('#trigger_seleccion_mes').html($('#cbo_seleccion_mes').html());
+    $('.btn-vista').trigger('click');
+})

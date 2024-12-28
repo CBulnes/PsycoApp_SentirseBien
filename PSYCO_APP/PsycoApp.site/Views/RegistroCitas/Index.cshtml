@@ -3,7 +3,7 @@
     var dynamicData = Model.DynamicData;
     var productos = Model.Model;
     var dHoy = DateTime.Now;
-    ViewData["Title"] = "Agenda"; 
+    ViewData["Title"] = "Agenda";
 }
 
 <style>
@@ -19,6 +19,7 @@
         left: 0 !important;
         width: 100% !important;
     }
+
     input[type="text"]:disabled, select[disabled] {
         background: #FFFFFF !important;
     }
@@ -41,9 +42,19 @@
                 color: #ffffff;
             }
 
-            .tab-pane.active{
-                background-color: #ffffff;
-            }
+    .tab-pane.active {
+        background-color: #ffffff;
+    }
+
+    .day_click_event {
+        cursor: default !important;
+    }
+
+    .header-semanal{
+        color: #868686 !important;
+        font-size: 11px;
+        text-align: center;
+    }
 </style>
 
 <!-- SB - STYLE -->
@@ -51,7 +62,7 @@
 <link rel="stylesheet" href="~/src/css/sb-registrar-citas.css" />
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css" />
 <div class="sb-reg-citas-container">
-    <div class="btn-group" role="group" aria-label="Basic example" style="display: none;">
+    <div class="btn-group" role="group" aria-label="Basic example">
         <button type="button" class="btn btn-secondary btn-vista active" data-tipo="MENSUAL">Mensual</button>
         <button type="button" class="btn btn-secondary btn-vista" data-tipo="SEMANAL">Semanal</button>
     </div>
@@ -68,7 +79,7 @@
             <p>Confirmado</p>
         </div>
         @* <div class="sb-reg-citas-color-en_proceso">
-            <p>En proceso</p>
+        <p>En proceso</p>
         </div> *@
         <div class="sb-reg-citas-color-atendido">
             <p>Atendido</p>
@@ -102,9 +113,41 @@
 
         <div id="my-calendar2" class="my-calendar2 hide-element">
             <div class="row sb-reg-citas-list-filtro">
+                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                    <table class="table">
+                        <tr class="calendar-month-header">
+                            <th>
+                                <div class="calendar-month-navigation trigger_mes_anterior" style="cursor: pointer;">
+                                    <span class="sb-reg-citas-arrow-left">&lt;</span>
+                                </div>
+                            </th>
+                            <th>
+                                <select id="trigger_seleccion_mes" style="color: #004A92; font-size: 18px; font-weight: bold; border: 0px; text-decoration: none; cursor: pointer;" disabled="true"></select>
+                            </th>
+                            <th>
+                                <div class="calendar-month-navigation trigger_mes_siguiente" style="cursor: pointer;">
+                                    <span class="sb-reg-citas-arrow-right">&gt;</span>
+                                </div>
+                            </th>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <div class="row sb-reg-citas-list-filtro">
+                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                    <span class="label-form">&nbsp;</span>
+                </div>
+            </div>
+
+            <div class="row sb-reg-citas-list-filtro">
                 <div class="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
                     <span class="label-form">N° de semana</span>
                     <select class="form-control" id="cboSemanaFiltro" onchange="recargar_vista_semanal()"></select>
+                </div>
+            </div>
+            <div class="row sb-reg-citas-list-filtro">
+                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                    <span class="label-form">&nbsp;</span>
                 </div>
             </div>
 
@@ -127,12 +170,12 @@
 <!--MODAL CITA-->
 <div id="mdl_cita" class="modal" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="true">
     <div class="modal-dialog modal-lg" role="document" style="height: 90%; display: grid; place-items: center;">
-        <div class="modal-content sb-reg-citas-popup-container" >
+        <div class="modal-content sb-reg-citas-popup-container">
             <div class="modal-header sb-reg-citas-popup-title">
                 <h5 class="modal-title">Datos de cita</h5>
             </div>
             <div class="modal-body sb-reg-citas-popup-body">
-                
+
                 <ul class="nav nav-tabs sb-reg-citas-popup-body-tabs" id="ulTabs">
                     <li class="nav-link sb-reg-citas-popup-body-tabs-resumen"><a data-toggle="tab" href="#resumen" class="active" id="btnResumen"><p>Resumen</p></a></li>
                     <li class="nav-link sb-reg-citas-popup-body-tabs-historial"><a data-toggle="tab" href="#historial"><p>Historial</p></a></li>
@@ -282,12 +325,12 @@
 <!--MODAL PAGO-->
 <div id="mdl_pago" class="modal" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="true">
     <div class="modal-dialog modal-md" role="document" style="height: 90%; display: grid; place-items: center;">
-        <div class="modal-content sb-reg-citas-popup-container" >
+        <div class="modal-content sb-reg-citas-popup-container">
             <div class="modal-header sb-reg-citas-popup-title">
                 <h5 class="modal-title">Registrar pago</h5>
             </div>
             <div class="modal-body sb-reg-citas-popup-body">
-                
+
                 <div class="sb-reg-citas-popup-tab-panel">
                     <div class="sb-reg-citas-popup-tab-panel-block" style="display: none;">
                         <input class="form-control" type="text" id="txtIdCita" />
@@ -351,7 +394,7 @@
                         </div>
                     </div>
                 </div>
-                
+
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary sb-reg-citas-popup-button-volver" onclick="cerrar_modal_pago()">Volver</button>
@@ -369,7 +412,7 @@
                 <h5 class="modal-title">Pagos pendientes</h5>
             </div>
             <div class="modal-body sb-reg-citas-popup-body">
-                
+
                 <div class="sb-reg-citas-popup-tab-panel">
                     <table class="table table-responsive" style="display: inline-table;">
                         <thead id="headPagosPendientes">
@@ -388,7 +431,7 @@
                         <tbody id="bodyPagosPendientes"></tbody>
                     </table>
                 </div>
-                
+
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary sb-reg-citas-popup-button-volver" onclick="cerrar_modal_pagos_pendientes()">Volver</button>
@@ -397,8 +440,8 @@
     </div>
 </div>
 
-@section Scripts{
-  
+@section Scripts {
+
     <link rel="stylesheet" href="~/assets/css/zabuto.css" />
     <link rel="stylesheet" href="~/assets/css/datetimepicker.css" />
 

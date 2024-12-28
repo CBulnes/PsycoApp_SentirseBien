@@ -344,7 +344,7 @@ $.fn.zabuto_calendar = function (options) {
                             dia_actual_class = '';
                         }
 
-                        var datos_marcacion = contenido_cita(currDayOfMonth, month, year);
+                        var datos_marcacion = contenido_cita(currDayOfMonth, month, year, null);
                         var $dayElement = $('<div id="' + dayId + '" class="day' + dia_actual_class + dia_inhabilitado_class + dia_feriado_class + '" ><span class="' + validar_feriado(currDayOfMonth, month, year) + '">' + currDayOfMonth + '</span></div>' + datos_marcacion);
 
                         $dayElement.data('day', currDayOfMonth);
@@ -815,7 +815,7 @@ function parseDate(dateString) {
     return new Date(year, month - 1, day);
 }
 
-function contenido_cita(dia, mes, año) {
+function contenido_cita(dia, mes, año, hora) {
     var html = '';
     var date;
     var dia_nombre;
@@ -825,7 +825,7 @@ function contenido_cita(dia, mes, año) {
 
     var fecha = año + '-' + formato_2_digitos(mes) + '-' + formato_2_digitos(dia);
     var lista_citas_dia = lista_citas.filter(function (element) {
-        return element.fecha_cita == fecha;// && element.tipo_marcacion != 'FERIADO';
+        return (hora == null && element.fecha_cita == fecha) || (hora != null && element.hora_cita == hora && element.fecha_cita == fecha);
     });
 
     if (lista_citas_dia.length == 0) {
@@ -874,7 +874,7 @@ function contenido_cita(dia, mes, año) {
 
     if (html != '-') {
         if (parseDate(fecha) >= parseDate(fecha_actual())) {
-            html += '<button data-id-cita="0" data-id-especialista="-1" data-id-paciente="-1" data-fecha-cita="' + fecha + '" data-hora-cita="" data-estado="-" data-telefono="--" data-moneda="S/." data-monto-pactado="0.00" data-monto-pagado="0.00" data-monto-pendiente="0.00" data-id-servicio="-1" onclick="ver_cita(this)" class="btn btn-primary main_color">+</button>';
+            html += '<button data-id-cita="0" data-id-especialista="-1" data-id-paciente="-1" data-fecha-cita="' + fecha + '" data-hora-cita="" data-estado="-" data-telefono="--" data-moneda="S/." data-monto-pactado="0.00" data-monto-pagado="0.00" data-monto-pendiente="0.00" data-id-servicio="-1" onclick="ver_cita(this)" class="btn btn-primary main_color btn_nueva_cita">+</button>';
         }
     }
 
