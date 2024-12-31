@@ -1,6 +1,7 @@
 ﻿var path = ruta;
 
 var lista_citas = [];
+var lista_horarios = [];
 var id_cita_ = 0;
 var estado_ = '';
 
@@ -45,9 +46,10 @@ function cargar_citas() {
 
     var filtroPaciente = $('#cboPacienteFiltro').val();
     var filtroDoctor = $('#cboDoctorFiltro').val();
+    var tipoVista = $('.btn-vista.active').attr('data-tipo');
 
     $.ajax({
-        url: '/RegistroCitas/CitasUsuario?idPaciente=' + filtroPaciente + '&idDoctor=' + filtroDoctor,
+        url: '/RegistroCitas/CitasUsuario?idPaciente=' + filtroPaciente + '&idDoctor=' + filtroDoctor + '&tipoVista=' + tipoVista,
         type: "GET",
         data: {},
         success: function (data) {
@@ -984,6 +986,34 @@ function recargar_vista_semanal() {
 }
 
 function listar_vista_semanal(mes, año, semana) {
+    var filtroDoctor = $('#cboDoctorFiltro').val();
+    var primerDia;
+    var ultimoDia;
+    var response_;
+
+    $.ajax({
+        url: "/RegistroCitas/ver_fechas_por_semana?mes=" + mes + "&año=" + año + "&semana=" + semana,
+        type: "GET",
+        data: null,
+        beforeSend: function () {
+            $('#trigger_seleccion_mes').html($('#cbo_seleccion_mes').html());
+        },
+        success: function (response) {
+            var listaFiltrada = response.filter(x => x.fecha != '');
+            primerDia = listaFiltrada[0].fecha;
+            ultimoDia = listaFiltrada[listaFiltrada.length - 1].fecha;
+            response_ = response;
+        },
+        error: function (response) {
+            
+        },
+        complete: function () {
+            listarHorariosAdicionales(primerDia, ultimoDia, filtroDoctor, response_);
+        }
+    });
+}
+
+function listarHorariosAdicionales(inicio, fin, filtroDoctor, response2) {
     var data_horas = [
         '08:00 AM',
         '09:00 AM',
@@ -1012,19 +1042,31 @@ function listar_vista_semanal(mes, año, semana) {
         'Dom'
     ];
 
-    $.ajax({
-        url: "/RegistroCitas/ver_fechas_por_semana?mes=" + mes + "&año=" + año + "&semana=" + semana,
-        type: "GET",
-        data: null,
-        beforeSend: function () {
-            $('#trigger_seleccion_mes').html($('#cbo_seleccion_mes').html());
-        },
-        success: function (response) {
-            var html_hd = '<th style="width: 12.5%;"></th>';
-            var html_bd = '';
-            var i = 0;
+    var html_hd = '<th style="width: 12.5%;"></th>';
+    var html_bd = '';
+    var i = 0;
+    var lista = [];
 
-            for (var dia of response) {
+    filtroDoctor = 11;
+
+    $.ajax({
+        url: '/RegistroCitas/ListarHorariosDoctor?inicio=' + inicio + '&fin=' + fin + '&id_doctor=' + filtroDoctor,
+        type: "GET",
+        data: {},
+        success: function (data) {
+            lista = data;
+        },
+        error: function (response) {
+            Swal.fire({
+                icon: "Error",
+                title: "Oops...",
+                text: "Ocurrió un error al obtener algunos registros.",
+            });
+            lista = [];
+        },
+        complete: function () {
+
+            for (var dia of response2) {
                 html_hd += '<th style="width: 12.5%;" class="' + (dia.fecha == '' ? 'header-semanal dia_inhabilitado' : 'header-semanal') + '">';
                 html_hd += (dia.fecha == '' ? dias[i] : dias[i] + ' ' + fecha_formato_ddmmyyyy(dia.fecha) + '&nbsp;');
                 html_hd += ver_btn_nueva_cita(dia.fecha);
@@ -1032,28 +1074,35 @@ function listar_vista_semanal(mes, año, semana) {
                 i++;
             }
             $('#hdTblSemanal > tr').html(html_hd);
-            
+
             for (var hora of data_horas) {
                 html_bd += '<tr>';
                 html_bd += '<td>' + hora + '</td>';
-                html_bd += '<td class="' + (response[0].fecha == '' ? 'dia_inhabilitado' : '') + '">' + (response[0].fecha == '' ? '' : enviar_datos_zabuto(response[0].fecha, hora)) + '</td>';
-                html_bd += '<td class="' + (response[1].fecha == '' ? 'dia_inhabilitado' : '') + '">' + (response[1].fecha == '' ? '' : enviar_datos_zabuto(response[1].fecha, hora)) + '</td>';
-                html_bd += '<td class="' + (response[2].fecha == '' ? 'dia_inhabilitado' : '')  + '">' + (response[2].fecha == '' ? '' : enviar_datos_zabuto(response[2].fecha, hora)) + '</td>';
-                html_bd += '<td class="' + (response[3].fecha == '' ? 'dia_inhabilitado' : '')  + '">' + (response[3].fecha == '' ? '' : enviar_datos_zabuto(response[3].fecha, hora)) + '</td>';
-                html_bd += '<td class="' + (response[4].fecha == '' ? 'dia_inhabilitado' : '')  + '">' + (response[4].fecha == '' ? '' : enviar_datos_zabuto(response[4].fecha, hora)) + '</td>';
-                html_bd += '<td class="' + (response[5].fecha == '' ? 'dia_inhabilitado' : '')  + '">' + (response[5].fecha == '' ? '' : enviar_datos_zabuto(response[5].fecha, hora)) + '</td>';
-                html_bd += '<td class="' + (response[6].fecha == '' ? 'dia_inhabilitado' : '')  + '">' + (response[6].fecha == '' ? '' : enviar_datos_zabuto(response[6].fecha, hora)) + '</td>';
+                html_bd += '<td class="' + (response2[0].fecha == '' ? 'dia_inhabilitado' : '') + '">' + (response2[0].fecha == '' ? '' : (enviar_datos_zabuto(response2[0].fecha, hora)) + agregarHoraLibre(response2[0].fecha, hora, lista)) + '</td>';
+                html_bd += '<td class="' + (response2[1].fecha == '' ? 'dia_inhabilitado' : '') + '">' + (response2[1].fecha == '' ? '' : (enviar_datos_zabuto(response2[1].fecha, hora)) + agregarHoraLibre(response2[1].fecha, hora, lista)) + '</td>';
+                html_bd += '<td class="' + (response2[2].fecha == '' ? 'dia_inhabilitado' : '') + '">' + (response2[2].fecha == '' ? '' : (enviar_datos_zabuto(response2[2].fecha, hora)) + agregarHoraLibre(response2[2].fecha, hora, lista)) + '</td>';
+                html_bd += '<td class="' + (response2[3].fecha == '' ? 'dia_inhabilitado' : '') + '">' + (response2[3].fecha == '' ? '' : (enviar_datos_zabuto(response2[3].fecha, hora)) + agregarHoraLibre(response2[3].fecha, hora, lista)) + '</td>';
+                html_bd += '<td class="' + (response2[4].fecha == '' ? 'dia_inhabilitado' : '') + '">' + (response2[4].fecha == '' ? '' : (enviar_datos_zabuto(response2[4].fecha, hora)) + agregarHoraLibre(response2[4].fecha, hora, lista)) + '</td>';
+                html_bd += '<td class="' + (response2[5].fecha == '' ? 'dia_inhabilitado' : '') + '">' + (response2[5].fecha == '' ? '' : (enviar_datos_zabuto(response2[5].fecha, hora)) + agregarHoraLibre(response2[5].fecha, hora, lista)) + '</td>';
+                html_bd += '<td class="' + (response2[6].fecha == '' ? 'dia_inhabilitado' : '') + '">' + (response2[6].fecha == '' ? '' : (enviar_datos_zabuto(response2[6].fecha, hora)) + agregarHoraLibre(response2[6].fecha, hora, lista)) + '</td>';
                 html_bd += '</tr>';
             }
             $('#bdTblSemanal').html(html_bd);
-        },
-        error: function (response) {
-            
-        },
-        complete: function () {
-            
         }
     });
+
+    return lista;
+}
+
+function agregarHoraLibre(fecha, hora, libres) {
+    var html = '';
+    if (libres.length > 0) {
+        var libre = libres.filter(x => x.fecha_cita == fecha && x.hora_cita == hora);
+        if (libre.length == 1) {
+            html = '<div style="background-color: ' + (libre[0].tipo == 'REFRIGERIO' ? '#797c7c' : '#5c9d9d') + '; color: #FFFFFF; padding: 5px; font-size: 12px; border-radius: 5px;">' + libre[0].tipo + '<br>' + libre[0].hora_cita + '</div>';
+        }
+    }
+    return html;
 }
 
 function ver_btn_nueva_cita(fecha){

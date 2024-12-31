@@ -154,6 +154,21 @@ namespace PsycoApp.api.Controllers
             return lista;
         }
 
+        [HttpGet("horarios_doctor/{inicio}/{fin}/{id_doctor}")]
+        public List<Cita> horarios_doctor(string inicio, string fin, int id_doctor)
+        {
+            List<Cita> lista = new List<Cita>();
+            try
+            {
+                lista = citaBL.horarios_doctor(inicio, fin, id_doctor);
+            }
+            catch (Exception)
+            {
+                lista.Clear();
+            }
+            return lista;
+        }
+
         [HttpGet("citas_doctor/{usuario}/{fecha}/{id_estado}/{ver_sin_reserva}")]
         public List<Cita> citas_doctor(string usuario, string fecha, int id_estado, int ver_sin_reserva)
         {

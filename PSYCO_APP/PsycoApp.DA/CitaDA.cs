@@ -254,6 +254,40 @@ namespace PsycoApp.DA
             return lista;
         }
 
+        public List<Cita> horarios_doctor(string inicio, string fin, int id_doctor)
+        {
+            List<Cita> lista = new List<Cita>();
+            try
+            {
+                cn.Open();
+                SqlCommand cmd = new SqlCommand("SP_LISTAR_HORARIOS_SEMANA_PSICOLOGO", cn);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Add("@inicio_", SqlDbType.VarChar).Value = inicio;
+                cmd.Parameters.Add("@fin_", SqlDbType.VarChar).Value = fin;
+                cmd.Parameters.Add("@id_psicologo", SqlDbType.Int).Value = id_doctor;
+
+                SqlDataAdapter da = new SqlDataAdapter(cmd);
+                DataTable dt = new DataTable();
+                da.Fill(dt);
+
+                foreach (DataRow row in dt.Rows)
+                {
+                    Cita cita = new Cita();
+                    cita.fecha_cita = Convert.ToString(row["fecha_cita"]);
+                    cita.hora_cita = Convert.ToString(row["hora_cita"]);
+                    cita.tipo = Convert.ToString(row["tipo"]);
+                    lista.Add(cita);
+                }
+            }
+            catch (Exception e)
+            {
+                //LOG.registrarLog("(Excepcion " + random_str + ")[ERROR]->[CitaDA.cs / disponibilidad_doctor <> " + e.Message.ToString(), "ERROR", main_path);
+                lista.Clear();
+            }
+            cn.Close();
+            return lista;
+        }
+
         public List<Cita> citas_doctor(string usuario, string fecha, int id_estado, int ver_sin_reserva)
         {
             List<Cita> lista = new List<Cita>();

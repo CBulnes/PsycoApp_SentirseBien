@@ -22,6 +22,7 @@ namespace PsycoApp.site.Controllers
         private string url_atender_cita = Helper.GetUrlApi() + "/api/cita/atender_cita";
         private string url_cancelar_cita = Helper.GetUrlApi() + "/api/cita/cancelar_cita";
         private string url_disponibilidad_doctor = Helper.GetUrlApi() + "/api/cita/disponibilidad_doctor";
+        private string url_horarios_doctor = Helper.GetUrlApi() + "/api/cita/horarios_doctor";
         private string url_citas_usuario = Helper.GetUrlApi() + "/api/cita/citas_usuario";
         private string url_productos_combo = Helper.GetUrlApi() + "/api/producto/listar_productos_combo";
         private string url_combo_sedes_x_usuario = Helper.GetUrlApi() + "/api/psicologo/listar_sedes_x_usuario_combo";
@@ -253,9 +254,27 @@ namespace PsycoApp.site.Controllers
         }
 
         [HttpGet]
+        public async Task<List<Cita>> ListarHorariosDoctor(string inicio, string fin, int id_doctor)
+        {
+            List<Cita> lista = new List<Cita>();
+            string res = "";
+            try
+            {
+                url = url_horarios_doctor + "/" + inicio + "/" + fin + "/" + id_doctor;
+                res = ApiCaller.consume_endpoint_method(url, null, "GET");
+                lista = JsonConvert.DeserializeObject<List<Cita>>(res);
+            }
+            catch (Exception)
+            {
+                lista.Clear();
+            }
+            return lista;
+        }
+
+        [HttpGet]
         //[AllowAnonymous]
         //[ResponseCache(NoStore = true, Duration = 0)]
-        public async Task<List<Cita>> CitasUsuario(int idPaciente, int idDoctor)
+        public async Task<List<Cita>> CitasUsuario(int idPaciente, int idDoctor, string tipoVista)
         {
             int id_usuario = Convert.ToInt32(HttpContext.Session.GetInt32("id_usuario"));
             List<Cita> lista = new List<Cita>();

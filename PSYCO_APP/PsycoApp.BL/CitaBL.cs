@@ -123,6 +123,20 @@ namespace PsycoApp.BL
             return lista;
         }
 
+        public List<Cita> horarios_doctor(string inicio, string fin, int id_doctor)
+        {
+            List<Cita> lista = new List<Cita>();
+            try
+            {
+                lista = citaDA.horarios_doctor(inicio, fin, id_doctor);
+            }
+            catch (Exception)
+            {
+                lista.Clear();
+            }
+            return lista;
+        }
+
         public List<Cita> citas_doctor(string usuario, string fecha, int id_estado, int ver_sin_reserva)
         {
             List<Cita> lista = new List<Cita>();
