@@ -650,7 +650,10 @@ function guardar_cita() {
                 $('#cboDoctor, #cboPaciente, #cboServicio').val('-1');
                 $('#mdl_cita').modal('hide');
 
-                $('.calendar-container').html('<div id="my-calendar"></div>');
+                var tipoVista = TipoVista();
+                if (tipoVista == 'MENSUAL') {
+                    $('.calendar-container').html('<div id="my-calendar"></div>');
+                }
                 cargar_citas();
             } else {
                 Swal.fire({
@@ -692,7 +695,10 @@ function confirmar_cita() {
                 $('#cboDoctor, #cboPaciente, #cboServicio').val('-1');
                 $('#mdl_cita').modal('hide');
 
-                $('.calendar-container').html('<div id="my-calendar"></div>');
+                var tipoVista = TipoVista();
+                if (tipoVista == 'MENSUAL') {
+                    $('.calendar-container').html('<div id="my-calendar"></div>');
+                }
                 cargar_citas();
             } else {
                 Swal.fire({
@@ -734,7 +740,10 @@ function atender_cita() {
                 $('#cboDoctor, #cboPaciente, #cboServicio').val('-1');
                 $('#mdl_cita').modal('hide');
 
-                $('.calendar-container').html('<div id="my-calendar"></div>');
+                var tipoVista = TipoVista();
+                if (tipoVista == 'MENSUAL') {
+                    $('.calendar-container').html('<div id="my-calendar"></div>');
+                }
                 cargar_citas();
             } else {
                 Swal.fire({
@@ -776,7 +785,10 @@ function cancelar_cita() {
                 $('#cboDoctor, #cboPaciente, #cboServicio').val('-1');
                 $('#mdl_cita').modal('hide');
 
-                $('.calendar-container').html('<div id="my-calendar"></div>');
+                var tipoVista = TipoVista();
+                if (tipoVista == 'MENSUAL') {
+                    $('.calendar-container').html('<div id="my-calendar"></div>');
+                }
                 cargar_citas();
             } else {
                 Swal.fire({
