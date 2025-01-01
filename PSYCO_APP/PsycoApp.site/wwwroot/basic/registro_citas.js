@@ -37,8 +37,16 @@ $(document).ready(function () {
     });
 });
 function recargar_citas() {
-    $('.calendar-container').html('<div id="my-calendar"></div>');
+    var tipoVista = TipoVista();
+    if (tipoVista == 'MENSUAL') {
+        $('.calendar-container').html('<div id="my-calendar"></div>');
+    }
     cargar_citas();
+}
+
+function TipoVista() {
+    var tipoVista = $('.btn-vista.active').attr('data-tipo');
+    return tipoVista;
 }
 
 function cargar_citas() {
@@ -46,7 +54,7 @@ function cargar_citas() {
 
     var filtroPaciente = $('#cboPacienteFiltro').val();
     var filtroDoctor = $('#cboDoctorFiltro').val();
-    var tipoVista = $('.btn-vista.active').attr('data-tipo');
+    var tipoVista = TipoVista();
 
     $.ajax({
         url: '/RegistroCitas/CitasUsuario?idPaciente=' + filtroPaciente + '&idDoctor=' + filtroDoctor + '&tipoVista=' + tipoVista,
@@ -64,10 +72,13 @@ function cargar_citas() {
             lista_citas = [];
         },
         complete: function () {
-            $("#my-calendar").zabuto_calendar({
-                legend: []
-            });
-
+            if (tipoVista == 'MENSUAL') {
+                $("#my-calendar").zabuto_calendar({
+                    legend: []
+                });
+            } else if (tipoVista == 'SEMANAL') {
+                recargar_vista_semanal()
+            }
             validar_cambio_fecha();
         }
     });
@@ -1047,12 +1058,23 @@ function listarHorariosAdicionales(inicio, fin, filtroDoctor, response2) {
     var i = 0;
     var lista = [];
 
-    filtroDoctor = 11;
+    if (filtroDoctor == -1) {
+        Swal.fire({
+            icon: "Error",
+            title: "Oops...",
+            text: "Seleccione un especialista para realizar la búsqueda.",
+        });
+    }
 
     $.ajax({
         url: '/RegistroCitas/ListarHorariosDoctor?inicio=' + inicio + '&fin=' + fin + '&id_doctor=' + filtroDoctor,
         type: "GET",
         data: {},
+        beforeSend: function () {
+            //$('.div_horario_refrigero').remove();
+            $('#hdTblSemanal > tr').html('');
+            $('#bdTblSemanal').html('');
+        },
         success: function (data) {
             lista = data;
         },
@@ -1065,7 +1087,6 @@ function listarHorariosAdicionales(inicio, fin, filtroDoctor, response2) {
             lista = [];
         },
         complete: function () {
-
             for (var dia of response2) {
                 html_hd += '<th style="width: 12.5%;" class="' + (dia.fecha == '' ? 'header-semanal dia_inhabilitado' : 'header-semanal') + '">';
                 html_hd += (dia.fecha == '' ? dias[i] : dias[i] + ' ' + fecha_formato_ddmmyyyy(dia.fecha) + '&nbsp;');
@@ -1099,20 +1120,18 @@ function agregarHoraLibre(fecha, hora, libres) {
     if (libres.length > 0) {
         var libre = libres.filter(x => x.fecha_cita == fecha && x.hora_cita == hora);
         if (libre.length == 1) {
-            html = '<div style="background-color: ' + (libre[0].tipo == 'REFRIGERIO' ? '#797c7c' : '#5c9d9d') + '; color: #FFFFFF; padding: 5px; font-size: 12px; border-radius: 5px;">' + libre[0].tipo + '<br>' + libre[0].hora_cita + '</div>';
+            html = '<div class="div_horario_refrigero" style="background-color: ' + (libre[0].tipo == 'REFRIGERIO' ? '#797c7c' : '#5c9d9d') + '; color: #FFFFFF; padding: 5px; font-size: 12px; border-radius: 5px;">' + libre[0].tipo + '<br>' + libre[0].hora_cita + '</div>';
         }
     }
     return html;
 }
 
-function ver_btn_nueva_cita(fecha){
+function ver_btn_nueva_cita(fecha) {
     var dia_ = parseInt(fecha.slice(-2));
     var mes_ = parseInt(fecha.substring(0, 7).slice(-2));
     var año_ = parseInt(fecha.substring(0, 4));
 
-    if (mes_ == 12) {
-        mes_--;
-    }
+    mes_--;
 
     var html = contenido_cita(dia_, mes_, año_, null);
     html = html.includes('btn_nueva_cita') ? html : '';
@@ -1123,10 +1142,8 @@ function enviar_datos_zabuto(fecha, hora) {
     var dia_ = parseInt(fecha.slice(-2));
     var mes_ = parseInt(fecha.substring(0, 7).slice(-2));
     var año_ = parseInt(fecha.substring(0, 4));
-
-    if (mes_ == 12) {
-        mes_--;
-    }
+    
+    mes_--;
 
     var html = contenido_cita(dia_, mes_, año_, hora);
     html = (html == '-' ? '' : (html.includes('btn_nueva_cita') ? '' : html));
