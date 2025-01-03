@@ -276,7 +276,7 @@ namespace PsycoApp.DA
                 cn.Open();
                 SqlCommand cmd = new SqlCommand(Procedures.listar_sedes_x_usuario, cn);
                 cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.AddWithValue("@id_usuario", id_usuario);
+                cmd.Parameters.AddWithValue("@id_psicologo", id_usuario);
 
                 SqlDataAdapter da = new SqlDataAdapter(cmd);
                 DataTable dt = new DataTable();

@@ -206,7 +206,7 @@ namespace PsycoApp.DA
             return lista;
         }
 
-        public List<Cita> citas_usuario(int id_usuario, int id_paciente, int id_doctor, string main_path, string random_str)
+        public List<Cita> citas_usuario(int id_usuario, int id_paciente, int id_doctor, int id_sede, string main_path, string random_str)
         {
             List<Cita> lista = new List<Cita>();
             try
@@ -217,6 +217,7 @@ namespace PsycoApp.DA
                 cmd.Parameters.Add("@id_usuario", SqlDbType.Int).Value = id_usuario;
                 cmd.Parameters.Add("@id_paciente", SqlDbType.Int).Value = id_paciente;
                 cmd.Parameters.Add("@id_doctor", SqlDbType.Int).Value = id_doctor;
+                cmd.Parameters.Add("@id_sede", SqlDbType.Int).Value = id_sede;
 
                 SqlDataAdapter da = new SqlDataAdapter(cmd);
                 DataTable dt = new DataTable();
@@ -241,7 +242,7 @@ namespace PsycoApp.DA
                     cita.monto_pagado = Convert.ToDecimal(row["monto_pagado"]);
                     cita.monto_pendiente = Convert.ToDecimal(row["monto_pendiente"]);
                     cita.id_servicio = Convert.ToInt32(row["id_servicio"]);
-                    cita.esTaller = Convert.ToBoolean(row["esTaller"]);
+                    cita.esEvaluacion = Convert.ToBoolean(row["esEvaluacion"]);
                     lista.Add(cita);
                 }
             }

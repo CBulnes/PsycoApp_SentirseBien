@@ -21,6 +21,12 @@ document.addEventListener('DOMContentLoaded', function () {
         searchPlaceholderValue: "Buscar...",
         itemSelectText: "Todos",
     });
+    const elementTT = document.querySelector('#cboSedeFiltro');
+    const choicesTT = new Choices(elementTT, {
+        placeholder: true,
+        searchPlaceholderValue: "Buscar...",
+        itemSelectText: "Todos",
+    });
 });
 $(document).ready(function () {
     const element = document.querySelector('#cboDoctorFiltro');
@@ -31,6 +37,12 @@ $(document).ready(function () {
     });
     const elementT = document.querySelector('#cboPacienteFiltro');
     const choicesT = new Choices(elementT, {
+        placeholder: true,
+        searchPlaceholderValue: "Buscar...",
+        itemSelectText: "Todos",
+    });
+    const elementTT = document.querySelector('#cboSedeFiltro');
+    const choicesTT = new Choices(elementTT, {
         placeholder: true,
         searchPlaceholderValue: "Buscar...",
         itemSelectText: "Todos",
@@ -54,10 +66,11 @@ function cargar_citas() {
 
     var filtroPaciente = $('#cboPacienteFiltro').val();
     var filtroDoctor = $('#cboDoctorFiltro').val();
+    var filtroSede = $('#cboSedeFiltro').val();
     var tipoVista = TipoVista();
 
     $.ajax({
-        url: '/RegistroCitas/CitasUsuario?idPaciente=' + filtroPaciente + '&idDoctor=' + filtroDoctor + '&tipoVista=' + tipoVista,
+        url: '/RegistroCitas/CitasUsuario?idPaciente=' + filtroPaciente + '&idDoctor=' + filtroDoctor + '&idSede=' + filtroSede + '&tipoVista=' + tipoVista,
         type: "GET",
         data: {},
         success: function (data) {
@@ -488,16 +501,20 @@ function cargar_datos_cita(id_cita, id_doctor, id_paciente, fecha, hora, estado,
 }
 
 function mostrar_historial(id_cita) {
-    var historial = lista_citas.filter(x => x.id_cita == parseInt(id_cita))[0].historial;
     var html = '';
-    for (var item of historial) {
-        html += '<div class="sb-reg-citas-popup-tab-historial-block"><div class="sb-reg-citas-popup-tab-historial-block-item">';
-        html += '<p>' + item.fecha + '</p>';
-        html += '</div>';
-        html += '<div class="sb-reg-citas-popup-tab-historial-block-item-2">';
-        html += '<button type="button" class="evento_' + item.evento.toLowerCase().replace(' ', '_') + '">' + item.evento + '</button>';
-        html += '<div class="sb-reg-citas-historial-user" ><p>Usuario: </p><span>' + item.usuario +'</span></div>';
-        html += '</div></div>';
+    try {
+        var historial = lista_citas.filter(x => x.id_cita == parseInt(id_cita))[0].historial;
+        for (var item of historial) {
+            html += '<div class="sb-reg-citas-popup-tab-historial-block"><div class="sb-reg-citas-popup-tab-historial-block-item">';
+            html += '<p>' + item.fecha + '</p>';
+            html += '</div>';
+            html += '<div class="sb-reg-citas-popup-tab-historial-block-item-2">';
+            html += '<button type="button" class="evento_' + item.evento.toLowerCase().replace(' ', '_') + '">' + item.evento + '</button>';
+            html += '<div class="sb-reg-citas-historial-user" ><p>Usuario: </p><span>' + item.usuario + '</span></div>';
+            html += '</div></div>';
+        }
+    } catch (e) {
+        html = '';
     }
     $('#divHistorial').html(html);
 }
@@ -535,7 +552,7 @@ function cargar_lista_doctores() {
         data: {},
         async: false,
         beforeSend: function () {
-            html += '<option value="-1">Seleccionar</option>';
+            html += '<option value="-1">Todos</option>';
         },
         success: function (data) {
             for (var item of data) {
@@ -543,7 +560,7 @@ function cargar_lista_doctores() {
             }
         },
         error: function (response) {
-            html = '<option value="-1">Seleccionar</option>';
+            html = '<option value="-1">Todos</option>';
         },
         complete: function () {
             $('#cboDoctor').html(html);
@@ -584,6 +601,7 @@ function guardar_cita() {
     var doctor = $('#cboDoctor').val();
     var paciente = $('#cboPaciente').val();
     var id_servicio = $('#cboServicio').val();
+    var id_sede = $('#cboSedeChange').val();
 
     if (doctor == '-1') {
         Swal.fire({
@@ -621,6 +639,15 @@ function guardar_cita() {
         return;
     }
 
+    if (id_sede == '-1') {
+        Swal.fire({
+            icon: "warning",
+            title: "Oops...",
+            text: "Seleccione la sede.",
+        });
+        return;
+    }
+
     var data_ = {
         id_cita: id_cita_,
         id_usuario: 0,
@@ -630,7 +657,8 @@ function guardar_cita() {
         id_doctor_asignado: doctor,
         id_paciente: paciente,
         monto_pactado: '0,00',
-        id_servicio: id_servicio
+        id_servicio: id_servicio,
+        id_sede: id_sede
     };
 
     $.ajax({
@@ -838,6 +866,34 @@ function verificar_disponibilidad() {
     if ((id_doc != id_doc_ant && $('#divReprogramar').is(':visible')) || id_cita_ == 0) {
         $('#txtHora').val('').attr('data-hora', '');
     }
+
+    validar_sede_usuario(id_doc);
+}
+
+function validar_sede_usuario(id_doc) {
+    var html = '';
+    var data_ = '';
+    $.ajax({
+        url: "/RegistroCitas/listar_sedes_x_usuario?id_doc=" + id_doc,
+        type: "GET",
+        data: {},
+        async: false,
+        beforeSend: function () {
+            html += '<option value="-1">Seleccionar</option>';
+        },
+        success: function (data) {
+            data_ = data;
+            for (var item of data_) {
+                html += '<option value="' + item.id + '">' + item.nombre + '</option>';
+            }
+        },
+        error: function (response) {
+            html = '<option value="-1">Seleccionar</option>';
+        },
+        complete: function () {
+            $('#cboSedeChange').html(html);
+        }
+    });
 }
 
 function disponibilidad_doctor() {

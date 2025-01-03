@@ -149,7 +149,7 @@ namespace PsycoApp.site.Controllers
         {
             string res = "";
             model.usuario = Convert.ToString(HttpContext.Session.GetString("login"));
-            model.id_sede = Convert.ToInt32(HttpContext.Session.GetInt32("id_sede"));
+            //model.id_sede = Convert.ToInt32(HttpContext.Session.GetInt32("id_sede"));
 
             RespuestaUsuario res_ = new RespuestaUsuario();
             try
@@ -274,14 +274,14 @@ namespace PsycoApp.site.Controllers
         [HttpGet]
         //[AllowAnonymous]
         //[ResponseCache(NoStore = true, Duration = 0)]
-        public async Task<List<Cita>> CitasUsuario(int idPaciente, int idDoctor, string tipoVista)
+        public async Task<List<Cita>> CitasUsuario(int idPaciente, int idDoctor, int idSede, string tipoVista)
         {
             int id_usuario = Convert.ToInt32(HttpContext.Session.GetInt32("id_usuario"));
             List<Cita> lista = new List<Cita>();
             string res = "";
             try
             {
-                url = url_citas_usuario + "/" + id_usuario + "/" + idPaciente + "/" + idDoctor;
+                url = url_citas_usuario + "/" + id_usuario + "/" + idPaciente + "/" + idDoctor + "/" + idSede;
                 res = ApiCaller.consume_endpoint_method(url, null, "GET");
                 lista = JsonConvert.DeserializeObject<List<Cita>>(res);
             }
@@ -293,20 +293,19 @@ namespace PsycoApp.site.Controllers
         }
 
         [HttpGet]
-        public ActionResult<List<entities.Sede>> listar_sedes_x_usuario()
+        public ActionResult<List<entities.Sede>> listar_sedes_x_usuario(int id_doc)
         {
-            int id_usuario = Convert.ToInt32(HttpContext.Session.GetInt32("id_usuario"));
             int id_sede = Convert.ToInt32(HttpContext.Session.GetInt32("id_sede"));
             List<entities.Sede> lista = new List<entities.Sede>();
             string res = "";
             try
             {
-                url = url_combo_sedes_x_usuario + "/" + id_usuario;
+                url = url_combo_sedes_x_usuario + "/" + id_doc;
                 res = ApiCaller.consume_endpoint_method(url, null, "GET");
                 lista = JsonConvert.DeserializeObject<List<entities.Sede>>(res);
 
-                if (id_sede > 0) lista.Clear();
-                if (lista.Count == 1) HttpContext.Session.SetInt32("id_sede", lista[0].Id);
+                //if (id_sede > 0) lista.Clear();
+                //if (lista.Count == 1) HttpContext.Session.SetInt32("id_sede", lista[0].Id);
             }
             catch (Exception ex)
             {

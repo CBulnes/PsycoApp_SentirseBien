@@ -1025,36 +1025,6 @@
                         }
                     });
                 }
-
-                function validar_sede_usuario(){
-                    var html = '';
-                    var data_ = '';
-                    $.ajax({
-                        url: "/RegistroCitas/listar_sedes_x_usuario",
-                        type: "GET",
-                        data: {},
-                        async: false,
-                        beforeSend: function () {
-                            html += '<option value="-1">Seleccionar</option>';
-                        },
-                        success: function (data) {
-                            data_ = data;
-                            for (var item of data_) {
-                                html += '<option value="' + item.id + '">' + item.nombre + '</option>';
-                            }
-                        },
-                        error: function (response) {
-                            html = '<option value="-1">Seleccionar</option>';
-                        },
-                        complete: function () {
-                            if (data_.length > 0){
-                                $('#cboSedeChange').html(html);
-                                $('#mdl_sede').modal('show');
-                            }
-                        }
-                    });
-                }
-                validar_sede_usuario();
             </script>
         }
         else if (Model.DynamicData.vista == "CAJA")

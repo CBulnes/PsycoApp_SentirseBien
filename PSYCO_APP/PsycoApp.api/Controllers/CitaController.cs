@@ -137,15 +137,15 @@ namespace PsycoApp.api.Controllers
             return lista;
         }
 
-        [HttpGet("citas_usuario/{id_usuario}/{id_paciente}/{id_doctor}")]
-        public List<Cita> citas_usuario(int id_usuario, int id_paciente, int id_doctor)
+        [HttpGet("citas_usuario/{id_usuario}/{id_paciente}/{id_doctor}/{id_sede}")]
+        public List<Cita> citas_usuario(int id_usuario, int id_paciente, int id_doctor, int id_sede)
         {
             List<Cita> lista = new List<Cita>();
             random_str = ru.RandomString(8) + "|" + ru.CurrentDate();
 
             try
             {
-                lista = citaBL.citas_usuario(id_usuario, id_paciente, id_doctor, main_path, random_str);
+                lista = citaBL.citas_usuario(id_usuario, id_paciente, id_doctor, id_sede, main_path, random_str);
             }
             catch (Exception)
             {

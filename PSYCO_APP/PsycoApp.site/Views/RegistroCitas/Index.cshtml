@@ -106,6 +106,15 @@
                 <option value="-1">Todos</option>
             </select>
         </div>
+
+        <div class="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
+            <span class="label-form">Sede</span>
+            <select class="form-control" id="cboSedeFiltro" onchange="recargar_citas()" data-placeholder="Eija cita">
+                <option value="-1">Todos</option>
+                <option value="1">La Molina</option>
+                <option value="2">Surco</option>
+            </select>
+        </div>
     </div>
 
     <div class="sb-reg-citas-table-calendar table-responsive calendar-container my-calendar">
@@ -258,6 +267,18 @@
                                                 <img id="PagoPendiente" src="../images/warning.jpg" style="height: 15px; width: auto; cursor: pointer; margin: 10px 6px 10px 6px;" title="Verificar pagos" onclick="form_pago()" />
                                             </span>
                                         </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+
+                            <div class="sb-reg-citas-popup-tab-panel-block">
+                                <div class="sb-reg-citas-popup-tab-panel-block-item">
+                                    <span class="label-form">Sede</span>
+                                    <div class="input-group">
+                                        <select class="form-control" id="cboSedeChange">
+                                            <option value="-1">Seleccionar</option>
+                                        </select>
                                     </div>
                                 </div>
                             </div>

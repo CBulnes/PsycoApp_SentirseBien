@@ -856,6 +856,7 @@ function contenido_cita(dia, mes, año, hora) {
                 if (item.tipo == 'CITA') {
                     //var clase_estado = item.estado == 'CITADO' ? 'div_cita_registrada' : 'div_cita_atendida';
                     var clase_estado = 'div_evt_' + (item.esTaller == 1 ? 'taller' : item.estado.replace(' ','_').toLowerCase());
+                    clase_estado += item.esEvaluacion == 1 ? ' div_evaluacion' : '';
 
                     html += '<div class="div_cita ' + clase_estado + '" data-id-cita="' + item.id_cita + '" data-id-especialista="' + item.id_doctor_asignado + '" data-id-paciente="' + item.id_paciente + '" data-fecha-cita="' + item.fecha_cita + '" data-hora-cita="' + item.hora_cita + '" data-estado="' + item.estado + '" data-telefono="' + item.telefono + '" data-moneda="' + item.moneda + '" data-monto-pactado="' + item.monto_pactado + '" data-monto-pagado="' + item.monto_pagado + '" data-monto-pendiente="' + item.monto_pendiente + '" data-id-servicio="' + item.id_servicio + '" onclick="ver_cita(this)">';
                     //html += 'Especialista: ' + item.doctor_asignado + '<br/>';
