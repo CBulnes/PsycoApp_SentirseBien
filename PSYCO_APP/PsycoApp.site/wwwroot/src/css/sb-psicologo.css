@@ -224,19 +224,145 @@
             border: 1px solid var(--colorbase2) !important;
         }
 
-.sb-frm-psi-agregar-block-item {
-    display: flex;
-    flex-direction: column;
-    gap: .5rem;
-}
+    .sb-frm-psi-agregar-block-item {
+        display: flex;
+        flex-direction: column;
+        gap: .5rem;
+    }
 
     .sb-frm-psi-agregar-block-item > span {
         font-weight: 400;
     }
 
-@media screen and (width <= 950px) {
+    /* Popup Horarios */
 
-    ::-webkit-scrollbar {
+    .sb-psi-container-horarios {
+        display: none;
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        max-width: none;
+        top: 0;
+        justify-content: center;
+        align-items: center;
+        transition: .3s;
+    }
+
+        .sb-psi-container-horarios::before {
+            content: "";
+            position: fixed;
+            z-index: -1;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: #000;
+            opacity: .7;
+        }
+
+    .sb-psi-container-horarios-popup {
+        width: 800px;
+        height: max-content;
+        max-height: 90vh;
+        background-color: #FFF;
+        border-radius: 1rem;
+        padding: 3rem 3rem;
+        transition: 0.4s linear;
+        overflow: auto;
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        right: 0;
+        left: 0;
+        margin: auto;
+    }
+
+    .sb-psi-container-horarios-popup-title {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 1.5rem;
+    }
+
+    .sb-psi-container-horarios-popup-title p {
+        margin: 0;
+        font-size: 30px;
+        font-weight: 600;
+        color: var(--colorbase2);
+    }
+
+.sb-reg-citas-popup-button-volver {
+    display: flex;
+    justify-content: center;
+    font-size: 16px;
+    font-weight: 500;
+    padding: .6rem 2rem;
+    cursor: pointer;
+    background-color: var(--colorbase2) !important;
+    border: 1px solid var(--colorbase2) !important;
+    color: #FFF;
+    transition: .3s;
+}
+
+    .sb-reg-citas-popup-button-volver:hover {
+        background-color: var(--colorsecundario) !important;
+        border: 1px solid var(--colorsecundario) !important;
+        color: #FFF !important;
+    }
+
+    .sb-reg-citas-popup-tab-panel {
+        display: flex;
+        width: 100%;
+        margin-bottom: 1.5rem;
+        gap: 1rem;
+    }
+
+    .sb-reg-citas-popup-tab-panel-item {
+        display: flex;
+        width: 70%;
+        gap: 1rem;
+    }
+
+    .sb-reg-citas-popup-tab-panel-item .sb-frm-psi-agregar-block-item{
+        width: calc(100% / 2);
+    }
+
+    .sb-reg-citas-popup-tab-panel-item-2 {
+        display: flex;
+        width: 30%;
+    }
+
+        .sb-reg-citas-popup-tab-panel-item-2 .sb-frm-psi-agregar-block-item {
+            width: 70%;
+        }
+
+    .sb-psi-container-horarios-popup-button {
+        display: flex;
+        margin-top: 1rem;
+        justify-content: flex-end;
+        gap: 1rem;
+    }
+
+        .sb-reg-citas-popup-button-salir {
+            display: flex;
+            justify-content: center;
+            font-size: 16px;
+            font-weight: 500;
+            padding: .6rem 2rem;
+            cursor: pointer;
+            background-color: #FFF;
+            border: 1px solid var(--colorbase2) !important;
+            color: var(--colorbase2) !important;
+            transition: .3s;
+        }
+
+            .sb-reg-citas-popup-button-salir:hover {
+                background-color: var(--colorbase2) !important;
+                border: 1px solid var(--colorbase2) !important;
+                color: #FFF !important;
+            }
+
+    @media screen and (width <= 950px) {
+    :: -webkit-scrollbar {
         display: none;
     }
 
@@ -364,6 +490,37 @@
         margin: 0;
     }
 
+    .sb-psi-container-horarios-popup {
+        width: 90%;
+    }
+
+    .sb-reg-citas-popup-tab-panel{
+        flex-direction: column;
+    }
+
+    .sb-reg-citas-popup-tab-panel-item {
+        width: 100%;
+    }
+
+        .sb-psi-container-horarios-popup {
+            padding: 1.5rem;
+        }
+
+        .sb-reg-citas-popup-tab-panel-item-2{
+            width: 50%;
+        }
+
+    #bdHorarios tr td{
+        font-size: 14px;
+    }
+
+    #cboInicio1 {
+        font-size: 14px;
+    }
+
+        .sb-psi-container-horarios-popup-button button, .sb-reg-citas-popup-button-volver {
+            font-size: 14px;
+        }
 
 }
 
