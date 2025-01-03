@@ -263,63 +263,58 @@
 </div>
 
 <!--modal horarios-->
-<div id="mdl_horarios" class="modal" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="true">
-    <div class="modal-dialog modal-lg" role="document" style="height: 90%; display: grid; place-items: center; max-width: fit-content;">
-        <div class="modal-content sb-reg-citas-popup-container" style=" width: fit-content;">
-            <div class="modal-header sb-reg-citas-popup-title">
-                <h5 class="modal-title">Horarios</h5>
-            </div>
-            <div class="modal-body sb-reg-citas-popup-body">
-                <input id="hdnIdPsicologo" type="hidden" />
-                
-                <div class="sb-reg-citas-popup-tab-panel">
-                    <div class="row">
-                        <div class="col-4">
-                            <div class="sb-frm-psi-agregar-block-item">
-                                <span class="label-form">Desde</span>
-                                <input id="txtInicio" name="txtInicio" class="form-control" type="date" required />
-                            </div>
-                        </div>
-                        <div class="col-4">
-                            <div class="sb-frm-psi-agregar-block-item">
-                                <span class="label-form">Hasta</span>
-                                <input id="txtFin" name="txtFin" class="form-control" type="date" required />
-                            </div>
-                        </div>
-                        <div class="col-4">
-                            <div class="sb-frm-psi-agregar-block-item">
-                                <span class="label-form">&nbsp;</span>
-                                <button type="button" class="btn btn-secondary sb-reg-citas-popup-button-volver" onclick="listarHorarios()">Buscar</button>
-                            </div>
-                        </div>
+<div id="mdl_horarios" class="modal sb-psi-container-horarios" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="true">
 
-                        <div class="col-12">
-                            <div class="sb-frm-psi-agregar-block-item">
-                                <table style="width: 100%;">
-                                    <thead>
-                                        <tr>
-                                            <th>Fecha</th>
-                                            <th>Inicio</th>
-                                            <th>Fin</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="bdHorarios">
-                                        <tr>
-                                            <td>Realice la búsqueda de horarios.</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
+    <div class="sb-psi-container-horarios-popup">
+        <div class="sb-psi-container-horarios-popup-title">
+            <p>Horarios</p>
+        </div>
+
+        <input id="hdnIdPsicologo" type="hidden" />
+
+        <div class="sb-reg-citas-popup-tab-panel">
+            <div class="sb-reg-citas-popup-tab-panel-item">
+                <div class="sb-frm-psi-agregar-block-item">
+                    <span class="label-form">Desde</span>
+                    <input id="txtInicio" name="txtInicio" class="form-control" type="date" required />
                 </div>
-
+                <div class="sb-frm-psi-agregar-block-item">
+                    <span class="label-form">Hasta</span>
+                    <input id="txtFin" name="txtFin" class="form-control" type="date" required />
+                </div>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary sb-reg-citas-popup-button-volver" onclick="guardarHorarios()">Guardar</button>
+            <div class="sb-reg-citas-popup-tab-panel-item-2">
+                <div class="sb-frm-psi-agregar-block-item">
+                    <button type="button" class="btn btn-secondary sb-reg-citas-popup-button-volver" onclick="listarHorarios()">Buscar</button>
+                </div>
             </div>
         </div>
+
+        <div class="sb-frm-psi-table-block-item">
+            <table class="table table-striped" style="width: 100%; overflow: scroll;">
+                <thead>
+                    <tr>
+                        <th>Fecha</th>
+                        <th>Inicio</th>
+                        <th>Fin</th>
+                    </tr>
+                </thead>
+                <tbody id="bdHorarios">
+                    <tr>
+                        <td>Realice la búsqueda de horarios.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="sb-psi-container-horarios-popup-button">
+            <button type="button" class="btn btn-secondary sb-reg-citas-popup-button-volver" onclick="guardarHorarios()">Guardar</button>
+            <button type="button" class="btn btn-secondary sb-reg-citas-popup-button-salir" onclick="cancelarHorarios()">Cancelar</button>
+        </div>
+
     </div>
+
+
 </div>
 
 @section Scripts {
@@ -638,6 +633,10 @@
             //         });
             //     }
             // });
+        }
+
+        function cancelarHorarios() {
+            $('#mdl_horarios').removeClass('show');
         }
 
         function listarEstudios(estudios, idPsicologo){

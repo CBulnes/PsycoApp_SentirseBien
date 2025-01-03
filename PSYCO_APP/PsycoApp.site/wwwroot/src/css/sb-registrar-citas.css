@@ -225,8 +225,122 @@
     font-weight: 600;
 }
 
+.sb-reg-citas-container .btn-group .btn-vista {
+    color: var(--colorbase2);
+    border-color: var(--colorbase2);
+}
 
-@media screen and (width <= 950px){
+    .sb-reg-citas-container .btn-group .btn-vista.active {
+        color: #fff;
+        background-color: var(--colorbase2);
+        border-color: var(--colorbase2);
+    }
+
+    .sb-reg-citas-container .btn-group .btn-vista:hover {
+        color: #fff;
+        background-color: var(--colorbase2);
+        border-color: var(--colorbase2);
+    }
+
+    .sb-reg-citas-list-filtro {
+        display: flex;
+        gap: 1rem;
+    }
+
+    .sb-reg-citas-list-filtro > div {
+        display: flex;
+        flex-direction: column;
+        gap: .5rem;
+    }
+
+    .sb-reg-citas-list-filtro > div > .choices .choices__inner {
+        border-color: var(--colorbase2);
+        border-radius: 4px;
+    }
+
+        .sb-reg-citas-list-filtro > div > .choices .choices__inner .choices__list .choices__item {
+            color: var(--colorbase2);
+            background: transparent;
+            opacity: 1;
+        }
+
+        .sb-reg-citas-list-filtro > div > .choices .choices__list.choices__list--dropdown {
+            border: 1px solid var(--colorbase2);
+        }
+
+        .sb-reg-citas-list-filtro > div > .choices .choices__list.choices__list--dropdown input {
+            color: var(--colorbase2);
+            border: 1px solid var(--colorbase2);
+        }
+
+        .choices__list--dropdown .choices__item--selectable[data-select-text], .choices__list[aria-expanded] .choices__item--selectable[data-select-text] {
+            color: var(--colorbase2);
+        }
+
+    #cbo_seleccion_mes {
+        padding: .5rem;
+    }
+
+
+
+    .sb-reg-citas-table-calendar {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .sb-reg-citas-table-calendar-month {
+        display: flex;
+        width: 100%;
+        justify-content: space-around;
+    }
+
+    .sb-reg-citas-table-calendar-list > div{
+        display: flex;
+        flex-direction: column;
+        gap: .5rem;
+    }
+
+    #tblSemanal{
+        width: 100%;
+    }
+
+    #bdTblSemanal tr td {
+        height: 40px !important;
+        font-size: 14px;
+    }
+
+    #hdTblSemanal tr th {
+        height: 40px !important;
+        font-size: 14px;
+    }
+
+    .sb-reg-citas-table-calendar-table {
+        padding: 0 15px;
+    }
+
+
+@media screen and (width <= 950px) {
+    .sb-reg-citas-table-calendar-table {
+        display: flex;
+        overflow: scroll;
+        flex-wrap: nowrap;
+    }
+
+    #tblSemanal {
+        flex: 0 0 auto;
+        min-width: 1200px;
+    }
+
+    #bdTblSemanal tr td {
+        height: 35px !important;
+        font-size: 12px;
+    }
+
+    #hdTblSemanal tr th {
+        height: 35px !important;
+        font-size: 12px;
+    }
 
     .sb-reg-citas-container {
         padding: 1rem;
@@ -239,16 +353,9 @@
     }
 
     .sb-reg-citas-list-filtro {
-        display: flex;
         flex-direction: column;
-        gap: 1rem;
+        margin: 0;
     }
-
-        .sb-reg-citas-list-filtro > div {
-            display: flex;
-            flex-direction: column;
-            gap: .5rem;
-        }
 
     .sb-reg-citas-list-colores > div {
         width: 7rem;

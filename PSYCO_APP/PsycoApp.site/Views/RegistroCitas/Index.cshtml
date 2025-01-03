@@ -112,7 +112,35 @@
         <div id="my-calendar"></div>
     </div>
 
-    <div class="my-calendar2 hide-element" style="display: block; width: 100%; overflow-x: auto;">
+    <div class="sb-reg-citas-table-calendar my-calendar2 hide-element">
+        <div class="sb-reg-citas-table-calendar-month">
+            <div class="calendar-month-navigation trigger_mes_anterior" style="cursor: pointer;">
+                <span class="sb-reg-citas-arrow-left">&lt;</span>
+            </div>
+            <select id="trigger_seleccion_mes" style="color: #004A92; font-size: 18px; font-weight: bold; border: 0px; text-decoration: none; cursor: pointer;" disabled="true"></select>
+            <div class="calendar-month-navigation trigger_mes_siguiente" style="cursor: pointer;">
+                <span class="sb-reg-citas-arrow-right">&gt;</span>
+            </div>
+        </div>
+        <div class="sb-reg-citas-table-calendar-list">
+            <div class="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
+                <span class="label-form">N° de semana</span>
+                <select class="form-control" id="cboSemanaFiltro" onchange="recargar_vista_semanal()"></select>
+            </div>
+        </div>
+        <div class="sb-reg-citas-table-calendar-table">
+            <table id="tblSemanal">
+                <thead id="hdTblSemanal">
+                    <tr></tr>
+                </thead>
+                <tbody id="bdTblSemanal">
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
+    <div class="my-calendar2 hide-element" style="display: none;">
         <div>
             <div class="row sb-reg-citas-list-filtro">
                 <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
@@ -135,11 +163,6 @@
                     </table>
                 </div>
             </div>
-            <div class="row sb-reg-citas-list-filtro">
-                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                    <span class="label-form">&nbsp;</span>
-                </div>
-            </div>
 
             <div class="row sb-reg-citas-list-filtro">
                 <div class="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
@@ -147,22 +170,15 @@
                     <select class="form-control" id="cboSemanaFiltro" onchange="recargar_vista_semanal()"></select>
                 </div>
             </div>
-            <div class="row sb-reg-citas-list-filtro">
-                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                    <span class="label-form">&nbsp;</span>
-                </div>
-            </div>
 
             <div class="row sb-reg-citas-list-filtro">
-                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                    <table id="tblSemanal" style="width: 100%;">
-                        <thead id="hdTblSemanal">
-                            <tr></tr>
-                        </thead>
-                        <tbody id="bdTblSemanal">
-                        </tbody>
-                    </table>
-                </div>
+                <table id="tblSemanal" style="width: 1050px !important;">
+                    <thead id="hdTblSemanal">
+                        <tr></tr>
+                    </thead>
+                    <tbody id="bdTblSemanal">
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
