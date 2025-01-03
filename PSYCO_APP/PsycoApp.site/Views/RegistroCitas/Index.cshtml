@@ -1,7 +1,7 @@
-﻿@model dynamic
+﻿@model ProductosYPacientesViewModel
 @{
     var dynamicData = Model.DynamicData;
-    var productos = Model.Model;
+    var productos = Model.Productos;
     var dHoy = DateTime.Now;
     ViewData["Title"] = "Agenda";
 }
@@ -50,7 +50,7 @@
         cursor: default !important;
     }
 
-    .header-semanal{
+    .header-semanal {
         color: #868686 !important;
         font-size: 11px;
         text-align: center;
@@ -79,8 +79,8 @@
             <p>Confirmado</p>
         </div>
         @* <div class="sb-reg-citas-color-en_proceso">
-        <p>En proceso</p>
-        </div> *@
+            <p>En proceso</p>
+            </div> *@
         <div class="sb-reg-citas-color-atendido">
             <p>Atendido</p>
         </div>
@@ -115,6 +115,7 @@
                 <option value="2">Surco</option>
             </select>
         </div>
+        <a href="#pacientesModal" class="btn modal-trigger">Abrir Modal de Pacientes</a>
     </div>
 
     <div class="sb-reg-citas-table-calendar table-responsive calendar-container my-calendar">
@@ -286,7 +287,7 @@
                                     </div>
                                 </div>
                             </div>
-                            
+
 
                             <div class="sb-reg-citas-popup-tab-panel-block">
                                 <div class="sb-reg-citas-popup-tab-panel-block-item">
@@ -442,7 +443,8 @@
         </div>
     </div>
 </div>
-
+<!-- Referencia la vista parcial de pacientes dentro del modal -->
+@Html.Partial("/Views/Mantenimiento/Paciente/_PacientesModal.cshtml", Model.Pacientes)
 <!--MODAL OTROS PAGOS PENDIENTES-->
 <div id="mdl_otros_pagos_pendientes" class="modal" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="true">
     <div class="modal-dialog modal-lg" role="document" style="height: 90%; display: grid; place-items: center; max-width: fit-content;">
@@ -481,8 +483,150 @@
 
 @section Scripts {
 
+
+
     <link rel="stylesheet" href="~/assets/css/zabuto.css" />
     <link rel="stylesheet" href="~/assets/css/datetimepicker.css" />
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var elems = document.querySelectorAll('.modal');
+            var instances = M.Modal.init(elems);
+        });
+
+        var estadosCiviles = [
+            { id: -1, valor: 'Seleccionar' },
+            { id: 1, valor: 'Casado' },
+            { id: 2, valor: 'Soltero' }
+        ];
+
+        var sexos = [
+            { id: -1, valor: 'Seleccionar' },
+            { id: 1, valor: 'Masculino' },
+            { id: 2, valor: 'Femenino' }
+        ];
+
+        var estados = [
+            { id: -1, valor: 'Seleccionar' },
+            { id: 1, valor: 'Habilitado' },
+            { id: 0, valor: 'Deshabilitado' }
+        ];
+
+        var tiposDocumento = [
+            { id: -1, valor: 'Seleccionar' },
+            { id: 1, valor: 'DNI' },
+            { id: 2, valor: 'Carnet Extranjeria' }
+        ];
+
+        function cargarCombo(array, idCombo) {
+            var html = '';
+            for (var item of array) {
+                html += '<option value="' + item.id + '">' + item.valor + '</option>';
+            }
+            $('#' + idCombo).html(html);
+        }
+        cargarCombo(estadosCiviles, 'cboEstadoCivil');
+        cargarCombo(sexos, 'cboSexo');
+        cargarCombo(estados, 'cboEstado');
+        cargarCombo(tiposDocumento, 'cboDocumento');
+
+        function buscarPaciente(pageNumber = 1) {
+            let nombre = document.getElementById('txtBuscarNombre').value;
+            let pageSize = 10; // Número de pacientes por página
+            console.log('paciente');
+            $.post('/Mantenimiento/Paciente/Buscar', { nombre: nombre, pageNumber: pageNumber, pageSize: pageSize })
+                .done(function (data) {
+                    // Actualizar solo el contenido de la tabla
+                    $('#containerTabla').html(data);
+                })
+                .fail(function () {
+                    Swal.fire({
+                        icon: "Error",
+                        title: "Oops...",
+                        text: "Error en la búsqueda de pacientes.",
+                    });
+                });
+        }
+
+        function mostrarFormularioAgregar() {
+            $(".sb-admninistrator").css('overflow', 'hidden');
+            $('#containerFormulario').css('display', 'flex');
+            $('#containerFormulario input').val('');
+            $('#containerFormulario select').val('-1');
+        }
+
+        function editarPaciente(id) {
+            $.get(`/Mantenimiento/Paciente/Get/${id}`, function (paciente) {
+                $('#hdnPacienteId').val(paciente.id);
+                $('#txtNombre').val(paciente.nombre);
+                $('#txtApellido').val(paciente.apellido);
+                $('#txtFecha').val(paciente.fechaNacimiento.substring(0, 10));
+                $('#cboEstado').val(paciente.estado);
+                $('#cboDocumento').val(paciente.documentoTipo);
+                $('#txtDocumento').val(paciente.documentoNumero);
+                $('#txtTelefono').val(paciente.telefono);
+                $('#cboEstadoCivil').val(paciente.estadoCivil);
+                $('#cboSexo').val(paciente.sexo);
+                $('#containerFormulario').css('display', 'flex');
+                $(".sb-admninistrator").css('overflow', 'hidden');
+            });
+        }
+
+        function eliminarPaciente(id) {
+            if (confirm('¿Estás seguro de que quieres eliminar este paciente?')) {
+                $.post(`/Mantenimiento/Paciente/Eliminar`, { id: id }, function (response) {
+                    Swal.fire({
+                        icon: "success",
+                        text: response.message,
+                    });
+                    buscarPaciente(); // Actualiza la lista después de eliminar
+                });
+            }
+        }
+
+        function guardarPaciente() {
+            console.log('prueba');
+            let paciente = {
+                Id: parseInt($('#hdnPacienteId').val()) || 0,
+                Nombre: $('#txtNombre').val(),
+                Apellido: $('#txtApellido').val(),
+                FechaNacimiento: $('#txtFechaModalPaci').val(),
+                Estado: $('#cboEstado').val(),
+                DocumentoTipo: $('#cboDocumento').val(),
+                DocumentoNumero: $('#txtDocumentoModalPaci').val(),
+                Telefono: $('#txtTelefonoModalPaci').val(),
+                EstadoCivil: $('#cboEstadoCivil').val(),
+                Sexo: $('#cboSexo').val(),
+            };
+
+            let url = paciente.Id ? '/Mantenimiento/Paciente/Editar' : '/Mantenimiento/Paciente/Agregar';
+            $.ajax({
+                type: 'POST',
+                url: url,
+                contentType: 'application/json',
+                data: JSON.stringify(paciente), // Aquí no envías dentro de un objeto
+                success: function (response) {
+                    Swal.fire({
+                        icon: "success",
+                        title: "Registro completo.",
+                    });
+                    $('#containerFormulario').hide();
+                    $(".sb-admninistrator").css('overflow', 'auto');
+                    buscarPaciente(); // Actualiza la lista después de guardar
+                },
+                error: function (xhr) {
+                    Swal.fire({
+                        icon: "Error",
+                        title: "Oops...",
+                        text: "Debe rellenar todos los campos!",
+                    });
+                }
+            });
+        }
+        function cancelarFormulario() {
+            $('#containerFormulario').hide();
+            $(".sb-admninistrator").css('overflow', 'auto');
+        }
+        </script>>
 
     <script src="~/basic/zabuto.js?f=@dHoy.ToString("yyyyMMddhhmmss")"></script>
     <script src="~/basic/moments.js?f=@dHoy.ToString("yyyyMMddhhmmss")"></script>

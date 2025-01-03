@@ -250,5 +250,45 @@ namespace PsycoApp.site.Controllers.Mantenimiento
             using var client = new HttpClient();
             return await client.DeleteAsync(url);
         }
+
+        [Route("Mantenimiento/Paciente/CargarPacientesModal")]
+        [HttpGet]
+        public async Task<IActionResult> CargarPacientesModal(int pageNumber = 1, int pageSize = 10, string search = "")
+        {
+            try
+            {
+                // Construir la URL para llamar a la API según el término de búsqueda
+                string url = string.IsNullOrEmpty(search)
+                    ? $"{apiUrl}/listar/{pageNumber}/{pageSize}"
+                    : $"{apiUrl}/buscar?nombre={search}&pageNumber={pageNumber}&pageSize={pageSize}";
+
+                // Obtener la lista de pacientes desde la API
+                var pacientes = await GetFromApiAsync<List<PsycoApp.entities.Paciente>>(url);
+
+                // Mapear los pacientes de entidad a ViewModel si es necesario
+                var pacientesViewModel = pacientes.Select(p => new PsycoApp.site.Models.Paciente
+                {
+                    Id = p.Id,
+                    Nombre = p.Nombre,
+                    Apellido = p.Apellido,
+                    DocumentoNumero = p.DocumentoNumero,
+                    Estado = p.Estado,
+                    DocumentoTipo = p.DocumentoTipo,
+                    EstadoCivil = p.EstadoCivil,
+                    FechaNacimiento = p.FechaNacimiento,
+                    Sexo = p.Sexo,
+                    Telefono = p.Telefono
+                }).ToList();
+
+                // Devolver la vista parcial con los datos
+                return PartialView("~/Views/Mantenimiento/Paciente/_PacienteTabla.cshtml", pacientesViewModel);
+            }
+            catch (Exception ex)
+            {
+                // Manejo de errores
+                return BadRequest($"Error al cargar pacientes: {ex.Message}");
+            }
+        }
+
     }
 }
