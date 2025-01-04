@@ -61,7 +61,8 @@ namespace PsycoApp.site.Controllers
                     Nombre = p.Nombre,
                     Alias = p.Alias,
                     Precio = p.Precio,
-                    Color = p.Color
+                    Color = p.Color,
+                    NumSesiones = p.NumSesiones
                 }).ToList();
 
                 var viewModelContainer = new ViewModelContainer<IEnumerable<PsycoApp.site.Models.Producto>>

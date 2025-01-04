@@ -28,5 +28,6 @@ namespace PsycoApp.entities
         public bool esEvaluacion { get; set; } = false;
 
         public List<HistorialCita> historial { get; set; }
+        public List<string> fechas_adicionales { get; set; }
     }
 }

@@ -21,7 +21,15 @@ namespace PsycoApp.BL
             RespuestaUsuario res_ = new RespuestaUsuario();
             try
             {
-                res_ = citaDA.registrar_cita(oCita, main_path, random_str);
+                res_ = citaDA.registrar_cita(oCita, "NO", main_path, random_str);
+                if (oCita.fechas_adicionales.Count > 0)
+                {
+                    foreach (var fecha in oCita.fechas_adicionales)
+                    {
+                        oCita.fecha_cita = fecha;
+                        var res2 = citaDA.registrar_cita(oCita, "SI", main_path, random_str);
+                    }
+                }
             }
             catch (Exception)
             {

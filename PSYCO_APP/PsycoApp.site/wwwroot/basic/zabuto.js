@@ -810,6 +810,14 @@ function fecha_actual() {
     return yyyy + '-' + mm + '-' + dd;
 }
 
+function fecha_yyyyMMdd(fecha) {
+    var dd = fecha.substring(0, 2);
+    var mm = (fecha.slice(-7)).substring(0, 2);
+    var yyyy = fecha.slice(-4);
+
+    return yyyy + '-' + mm + '-' + dd;
+}
+
 function parseDate(dateString) {
     const [year, month, day] = dateString.split('-');
     return new Date(year, month - 1, day);

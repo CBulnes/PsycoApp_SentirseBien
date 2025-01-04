@@ -15,7 +15,7 @@ namespace PsycoApp.DA
         SqlConnection cn = new SqlConnector().cadConnection_psyco;
         string rpta = "";
 
-        public RespuestaUsuario registrar_cita(Cita oCita, string main_path, string random_str)
+        public RespuestaUsuario registrar_cita(Cita oCita, string adicional, string main_path, string random_str)
         {
             RespuestaUsuario res_ = new RespuestaUsuario();
             try
@@ -32,6 +32,7 @@ namespace PsycoApp.DA
                 cmd.Parameters.Add("@id_servicio", SqlDbType.Int).Value = oCita.id_servicio;
                 cmd.Parameters.Add("@id_sede", SqlDbType.Int).Value = oCita.id_sede;
                 cmd.Parameters.Add("@usuario", SqlDbType.VarChar).Value = oCita.usuario;
+                cmd.Parameters.Add("@adicional", SqlDbType.VarChar).Value = adicional;
 
                 SqlDataAdapter da = new SqlDataAdapter(cmd);
                 DataTable dt = new DataTable();

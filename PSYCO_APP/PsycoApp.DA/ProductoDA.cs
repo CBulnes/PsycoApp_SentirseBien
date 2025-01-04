@@ -39,6 +39,7 @@ namespace PsycoApp.DA
                     item.Alias = Convert.ToString(row["Alias"]);
                     item.Precio = Convert.ToString(row["Precio"]);
                     item.Color = Convert.ToString(row["Color"]);
+                    item.NumSesiones = Convert.ToInt32(row["NumSesiones"]);
                     lista.Add(item);
                 }
             }

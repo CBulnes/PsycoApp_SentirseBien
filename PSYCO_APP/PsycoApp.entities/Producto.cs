@@ -11,5 +11,6 @@ namespace PsycoApp.entities
         public string Alias { get; set; }
         public string Precio { get; set; }
         public string Color { get; set; }
+        public int NumSesiones { get; set; }
     }
 }

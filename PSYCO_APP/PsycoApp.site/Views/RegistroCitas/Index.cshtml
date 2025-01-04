@@ -213,10 +213,14 @@
                     <div id="resumen" class="tab-pane fade show active">
 
                         <div class="sb-reg-citas-popup-tab-panel">
-                            <div class="sb-reg-citas-popup-tab-panel-block">
-                                <div class="sb-reg-citas-popup-tab-panel-block-item">
+                            <div class="sb-reg-citas-popup-tab-panel-block" style="display: inline-flex;">
+                                <div class="sb-reg-citas-popup-tab-panel-block-item" style="width: 50%; display: inline-flex">
                                     <span class="label-form">Fecha cita</span>
                                     <input id="txtFecha" class="form-control" type="text" autocomplete="off" disabled="disabled" />
+                                </div>
+                                <div class="sb-reg-citas-popup-tab-panel-block-item fechasAdicionales hide-element" style="width: 50%; display: inline-flex" onclick="verFechasAdicionales()">
+                                    <span class="label-form">&nbsp;</span>
+                                    <button type="button" class="btn btn-primary main_color">Fechas adicionales</button>
                                 </div>
                             </div>
 
@@ -272,10 +276,10 @@
                                     <span class="label-form">Servicio</span>
                                     <div class="input-group">
                                         <select class="form-control" id="cboServicio">
-                                            <option value="-1">Seleccionar</option>
+                                            <option value="-1" data-sesiones="0">Seleccionar</option>
                                             @foreach (var prod in productos)
                                             {
-                                                <option value="@prod.Id">@prod.Alias</option>
+                                                <option value="@prod.Id" data-sesiones="@prod.NumSesiones">@prod.Alias</option>
                                             }
                                         </select>
                                         <div class="input-group-append" id="divPagoPendiente">
@@ -474,6 +478,29 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary sb-reg-citas-popup-button-volver" onclick="cerrar_modal_pagos_pendientes()">Volver</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--MODAL FECHAS ADICIONALES-->
+<div id="mdl_adicionales_" class="modal" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="true">
+    <div class="modal-dialog modal-lg" role="document" style="height: 90%; display: grid; place-items: center; max-width: fit-content;">
+        <div class="modal-content sb-reg-citas-popup-container" style=" width: fit-content;">
+            <div class="modal-header sb-reg-citas-popup-title">
+                <h5 class="modal-title">Fechas adicionales</h5>
+            </div>
+            <div class="modal-body sb-reg-citas-popup-body">
+
+                <div class="sb-reg-citas-popup-tab-panel">
+                    <table class="table table-responsive" style="display: inline-table;">
+                        <tbody id="bdFechas"></tbody>
+                    </table>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary sb-reg-citas-popup-button-volver" onclick="cerrar_modal_fechas_adicionales()">Volver</button>
             </div>
         </div>
     </div>

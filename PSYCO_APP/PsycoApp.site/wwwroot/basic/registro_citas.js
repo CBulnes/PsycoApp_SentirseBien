@@ -4,6 +4,8 @@ var lista_citas = [];
 var lista_horarios = [];
 var id_cita_ = 0;
 var estado_ = '';
+var sesiones = 0;
+var adicionales = [];
 
 var person_img = path + '/images/user.png';
 var recargar_pagos_pendientes = false;
@@ -47,7 +49,43 @@ $(document).ready(function () {
         searchPlaceholderValue: "Buscar...",
         itemSelectText: "Todos",
     });
+
+    $('#cboServicio').on('change', function () {
+        $('.fechasAdicionales').addClass('hide-element');
+        sesiones = $(this).find(':selected').attr('data-sesiones');
+        if (sesiones > 0) {
+            $('.fechasAdicionales').removeClass('hide-element');
+        }
+
+        var fechaInicial = $('#txtFecha').val();
+        var html = '';
+        var disabled = id_cita_ > 0 ? 'disabled="disabled"' : '';
+        for (var i = 1; i < sesiones; i++) {
+            var fecha = addDays(parseDate(fecha_yyyyMMdd(fechaInicial)), i*7);
+            html += '<tr>';
+            html += '<td><input class="form-control fechaAd" type="date" id="txtFecha' + i + '" autocomplete="off" max="2050-12-31" min="2022-08-01" value="' + formatDateISO(fecha) + '" onkeydown="return false" ' + disabled + ' /></td>';
+            html += '</tr>';
+        }
+        $('#bdFechas').html(html);
+    })
 });
+
+function addDays(date, days) {
+    const newDate = new Date(date);
+    newDate.setDate(date.getDate() + days);
+    return newDate;
+}
+
+function formatDateISO(date) {
+    const isoString = date.toISOString();
+    const formattedDate = isoString.split("T")[0];
+    return formattedDate;
+};
+
+function verFechasAdicionales() {
+    $('#mdl_adicionales_').modal('show');
+}
+
 function recargar_citas() {
     var tipoVista = TipoVista();
     if (tipoVista == 'MENSUAL') {
@@ -319,6 +357,14 @@ function cerrar_modal_pagos_pendientes(){
     }, 250);
 }
 
+function cerrar_modal_fechas_adicionales() {
+    adicionales = [];
+    $('.fechaAd').each(function () {
+        adicionales.push($(this).val());
+    })
+    $('#mdl_adicionales_').modal('hide');
+}
+
 function guardar_pago() {
     var id_forma_pago = $('#cboFormaPago').val();
     var id_detalle_transferencia = $('#cboDetalleTransferencia').val();
@@ -449,6 +495,7 @@ function cerrar_modal_pago2() {
 function cargar_datos_cita(id_cita, id_doctor, id_paciente, fecha, hora, estado, telefono, moneda, monto_pactado, monto_pagado, monto_pendiente, id_servicio, id_sede) {
     $('#btnResumen').trigger('click');
     $('#ulTabs').hide();
+    $('.fechasAdicionales').addClass('hide-element');
 
     $('#txtFecha').attr('data-fecha', fecha).val(fecha_formato_ddmmyyyy(fecha));
     $('#txtHora').val(hora).attr('data-hora', hora);
@@ -650,6 +697,15 @@ function guardar_cita() {
         return;
     }
 
+    if (sesiones > 0 && adicionales.length == 0) {
+        Swal.fire({
+            icon: "warning",
+            title: "Oops...",
+            text: "Seleccione las fechas adicionales.",
+        });
+        return;
+    }
+
     var data_ = {
         id_cita: id_cita_,
         id_usuario: 0,
@@ -660,7 +716,8 @@ function guardar_cita() {
         id_paciente: paciente,
         monto_pactado: '0,00',
         id_servicio: id_servicio,
-        id_sede: id_sede
+        id_sede: id_sede,
+        fechas_adicionales: adicionales
     };
 
     $.ajax({
