@@ -126,8 +126,9 @@ function ver_cita(e) {
     var monto_pagado = $(e).attr('data-monto-pagado');
     var monto_pendiente = $(e).attr('data-monto-pendiente');
     var id_servicio = $(e).attr('data-id-servicio');
+    var id_sede = $(e).attr('data-id-sede');
 
-    cargar_datos_cita(id_cita, id_especialista, id_paciente, fecha_cita, hora_Cita, estado, telefono, moneda, formatDecimal(monto_pactado), formatDecimal(monto_pagado), formatDecimal(monto_pendiente), id_servicio);
+    cargar_datos_cita(id_cita, id_especialista, id_paciente, fecha_cita, hora_Cita, estado, telefono, moneda, formatDecimal(monto_pactado), formatDecimal(monto_pagado), formatDecimal(monto_pendiente), id_servicio, id_sede);
 }
 
 function formatDecimal(num) {
@@ -445,13 +446,13 @@ function cerrar_modal_pago2() {
     }, 250);
 }
 
-function cargar_datos_cita(id_cita, id_doctor, id_paciente, fecha, hora, estado, telefono, moneda, monto_pactado, monto_pagado, monto_pendiente, id_servicio) {
+function cargar_datos_cita(id_cita, id_doctor, id_paciente, fecha, hora, estado, telefono, moneda, monto_pactado, monto_pagado, monto_pendiente, id_servicio, id_sede) {
     $('#btnResumen').trigger('click');
     $('#ulTabs').hide();
 
     $('#txtFecha').attr('data-fecha', fecha).val(fecha_formato_ddmmyyyy(fecha));
     $('#txtHora').val(hora).attr('data-hora', hora);
-     $('#cboDoctor').val(id_doctor).attr('data-id-doctor', id_doctor);
+    $('#cboDoctor').val(id_doctor).attr('data-id-doctor', id_doctor);
     $('#cboPaciente').val(id_paciente).attr('data-id-paciente', id_paciente);
     $('#txtTelefono').val(telefono).attr('data-telefono', telefono);
     $('#txtMontoPactado').val(monto_pactado).attr('data-monto-pactado', monto_pactado);
@@ -498,6 +499,7 @@ function cargar_datos_cita(id_cita, id_doctor, id_paciente, fecha, hora, estado,
     verificar_si_es_psicologo();
     verificar_disponibilidad();
     mostrar_historial(id_cita);
+    validar_sede_usuario(id_doctor, id_sede);
 }
 
 function mostrar_historial(id_cita) {
@@ -867,10 +869,10 @@ function verificar_disponibilidad() {
         $('#txtHora').val('').attr('data-hora', '');
     }
 
-    validar_sede_usuario(id_doc);
+    validar_sede_usuario(id_doc, null);
 }
 
-function validar_sede_usuario(id_doc) {
+function validar_sede_usuario(id_doc, id_selected) {
     var html = '';
     var data_ = '';
     $.ajax({
@@ -892,6 +894,9 @@ function validar_sede_usuario(id_doc) {
         },
         complete: function () {
             $('#cboSedeChange').html(html);
+            if (id_selected != null) {
+                $('#cboSedeChange').val(id_selected);
+            }
         }
     });
 }
@@ -1188,7 +1193,16 @@ function agregarHoraLibre(fecha, hora, libres) {
     if (libres.length > 0) {
         var libre = libres.filter(x => x.fecha_cita == fecha && x.hora_cita == hora);
         if (libre.length == 1) {
-            html = '<div class="div_horario_refrigero" style="background-color: ' + (libre[0].tipo == 'REFRIGERIO' ? '#797c7c' : '#5c9d9d') + '; color: #FFFFFF; padding: 5px; font-size: 12px; border-radius: 5px;">' + libre[0].tipo + '<br>' + libre[0].hora_cita + '</div>';
+            if (libre[0].tipo == 'REFRIGERIO') {
+                html = '<div class="div_refrigero" style="background-color: #797c7c; color: #FFFFFF; padding: 5px; font-size: 12px; border-radius: 5px;">' + libre[0].tipo + '<br>' + libre[0].hora_cita + '</div>';
+            } else {
+                html = '<div class="div_horario" style="background-color: #5c9d9d; color: #FFFFFF; padding: 5px; font-size: 12px; border-radius: 5px; cursor: pointer;"';
+                if (parseDate(fecha) >= parseDate(fecha_actual())) {
+                    html += ' data-id-cita="0" data-id-especialista="-1" data-id-paciente="-1" data-fecha-cita="' + fecha + '" data-hora-cita="" data-estado="-" data-telefono="--" data-moneda="S/." data-monto-pactado="0.00" data-monto-pagado="0.00" data-monto-pendiente="0.00" data-id-servicio="-1" data-id-sede="-1" onclick="ver_cita(this)" ';
+                }
+                html +='>' + libre[0].tipo + ' <br> ' + libre[0].hora_cita + '</div> ';
+            }
+            
         }
     }
     return html;
@@ -1201,7 +1215,7 @@ function ver_btn_nueva_cita(fecha) {
 
     mes_--;
 
-    var html = contenido_cita(dia_, mes_, año_, null);
+    var html = contenido_cita(dia_, mes_, año_, null, true);
     html = html.includes('btn_nueva_cita') ? html : '';
     return html;
 }
@@ -1213,7 +1227,7 @@ function enviar_datos_zabuto(fecha, hora) {
     
     mes_--;
 
-    var html = contenido_cita(dia_, mes_, año_, hora);
+    var html = contenido_cita(dia_, mes_, año_, hora, false);
     html = (html == '-' ? '' : (html.includes('btn_nueva_cita') ? '' : html));
     return html;
 }

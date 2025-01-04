@@ -344,7 +344,7 @@ $.fn.zabuto_calendar = function (options) {
                             dia_actual_class = '';
                         }
 
-                        var datos_marcacion = contenido_cita(currDayOfMonth, month, year, null);
+                        var datos_marcacion = contenido_cita(currDayOfMonth, month, year, null, false, true);
                         var $dayElement = $('<div id="' + dayId + '" class="day' + dia_actual_class + dia_inhabilitado_class + dia_feriado_class + '" ><span class="' + validar_feriado(currDayOfMonth, month, year) + '">' + currDayOfMonth + '</span></div>' + datos_marcacion);
 
                         $dayElement.data('day', currDayOfMonth);
@@ -815,7 +815,7 @@ function parseDate(dateString) {
     return new Date(year, month - 1, day);
 }
 
-function contenido_cita(dia, mes, año, hora) {
+function contenido_cita(dia, mes, año, hora, btnNuevaCita = false, btnCita = false) {
     var html = '';
     var date;
     var dia_nombre;
@@ -854,80 +854,30 @@ function contenido_cita(dia, mes, año, hora) {
                 html = '-';
             } else {
                 if (item.tipo == 'CITA') {
-                    //var clase_estado = item.estado == 'CITADO' ? 'div_cita_registrada' : 'div_cita_atendida';
                     var clase_estado = 'div_evt_' + (item.esTaller == 1 ? 'taller' : item.estado.replace(' ','_').toLowerCase());
                     clase_estado += item.esEvaluacion == 1 ? ' div_evaluacion' : '';
 
-                    html += '<div class="div_cita ' + clase_estado + '" data-id-cita="' + item.id_cita + '" data-id-especialista="' + item.id_doctor_asignado + '" data-id-paciente="' + item.id_paciente + '" data-fecha-cita="' + item.fecha_cita + '" data-hora-cita="' + item.hora_cita + '" data-estado="' + item.estado + '" data-telefono="' + item.telefono + '" data-moneda="' + item.moneda + '" data-monto-pactado="' + item.monto_pactado + '" data-monto-pagado="' + item.monto_pagado + '" data-monto-pendiente="' + item.monto_pendiente + '" data-id-servicio="' + item.id_servicio + '" onclick="ver_cita(this)">';
-                    //html += 'Especialista: ' + item.doctor_asignado + '<br/>';
+                    html += '<div class="div_cita ' + clase_estado + '" data-id-cita="' + item.id_cita + '" data-id-especialista="' + item.id_doctor_asignado + '" data-id-paciente="' + item.id_paciente + '" data-fecha-cita="' + item.fecha_cita + '" data-hora-cita="' + item.hora_cita + '" data-estado="' + item.estado + '" data-telefono="' + item.telefono + '" data-moneda="' + item.moneda + '" data-monto-pactado="' + item.monto_pactado + '" data-monto-pagado="' + item.monto_pagado + '" data-monto-pendiente="' + item.monto_pendiente + '" data-id-servicio="' + item.id_servicio + '" data-id-sede="' + item.id_sede + '" onclick="ver_cita(this)">';
                     html += 'Paciente: ' + item.paciente + '<br/>';
                     html += 'Hora: ' + item.hora_cita;
-                    html += '</div > ';
-                }
-                if (item.tipo == 'CUESTIONARIO') {
-                    html += '<div class="div_cita" style="background-color: #6fd530; text-align: center;" data-id-cita="' + item.id_cita + '" data-id-cuestionario="' + item.id_doctor_asignado + '" data-estado="' + item.estado + '" onclick="ver_cuestionario(this)">';
-                    html += 'Nuevo cuestionario<br/>';// #' + item.id_doctor_asignado + '<br/>';
                     html += '</div > ';
                 }
             }
         }
     }
 
-    if (html != '-') {
-        if (parseDate(fecha) >= parseDate(fecha_actual())) {
-            html += '<button data-id-cita="0" data-id-especialista="-1" data-id-paciente="-1" data-fecha-cita="' + fecha + '" data-hora-cita="" data-estado="-" data-telefono="--" data-moneda="S/." data-monto-pactado="0.00" data-monto-pagado="0.00" data-monto-pendiente="0.00" data-id-servicio="-1" onclick="ver_cita(this)" class="btn btn-primary main_color btn_nueva_cita">+</button>';
+    if (btnCita) {
+        if (html != '-') {
+            if (parseDate(fecha) >= parseDate(fecha_actual())) {
+                if (btnNuevaCita) {
+                    html = '<button data-id-cita="0" data-id-especialista="-1" data-id-paciente="-1" data-fecha-cita="' + fecha + '" data-hora-cita="" data-estado="-" data-telefono="--" data-moneda="S/." data-monto-pactado="0.00" data-monto-pagado="0.00" data-monto-pendiente="0.00" data-id-servicio="-1" data-id-sede="-1" onclick="ver_cita(this)" class="btn btn-primary main_color btn_nueva_cita">+</button>';
+                } else {
+                    html += '<button data-id-cita="0" data-id-especialista="-1" data-id-paciente="-1" data-fecha-cita="' + fecha + '" data-hora-cita="" data-estado="-" data-telefono="--" data-moneda="S/." data-monto-pactado="0.00" data-monto-pagado="0.00" data-monto-pendiente="0.00" data-id-servicio="-1" data-id-sede="-1" onclick="ver_cita(this)" class="btn btn-primary main_color btn_nueva_cita">+</button>';
+                }
+            }
         }
     }
-
     return html;
-
-    
-
-    //if (lista_citas_dia.length == 0) {
-    //    html = '';
-    //} else {
-    //    for (var item of lista_citas_dia) {
-    //        if (item.tipo_marcacion == 'INGRESO' || item.tipo_marcacion == 'TARDANZA' || item.tipo_marcacion == 'SALIDA' || item.tipo_marcacion == 'HORAS NO LABORADAS'
-    //            || item.tipo_marcacion == 'INGRESO-OMISION' || item.tipo_marcacion == 'SALIDA-OMISION') {
-    //            html += '<div class="info_marcacion small_">';
-    //            if (item.tipo_marcacion == 'TARDANZA' || item.tipo_marcacion == 'HORAS NO LABORADAS') {
-    //                html += '<span class="span_in_out" style="color: red !important;">' + capitalize(item.tipo_marcacion) + '</span><br/><span class="span_hour">' + item.hora_marcacion + '</span>';
-    //            } else if (item.tipo_marcacion == 'INGRESO-OMISION') {
-    //                html += '<span class="span_in_out" style="background-color: yellow !important; display: table;">Ingreso</span><br/><span class="span_hour">' + item.hora_marcacion + '</span>';
-    //            } else if (item.tipo_marcacion == 'SALIDA-OMISION') {
-    //                html += '<span class="span_in_out" style="background-color: yellow !important; display: table;">Salida</span><br/><span class="span_hour">' + item.hora_marcacion + '</span>';
-    //            }
-    //            else {
-    //                html += '<span class="span_in_out">' + capitalize(item.tipo_marcacion) + '</span><br/><span class="span_hour">' + item.hora_marcacion + '</span>';
-    //            }
-    //            html += '</div>';
-    //        }
-
-    //        //if (item.tipo_marcacion == 'COMPENSACIÓN') {
-    //        //    html += '<div class="info_marcacion"><span class="span_compensacion">' + item.desc1 + '</span></div>';
-    //        //}
-
-    //        if (item.tipo_marcacion == 'FALTA (INGRESO)' || item.tipo_marcacion == 'FALTA (SALIDA)') {
-    //            html += '<div class="info_marcacion">';
-    //            if (item.tipo_marcacion == 'FALTA (INGRESO)') {
-    //                html += '<span class="span_falta">Ingreso</span><br/><span class="span_hour" style="color: #FF6877 !important;">FALTA</span>';
-    //            } else {
-    //                html += '<span class="span_falta">Salida</span><br/><span class="span_hour" style="color: #FF6877 !important;">FALTA</span>';
-    //            }
-    //            html += '</div>';
-    //        }
-
-    //        if (item.tipo_marcacion == 'VACACIONES') {
-    //            html += '<div class="info_marcacion"><span class="span_vacaciones">Vacaciones</span></div>';
-    //        }
-
-    //        if (item.tipo_marcacion == 'PAPELETA') {
-    //            html += '<div class="info_papeleta"><span class="span_papeleta">Papeleta - ' + item.desc1 + '</span><span class="span_papeleta2">Estado:&nbsp;' + item.desc2 + '</span></div>';
-    //        }
-    //    }
-    //}
-
-    //return html;
 }
 
 function validar_feriado(dia, mes, año) {
