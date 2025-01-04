@@ -244,6 +244,7 @@
 
     .sb-reg-citas-list-filtro {
         display: flex;
+        align-items: flex-end;
         gap: 1rem;
     }
 
@@ -277,11 +278,40 @@
             color: var(--colorbase2);
         }
 
+    .sb-reg-citas-button {
+        display: flex;
+        align-items: center;
+        background-color: var(--colorbase2);
+        border: 1px solid var(--colorbase2);
+        padding: .8rem 1.5rem;
+        cursor: pointer;
+        transition: .3s;
+        margin-left: 15px;
+    }
+
+        .sb-reg-citas-button:hover {
+            background-color: var(--colorsecundario);
+            border: 1px solid var(--colorsecundario);
+        }
+
+
+    .sb-reg-citas-button p {
+        font-size: 16px;
+        font-weight: 500;
+        line-height: 1;
+        color: #FFF;
+        margin: 0;
+    }
+
+        .sb-reg-citas-button:hover p {
+            color: #FFF;
+        }
+
+
+
     #cbo_seleccion_mes {
         padding: .5rem;
     }
-
-
 
     .sb-reg-citas-table-calendar {
         display: flex;
@@ -319,9 +349,41 @@
         padding: 0 15px;
     }
 
+    /* Modal Pacientes */
+    #pacientesModal {
+        display: block;
+        width: 800px;
+        height: auto;
+        max-height: 90vh;
+        background-color: #FFF;
+        border-radius: 1rem;
+        padding: 1rem;
+        transition: 0.4s linear;
+        overflow: auto;
+        margin: auto;
+    }
 
-@media screen and (width <= 950px) {
-    .sb-reg-citas-table-calendar-table {
+    .modal-footer > .modal-close {
+        display: flex;
+        justify-content: center;
+        font-size: 16px;
+        font-weight: 500;
+        padding: .6rem 2rem;
+        cursor: pointer;
+        background-color: #FFF;
+        border: 1px solid var(--colorbase2) !important;
+        color: var(--colorbase2) !important;
+        transition: .3s;
+    }
+
+        .modal-footer > .modal-close:hover {
+            background-color: var(--colorbase2) !important;
+            color: #FFF !important;
+        }
+
+
+    @media screen and (width <= 950px) {
+        .sb-reg-citas-table-calendar-table {
         display: flex;
         overflow: scroll;
         flex-wrap: nowrap;
@@ -354,6 +416,7 @@
 
     .sb-reg-citas-list-filtro {
         flex-direction: column;
+        align-items: flex-start;
         margin: 0;
     }
 
@@ -365,6 +428,10 @@
         .sb-reg-citas-list-colores > div p {
             font-size: 14px;
         }
+
+    .sb-reg-citas-button p{
+        font-size: 14px;
+    }
 
     ::-webkit-scrollbar {
         display: none;
@@ -414,6 +481,10 @@
         flex-wrap: wrap;
         justify-content: center;
         gap: .3rem 0;
+    }
+
+    #pacientesModal{
+        width: 96%;
     }
 
 
