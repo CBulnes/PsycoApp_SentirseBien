@@ -14,6 +14,8 @@ namespace PsycoApp.site.Controllers
 {
     public class RegistroCitasController : Controller
     {
+        private readonly string apiUrl = Helper.GetUrlApi() + "/api/paciente"; // URL base de la API
+
         private string url_centros_atencion = Helper.GetUrlApi() + "/api/centroatencion/listar_centros";
         private string url_lista_psicologos = Helper.GetUrlApi() + "/api/psicologo/listar_psicologos_combo";
         private string url_lista_pacientes = Helper.GetUrlApi() + "/api/paciente/listar_pacientes_combo";
@@ -38,6 +40,10 @@ namespace PsycoApp.site.Controllers
         {
             if (!string.IsNullOrEmpty(HttpContext.Session.GetString("nombres") as string))
             {
+                string urlPaciente = string.IsNullOrEmpty("") ?
+                 $"{apiUrl}/listar/{1}/{10}" :
+                 $"{apiUrl}/buscar?nombre={""}&pageNumber={1}&pageSize={10}";
+
                 dynamic obj = new System.Dynamic.ExpandoObject();
                 string path = $"{this.Request.Scheme}://{this.Request.Host}{this.Request.PathBase}";
                 obj.path = path;
@@ -65,13 +71,33 @@ namespace PsycoApp.site.Controllers
                     NumSesiones = p.NumSesiones
                 }).ToList();
 
-                var viewModelContainer = new ViewModelContainer<IEnumerable<PsycoApp.site.Models.Producto>>
+                var pacientes = await GetFromApiAsync<List<PsycoApp.entities.Paciente>>(urlPaciente);
+                var pacientesViewModel = pacientes.Select(p => new PsycoApp.site.Models.Paciente
                 {
-                    Model = productosViewModel,
+                    Id = p.Id,
+                    Nombre = p.Nombre,
+                    Apellido = p.Apellido,
+                    DocumentoNumero = p.DocumentoNumero,
+                    Estado = p.Estado,
+                    DocumentoTipo = p.DocumentoTipo,
+                    EstadoCivil = p.EstadoCivil,
+                    FechaNacimiento = p.FechaNacimiento,
+                    Sexo = p.Sexo,
+                    Telefono = p.Telefono
+                }).ToList();
+                var productosYPacientesViewModel = new ProductosYPacientesViewModel
+                {
+                    Productos = productosViewModel,
+                    Pacientes = pacientesViewModel,
                     DynamicData = obj
                 };
+                //var viewModelContainer = new ViewModelContainer<IEnumerable<PsycoApp.site.Models.Producto>>
+                //{
+                //    Model = productosViewModel,
+                //    DynamicData = obj
+                //};
 
-                return View("Index", viewModelContainer);
+                return View("Index", productosYPacientesViewModel);
             }
             else
             {
