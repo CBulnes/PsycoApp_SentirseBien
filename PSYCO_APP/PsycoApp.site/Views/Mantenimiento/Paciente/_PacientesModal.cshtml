@@ -30,7 +30,7 @@
 
                 <!-- Contenedor de la tabla -->
                 <div id="containerTabla" class="sb-pa-container-table">
-                    @await Html.PartialAsync("~/Views/Mantenimiento/Paciente/_PacienteTabla.cshtml", Model)
+                    @await Html.PartialAsync("~/Views/Mantenimiento/Paciente/_PacienteTablaCita.cshtml", Model)
                 </div>
             </div>
         </div>
@@ -138,7 +138,7 @@
                     </div>
 
                     <div class="sb-frm-agregar-block-button text-right">
-                        <button type="button" class="btn btn-success" onclick="guardarPaciente()">Guardar</button>
+                        <button type="button" class="btn btn-success" onclick="guardarPacienteCitas()">Guardar</button>
                         <button type="button" class="btn btn-secondary" onclick="cancelarFormulario()">Cancelar</button>
                     </div>
                 </form>
@@ -194,9 +194,10 @@
             let nombre = document.getElementById('txtBuscarNombre').value;
             let pageSize = 10; // Número de pacientes por página
             console.log('paciente');
-            $.post('/Mantenimiento/Paciente/Buscar', { nombre: nombre, pageNumber: pageNumber, pageSize: pageSize })
+            $.post('/Mantenimiento/Paciente/BuscarPacienteCita', { nombre: nombre, pageNumber: pageNumber, pageSize: pageSize })
                 .done(function (data) {
                     // Actualizar solo el contenido de la tabla
+                    console.log('tabla');
                     $('#containerTabla').html(data);
                 })
                 .fail(function () {
@@ -244,21 +245,19 @@
             }
         }
 
-        function guardarPaciente() {
+        function guardarPacienteCitas() {
+            console.log('prueba');
             let paciente = {
                 Id: parseInt($('#hdnPacienteId').val()) || 0,
                 Nombre: $('#txtNombre').val(),
                 Apellido: $('#txtApellido').val(),
-                FechaNacimiento: $('#txtFecha').val(),
+                FechaNacimiento: $('#txtFechaModalPaci').val(),
                 Estado: $('#cboEstado').val(),
                 DocumentoTipo: $('#cboDocumento').val(),
-                DocumentoNumero: $('#txtDocumento').val(),
-                Telefono: $('#txtTelefono').val(),
+                DocumentoNumero: $('#txtDocumentoModalPaci').val(),
+                Telefono: $('#txtTelefonoModalPaci').val(),
                 EstadoCivil: $('#cboEstadoCivil').val(),
                 Sexo: $('#cboSexo').val(),
-            };
-            let dataToSend = {
-                paciente: paciente // Enviar dentro de un objeto "paciente"
             };
 
             let url = paciente.Id ? '/Mantenimiento/Paciente/Editar' : '/Mantenimiento/Paciente/Agregar';
@@ -266,7 +265,7 @@
                 type: 'POST',
                 url: url,
                 contentType: 'application/json',
-                data: JSON.stringify(dataToSend.paciente),
+                data: JSON.stringify(paciente), // Aquí no envías dentro de un objeto
                 success: function (response) {
                     Swal.fire({
                         icon: "success",
@@ -275,6 +274,7 @@
                     $('#containerFormulario').hide();
                     $(".sb-admninistrator").css('overflow', 'auto');
                     buscarPaciente(); // Actualiza la lista después de guardar
+                    cargar_lista_pacientes_cita();
                 },
                 error: function (xhr) {
                     Swal.fire({
@@ -285,7 +285,6 @@
                 }
             });
         }
-
         function cancelarFormulario() {
             $('#containerFormulario').hide();
             $(".sb-admninistrator").css('overflow', 'auto');

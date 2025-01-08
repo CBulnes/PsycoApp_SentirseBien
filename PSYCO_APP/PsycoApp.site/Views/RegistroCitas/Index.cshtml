@@ -115,7 +115,7 @@
                 <option value="2">Surco</option>
             </select>
         </div>
-        <a onclick="$('#pacientesModal').modal('show');" class="btn modal-trigger sb-reg-citas-button"><p>Abrir Modal de Pacientes</p></a>
+        <a onclick="$('#pacientesModal').modal('show');" class="btn modal-trigger sb-reg-citas-button"><p>Acceso a Pacientes</p></a>
     </div>
 
     <div class="sb-reg-citas-table-calendar table-responsive calendar-container my-calendar">
@@ -560,7 +560,7 @@
             let nombre = document.getElementById('txtBuscarNombre').value;
             let pageSize = 10; // Número de pacientes por página
             console.log('paciente');
-            $.post('/Mantenimiento/Paciente/Buscar', { nombre: nombre, pageNumber: pageNumber, pageSize: pageSize })
+            $.post('/Mantenimiento/Paciente/BuscarPacienteCita', { nombre: nombre, pageNumber: pageNumber, pageSize: pageSize })
                 .done(function (data) {
                     // Actualizar solo el contenido de la tabla
                     $('#containerTabla').html(data);
@@ -573,7 +573,7 @@
                     });
                 });
         }
-
+      
         function mostrarFormularioAgregar() {
             $(".sb-admninistrator").css('overflow', 'hidden');
             $('#containerFormulario').css('display', 'flex');

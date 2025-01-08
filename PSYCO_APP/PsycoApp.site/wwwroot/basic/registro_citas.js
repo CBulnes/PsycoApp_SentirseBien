@@ -6,7 +6,7 @@ var id_cita_ = 0;
 var estado_ = '';
 var sesiones = 0;
 var adicionales = [];
-
+let choicesT; // Variable global
 var person_img = path + '/images/user.png';
 var recargar_pagos_pendientes = false;
 
@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', function () {
         itemSelectText: "Todos",
     });
     const elementT = document.querySelector('#cboPacienteFiltro');
-    const choicesT = new Choices(elementT, {
+    choicesT = new Choices(elementT, {
         placeholder: true,
         searchPlaceholderValue: "Buscar...",
         itemSelectText: "Todos",
@@ -31,25 +31,8 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 $(document).ready(function () {
-    const element = document.querySelector('#cboDoctorFiltro');
-    const choices = new Choices(element, {
-        placeholder: true,
-        searchPlaceholderValue: "Buscar...",
-        itemSelectText: "Todos",
-    });
-    const elementT = document.querySelector('#cboPacienteFiltro');
-    const choicesT = new Choices(elementT, {
-        placeholder: true,
-        searchPlaceholderValue: "Buscar...",
-        itemSelectText: "Todos",
-    });
-    const elementTT = document.querySelector('#cboSedeFiltro');
-    const choicesTT = new Choices(elementTT, {
-        placeholder: true,
-        searchPlaceholderValue: "Buscar...",
-        itemSelectText: "Todos",
-    });
 
+    console.log('prueba3');
     $('#cboServicio').on('change', function () {
         $('.fechasAdicionales').addClass('hide-element');
         sesiones = $(this).find(':selected').attr('data-sesiones');
@@ -69,7 +52,13 @@ $(document).ready(function () {
         $('#bdFechas').html(html);
     })
 });
-
+function seleccionarPaciente(id) {
+    console.log('choices');
+    choicesT.setChoiceByValue(String(id));
+    
+    recargar_citas();
+    $('#pacientesModal').modal('hide');
+}
 function addDays(date, days) {
     const newDate = new Date(date);
     newDate.setDate(date.getDate() + days);
@@ -566,6 +555,126 @@ function mostrar_historial(id_cita) {
         html = '';
     }
     $('#divHistorial').html(html);
+}
+function guardarPacienteCitas() {
+    console.log('prueba');
+    let paciente = {
+        Id: parseInt($('#hdnPacienteId').val()) || 0,
+        Nombre: $('#txtNombre').val(),
+        Apellido: $('#txtApellido').val(),
+        FechaNacimiento: $('#txtFechaModalPaci').val(),
+        Estado: $('#cboEstado').val(),
+        DocumentoTipo: $('#cboDocumento').val(),
+        DocumentoNumero: $('#txtDocumentoModalPaci').val(),
+        Telefono: $('#txtTelefonoModalPaci').val(),
+        EstadoCivil: $('#cboEstadoCivil').val(),
+        Sexo: $('#cboSexo').val(),
+    };
+
+    let url = paciente.Id ? '/Mantenimiento/Paciente/Editar' : '/Mantenimiento/Paciente/Agregar';
+    $.ajax({
+        type: 'POST',
+        url: url,
+        contentType: 'application/json',
+        data: JSON.stringify(paciente), // Aquí no envías dentro de un objeto
+        success: function (response) {
+            Swal.fire({
+                icon: "success",
+                title: "Registro completo.",
+            });
+            $('#containerFormulario').hide();
+            $(".sb-admninistrator").css('overflow', 'auto');
+            buscarPaciente(); // Actualiza la lista después de guardar
+            cargar_lista_pacientes_modal();
+
+        },
+        error: function (xhr) {
+            Swal.fire({
+                icon: "Error",
+                title: "Oops...",
+                text: "Debe rellenar todos los campos!",
+            });
+        }
+    });
+}
+
+function guardarPaciente() {
+    console.log('prueba');
+    let paciente = {
+        Id: parseInt($('#hdnPacienteId').val()) || 0,
+        Nombre: $('#txtNombre').val(),
+        Apellido: $('#txtApellido').val(),
+        FechaNacimiento: $('#txtFechaModalPaci').val(),
+        Estado: $('#cboEstado').val(),
+        DocumentoTipo: $('#cboDocumento').val(),
+        DocumentoNumero: $('#txtDocumentoModalPaci').val(),
+        Telefono: $('#txtTelefonoModalPaci').val(),
+        EstadoCivil: $('#cboEstadoCivil').val(),
+        Sexo: $('#cboSexo').val(),
+    };
+
+    let url = paciente.Id ? '/Mantenimiento/Paciente/Editar' : '/Mantenimiento/Paciente/Agregar';
+    $.ajax({
+        type: 'POST',
+        url: url,
+        contentType: 'application/json',
+        data: JSON.stringify(paciente), // Aquí no envías dentro de un objeto
+        success: function (response) {
+            Swal.fire({
+                icon: "success",
+                title: "Registro completo.",
+            });
+            $('#containerFormulario').hide();
+            $(".sb-admninistrator").css('overflow', 'auto');
+            buscarPaciente(); // Actualiza la lista después de guardar
+        },
+        error: function (xhr) {
+            Swal.fire({
+                icon: "Error",
+                title: "Oops...",
+                text: "Debe rellenar todos los campos!",
+            });
+        }
+    });
+}
+function cargar_lista_pacientes_modal() {
+    var html = '';
+    $.ajax({
+        url: "/RegistroCitas/listar_pacientes",
+        type: "GET",
+        data: {},
+        async: false,
+        beforeSend: function () {
+            html += '<option value="-1">Seleccionar</option>';
+        },
+        success: function (data) {
+            for (var item of data) {
+                html += '<option value="' + item.id + '">' + item.nombre + '</option>';
+            }
+        },
+        error: function (response) {
+            html = '<option value="-1">Seleccionar</option>';
+        },
+        complete: function () {
+            // Reemplaza el contenido del select
+            $('#cboPaciente').html(html);
+            $('#cboPacienteFiltro').html(html);
+
+            // Reinicializa Choices.js
+            if (typeof choicesT !== 'undefined') {
+                choicesT.destroy(); // Destruye la instancia existente
+            }
+
+            const elementT = document.querySelector('#cboPacienteFiltro');
+            choicesT = new Choices(elementT, {
+                placeholder: true,
+                searchPlaceholderValue: "Buscar...",
+                itemSelectText: "Todos",
+            });
+
+
+        }
+    });
 }
 
 function cargar_lista_pacientes() {
