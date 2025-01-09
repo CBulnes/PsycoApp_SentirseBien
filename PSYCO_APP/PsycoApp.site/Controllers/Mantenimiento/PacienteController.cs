@@ -123,6 +123,8 @@ namespace PsycoApp.site.Controllers.Mantenimiento
                                             //return RedirectToAction("Index", new { pageNumber, pageSize, search = nombre });
             return PartialView("~/Views/Mantenimiento/Paciente/_PacienteTabla.cshtml", viewModelContainer.Model);
         }
+
+
         // POST: Paciente/Buscar
         [Route("/Mantenimiento/Paciente/BuscarPacienteCita")]
         [HttpPost]

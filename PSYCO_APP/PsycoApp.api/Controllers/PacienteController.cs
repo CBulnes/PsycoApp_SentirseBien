@@ -102,7 +102,22 @@ namespace PsycoApp.api.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        [HttpGet("listar_pacientes_combo_dinamico")]
+        public ActionResult<List<entities.Paciente>> ListarPacientesCombo([FromQuery] int page = 1, [FromQuery] int pageSize = 10, [FromQuery] string search = "")
+        {
+            List<entities.Paciente> lista = new List<entities.Paciente>();
 
+            try
+            {
+                lista = _pacienteBL.listar_pacientes_combo_dinamico(page, pageSize, search); // Llamada al método BL con paginación y filtro
+            }
+            catch (Exception e)
+            {
+                lista.Clear();
+            }
+
+            return lista; 
+        }
         [HttpGet("listar_pacientes_combo")]
         public ActionResult<List<entities.Paciente>> listar_pacientes_combo()
         {

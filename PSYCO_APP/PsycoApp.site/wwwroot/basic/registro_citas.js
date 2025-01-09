@@ -9,7 +9,10 @@ var adicionales = [];
 let choicesT; // Variable global
 var person_img = path + '/images/user.png';
 var recargar_pagos_pendientes = false;
-
+let currentPage = 1;
+const pageSize = 10; // Tamaño de la página fijo
+let searchTerm = '';
+let debounceTimer;
 document.addEventListener('DOMContentLoaded', function () {
     const element = document.querySelector('#cboDoctorFiltro');
     const choices = new Choices(element, {
@@ -29,6 +32,36 @@ document.addEventListener('DOMContentLoaded', function () {
         searchPlaceholderValue: "Buscar...",
         itemSelectText: "Todos",
     });
+
+    // Código de eventos y carga de pacientes
+
+    elementT.addEventListener('search', function (event) {
+        const inputValue = event.detail.value;
+        clearTimeout(debounceTimer); // Limpiar el timer anterior
+
+        if (inputValue.length >= 4) { // Solo realizar la búsqueda si el filtro tiene 4 o más caracteres
+            debounceTimer = setTimeout(() => {
+                searchTerm = inputValue;
+                currentPage = 1; // Resetear a la primera página cuando se realiza una nueva búsqueda
+                choicesT.clearChoices(); // Limpiar las opciones actuales
+                searchPatients(searchTerm, currentPage); // Cargar los pacientes con el filtro
+            }, 300); // 300ms de debounce
+        }
+
+    });
+
+    // Evento para cargar más pacientes cuando el usuario llega al final de la lista
+    elementT.addEventListener('choices:add', function () {
+        const isNearEnd = elementT.scrollHeight - elementT.scrollTop === elementT.clientHeight;
+        if (isNearEnd && searchTerm.length >= 4) {
+            currentPage++; // Aumentar el número de página
+            
+            searchPatients(searchTerm, currentPage); // Cargar la siguiente página
+        }
+    });
+
+    // Inicializar con los primeros pacientes (vacío al principio o con un filtro inicial)
+    loadPatients('', currentPage);
 });
 $(document).ready(function () {
 
@@ -52,11 +85,135 @@ $(document).ready(function () {
         $('#bdFechas').html(html);
     })
 });
+
+function searchPatientsModal(filtro) {
+    console.log("Buscando pacientes con filtro:", filtro);
+
+    // Llamada AJAX para búsqueda dinámica
+    $.ajax({
+        url: `/RegistroCitas/listar_pacientes_dinamico?filtro=${filtro}&page=1&pageSize=10`,
+        type: "GET",
+        beforeSend: function () {
+           
+            if (choicesT) {
+                choicesT.destroy();
+            }
+
+            
+            const selectElement = document.querySelector('#cboPacienteFiltro');
+            choicesT = new Choices(selectElement, {
+                searchEnabled: true, // Habilita la barra de búsqueda dentro del combo
+                itemSelectText: "",
+            });
+
+            choicesT.setChoices([
+                { value: "-1", label: "Buscando...", disabled: true },
+            ]);
+        },
+        success: function (res) {
+            if (res && res.length > 0) {
+                const pacientes = res.map((item) => ({
+                    value: item.id,
+                    label: item.nombre,
+                }));
+
+                // Actualizar combo con resultados de búsqueda
+                choicesT.setChoices(pacientes, "value", "label", true);
+            } else {
+                // Sin resultados
+                choicesT.setChoices([
+                    { value: "-1", label: "No se encontraron pacientes", disabled: true },
+                ]);
+            }
+        },
+        error: function () {
+            // Error en la búsqueda
+            choicesT.setChoices([
+                { value: "-1", label: "Error al buscar pacientes", disabled: true },
+            ]);
+        },
+    });
+}
+function searchPatients(filtro) {
+    console.log("Buscando pacientes con filtro:", filtro);
+
+    // Llamada AJAX para búsqueda dinámica
+    $.ajax({
+        url: `/RegistroCitas/listar_pacientes_dinamico?filtro=${filtro}&page=1&pageSize=10`,
+        type: "GET",
+        beforeSend: function () {
+            // Limpiar opciones actuales antes de mostrar resultados de búsqueda
+            choicesT.clearChoices();
+            choicesT.setChoices([
+                { value: "-1", label: "Buscando...", disabled: true },
+            ]);
+        },
+        success: function (res) {
+            if (res && res.length > 0) {
+                const pacientes = res.map((item) => ({
+                    value: item.id,
+                    label: item.nombre,
+                }));
+
+                // Actualizar combo con resultados de búsqueda
+                choicesT.setChoices(pacientes, "value", "label", true);
+            } else {
+                choicesT.setChoices([
+                    { value: "-1", label: "No se encontraron pacientes", disabled: true },
+                ]);
+            }
+        },
+        error: function () {
+            choicesT.setChoices([
+                { value: "-1", label: "Error al buscar pacientes", disabled: true },
+            ]);
+        },
+    });
+}
+function loadPatients(filtro= "", page) {
+    console.log('pacientes');
+
+    var html = '';
+    $.ajax({
+        url: `/RegistroCitas/listar_pacientes_dinamico?filtro=${filtro}&page=${page}&pageSize=10`,
+        type: "GET",
+        data: {},
+        async: false,
+        beforeSend: function () {
+            html += '<option value="-1">Seleccionar</option>';
+        },
+        success: function (res) {
+            for (var item of res) {
+                html += '<option value="' + item.id + '">' + item.nombre + '</option>';
+            }
+        },
+        error: function (response) {
+            html = '<option value="-1">Seleccionar</option>';
+        },
+        complete: function () {
+            $('#cboPaciente').html(html);
+            $('#cboPacienteFiltro').html(html);
+           
+
+        }
+    });
+}
+
 function seleccionarPaciente(id) {
     console.log('choices');
-    choicesT.setChoiceByValue(String(id));
     
-    recargar_citas();
+    
+    debounceTimer = setTimeout(() => {
+     
+        currentPage = 1; // Resetear a la primera página cuando se realiza una nueva búsqueda
+        choicesT.clearChoices(); // Limpiar las opciones actuales
+        searchPatientsModal(String(id), currentPage); // Cargar los pacientes con el filtro
+        choicesT.setChoiceByValue(String(id));
+    /*        recargar_citas_dinamico(String(id));*/
+        recargar_citas();
+    }, 300); // 300ms de debounce
+   
+    
     $('#pacientesModal').modal('hide');
 }
 function addDays(date, days) {
@@ -82,12 +239,60 @@ function recargar_citas() {
     }
     cargar_citas();
 }
-
+function recargar_citas_dinamico(id) {
+    var tipoVista = TipoVista();
+    if (tipoVista == 'MENSUAL') {
+        $('.calendar-container').html('<div id="my-calendar"></div>');
+    }
+    cargar_citas_dinamico(id);
+}
 function TipoVista() {
     var tipoVista = $('.btn-vista.active').attr('data-tipo');
     return tipoVista;
 }
+function cargar_citas_dinamico(id) {
+    $("#txtMontoPactado, #txtMontoPagado, #txtMontoPendiente").inputmask({ 'alias': 'numeric', allowMinus: false, digits: 2, max: 999.99 });
 
+    var filtroPaciente = id;
+    var filtroDoctor = $('#cboDoctorFiltro').val();
+    var filtroSede = $('#cboSedeFiltro').val();
+    var tipoVista = TipoVista();
+
+    $.ajax({
+        url: '/RegistroCitas/CitasUsuario?idPaciente=' + filtroPaciente + '&idDoctor=' + filtroDoctor + '&idSede=' + filtroSede + '&tipoVista=' + tipoVista,
+        type: "GET",
+        data: {},
+        success: function (data) {
+            lista_citas = data;
+        },
+        error: function (response) {
+            Swal.fire({
+                icon: "Error",
+                title: "Oops...",
+                text: "Ocurrió un error al obtener el registro de citas.",
+            });
+            lista_citas = [];
+        },
+        complete: function () {
+            if (tipoVista == 'MENSUAL') {
+                $("#my-calendar").zabuto_calendar({
+                    legend: []
+                });
+            } else if (tipoVista == 'SEMANAL') {
+                recargar_vista_semanal()
+            }
+            validar_cambio_fecha();
+        }
+    });
+
+    //lista_citas = [
+    //    { 'estado': 'PENDIENTE', 'fecha_cita': '2022-08-15', 'doctor_asignado': 'Doctor1', 'hora_cita': '13:00PM', 'id_doctor_asignado': 2, 'id_cita': 1 }
+    //];
+
+    //$("#my-calendar").zabuto_calendar({
+    //    legend: []
+    //});
+}
 function cargar_citas() {
     $("#txtMontoPactado, #txtMontoPagado, #txtMontoPendiente").inputmask({ 'alias': 'numeric', allowMinus: false, digits: 2, max: 999.99 });
 
@@ -571,6 +776,7 @@ function guardarPacienteCitas() {
         Sexo: $('#cboSexo').val(),
     };
 
+    searchPatients(String(Id), currentPage);
     let url = paciente.Id ? '/Mantenimiento/Paciente/Editar' : '/Mantenimiento/Paciente/Agregar';
     $.ajax({
         type: 'POST',
@@ -701,7 +907,8 @@ function cargar_lista_pacientes() {
         }
     });
 }
-cargar_lista_pacientes();
+loadPatients();
+/*cargar_lista_pacientes();*/
 function cargar_lista_doctores() {
     var html = '';
     $.ajax({

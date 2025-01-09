@@ -187,7 +187,7 @@ namespace PsycoApp.DA
                 _connection.Close();
             }
         }
-
+        
         public List<entities.Paciente> listar_pacientes_combo()
         {
             List<entities.Paciente> lista = new List<entities.Paciente>();
@@ -214,6 +214,43 @@ namespace PsycoApp.DA
                 lista.Clear();
             }
             cn.Close();
+            return lista;
+        }
+
+        public List<entities.Paciente> listar_pacientes_combo_dinamico(int page, int pageSize, string search)
+        {
+            List<entities.Paciente> lista = new List<entities.Paciente>();
+            try
+            {
+                cn.Open();
+                SqlCommand cmd = new SqlCommand(Procedures.sp_listar_pacientes_combo_dinamico, cn); // Procedimiento almacenado modificado
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                cmd.Parameters.AddWithValue("@Page", page);
+                cmd.Parameters.AddWithValue("@PageSize", pageSize); // Se agrega pageSize
+                cmd.Parameters.AddWithValue("@Search", search ?? string.Empty);
+
+                SqlDataAdapter da = new SqlDataAdapter(cmd);
+                DataTable dt = new DataTable();
+                da.Fill(dt);
+
+                foreach (DataRow row in dt.Rows)
+                {
+                    entities.Paciente item = new entities.Paciente();
+                    item.Id = Convert.ToInt32(row["id_paciente"]);
+                    item.Nombre = Convert.ToString(row["nombres"]);
+                    lista.Add(item);
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                lista.Clear(); // Limpiar en caso de error
+            }
+            finally
+            {
+                cn.Close();
+            }
             return lista;
         }
 

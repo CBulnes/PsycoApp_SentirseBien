@@ -18,6 +18,8 @@ namespace PsycoApp.site.Controllers
 
         private string url_centros_atencion = Helper.GetUrlApi() + "/api/centroatencion/listar_centros";
         private string url_lista_psicologos = Helper.GetUrlApi() + "/api/psicologo/listar_psicologos_combo";
+        private string url_lista_psicologos_dinamico = Helper.GetUrlApi() + "/api/paciente/listar_pacientes_combo_dinamico";
+        
         private string url_lista_pacientes = Helper.GetUrlApi() + "/api/paciente/listar_pacientes_combo";
         private string url_registrar_cita = Helper.GetUrlApi() + "/api/cita/registrar_cita";
         private string url_confirmar_cita = Helper.GetUrlApi() + "/api/cita/confirmar_cita";
@@ -169,6 +171,25 @@ namespace PsycoApp.site.Controllers
             return lista;
         }
 
+        [HttpGet]
+        public ActionResult<List<entities.Paciente>> listar_pacientes_dinamico(int page = 1, string filtro = "", int pageSize = 10)
+        {
+            List<entities.Paciente> listaPacientes = new List<entities.Paciente>();
+            try
+            {
+                string apiUrl = url_lista_psicologos_dinamico + $"?page={page}&pageSize={pageSize}&search={filtro}";
+                var res =  ApiCaller.consume_endpoint_method(apiUrl, null, "GET");
+
+                listaPacientes = JsonConvert.DeserializeObject<List<entities.Paciente>>(res);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                listaPacientes.Clear(); // Limpiar en caso de error
+            }
+
+            return (listaPacientes); // Retorna los pacientes como JSON
+        }
         [HttpPost]
         //[AllowAnonymous]
         //[ResponseCache(NoStore = true, Duration = 0)]
