@@ -123,6 +123,54 @@ namespace PsycoApp.site.Controllers.Mantenimiento
                                             //return RedirectToAction("Index", new { pageNumber, pageSize, search = nombre });
             return PartialView("~/Views/Mantenimiento/Paciente/_PacienteTabla.cshtml", viewModelContainer.Model);
         }
+
+
+        // POST: Paciente/Buscar
+        [Route("/Mantenimiento/Paciente/BuscarPacienteCita")]
+        [HttpPost]
+        public async Task<IActionResult> BuscarPacienteCita(string nombre, int pageNumber = 1, int pageSize = 10)
+        {
+            string url = $"{apiUrl}/buscar?nombre={nombre}&pageNumber={pageNumber}&pageSize={pageSize}";
+            var pacientes = await GetFromApiAsync<List<entities.Paciente>>(url);
+
+            dynamic obj = new System.Dynamic.ExpandoObject();
+            string path = $"{this.Request.Scheme}://{this.Request.Host}{this.Request.PathBase}";
+            obj.path = path;
+            obj.call_center = Helper.GetCallCenter();
+            obj.horario_atencion = Helper.GetHorario();
+            obj.whatsapp = Helper.GetWhatsapp();
+            obj.nombres = HttpContext.Session.GetString("nombres");
+            obj.apellidos = HttpContext.Session.GetString("apellidos");
+            obj.id_usuario = HttpContext.Session.GetInt32("id_usuario");
+            obj.id_tipousuario = HttpContext.Session.GetInt32("id_tipousuario");
+            obj.id_psicologo = HttpContext.Session.GetInt32("id_psicologo");
+            obj.tipo_documento = HttpContext.Session.GetString("tipo_documento");
+            obj.num_documento = HttpContext.Session.GetString("num_documento");
+            obj.vista = "HOME";
+            var viewModelContainer = new ViewModelContainer<IEnumerable<PsycoApp.site.Models.Paciente>>
+            {
+                Model = pacientes.Select(p => new PsycoApp.site.Models.Paciente
+                {
+                    Id = p.Id,
+                    Nombre = p.Nombre,
+                    Apellido = p.Apellido,
+                    DocumentoNumero = p.DocumentoNumero,
+                    Estado = p.Estado,
+                    DocumentoTipo = p.DocumentoTipo,
+                    EstadoCivil = p.EstadoCivil,
+                    FechaNacimiento = p.FechaNacimiento,
+                    Sexo = p.Sexo,
+                    Telefono = p.Telefono
+                }).ToList(),
+                DynamicData = obj
+            };
+
+            ViewBag.PageNumber = pageNumber;
+            ViewBag.PageSize = pageSize;
+            ViewBag.NombreBuscado = nombre; // Guardamos el término de búsqueda
+                                            //return RedirectToAction("Index", new { pageNumber, pageSize, search = nombre });
+            return PartialView("~/Views/Mantenimiento/Paciente/_PacienteTablaCita.cshtml", viewModelContainer.Model);
+        }
         [Route("Mantenimiento/Paciente/Agregar")]
         // POST: Paciente/Agregar
         [HttpPost]
@@ -250,5 +298,45 @@ namespace PsycoApp.site.Controllers.Mantenimiento
             using var client = new HttpClient();
             return await client.DeleteAsync(url);
         }
+
+        [Route("Mantenimiento/Paciente/CargarPacientesModal")]
+        [HttpGet]
+        public async Task<IActionResult> CargarPacientesModal(int pageNumber = 1, int pageSize = 10, string search = "")
+        {
+            try
+            {
+                // Construir la URL para llamar a la API según el término de búsqueda
+                string url = string.IsNullOrEmpty(search)
+                    ? $"{apiUrl}/listar/{pageNumber}/{pageSize}"
+                    : $"{apiUrl}/buscar?nombre={search}&pageNumber={pageNumber}&pageSize={pageSize}";
+
+                // Obtener la lista de pacientes desde la API
+                var pacientes = await GetFromApiAsync<List<PsycoApp.entities.Paciente>>(url);
+
+                // Mapear los pacientes de entidad a ViewModel si es necesario
+                var pacientesViewModel = pacientes.Select(p => new PsycoApp.site.Models.Paciente
+                {
+                    Id = p.Id,
+                    Nombre = p.Nombre,
+                    Apellido = p.Apellido,
+                    DocumentoNumero = p.DocumentoNumero,
+                    Estado = p.Estado,
+                    DocumentoTipo = p.DocumentoTipo,
+                    EstadoCivil = p.EstadoCivil,
+                    FechaNacimiento = p.FechaNacimiento,
+                    Sexo = p.Sexo,
+                    Telefono = p.Telefono
+                }).ToList();
+
+                // Devolver la vista parcial con los datos
+                return PartialView("~/Views/Mantenimiento/Paciente/_PacienteTabla.cshtml", pacientesViewModel);
+            }
+            catch (Exception ex)
+            {
+                // Manejo de errores
+                return BadRequest($"Error al cargar pacientes: {ex.Message}");
+            }
+        }
+
     }
 }

@@ -232,7 +232,7 @@
                 $(".sb-admninistrator").css('overflow', 'hidden');
             });
         }
-
+       
         function eliminarPaciente(id) {
             if (confirm('¿Estás seguro de que quieres eliminar este paciente?')) {
                 $.post(`/Mantenimiento/Paciente/Eliminar`, { id: id }, function (response) {
