@@ -351,6 +351,7 @@ namespace PsycoApp.DA
                     item.Fecha = Convert.ToString(row["Fecha"]);
                     item.NombreDia = Convert.ToString(row["NombreDia"]);
                     item.Inicio = Convert.ToString(row["Inicio"]);
+                    item.Refrigerio = Convert.ToString(row["Refrigerio"]);
                     item.Fin = Convert.ToString(row["Fin"]);
                     lista.Add(item);
                 }
@@ -402,6 +403,7 @@ namespace PsycoApp.DA
                 cmd.Parameters.Add("@IdPsicologo", SqlDbType.Int).Value = item.IdPsicologo;
                 cmd.Parameters.Add("@Fecha", SqlDbType.VarChar).Value = item.Fecha;
                 cmd.Parameters.Add("@Inicio", SqlDbType.VarChar).Value = item.Inicio;
+                cmd.Parameters.Add("@Refrigerio", SqlDbType.VarChar).Value = item.Refrigerio;
                 cmd.Parameters.Add("@Fin", SqlDbType.VarChar).Value = item.Fin;
 
                 SqlDataAdapter da = new SqlDataAdapter(cmd);

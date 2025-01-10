@@ -214,7 +214,7 @@
                         <select class="form-control" id="cboHorario2" name="cboHorario2" required></select>
                     </div>
                 </div>
-                <div class="col-4">
+                <div class="col-4" id="divRefrigerio">
                     <div class="sb-frm-psi-agregar-block-item">
                         <span class="label-form">Refrigerio</span>
                         <select class="form-control" id="cboRefrigerio" name="Refrigerio" required></select>
@@ -296,6 +296,7 @@
                     <tr>
                         <th>Fecha</th>
                         <th>Inicio</th>
+                        <th>Refrigerio</th>
                         <th>Fin</th>
                     </tr>
                 </thead>
@@ -309,7 +310,7 @@
 
         <div class="sb-psi-container-horarios-popup-button">
             <button type="button" class="btn btn-secondary sb-reg-citas-popup-button-volver" onclick="guardarHorarios()">Guardar</button>
-            <button type="button" class="btn btn-secondary sb-reg-citas-popup-button-salir" onclick="cancelarHorarios()">Cancelar</button>
+            <button type="button" class="btn btn-secondary sb-reg-citas-popup-button-salir" onclick="cancelarHorarios()">Volver</button>
         </div>
 
     </div>
@@ -448,13 +449,13 @@
             $('#containerFormulario select').val('-1');
             $('#containerFormulario select#cboRefrigerio').val('12:00');
 
-            $('#divDescHorario, #divHorario1, #divHorario2').removeClass('hide-element');
+            $('#divDescHorario, #divHorario1, #divHorario2, #divRefrigerio').removeClass('hide-element');
 
             listarEstudios([{ id: 0, idPsicologo: 0, gradoAcademico: -1, institucion: -1, carrera: -1 }], 0);
         }
 
         function editarPsicologo(id) {
-            $('#divDescHorario, #divHorario1, #divHorario2').addClass('hide-element');
+            $('#divDescHorario, #divHorario1, #divHorario2, #divRefrigerio').addClass('hide-element');
 
             $.get(`/Mantenimiento/Psicologo/Get/${id}`, function (psicologo) {
                 $('#hdnPsicologoId').val(psicologo.id);
@@ -517,6 +518,7 @@
                     html += '<tr>';
                     html += '<td>' + item.nombreDia + ' ' + item.fecha + '</td>';
                     html += '<td>' + comboHorario(item.orden, item.id, item.inicio, 'Inicio') + '</td>';
+                    html += '<td>' + comboHorario(item.orden, item.id, item.refrigerio, 'Refrigerio') + '</td>';
                     html += '<td>' + comboHorario(item.orden, item.id, item.fin, 'Fin') + '</td>';
                     html += '</tr>';
                 }
@@ -541,6 +543,10 @@
             if ($(ordenId).hasClass('cboInicio')) {
                 tipo = 'inicio';
             }
+
+            if ($(ordenId).hasClass('cboRefrigerio')) {
+                tipo = 'refrigerio';
+            }
             if ($(ordenId).hasClass('cboFin')) {
                 tipo = 'fin';
             }
@@ -551,6 +557,9 @@
                 if (item.orden == orden) {
                     if (tipo == 'inicio') {
                         item.inicio = valor;
+                    }
+                    if (tipo == 'refrigerio') {
+                        item.refrigerio = valor;
                     }
                     if (tipo == 'fin') {
                         item.fin = valor;
@@ -563,9 +572,10 @@
             var error = '';
             for (var item of horarios_psicologo){
                 var inicio = item.inicio;
+                var refrigerio = item.refrigerio;
                 var fin = item.fin;
 
-                if ((inicio != '-1' && fin == '-1') || (inicio == '-1' && fin != '-1')){
+                if ((inicio != '-1' && refrigerio == '-1' && fin == '-1') || (inicio == '-1' || refrigerio == '-1' || fin == '-1')){
                     if (error == ''){
                         error = "ERROR";
                     }
@@ -585,7 +595,7 @@
             var lista_enviar = [];
             for (var item of horarios_psicologo) {
                 if (item.inicio != '-1' && item.fin != '-1'){
-                    lista_enviar.push({ Fecha: item.fecha, Inicio: item.inicio, Fin: item.fin, Id: item.id, IdPsicologo: parseInt(id_psicologo) });
+                    lista_enviar.push({ Fecha: item.fecha, Inicio: item.inicio, Refrigerio: item.refrigerio, Fin: item.fin, Id: item.id, IdPsicologo: parseInt(id_psicologo) });
                 }
             }
 
@@ -636,7 +646,7 @@
         }
 
         function cancelarHorarios() {
-            $('#mdl_horarios').removeClass('show');
+            $('#mdl_horarios').modal('hide');
         }
 
         function listarEstudios(estudios, idPsicologo){

@@ -20,6 +20,7 @@ namespace PsycoApp.entities
         public string Fecha { get; set; }
         public string NombreDia { get; set; }
         public string Inicio { get; set; }
+        public string Refrigerio { get; set; }
         public string Fin { get; set; }
     }
 }
