@@ -201,9 +201,8 @@
     <script src="~/login/vendor/daterangepicker/daterangepicker.js"></script>
     <script src="~/login/vendor/countdowntime/countdowntime.js"></script>
 
-    <script src="~/login/js/main.js?f=@dHoy.ToString("yyyyMMddhhmmss")"></script>
-
-    <script src="~/assets/plugins/sweetalert/sweetalert.min.js"></script>
+    @* <script src="~/assets/plugins/sweetalert/sweetalert.min.js"></script> *@
+    <script src="~/src/plugin/sweetalert2/js/sweetalert2.all.min.js"></script>
     <script type="text/javascript">
 
         function alerta(text, type) {
@@ -235,6 +234,8 @@
                 }(window.jQuery);
         }
     </script>
+
+    <script src="~/login/js/main.js?f=@dHoy.ToString("yyyyMMddhhmmss")"></script>
 
 </body>
 </html>
