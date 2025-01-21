@@ -26,7 +26,8 @@ namespace PsycoApp.entities
         public int id_servicio { get; set; } = 0;
         public int id_sede { get; set; } = 0;
         public bool esEvaluacion { get; set; } = false;
-
+        public bool feedback{ get; set; } = false;
+        public string comentario{ get; set; }
         public List<HistorialCita> historial { get; set; }
         public List<string> fechas_adicionales { get; set; }
     }

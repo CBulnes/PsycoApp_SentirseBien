@@ -22,7 +22,8 @@ namespace PsycoApp.BL
             try
             {
                 res_ = citaDA.registrar_cita(oCita, "NO", main_path, random_str);
-                if (oCita.fechas_adicionales.Count > 0)
+                //Cuando no hay fechas adicionales estaba arrojando error
+                if (oCita.fechas_adicionales != null && oCita.fechas_adicionales.Count > 0)
                 {
                     foreach (var fecha in oCita.fechas_adicionales)
                     {

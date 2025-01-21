@@ -84,6 +84,7 @@ $(document).ready(function () {
         }
         $('#bdFechas').html(html);
     })
+   
 });
 
 function searchPatientsModal(filtro) {
@@ -359,8 +360,9 @@ function ver_cita(e) {
     var monto_pendiente = $(e).attr('data-monto-pendiente');
     var id_servicio = $(e).attr('data-id-servicio');
     var id_sede = $(e).attr('data-id-sede');
-
-    cargar_datos_cita(id_cita, id_especialista, id_paciente, fecha_cita, hora_Cita, estado, telefono, moneda, formatDecimal(monto_pactado), formatDecimal(monto_pagado), formatDecimal(monto_pendiente), id_servicio, id_sede);
+    var feedback = $(e).attr('data-feedback');
+    var comentario = $(e).attr('data-comentario');
+    cargar_datos_cita(id_cita, id_especialista, id_paciente, fecha_cita, hora_Cita, estado, telefono, moneda, formatDecimal(monto_pactado), formatDecimal(monto_pagado), formatDecimal(monto_pendiente), id_servicio, id_sede, feedback,comentario);
 }
 
 function formatDecimal(num) {
@@ -686,7 +688,7 @@ function cerrar_modal_pago2() {
     }, 250);
 }
 
-function cargar_datos_cita(id_cita, id_doctor, id_paciente, fecha, hora, estado, telefono, moneda, monto_pactado, monto_pagado, monto_pendiente, id_servicio, id_sede) {
+function cargar_datos_cita(id_cita, id_doctor, id_paciente, fecha, hora, estado, telefono, moneda, monto_pactado, monto_pagado, monto_pendiente, id_servicio, id_sede,feedback,comentario) {
     $('#btnResumen').trigger('click');
     $('#ulTabs').hide();
     $('.fechasAdicionales').addClass('hide-element');
@@ -709,7 +711,15 @@ function cargar_datos_cita(id_cita, id_doctor, id_paciente, fecha, hora, estado,
     $('#spnPendiente').html('Monto pendiente (' + moneda + ')' + btnAbonar);
     
     $('#cboDoctor, #cboPaciente, #txtHora, #cboServicio').removeAttr('disabled');
-
+    // Asignar el feedback
+    if (feedback) { // Si feedback es true, es "sad"
+        $('#sad').prop('checked', true);
+        toggleComment(true); // Mostrar el área de comentarios
+    } else { // Si feedback es false, es "happy"
+        $('#happy').prop('checked', true);
+        toggleComment(false); // Ocultar el área de comentarios
+    }
+    $('#comment').val(comentario);
     $('.divMonto').hide();
     if (id_cita == 0) {
         $('#txtFechaReasignar').val('');
@@ -1021,6 +1031,9 @@ function guardar_cita() {
         });
         return;
     }
+    // Obtener el feedback
+    var feedback = $('input[name="feedback"]:checked').val(); // 'happy' o 'sad'
+    var comentario = $('#comment').val(); // Comentario adicional si es cara triste
 
     var data_ = {
         id_cita: id_cita_,
@@ -1033,9 +1046,12 @@ function guardar_cita() {
         monto_pactado: '0,00',
         id_servicio: id_servicio,
         id_sede: id_sede,
-        fechas_adicionales: adicionales
+        fechas_adicionales: adicionales,
     };
-
+    if (feedback === 'sad') {
+        data_.feedback = true; // Enviar true si es triste
+        data_.comentario = comentario || ''; // Enviar comentario adicional si existe
+    }
     $.ajax({
         url: "/RegistroCitas/RegistrarCita",
         type: "POST", //(idRegistro > 0 ? "PUT" : "POST"),
@@ -1365,7 +1381,10 @@ function deshabilitar_campos() {
         $('#cboDoctor, #cboPaciente, #txtHora, #cboServicio').attr('disabled', true);
     }
 }
-
+function toggleComment(show) {
+    const commentSection = document.getElementById('comment-section');
+    commentSection.style.display = show ? 'block' : 'none';
+}
 function seleccionar_hora_disponible(e) {
     var hora = $(e).attr('data-hora');
 
@@ -1415,6 +1434,7 @@ $('.btn-vista').on('click', function () {
             $(".my-calendar").removeClass('hide-element');
             $(".my-calendar2").addClass('hide-element');
         } else if (tipo == 'SEMANAL') {
+            console.log('semana');
             $(".my-calendar").addClass('hide-element');
             $(".my-calendar2").removeClass('hide-element');
 
@@ -1431,6 +1451,33 @@ $('.btn-vista').on('click', function () {
             $('#cboSemanaFiltro').html(html_);
 
             listar_vista_semanal(mes_, año_, 1);
+
+
+            // Detectar el año dinámicamente según el sistema
+            const fechaActual = new Date();
+            let anioActivo = fechaActual.getFullYear(); // Cambié 'añoSeleccionado' por 'anioActivo'
+
+            // Detectar si hay un cambio de año en los meses seleccionados
+            const comboMes = document.getElementById("trigger_seleccion_mes");
+
+            // Detectar cambio de mes y actualizar las semanas dinámicamente
+            comboMes.addEventListener("change", function () {
+                const mesSeleccionado = parseInt(this.value, 10);
+
+                // Cambiar el año si se selecciona diciembre y pasa a enero (u otros saltos de año)
+                if (mesSeleccionado === 11 && fechaActual.getMonth() === 0) {
+                    anioActivo--;
+                } else if (mesSeleccionado === 0 && fechaActual.getMonth() === 11) {
+                    anioActivo++;
+                }
+
+                actualizarComboSemanas(mesSeleccionado, anioActivo);
+            });
+            // Cargar semanas al iniciar la página
+            const mesInicial = parseInt(comboMes.value, 10);
+            actualizarComboSemanas(mesInicial, anioActivo);
+
+
         }
     }
 })
@@ -1604,6 +1651,66 @@ function enviar_datos_zabuto(fecha, hora) {
     html = (html == '-' ? '' : (html.includes('btn_nueva_cita') ? '' : html));
     return html;
 }
+// Genera las semanas de un mes específico
+function generarSemanasDelMes(mes, año) {
+    const semanas = [];
+    let fechaInicio = new Date(año, mes, 1); // Primer día del mes
+    const fechaFin = new Date(año, mes + 1, 0); // Último día del mes
+
+    // Ajustar para que la semana comience en lunes
+    if (fechaInicio.getDay() !== 1) {
+        fechaInicio.setDate(fechaInicio.getDate() - (fechaInicio.getDay() === 0 ? 6 : fechaInicio.getDay() - 1));
+    }
+
+    let semanaContador = 1;
+    while (fechaInicio <= fechaFin) {
+        const inicioSemana = new Date(fechaInicio);
+        const finSemana = new Date(inicioSemana);
+        finSemana.setDate(inicioSemana.getDate() + 6);
+
+        if (finSemana > fechaFin) {
+            finSemana.setDate(fechaFin.getDate());
+        }
+
+        semanas.push({
+            label: `Semana ${semanaContador} (${inicioSemana.getDate()} ${obtenerNombreMes(inicioSemana.getMonth())} - ${finSemana.getDate()} ${obtenerNombreMes(finSemana.getMonth())})`,
+            value: `${semanaContador}`, // Valor de la semana
+        });
+
+        fechaInicio.setDate(fechaInicio.getDate() + 7);
+        semanaContador++;
+    }
+
+    return semanas;
+}
+
+// Obtiene el nombre del mes en español
+function obtenerNombreMes(mes) {
+    const nombresMeses = [
+        "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
+        "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre",
+    ];
+    return nombresMeses[mes];
+}
+
+// Actualiza las opciones del combo de semanas
+function actualizarComboSemanas(mes, año) {
+    const combo = document.getElementById("cboSemanaFiltro");
+    combo.innerHTML = ""; // Limpiar las opciones existentes
+
+    const semanas = generarSemanasDelMes(mes, año);
+
+    // Crear opciones dinámicas para el combo
+    semanas.forEach((semana) => {
+        const option = document.createElement("option");
+        option.value = semana.value;
+        option.textContent = semana.label;
+        combo.appendChild(option);
+    });
+}
+
+
+
 
 $('.trigger_mes_anterior').on('click', function () {
     $('.nav_mes_anterior').trigger('click');

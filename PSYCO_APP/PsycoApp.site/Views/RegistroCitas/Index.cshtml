@@ -87,9 +87,7 @@
         <div class="sb-reg-citas-color-evaluacion">
             <p>Evaluación</p>
         </div>
-        <div class="sb-reg-citas-color-taller">
-            <p>Taller</p>
-        </div>
+  
     </div>
 
     <div class="row sb-reg-citas-list-filtro">
@@ -301,6 +299,22 @@
                                             <option value="-1">Seleccionar</option>
                                         </select>
                                     </div>
+                                </div>
+                            </div>
+
+                            <div class="customer-feedback">
+                                <label for="feedback">Estado del Cliente:</label>
+                                <div class="feedback-icons">
+                                    <input type="radio" id="happy" name="feedback" value="happy" onclick="toggleComment(false)" checked>
+                                    <label for="happy" class="icon-happy">😊</label>
+
+                                    <input type="radio" id="sad" name="feedback" value="sad" onclick="toggleComment(true)">
+                                    <label for="sad" class="icon-sad">😢</label>
+                                </div>
+
+                                <div id="comment-section" style="display: block;">
+                                    <label for="comment">Comentario adicional:</label>
+                                    <textarea id="comment" name="comment" placeholder="Describe el problema aquí..."></textarea>
                                 </div>
                             </div>
 

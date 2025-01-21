@@ -33,6 +33,8 @@ namespace PsycoApp.DA
                 cmd.Parameters.Add("@id_sede", SqlDbType.Int).Value = oCita.id_sede;
                 cmd.Parameters.Add("@usuario", SqlDbType.VarChar).Value = oCita.usuario;
                 cmd.Parameters.Add("@adicional", SqlDbType.VarChar).Value = adicional;
+                cmd.Parameters.Add("@feedback", SqlDbType.Bit).Value = oCita.feedback;
+                cmd.Parameters.Add("@comentario", SqlDbType.VarChar).Value = oCita.comentario;
 
                 SqlDataAdapter da = new SqlDataAdapter(cmd);
                 DataTable dt = new DataTable();
@@ -245,6 +247,8 @@ namespace PsycoApp.DA
                     cita.id_servicio = Convert.ToInt32(row["id_servicio"]);
                     cita.id_sede = Convert.ToInt32(row["id_sede"]);
                     cita.esEvaluacion = Convert.ToBoolean(row["esEvaluacion"]);
+                    cita.feedback = Convert.ToBoolean(row["feedback"]);
+                    cita.comentario = Convert.ToString(row["comentario"]);
                     lista.Add(cita);
                 }
             }
