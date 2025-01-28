@@ -209,15 +209,15 @@ namespace PsycoApp.site.Controllers.Mantenimiento
             return await client.DeleteAsync(url);
         }
 
-        [Route("/Mantenimiento/Psicologo/horarios_psicologo/{id}/{inicio}/{fin}")]
+        [Route("/Mantenimiento/Psicologo/horarios_psicologo/{id}/{inicio}/{fin}/{dias}")]
         [HttpGet]
-        public ActionResult<List<entities.Horario>> horarios_psicologo(int id, string inicio, string fin)
+        public ActionResult<List<entities.Horario>> horarios_psicologo(int id, string inicio, string fin, string dias)
         {
             List<entities.Horario> lista = new List<entities.Horario>();
             string res = "";
             try
             {
-                string url = url_horarios_psicologo + "/" + id + "/" + inicio + "/" + fin;
+                string url = url_horarios_psicologo + "/" + id + "/" + inicio + "/" + fin + "/" + dias;
                 res = ApiCaller.consume_endpoint_method(url, null, "GET");
                 lista = JsonConvert.DeserializeObject<List<entities.Horario>>(res);
             }

@@ -26,18 +26,19 @@ namespace PsycoApp.site.Controllers
         List<ReporteNPS> listaReporteNPS = new List<ReporteNPS>();
 
         [Route("Caja")]
-        public async Task<IActionResult> Index(int pageNumber = 1, int pageSize = 10, int mes = -1, int anio = -1)
+        public async Task<IActionResult> Index(int pageNumber = 1, int pageSize = 10, int mes = -1, int anio = -1, int sede = -1)
         {
             if (!string.IsNullOrEmpty(HttpContext.Session.GetString("nombres") as string))
             {
                 var usuario = Convert.ToString(HttpContext.Session.GetString("login"));
                 // Construir la URL para la API dependiendo de si hay un término de búsqueda
-                string url = $"{apiUrl}/listar_cuadre_caja/{usuario}/{pageNumber}/{pageSize}/{mes}/{anio}";
+                string url = $"{apiUrl}/listar_cuadre_caja/{usuario}/{pageNumber}/{pageSize}/{mes}/{anio}/{sede}";
 
                 var registros = await GetFromApiAsync<List<PsycoApp.entities.CuadreCaja>>(url);
                 var pacientesViewModel = registros.Select(p => new PsycoApp.site.Models.CuadreCaja
                 {
                     paciente = p.paciente,
+                    sede = p.sede,
                     fecha_transaccion = p.fecha_transaccion,
                     estado_cita = p.estado_cita,
                     servicio = p.servicio,
@@ -82,12 +83,12 @@ namespace PsycoApp.site.Controllers
 
         [Route("/Caja/Buscar")]
         [HttpPost]
-        public async Task<IActionResult> Buscar(int pageNumber = 1, int pageSize = 10, int mes = -1, int anio = -1)
+        public async Task<IActionResult> Buscar(int pageNumber = 1, int pageSize = 10, int mes = -1, int anio = -1, int sede = -1)
         {
             if (!string.IsNullOrEmpty(HttpContext.Session.GetString("nombres") as string))
             {
                 var usuario = Convert.ToString(HttpContext.Session.GetString("login"));
-                string url = $"{apiUrl}/listar_cuadre_caja/{usuario}/{pageNumber}/{pageSize}/{mes}/{anio}";
+                string url = $"{apiUrl}/listar_cuadre_caja/{usuario}/{pageNumber}/{pageSize}/{mes}/{anio}/{sede}";
 
                 var registros = await GetFromApiAsync<List<PsycoApp.entities.CuadreCaja>>(url);
 
@@ -111,6 +112,7 @@ namespace PsycoApp.site.Controllers
                     Model = registros.Select(p => new PsycoApp.site.Models.CuadreCaja
                     {
                         paciente = p.paciente,
+                        sede = p.sede,
                         fecha_transaccion = p.fecha_transaccion,
                         estado_cita = p.estado_cita,
                         servicio = p.servicio,
@@ -200,14 +202,14 @@ namespace PsycoApp.site.Controllers
         }
 
         [HttpGet]
-        public async Task<List<entities.CuadreCaja>> ListarResumenCajaPorUsuario(int mes, int anio)
+        public async Task<List<entities.CuadreCaja>> ListarResumenCajaPorUsuario(int mes, int anio, int sede)
         {
             List<entities.CuadreCaja> lista = new List<entities.CuadreCaja>();
             string res = "";
             string usuario = Convert.ToString(HttpContext.Session.GetString("login"));
             try
             {
-                url = Endpoints.apiUrl + "/api" + Endpoints.Caja.url_resumen_caja_x_usuario + "/" + usuario + "/" + mes + "/" + anio;
+                url = Endpoints.apiUrl + "/api" + Endpoints.Caja.url_resumen_caja_x_usuario + "/" + usuario + "/" + mes + "/" + anio + "/" + sede;
                 res = ApiCaller.consume_endpoint_method(url, null, "GET");
                 lista = JsonConvert.DeserializeObject<List<entities.CuadreCaja>>(res);
             }
@@ -219,14 +221,14 @@ namespace PsycoApp.site.Controllers
         }
 
         [HttpGet]
-        public async Task<List<entities.CuadreCaja>> ListarResumenCajaPorFormaPago(int mes, int anio)
+        public async Task<List<entities.CuadreCaja>> ListarResumenCajaPorFormaPago(int mes, int anio, int sede)
         {
             List<entities.CuadreCaja> lista = new List<entities.CuadreCaja>();
             string res = "";
             string usuario = Convert.ToString(HttpContext.Session.GetString("login"));
             try
             {
-                url = Endpoints.apiUrl + "/api" + Endpoints.Caja.url_resumen_caja_x_forma_pago + "/" + usuario + "/" + mes + "/" + anio;
+                url = Endpoints.apiUrl + "/api" + Endpoints.Caja.url_resumen_caja_x_forma_pago + "/" + usuario + "/" + mes + "/" + anio + "/" + sede;
                 res = ApiCaller.consume_endpoint_method(url, null, "GET");
                 lista = JsonConvert.DeserializeObject<List<entities.CuadreCaja>>(res);
             }

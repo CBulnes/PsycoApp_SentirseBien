@@ -9,6 +9,14 @@
 <!-- SB - STYLE -->
 
 <link rel="stylesheet" href="~/src/css/sb-psicologo.css" />
+<style>
+    .btnDia, .btnDia:focus {
+        color: #99abb4 !important;
+    }
+    .btnDiaSeleccionado {
+        background-color: #bff9c6 !important;
+    }
+</style>
 
 <div class="sb-psi-container">
    <div class="sb-psi-container-buscar">
@@ -290,6 +298,49 @@
             </div>
         </div>
 
+        <div class="sb-reg-citas-popup-tab-panel hide-element" id="divFechasMultiple">
+            <div class="sb-reg-citas-popup-tab-panel-item">
+                <div class="sb-frm-psi-agregar-block-item">
+                    <span class="label-form">Inicio (masivo)</span>
+                    <select class="form-control" id="cboInicioM" name="cboInicioM"></select>
+                </div>
+                <div class="sb-frm-psi-agregar-block-item">
+                    <span class="label-form">Refrigerio (masivo)</span>
+                    <select class="form-control" id="cboRefrigerioM" name="cboRefrigerioM"></select>
+                </div>
+                <div class="sb-frm-psi-agregar-block-item">
+                    <span class="label-form">Fin (masivo)</span>
+                    <select class="form-control" id="cboFinM" name="cboFinM"></select>
+                </div>
+            </div>
+        </div>
+
+        <div class="sb-reg-citas-popup-tab-panel">
+            <div class="row" style="width: 100%;">
+                <div class="col-3" style="width: 14%; max-width: 14%;">
+                    <button type="button" class="btn btn-secondary btnDia" style="width: 100%;" data-dia="*LU*" onclick="cambiarSeleccionDia(this)">Lun</button>
+                </div>
+                <div class="col-3" style="width: 14%; max-width: 14%;">
+                    <button type="button" class="btn btn-secondary btnDia" style="width: 100%;" data-dia="*MA*" onclick="cambiarSeleccionDia(this)">Mar</button>
+                </div>
+                <div class="col-3" style="width: 14%; max-width: 14%;">
+                    <button type="button" class="btn btn-secondary btnDia" style="width: 100%;" data-dia="*MI*" onclick="cambiarSeleccionDia(this)">Mié</button>
+                </div>
+                <div class="col-3" style="width: 14%; max-width: 14%;">
+                    <button type="button" class="btn btn-secondary btnDia" style="width: 100%;" data-dia="*JU*" onclick="cambiarSeleccionDia(this)">Jue</button>
+                </div>
+                <div class="col-3" style="width: 14%; max-width: 14%;">
+                    <button type="button" class="btn btn-secondary btnDia" style="width: 100%;" data-dia="*VI*" onclick="cambiarSeleccionDia(this)">Vie</button>
+                </div>
+                <div class="col-3" style="width: 14%; max-width: 14%;">
+                    <button type="button" class="btn btn-secondary btnDia" style="width: 100%;" data-dia="*SA*" onclick="cambiarSeleccionDia(this)">Sáb</button>
+                </div>
+                <div class="col-3" style="width: 14%; max-width: 14%;">
+                    <button type="button" class="btn btn-secondary btnDia" style="width: 100%;" data-dia="*DO*" onclick="cambiarSeleccionDia(this)">Dom</button>
+                </div>
+            </div>
+        </div>
+
         <div class="sb-frm-psi-table-block-item">
             <table class="table table-striped" style="width: 100%; overflow: scroll;">
                 <thead>
@@ -302,7 +353,7 @@
                 </thead>
                 <tbody id="bdHorarios">
                     <tr>
-                        <td>Realice la búsqueda de horarios.</td>
+                        <td colspan="4">Realice la búsqueda de horarios.</td>
                     </tr>
                 </tbody>
             </table>
@@ -377,6 +428,10 @@
         cargarCombo(refrigerio, 'cboRefrigerio');
         cargarCombo(horarios, 'cboHorario1');
         cargarCombo(horarios, 'cboHorario2');
+
+        cargarCombo(horarios, 'cboInicioM');
+        cargarCombo(horarios, 'cboRefrigerioM');
+        cargarCombo(horarios, 'cboFinM');
 
         function cargarSedes() {
             var html = '';
@@ -485,7 +540,7 @@
 
         function modalHorarios(id) {
             $('#hdnIdPsicologo').val(id);
-            $('#bdHorarios').html('<tr><td colspan="3">Realice la búsqueda de horarios.</td></tr>');
+            $('#bdHorarios').html('<tr><td colspan="4">Realice la búsqueda de horarios.</td></tr>');
             $('#mdl_horarios').modal('show');
         }
 
@@ -493,6 +548,13 @@
             var id = $('#hdnIdPsicologo').val();
             var inicio = $('#txtInicio').val();
             var fin = $('#txtFin').val();
+            var dias = '';
+
+            if ($('.btnDiaSeleccionado').length > 0) {
+                $('.btnDiaSeleccionado').each(function(){
+                    dias += $(this).attr('data-dia');
+                })
+            }
 
             if (inicio == '') {
                 Swal.fire({
@@ -511,7 +573,7 @@
                 return;
             }
 
-            $.get(`/Mantenimiento/Psicologo/horarios_psicologo/${id}/${inicio}/${fin}`, function (data) {
+            $.get(`/Mantenimiento/Psicologo/horarios_psicologo/${id}/${inicio}/${fin}/${dias}`, function (data) {
                 horarios_psicologo = data;
                 var html = '';
                 for (var item of data){
@@ -848,5 +910,31 @@
             var año = fecha.substring(0, 4);
             return dia + "/" + mes + "/" + año;
         }
+
+        function cambiarSeleccionDia(e){
+            if ($(e).hasClass('btnDiaSeleccionado')){
+                $(e).removeClass('btnDiaSeleccionado');
+            } else {
+                $(e).addClass('btnDiaSeleccionado');
+            }
+
+            if ($('.btnDiaSeleccionado').length == 0) {
+                $('#divFechasMultiple').addClass('hide-element');
+            } else {
+                $('#divFechasMultiple').removeClass('hide-element');
+            }
+        }
+
+        $('#cboInicioM').on('change', function(){
+            $('.cboHorario.cboInicio').val($(this).val());
+        })
+
+        $('#cboRefrigerioM').on('change', function(){
+            $('.cboHorario.cboRefrigerio').val($(this).val());
+        })
+
+        $('#cboFinM').on('change', function(){
+            $('.cboHorario.cboFin').val($(this).val());
+        })
     </script>
 }

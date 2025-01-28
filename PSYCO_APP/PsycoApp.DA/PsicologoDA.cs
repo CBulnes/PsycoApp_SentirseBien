@@ -327,7 +327,7 @@ namespace PsycoApp.DA
             return lista;
         }
 
-        public List<entities.Horario> horarios_psicologo(int id_psicologo, string inicio, string fin)
+        public List<entities.Horario> horarios_psicologo(int id_psicologo, string inicio, string fin, string dias)
         {
             List<entities.Horario> lista = new List<entities.Horario>();
             try
@@ -338,6 +338,7 @@ namespace PsycoApp.DA
                 cmd.Parameters.Add("@id_psicologo", SqlDbType.Int).Value = id_psicologo;
                 cmd.Parameters.Add("@inicio", SqlDbType.VarChar).Value = inicio;
                 cmd.Parameters.Add("@fin", SqlDbType.VarChar).Value = fin;
+                cmd.Parameters.Add("@dias", SqlDbType.VarChar).Value = dias;
 
                 SqlDataAdapter da = new SqlDataAdapter(cmd);
                 DataTable dt = new DataTable();

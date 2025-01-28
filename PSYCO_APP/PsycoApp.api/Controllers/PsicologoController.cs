@@ -148,13 +148,13 @@ namespace PsycoApp.api.Controllers
             return lista;
         }
 
-        [HttpGet("horarios_psicologo/{id_psicologo}/{inicio}/{fin}")]
-        public List<entities.Horario> horarios_psicologo(int id_psicologo, string inicio, string fin)
+        [HttpGet("horarios_psicologo/{id_psicologo}/{inicio}/{fin}/{dias}")]
+        public List<entities.Horario> horarios_psicologo(int id_psicologo, string inicio, string fin, string dias)
         {
             List<entities.Horario> res_ = new List<entities.Horario>();
             try
             {
-                res_ = _psicologoBL.horarios_psicologo(id_psicologo, inicio, fin);
+                res_ = _psicologoBL.horarios_psicologo(id_psicologo, inicio, fin, dias);
             }
             catch (Exception)
             {

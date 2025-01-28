@@ -44,12 +44,12 @@ namespace PsycoApp.BL
             return lista;
         }
 
-        public List<CuadreCaja> listar_cuadre_caja(string usuario, int pagina, int tamanoPagina, int mes, int anio)
+        public List<CuadreCaja> listar_cuadre_caja(string usuario, int pagina, int tamanoPagina, int mes, int anio, int sede)
         {
             List<CuadreCaja> lista = new List<CuadreCaja>();
             try
             {
-                lista = cajaDA.listar_cuadre_caja(usuario, pagina, tamanoPagina, mes, anio);
+                lista = cajaDA.listar_cuadre_caja(usuario, pagina, tamanoPagina, mes, anio, sede);
             }
             catch (Exception)
             {
@@ -58,12 +58,12 @@ namespace PsycoApp.BL
             return lista;
         }
 
-        public List<CuadreCaja> resumen_caja_x_usuario(string usuario, int mes, int año)
+        public List<CuadreCaja> resumen_caja_x_usuario(string usuario, int mes, int año, int sede)
         {
             List<CuadreCaja> lista = new List<CuadreCaja>();
             try
             {
-                lista = cajaDA.resumen_caja_x_usuario(usuario, mes, año);
+                lista = cajaDA.resumen_caja_x_usuario(usuario, mes, año, sede);
             }
             catch (Exception)
             {
@@ -72,12 +72,12 @@ namespace PsycoApp.BL
             return lista;
         }
 
-        public List<CuadreCaja> resumen_caja_x_forma_pago(string usuario, int mes, int año)
+        public List<CuadreCaja> resumen_caja_x_forma_pago(string usuario, int mes, int año, int sede)
         {
             List<CuadreCaja> lista = new List<CuadreCaja>();
             try
             {
-                lista = cajaDA.resumen_caja_x_forma_pago(usuario, mes, año);
+                lista = cajaDA.resumen_caja_x_forma_pago(usuario, mes, año, sede);
             }
             catch (Exception)
             {

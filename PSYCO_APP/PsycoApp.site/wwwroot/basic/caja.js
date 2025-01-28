@@ -4,8 +4,9 @@ function buscarPago(pageNumber = 1) {
     let pageSize = 10;
     var mes = $('#cboMes').val();
     var anio = $('#cboAnio').val();
+    var sede = $('#cboSede').val();
 
-    $.post('/Caja/Buscar', { pageNumber: pageNumber, pageSize: pageSize, mes: mes, anio: anio })
+    $.post('/Caja/Buscar', { pageNumber: pageNumber, pageSize: pageSize, mes: mes, anio: anio, sede: sede })
         .done(function (data) {
             $('#containerTabla').html(data);
             verResumenUsuario(false);
@@ -24,17 +25,19 @@ function verResumenUsuario(recargar) {
     if (recargar) {
         $('#cboMes').val(-1);
         $('#cboAnio').val(-1);
+        $('#cboSede').val(-1);
     }
 
     var mes = $('#cboMes').val();
     var anio = $('#cboAnio').val();
+    var sede = $('#cboSede').val();
     var html = '';
     var contador = 1;
 
     $('.preloader').removeAttr('style');
     $('.preloader').removeClass('hide-element');
 
-    $.get('/Caja/ListarResumenCajaPorUsuario?mes=' + mes + "&anio=" + anio)
+    $.get('/Caja/ListarResumenCajaPorUsuario?mes=' + mes + "&anio=" + anio + "&sede=" + sede)
         .done(function (data) {
             if (data.length > 0) {
                 for (var item of data) {
@@ -51,7 +54,7 @@ function verResumenUsuario(recargar) {
                 html += '</tr>';
             }
             $('#bdResumen').html(html);
-            getResumenTipoPago(mes, anio);
+            getResumenTipoPago(mes, anio, sede);
         })
         .fail(function () {
             Swal.fire({
@@ -59,16 +62,16 @@ function verResumenUsuario(recargar) {
                 title: "Oops...",
                 text: "Ocurrió un error al obtener los registros.",
             });
-            getResumenTipoPago(mes, anio);
+            getResumenTipoPago(mes, anio, sede);
         });
 }
 
-function getResumenTipoPago(mes, anio) {
+function getResumenTipoPago(mes, anio, sede) {
     data_resumen = [];
     var html = '';
     var contador = 1;
 
-    $.get('/Caja/ListarResumenCajaPorFormaPago?mes=' + mes + "&anio=" + anio)
+    $.get('/Caja/ListarResumenCajaPorFormaPago?mes=' + mes + "&anio=" + anio + "&sede=" + sede)
         .done(function (data) {
             var data_resumen = [];
 
@@ -174,7 +177,6 @@ function update() {
 update();
 
 function generar_grafico(data_nps) {
-
     $('#reporte_nps').empty();
     var data_nps_dona = [];
     var i = 0;

@@ -63,12 +63,12 @@ namespace PsycoApp.BL
             return _psicologoDA.listar_sedes_combo();
         }
 
-        public List<entities.Horario> horarios_psicologo(int id_psicologo, string inicio, string fin)
+        public List<entities.Horario> horarios_psicologo(int id_psicologo, string inicio, string fin, string dias)
         {
             List<entities.Horario> lista = new List<entities.Horario>();
             try
             {
-                lista = _psicologoDA.horarios_psicologo(id_psicologo, inicio, fin);
+                lista = _psicologoDA.horarios_psicologo(id_psicologo, inicio, fin, dias);
             }
             catch (Exception)
             {
