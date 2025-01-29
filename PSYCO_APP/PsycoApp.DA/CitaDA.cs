@@ -15,7 +15,7 @@ namespace PsycoApp.DA
         SqlConnection cn = new SqlConnector().cadConnection_psyco;
         string rpta = "";
 
-        public RespuestaUsuario registrar_cita(Cita oCita, string adicional, string main_path, string random_str)
+        public RespuestaUsuario registrar_cita(Cita oCita, string adicional, int orden, string main_path, string random_str)
         {
             RespuestaUsuario res_ = new RespuestaUsuario();
             try
@@ -35,6 +35,7 @@ namespace PsycoApp.DA
                 cmd.Parameters.Add("@adicional", SqlDbType.VarChar).Value = adicional;
                 cmd.Parameters.Add("@feedback", SqlDbType.Bit).Value = oCita.feedback;
                 cmd.Parameters.Add("@comentario", SqlDbType.VarChar).Value = oCita.comentario;
+                cmd.Parameters.Add("@orden", SqlDbType.Int).Value = orden;
 
                 SqlDataAdapter da = new SqlDataAdapter(cmd);
                 DataTable dt = new DataTable();
@@ -247,6 +248,7 @@ namespace PsycoApp.DA
                     cita.id_servicio = Convert.ToInt32(row["id_servicio"]);
                     cita.id_sede = Convert.ToInt32(row["id_sede"]);
                     cita.esEvaluacion = Convert.ToBoolean(row["esEvaluacion"]);
+                    cita.siglas = Convert.ToString(row["siglas"]);
                     cita.feedback = Convert.ToBoolean(row["feedback"]);
                     cita.comentario = Convert.ToString(row["comentario"]);
                     lista.Add(cita);

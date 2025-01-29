@@ -866,7 +866,7 @@ function contenido_cita(dia, mes, año, hora, btnNuevaCita = false, btnCita = fa
                     clase_estado += item.esEvaluacion == 1 ? ' div_evaluacion' : '';
 
                     html += '<div class="div_cita ' + clase_estado + '" data-id-cita="' + item.id_cita + '" data-id-especialista="' + item.id_doctor_asignado + '" data-id-paciente="' + item.id_paciente + '" data-fecha-cita="' + item.fecha_cita + '" data-hora-cita="' + item.hora_cita + '" data-estado="' + item.estado + '" data-telefono="' + item.telefono + '" data-moneda="' + item.moneda + '" data-monto-pactado="' + item.monto_pactado + '" data-monto-pagado="' + item.monto_pagado + '" data-monto-pendiente="' + item.monto_pendiente + '" data-id-servicio="' + item.id_servicio + '" data-id-sede="' + item.id_sede + '" data-feedback="' + item.feedback + '" data-comentario="' + item.comentario + '" onclick="ver_cita(this)">';
-                    html += 'Paciente: ' + item.paciente + '<br/>';
+                    html += 'Paciente: ' + (item.paciente + (' ' + item.siglas)).trim() + '<br/>';
                     html += 'Hora: ' + item.hora_cita;
                     html += '</div > ';
                 }

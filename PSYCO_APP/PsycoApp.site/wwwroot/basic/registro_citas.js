@@ -71,21 +71,53 @@ $(document).ready(function () {
         sesiones = $(this).find(':selected').attr('data-sesiones');
         if (sesiones > 0) {
             $('.fechasAdicionales').removeClass('hide-element');
+            $('#divHorarios').addClass('hide-element');
+        } else {
+            $('#divHorarios').removeClass('hide-element');
         }
 
         var fechaInicial = $('#txtFecha').val();
         var html = '';
         var disabled = id_cita_ > 0 ? 'disabled="disabled"' : '';
-        for (var i = 1; i < sesiones; i++) {
+
+        for (var i = 0; i < sesiones; i++) {
             var fecha = addDays(parseDate(fecha_yyyyMMdd(fechaInicial)), i*7);
             html += '<tr>';
             html += '<td><input class="form-control fechaAd" type="date" id="txtFecha' + i + '" autocomplete="off" max="2050-12-31" min="2022-08-01" value="' + formatDateISO(fecha) + '" onkeydown="return false" ' + disabled + ' /></td>';
+
+            html += '<td><select class="form-control horarioAd" id="cboHorario' + i + '">' + obtener_horarios_fecha(formatDateISO(fecha)) + '</select></td>';
+
             html += '</tr>';
         }
         $('#bdFechas').html(html);
     })
    
 });
+
+var obtener_horarios_fecha = function (fecha) {
+    var doctor = $('#cboDoctor').val();
+    var html = '';
+
+    $.ajax({
+        url: "/RegistroCitas/DisponibilidadDoctor?id_doctor=" + doctor + "&fecha=" + fecha,
+        type: "GET",
+        async: false,
+        beforeSend: function () {
+            html = '<option value="-1">Seleccionar horario</option>';
+        },
+        success: function (data) {
+            if (data.length > 0) {
+                for (item of data) {
+                    html += '<option value="' + (item.estado == 'DISPONIBLE' ? item.hora_cita : item.estado) + '">' + (item.estado == 'DISPONIBLE' ? item.hora_cita : item.estado) + '</option>';
+                }
+            }
+        },
+        error: function (response) {
+            html = '<option value="-1">Seleccionar horario</option>';
+        }
+    });
+    return html;
+}
 
 function searchPatientsModal(filtro) {
     console.log("Buscando pacientes con filtro:", filtro);
@@ -555,10 +587,33 @@ function cerrar_modal_pagos_pendientes(){
 
 function cerrar_modal_fechas_adicionales() {
     adicionales = [];
-    $('.fechaAd').each(function () {
-        adicionales.push($(this).val());
-    })
-    $('#mdl_adicionales_').modal('hide');
+    var error = '';
+
+    if (sesiones > 0) {
+        for (var i = 0; i <= sesiones; i++) {
+            if (error == '') {
+                var fecha = $('#txtFecha' + i).val();
+                var hora = $('#cboHorario' + i).val();
+                if (hora == '-1' || hora == 'REFRIGERIO') {
+                    error = 'ERROR';
+                } else {
+                    adicionales.push({ fecha: fecha, hora: hora });
+                }
+            }
+        }
+    }
+
+    if (error == '') {
+        $('#mdl_adicionales_').modal('hide');
+    } else {
+        adicionales = [];
+        Swal.fire({
+            icon: "warning",
+            title: "Oops...",
+            text: "Seleccione horarios válidos para las citas.",
+        });
+    }
+    
 }
 
 function guardar_pago() {
@@ -987,7 +1042,7 @@ function guardar_cita() {
         return;
     }
 
-    if (hora == '') {
+    if (hora == '' && sesiones == 0) {
         Swal.fire({
             icon: "warning",
             title: "Oops...",

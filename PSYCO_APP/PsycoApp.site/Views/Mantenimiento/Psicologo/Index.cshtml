@@ -926,15 +926,15 @@
         }
 
         $('#cboInicioM').on('change', function(){
-            $('.cboHorario.cboInicio').val($(this).val());
+            $('.cboHorario.cboInicio').val($(this).val()).change();
         })
 
         $('#cboRefrigerioM').on('change', function(){
-            $('.cboHorario.cboRefrigerio').val($(this).val());
+            $('.cboHorario.cboRefrigerio').val($(this).val()).change();
         })
 
         $('#cboFinM').on('change', function(){
-            $('.cboHorario.cboFin').val($(this).val());
+            $('.cboHorario.cboFin').val($(this).val()).change();
         })
     </script>
 }
