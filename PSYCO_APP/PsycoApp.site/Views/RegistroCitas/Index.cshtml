@@ -66,11 +66,11 @@
         <button type="button" class="btn btn-secondary btn-vista active" data-tipo="MENSUAL">Mensual</button>
         <button type="button" class="btn btn-secondary btn-vista" data-tipo="SEMANAL">Semanal</button>
     </div>
-
+    <input type="hidden" id="hiddenDoctor" name="hiddenDoctor" />
     <div class="sb-reg-citas-title">
         <p>Registro de Citas</p>
     </div>
-
+    <input type="hidden" id="hiddenIdSede" value="@(Model?.DynamicData?.id_sede)" />
     <div class="sb-reg-citas-list-colores">
         <div class="sb-reg-citas-color-citado">
             <p>Citado</p>
@@ -107,6 +107,7 @@
 
         <div class="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
             <span class="label-form">Sede</span>
+
             <select class="form-control" id="cboSedeFiltro" onchange="recargar_citas()" data-placeholder="Eija cita">
                 <option value="-1">Todos</option>
                 <option value="1">La Molina</option>
