@@ -1574,6 +1574,8 @@ function listar_vista_semanal(mes, año, semana) {
 
 function listarHorariosAdicionales(inicio, fin, filtroDoctor, response2) {
     var data_horas = [
+        '06:00 AM',
+        '07:00 AM',
         '08:00 AM',
         '09:00 AM',
         '10:00 AM',
