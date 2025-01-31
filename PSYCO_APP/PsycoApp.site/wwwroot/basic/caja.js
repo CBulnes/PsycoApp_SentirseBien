@@ -1,5 +1,14 @@
 ﻿var colors = ["#a09b9b", "#6788d2", "#ff8128", "#4f5467", "#7460ee", "#26c6da", "#009efb"];
+$(document).ready(function () {
 
+var idSede = document.getElementById("hiddenIdSede").value;
+
+// Establece el valor seleccionado en el <select>
+    var select = document.getElementById("cboSede");
+
+select.value = idSede;
+
+});
 function buscarPago(pageNumber = 1) {
     let pageSize = 10;
     var mes = $('#cboMes').val();

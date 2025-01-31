@@ -61,6 +61,7 @@ namespace PsycoApp.site.Controllers
                 obj.id_psicologo = HttpContext.Session.GetInt32("id_psicologo");
                 obj.tipo_documento = HttpContext.Session.GetString("tipo_documento");
                 obj.num_documento = HttpContext.Session.GetString("num_documento");
+                obj.id_sede = HttpContext.Session.GetInt32("id_sede");
                 obj.vista = "CAJA";
 
                 var viewModelContainer = new ViewModelContainer<IEnumerable<PsycoApp.site.Models.CuadreCaja>>

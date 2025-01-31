@@ -14,6 +14,7 @@ const pageSize = 10; // Tamaño de la página fijo
 let searchTerm = '';
 let debounceTimer;
 document.addEventListener('DOMContentLoaded', function () {
+  
     const element = document.querySelector('#cboDoctorFiltro');
     const choices = new Choices(element, {
         placeholder: true,
@@ -26,13 +27,7 @@ document.addEventListener('DOMContentLoaded', function () {
         searchPlaceholderValue: "Buscar...",
         itemSelectText: "Todos",
     });
-    const elementTT = document.querySelector('#cboSedeFiltro');
-    const choicesTT = new Choices(elementTT, {
-        placeholder: true,
-        searchPlaceholderValue: "Buscar...",
-        itemSelectText: "Todos",
-    });
-
+ 
     // Código de eventos y carga de pacientes
 
     elementT.addEventListener('search', function (event) {
@@ -64,6 +59,22 @@ document.addEventListener('DOMContentLoaded', function () {
     loadPatients('', currentPage);
 });
 $(document).ready(function () {
+
+    $('#cboDoctorFiltro').change(function () {
+        console.log('prueba32');
+        var doctorSeleccionado = parseInt($(this).val(), 10);  // O usa parseFloat si el valor es decimal
+
+        // Asignar ese valor numérico al cboDoctor
+        // Asignar ese valor al campo oculto
+        $('#hiddenDoctor').val(doctorSeleccionado);
+
+    });
+    var idSede = document.getElementById("hiddenIdSede").value;
+
+    // Establece el valor seleccionado en el <select>
+    var select = document.getElementById("cboSedeFiltro");
+ 
+    select.value = idSede;
 
     console.log('prueba3');
     $('#cboServicio').on('change', function () {
@@ -394,6 +405,15 @@ function ver_cita(e) {
     var id_sede = $(e).attr('data-id-sede');
     var feedback = $(e).attr('data-feedback');
     var comentario = $(e).attr('data-comentario');
+    console.log(id_especialista);
+    if (id_especialista == -1) {
+
+        if ($('#hiddenDoctor').val()!=null) {
+            id_especialista = $('#hiddenDoctor').val();
+        }
+       
+
+    }
     cargar_datos_cita(id_cita, id_especialista, id_paciente, fecha_cita, hora_Cita, estado, telefono, moneda, formatDecimal(monto_pactado), formatDecimal(monto_pagado), formatDecimal(monto_pendiente), id_servicio, id_sede, feedback,comentario);
 }
 
