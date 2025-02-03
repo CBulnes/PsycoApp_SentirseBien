@@ -15,6 +15,47 @@ namespace PsycoApp.DA
         SqlConnection cn = new SqlConnector().cadConnection_psyco;
         string rpta = "";
 
+        public RespuestaUsuario validar_cita(Cita oCita, string adicional, int orden, string main_path, string random_str)
+        {
+            RespuestaUsuario res_ = new RespuestaUsuario();
+            try
+            {
+                cn.Open();
+                SqlCommand cmd = new SqlCommand(Procedures.sp_validar_cita, cn);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Add("@id_cita", SqlDbType.Int).Value = oCita.id_cita;
+                cmd.Parameters.Add("@id_paciente", SqlDbType.Int).Value = oCita.id_paciente;
+                cmd.Parameters.Add("@fecha_cita", SqlDbType.VarChar).Value = oCita.fecha_cita;
+                cmd.Parameters.Add("@hora_cita", SqlDbType.VarChar).Value = oCita.hora_cita;
+                cmd.Parameters.Add("@id_doctor", SqlDbType.Int).Value = oCita.id_doctor_asignado;
+                cmd.Parameters.Add("@monto_pactado", SqlDbType.Decimal).Value = oCita.monto_pactado;
+                cmd.Parameters.Add("@id_servicio", SqlDbType.Int).Value = oCita.id_servicio;
+                cmd.Parameters.Add("@id_sede", SqlDbType.Int).Value = oCita.id_sede;
+                cmd.Parameters.Add("@usuario", SqlDbType.VarChar).Value = oCita.usuario;
+                cmd.Parameters.Add("@adicional", SqlDbType.VarChar).Value = adicional;
+                cmd.Parameters.Add("@feedback", SqlDbType.Bit).Value = oCita.feedback;
+                cmd.Parameters.Add("@comentario", SqlDbType.VarChar).Value = oCita.comentario;
+                cmd.Parameters.Add("@orden", SqlDbType.Int).Value = orden;
+
+                SqlDataAdapter da = new SqlDataAdapter(cmd);
+                DataTable dt = new DataTable();
+                da.Fill(dt);
+
+                foreach (DataRow row in dt.Rows)
+                {
+                    res_.descripcion = Convert.ToString(row["rpta"]);
+                }
+                res_.estado = res_.descripcion == "OK" ? true : false;
+            }
+            catch (Exception e)
+            {
+                res_.estado = false;
+                res_.descripcion = "Ocurrió un error al registrar la cita.";
+            }
+            cn.Close();
+            return res_;
+        }
+
         public RespuestaUsuario registrar_cita(Cita oCita, string adicional, int orden, string main_path, string random_str)
         {
             RespuestaUsuario res_ = new RespuestaUsuario();

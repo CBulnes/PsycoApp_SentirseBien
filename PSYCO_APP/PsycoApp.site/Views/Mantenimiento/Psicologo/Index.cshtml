@@ -69,6 +69,7 @@
                                         <div class="sb-psi-container-tble-td">
                                             <button class="btn btn-sm sb-psi-container-table-button-edit" onclick="editarPsicologo(@psicologo.item.Id)">Editar</button>
                                             <button class="btn btn-sm sb-psi-container-table-button-edit" onclick="modalHorarios(@psicologo.item.Id)">Horarios</button>
+                                            <button class="btn btn-sm sb-psi-container-table-button-edit" onclick="modalVacaciones(@psicologo.item.Id)">Vacaciones</button>
                                             <button class="btn btn-sm sb-psi-container-table-button-delet" onclick="eliminarPsicologo(@psicologo.item.Id, @psicologo.item.Estado)">@(psicologo.item.Estado == "1" ? "Deshabilitar" : "Habilitar")</button>
                                         </div>
                                     </td>
@@ -365,13 +366,75 @@
         </div>
 
     </div>
+</div>
 
+<!--modal vacaciones-->
+<div id="mdl_vacaciones" class="modal sb-psi-container-horarios" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="true">
 
+    <div class="sb-psi-container-horarios-popup">
+        <div class="sb-psi-container-horarios-popup-title">
+            <p>Vacaciones</p>
+        </div>
+
+        <input id="hdnIdPsicologo2" type="hidden" />
+
+        <div class="sb-reg-citas-popup-tab-panel">
+            <div class="sb-reg-citas-popup-tab-panel-item-2">
+                <div class="sb-frm-psi-agregar-block-item">
+                    <span class="label-form">Año</span>
+                    <select class="form-control" id="cboAño_">
+                        <option value="-1">Seleccionar</option>
+                        <option value="2025">2025</option>
+                    </select>
+                </div>
+            </div>
+            <div class="sb-reg-citas-popup-tab-panel-item-2">
+                <div class="sb-frm-psi-agregar-block-item">
+                    <button type="button" class="btn btn-secondary sb-reg-citas-popup-button-volver" onclick="listarVacaciones('BUSQUEDA')">Buscar</button>
+                </div>
+            </div>
+            <div class="sb-reg-citas-popup-tab-panel-item-2">
+                <div class="sb-frm-psi-agregar-block-item">
+                    <span class="label-form">Nueva&nbsp;fecha</span>
+                    <input id="txtAgregar" name="txtAgregar" class="form-control" type="date" required />
+                </div>
+            </div>
+            <div class="sb-reg-citas-popup-tab-panel-item-2">
+                <div class="sb-frm-psi-agregar-block-item">
+                    <button type="button" class="btn btn-secondary sb-reg-citas-popup-button-volver" onclick="agregarVacaciones()">Agregar</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="sb-frm-psi-table-block-item">
+            <table class="table table-striped" style="width: 100%; overflow: scroll;">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Fecha</th>
+                        <th>Acción</th>
+                    </tr>
+                </thead>
+                <tbody id="bdVacaciones">
+                    <tr>
+                        <td colspan="3">Realice la búsqueda de vacaciones.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="sb-psi-container-horarios-popup-button">
+            <button type="button" class="btn btn-secondary sb-reg-citas-popup-button-volver" onclick="guardarVacaciones()">Guardar</button>
+            <button type="button" class="btn btn-secondary sb-reg-citas-popup-button-salir" onclick="cancelarVacaciones()">Volver</button>
+        </div>
+
+    </div>
 </div>
 
 @section Scripts {
     <script>
         var horarios_psicologo = [];
+        var vacaciones_psicologo = [];
 
         var horarios = [
             { id: '-1', valor: 'Seleccionar' },
@@ -539,9 +602,15 @@
         }
 
         function modalHorarios(id) {
-            $('#hdnIdPsicologo').val(id);
+            $('#hdnIdPsicologo2').val(id);
             $('#bdHorarios').html('<tr><td colspan="4">Realice la búsqueda de horarios.</td></tr>');
             $('#mdl_horarios').modal('show');
+        }
+
+        function modalVacaciones(id) {
+            $('#hdnIdPsicologo2').val(id);
+            $('#bdVacaciones').html('<tr><td colspan="3">Realice la búsqueda de vacaciones.</td></tr>');
+            $('#mdl_vacaciones').modal('show');
         }
 
         function listarHorarios() {
@@ -585,6 +654,99 @@
                     html += '</tr>';
                 }
                 $('#bdHorarios').html(html);
+            });
+        }
+
+        function agregarVacaciones(){
+            var otraFecha = $('#txtAgregar').val();
+            if (otraFecha == ''){
+                Swal.fire({
+                    icon: "warning",
+                    title: "Oops...",
+                    text: "Seleccione la fecha a agregar.",
+                });
+                return;
+            }
+
+            for (var item of vacaciones_psicologo){
+                if (item.fecha == otraFecha){
+                    Swal.fire({
+                        icon: "warning",
+                        title: "Oops...",
+                        text: "La fecha seleccione ya ha sido agregada.",
+                    });
+                    return;
+                }
+            }
+
+            var days = ['LUNES', 'MARTES', 'MIÉRCOLES', 'JUEVES', 'VIERNES', 'SÁBADO', 'DOMINGO'];
+            var d = new Date(otraFecha);
+            var dayName = days[d.getDay()];
+            if (dayName == 'SÁBADO' || dayName == 'DOMINGO'){
+                Swal.fire({
+                    icon: "warning",
+                    title: "Oops...",
+                    text: "La fecha seleccionada no puede ser un día sábado o domingo.",
+                });
+                return;
+            }
+
+            let limite = 15;
+            if (vacaciones_psicologo.length == limite) {
+                Swal.fire({
+                    icon: "warning",
+                    title: "Oops...",
+                    text: "Ya llegó al límite de vacaciones por año (" + limite + " días).",
+                });
+                return;
+            }
+
+            var id_psicologo = $('#hdnIdPsicologo2').val();
+            vacaciones_psicologo.push({ fecha: otraFecha, id: 0, idPsicologo: parseInt(id_psicologo), eliminar: 0, nombreDia: dayName });
+            vacaciones_psicologo.sort((x, y) => x.fecha.localeCompare(y.fecha));
+
+            var html = '';
+            var i = 1;
+            for (var item of vacaciones_psicologo) {
+                html += '<tr>';
+                html += '<td>' + i + '</td>';
+                html += '<td>' + item.nombreDia + ' ' + item.fecha + '</td>';
+                html += '<td>' + '<button type="button" class="btn btn-secondary" data-fecha="' + item.fecha + '" onclick="eliminarVacacion(this)">Eliminar</button>' + '</td>';
+                html += '</tr>';
+                i++;
+            }
+            $('#bdVacaciones').html(html);
+        }
+
+        function listarVacaciones(tipoBusqueda) {
+            var id = $('#hdnIdPsicologo2').val();
+            var año = parseInt($('#cboAño_').val());
+
+            if (año.toString() == '-1') {
+                Swal.fire({
+                    icon: "warning",
+                    title: "Oops...",
+                    text: "Seleccione el año.",
+                });
+                return;
+            }
+
+            var inicio = año + '-01-01';
+            var fin = año + '-12-31';
+
+            $.get(`/Mantenimiento/Psicologo/vacaciones_psicologo/${id}/${inicio}/${fin}/${año}`, function (data) {
+                vacaciones_psicologo = data;
+                var html = '';
+                var i = 1;
+                for (var item of data){
+                    html += '<tr>';
+                    html += '<td>' + i + '</td>';
+                    html += '<td>' + item.nombreDia + ' ' + item.fecha + '</td>';
+                    html += '<td>' + '<button type="button" class="btn btn-secondary" data-fecha="' + item.fecha + '" onclick="eliminarVacacion(this)">Eliminar</button>' + '</td>';
+                    html += '</tr>';
+                    i++;
+                }
+                $('#bdVacaciones').html(html);
             });
         }
 
@@ -707,8 +869,59 @@
             // });
         }
 
+        function eliminarVacacion(e){
+            var fecha = $(e).attr('data-fecha');
+
+            let filtrado = vacaciones_psicologo.filter(a => a.fecha != fecha);
+            vacaciones_psicologo = filtrado;
+            $(e).parent().parent().remove();
+        }
+
+        function guardarVacaciones() {
+            var id_psicologo = $('#hdnIdPsicologo2').val();
+            var lista_enviar = [];
+            for (var item of vacaciones_psicologo) {
+                lista_enviar.push({ Fecha: item.fecha, Id: item.id, IdPsicologo: parseInt(id_psicologo), Eliminar: 0 });
+            }
+
+            lista_enviar[0].Eliminar = 1;
+
+            $.ajax({
+                type: 'POST',
+                url: '/Mantenimiento/Psicologo/GuardarVacaciones',
+                contentType: 'application/json',
+                data: JSON.stringify(lista_enviar),
+                success: function (response) {
+                    if (response.estado) {
+                        Swal.fire({
+                            icon: "success",
+                            text: "Vacaciones guardadas correctamente."
+                        });
+                        listarVacaciones();
+                    } else {
+                        Swal.fire({
+                            icon: "warning",
+                            title: "Oops...",
+                            text: response.descripcion
+                        });
+                    }
+                },
+                error: function (xhr) {
+                    Swal.fire({
+                        icon: "warning",
+                        title: "Oops...",
+                        text: "Ocurrió un error al guardar las vacaciones."
+                    });
+                }
+            })
+        }
+
         function cancelarHorarios() {
             $('#mdl_horarios').modal('hide');
+        }
+
+        function cancelarVacaciones() {
+            $('#mdl_vacaciones').modal('hide');
         }
 
         function listarEstudios(estudios, idPsicologo){

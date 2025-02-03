@@ -2,6 +2,7 @@
 using PsycoApp.entities;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace PsycoApp.BL
@@ -77,6 +78,20 @@ namespace PsycoApp.BL
             return lista;
         }
 
+        public List<entities.Horario> vacaciones_psicologo(int id_psicologo, string inicio, string fin, int año)
+        {
+            List<entities.Horario> lista = new List<entities.Horario>();
+            try
+            {
+                lista = _psicologoDA.vacaciones_psicologo(id_psicologo, inicio, fin, año);
+            }
+            catch (Exception)
+            {
+                lista.Clear();
+            }
+            return lista;
+        }
+
         public RespuestaUsuario guardar_horarios_psicologo(List<entities.Horario> lista)
         {
             var res = new RespuestaUsuario();
@@ -91,6 +106,26 @@ namespace PsycoApp.BL
             {
                 res.estado = false;
                 res.descripcion = "Ocurrió un error al guardar los horarios.";
+            }
+            return res;
+        }
+
+        public RespuestaUsuario guardar_vacaciones_psicologo(List<entities.Horario> lista)
+        {
+            var res = new RespuestaUsuario();
+            try
+            {
+                int i = 0;
+                foreach (var item in lista)
+                {
+                    res = _psicologoDA.guardar_vacaciones_psicologo(item, (i == 0 ? 0 : (lista.Where(x => x.Eliminar == 1).ToList().Count)));
+                    i++;
+                }
+            }
+            catch (Exception)
+            {
+                res.estado = false;
+                res.descripcion = "Ocurrió un error al guardar las vacaciones.";
             }
             return res;
         }

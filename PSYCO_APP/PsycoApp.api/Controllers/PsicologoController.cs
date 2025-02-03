@@ -163,6 +163,21 @@ namespace PsycoApp.api.Controllers
             return res_;
         }
 
+        [HttpGet("vacaciones_psicologo/{id_psicologo}/{inicio}/{fin}/{año}")]
+        public List<entities.Horario> vacaciones_psicologo(int id_psicologo, string inicio, string fin, int año)
+        {
+            List<entities.Horario> res_ = new List<entities.Horario>();
+            try
+            {
+                res_ = _psicologoBL.vacaciones_psicologo(id_psicologo, inicio, fin, año);
+            }
+            catch (Exception)
+            {
+                res_.Clear();
+            }
+            return res_;
+        }
+
         [HttpPost("guardar_horarios_psicologo")]
         public RespuestaUsuario guardar_horarios_psicologo(List<entities.Horario> lista)
         {
@@ -175,6 +190,22 @@ namespace PsycoApp.api.Controllers
             {
                 res_.estado = false;
                 res_.descripcion = "Ocurrió un error al guardar los horarios.";
+            }
+            return res_;
+        }
+
+        [HttpPost("guardar_vacaciones_psicologo")]
+        public RespuestaUsuario guardar_vacaciones_psicologo(List<entities.Horario> lista)
+        {
+            var res_ = new RespuestaUsuario();
+            try
+            {
+                res_ = _psicologoBL.guardar_vacaciones_psicologo(lista);
+            }
+            catch (Exception)
+            {
+                res_.estado = false;
+                res_.descripcion = "Ocurrió un error al guardar las vacaciones.";
             }
             return res_;
         }

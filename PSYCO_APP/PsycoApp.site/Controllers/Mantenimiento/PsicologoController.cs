@@ -18,7 +18,9 @@ namespace PsycoApp.site.Controllers.Mantenimiento
         private readonly string apiUrl = Helper.GetUrlApi() + "/api/psicologo";
         private readonly string apiUrlUbigeo = Helper.GetUrlApi() + "/api/ubigeo";
         private string url_horarios_psicologo = Helper.GetUrlApi() + "/api/psicologo/horarios_psicologo";
+        private string url_vacaciones_psicologo = Helper.GetUrlApi() + "/api/psicologo/vacaciones_psicologo";
         private string url_guardar_horarios_psicologo = Helper.GetUrlApi() + "/api/psicologo/guardar_horarios_psicologo";
+        private string url_guardar_vacaciones_psicologo = Helper.GetUrlApi() + "/api/psicologo/guardar_vacaciones_psicologo";
 
         [Route("Mantenimiento/Psicologo")]
         public async Task<IActionResult> Index(int pageNumber = 1, int pageSize = 10)
@@ -229,6 +231,26 @@ namespace PsycoApp.site.Controllers.Mantenimiento
             return lista;
         }
 
+        [Route("/Mantenimiento/Psicologo/vacaciones_psicologo/{id}/{inicio}/{fin}/{año}")]
+        [HttpGet]
+        public ActionResult<List<entities.Horario>> vacaciones_psicologo(int id, string inicio, string fin, int año)
+        {
+            List<entities.Horario> lista = new List<entities.Horario>();
+            string res = "";
+            try
+            {
+                string url = url_vacaciones_psicologo + "/" + id + "/" + inicio + "/" + fin + "/" + año;
+                res = ApiCaller.consume_endpoint_method(url, null, "GET");
+                lista = JsonConvert.DeserializeObject<List<entities.Horario>>(res);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                lista.Clear();
+            }
+            return lista;
+        }
+
         [Route("/Mantenimiento/Psicologo/GuardarHorarios")]
         [HttpPost]
         public ActionResult<RespuestaUsuario> GuardarHorarios([FromBody] List<entities.Horario> lista)
@@ -245,6 +267,26 @@ namespace PsycoApp.site.Controllers.Mantenimiento
             {
                 res.estado = false;
                 res.descripcion = "Ocurrió un error al guardar los horarios.";
+            }
+            return res;
+        }
+
+        [Route("/Mantenimiento/Psicologo/GuardarVacaciones")]
+        [HttpPost]
+        public ActionResult<RespuestaUsuario> GuardarVacaciones([FromBody] List<entities.Horario> lista)
+        {
+            var res = new RespuestaUsuario();
+            string restring = "";
+            try
+            {
+                string url = url_guardar_vacaciones_psicologo;
+                restring = ApiCaller.consume_endpoint_method(url, lista, "POST");
+                res = JsonConvert.DeserializeObject<RespuestaUsuario>(restring);
+            }
+            catch (Exception ex)
+            {
+                res.estado = false;
+                res.descripcion = "Ocurrió un error al guardar las vacaciones.";
             }
             return res;
         }

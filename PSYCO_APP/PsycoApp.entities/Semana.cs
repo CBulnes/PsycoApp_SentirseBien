@@ -22,5 +22,6 @@ namespace PsycoApp.entities
         public string Inicio { get; set; }
         public string Refrigerio { get; set; }
         public string Fin { get; set; }
+        public int Eliminar { get; set; } = 0;
     }
 }

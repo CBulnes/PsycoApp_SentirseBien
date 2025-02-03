@@ -19,6 +19,8 @@ namespace PsycoApp.BL
         public RespuestaUsuario registrar_cita(Cita oCita, string main_path, string random_str)
         {
             RespuestaUsuario res_ = new RespuestaUsuario();
+            List<string> errores = new List<string>();
+
             try
             {
                 if (oCita.fechas_adicionales.Count > 0)
@@ -26,8 +28,12 @@ namespace PsycoApp.BL
                     oCita.hora_cita = oCita.fechas_adicionales[0].hora;
                 }
 
-                res_ = citaDA.registrar_cita(oCita, "NO", (oCita.fechas_adicionales.Count > 0 ? 1 : 0), main_path, random_str);
-                //Cuando no hay fechas adicionales estaba arrojando error
+                res_ = citaDA.validar_cita(oCita, "NO", (oCita.fechas_adicionales.Count > 0 ? 1 : 0), main_path, random_str);
+                if (!res_.estado && res_.descripcion == "Ya hay una cita registrada:")
+                {
+                    errores.Add(res_.descripcion + " " + oCita.fecha_cita + " " + oCita.hora_cita);
+                }
+
                 if (oCita.fechas_adicionales != null && oCita.fechas_adicionales.Count > 0)
                 {
                     int orden = 1;
@@ -37,9 +43,40 @@ namespace PsycoApp.BL
                         {
                             oCita.fecha_cita = adicional.fecha;
                             oCita.hora_cita = adicional.hora;
-                            var res2 = citaDA.registrar_cita(oCita, "SI", orden, main_path, random_str);                            
+                            var res2 = citaDA.validar_cita(oCita, "SI", orden, main_path, random_str);
+                            if (!res2.estado && res2.descripcion == "Ya hay una cita registrada:")
+                            {
+                                errores.Add(res2.descripcion + " " + adicional.fecha + " " + adicional.hora);
+                            }
                         }
                         orden++;
+                    }
+                }
+
+                if (errores.Count == 0)
+                {
+                    res_ = citaDA.registrar_cita(oCita, "NO", (oCita.fechas_adicionales.Count > 0 ? 1 : 0), main_path, random_str);
+                    //Cuando no hay fechas adicionales estaba arrojando error
+                    if (oCita.fechas_adicionales != null && oCita.fechas_adicionales.Count > 0)
+                    {
+                        int orden = 1;
+                        foreach (var adicional in oCita.fechas_adicionales)
+                        {
+                            if (orden > 1)
+                            {
+                                oCita.fecha_cita = adicional.fecha;
+                                oCita.hora_cita = adicional.hora;
+                                var res2 = citaDA.registrar_cita(oCita, "SI", orden, main_path, random_str);
+                            }
+                            orden++;
+                        }
+                    }
+                } else
+                {
+                    res_.estado = false;
+                    foreach (var item in errores)
+                    {
+                        res_.descripcion += item + "\n" + "<br/>";
                     }
                 }
             }

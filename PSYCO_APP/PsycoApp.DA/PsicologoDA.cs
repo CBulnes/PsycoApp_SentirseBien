@@ -365,6 +365,42 @@ namespace PsycoApp.DA
             return lista;
         }
 
+        public List<entities.Horario> vacaciones_psicologo(int id_psicologo, string inicio, string fin, int año)
+        {
+            List<entities.Horario> lista = new List<entities.Horario>();
+            try
+            {
+                cn.Open();
+                SqlCommand cmd = new SqlCommand(Procedures.sp_listar_vacaciones_psicologo, cn);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Add("@id_psicologo", SqlDbType.Int).Value = id_psicologo;
+                cmd.Parameters.Add("@inicio", SqlDbType.VarChar).Value = inicio;
+                cmd.Parameters.Add("@fin", SqlDbType.VarChar).Value = fin;
+                cmd.Parameters.Add("@año", SqlDbType.Int).Value = año;
+
+                SqlDataAdapter da = new SqlDataAdapter(cmd);
+                DataTable dt = new DataTable();
+                da.Fill(dt);
+
+                foreach (DataRow row in dt.Rows)
+                {
+                    entities.Horario item = new entities.Horario();
+                    item.Orden = Convert.ToInt32(row["Orden"]);
+                    item.Id = Convert.ToInt32(row["Id"]);
+                    item.Fecha = Convert.ToString(row["Fecha"]);
+                    item.NombreDia = Convert.ToString(row["NombreDia"]);
+                    item.Eliminar = Convert.ToInt32(row["Eliminar"]);
+                    lista.Add(item);
+                }
+            }
+            catch (Exception e)
+            {
+                lista.Clear();
+            }
+            cn.Close();
+            return lista;
+        }
+
         public RespuestaUsuario guardar_horarios_psicologo(List<entities.Horario> lista)
         {
             var res = new RespuestaUsuario();
@@ -416,6 +452,38 @@ namespace PsycoApp.DA
             {
                 res.estado = false;
                 res.descripcion = "Ocurrió un error al guardar los horarios.";
+            }
+            cn.Close();
+            return res;
+        }
+
+        public RespuestaUsuario guardar_vacaciones_psicologo(entities.Horario item, int totalEliminar)
+        {
+            var res = new RespuestaUsuario();
+            try
+            {
+                cn.Open();
+                SqlCommand cmd = new SqlCommand(Procedures.sp_guardar_vacaciones_psicologo, cn);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Add("@Id", SqlDbType.Int).Value = item.Id;
+                cmd.Parameters.Add("@IdPsicologo", SqlDbType.Int).Value = item.IdPsicologo;
+                cmd.Parameters.Add("@Fecha", SqlDbType.VarChar).Value = item.Fecha;
+                cmd.Parameters.Add("@Eliminar", SqlDbType.Int).Value = item.Eliminar;
+                cmd.Parameters.Add("@TotalEliminar", SqlDbType.Int).Value = totalEliminar;
+
+                SqlDataAdapter da = new SqlDataAdapter(cmd);
+                DataTable dt = new DataTable();
+                da.Fill(dt);
+
+                foreach (DataRow row in dt.Rows)
+                {
+                    res.estado = Convert.ToString(row["rpta"]) == "OK" ? true : false;
+                }
+            }
+            catch (Exception e)
+            {
+                res.estado = false;
+                res.descripcion = "Ocurrió un error al guardar las vacaciones.";
             }
             cn.Close();
             return res;

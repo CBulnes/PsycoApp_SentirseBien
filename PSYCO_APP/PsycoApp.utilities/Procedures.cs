@@ -45,6 +45,7 @@ namespace PsycoApp.utilities
         public const string sp_listar_historial_paciente = "SP_LISTAR_HISTORIAL_PACIENTE";
         public const string sp_listar_historial_cita = "SP_LISTAR_HISTORIAL_CITA";
         public const string sp_registrar_cita = "SP_REGISTRAR_CITA";
+        public const string sp_validar_cita = "SP_VALIDAR_CITA";
         public const string sp_confirmar_cita = "SP_CONFIRMAR_CITA";
         public const string sp_atender_cita = "SP_ATENDER_CITA";
         public const string sp_cancelar_cita = "SP_CANCELAR_CITA";
@@ -54,8 +55,10 @@ namespace PsycoApp.utilities
         public const string sp_listar_citas_doctor = "SP_LISTAR_CITAS_DOCTOR";
         public const string sp_listar_dias_semana_mes = "SP_LISTAR_DIAS_X_SEMANA_MES";
         public const string sp_listar_horario_psicologo = "SP_LISTAR_HORARIO_PSICOLOGO";
+        public const string sp_listar_vacaciones_psicologo = "SP_LISTAR_VACACIONES_PSICOLOGO";
         public const string sp_guardar_horario_psicologo = "SP_GUARDAR_HORARIO_PSICOLOGO";
         public const string sp_guardar_horario_psicologo_v2 = "SP_GUARDAR_HORARIO_PSICOLOGO_V2";
+        public const string sp_guardar_vacaciones_psicologo = "SP_GUARDAR_VACACIONES_PSICOLOGO";
 
         #region "psicologos"
         public const string listar_sedes_x_usuario = "dbo.SP_LISTAR_SEDES_X_USUARIO";
