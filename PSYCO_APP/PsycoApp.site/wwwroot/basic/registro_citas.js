@@ -1636,6 +1636,8 @@ function listarHorariosAdicionales(inicio, fin, filtroDoctor, response2) {
         });
     }
 
+    var fechasVacaciones = [];
+
     $.ajax({
         url: '/RegistroCitas/ListarHorariosDoctor?inicio=' + inicio + '&fin=' + fin + '&id_doctor=' + filtroDoctor,
         type: "GET",
@@ -1657,28 +1659,38 @@ function listarHorariosAdicionales(inicio, fin, filtroDoctor, response2) {
             lista = [];
         },
         complete: function () {
-            for (var dia of response2) {
-                html_hd += '<th style="width: 12.5%;" class="' + (dia.fecha == '' ? 'header-semanal dia_inhabilitado' : 'header-semanal') + '">';
-                html_hd += (dia.fecha == '' ? dias[i] : dias[i] + ' ' + fecha_formato_ddmmyyyy(dia.fecha) + '&nbsp;');
-                html_hd += ver_btn_nueva_cita(dia.fecha);
-                html_hd += '</th>';
-                i++;
-            }
-            $('#hdTblSemanal > tr').html(html_hd);
+            var año = parseInt($('#cbo_seleccion_mes').attr('data-año'));
+            var inicio = año + '-01-01';
+            var fin = año + '-12-31';
+            $.get(`/Mantenimiento/Psicologo/vacaciones_psicologo/${filtroDoctor}/${inicio}/${fin}/${año}`, function (data) {
+                for (var item of data) {
+                    fechasVacaciones.push(item.fecha);
+                }
 
-            for (var hora of data_horas) {
-                html_bd += '<tr>';
-                html_bd += '<td>' + hora + '</td>';
-                html_bd += '<td class="' + (response2[0].fecha == '' ? 'dia_inhabilitado' : '') + '">' + (response2[0].fecha == '' ? '' : (enviar_datos_zabuto(response2[0].fecha, hora)) + agregarHoraLibre(response2[0].fecha, hora, lista)) + '</td>';
-                html_bd += '<td class="' + (response2[1].fecha == '' ? 'dia_inhabilitado' : '') + '">' + (response2[1].fecha == '' ? '' : (enviar_datos_zabuto(response2[1].fecha, hora)) + agregarHoraLibre(response2[1].fecha, hora, lista)) + '</td>';
-                html_bd += '<td class="' + (response2[2].fecha == '' ? 'dia_inhabilitado' : '') + '">' + (response2[2].fecha == '' ? '' : (enviar_datos_zabuto(response2[2].fecha, hora)) + agregarHoraLibre(response2[2].fecha, hora, lista)) + '</td>';
-                html_bd += '<td class="' + (response2[3].fecha == '' ? 'dia_inhabilitado' : '') + '">' + (response2[3].fecha == '' ? '' : (enviar_datos_zabuto(response2[3].fecha, hora)) + agregarHoraLibre(response2[3].fecha, hora, lista)) + '</td>';
-                html_bd += '<td class="' + (response2[4].fecha == '' ? 'dia_inhabilitado' : '') + '">' + (response2[4].fecha == '' ? '' : (enviar_datos_zabuto(response2[4].fecha, hora)) + agregarHoraLibre(response2[4].fecha, hora, lista)) + '</td>';
-                html_bd += '<td class="' + (response2[5].fecha == '' ? 'dia_inhabilitado' : '') + '">' + (response2[5].fecha == '' ? '' : (enviar_datos_zabuto(response2[5].fecha, hora)) + agregarHoraLibre(response2[5].fecha, hora, lista)) + '</td>';
-                html_bd += '<td class="' + (response2[6].fecha == '' ? 'dia_inhabilitado' : '') + '">' + (response2[6].fecha == '' ? '' : (enviar_datos_zabuto(response2[6].fecha, hora)) + agregarHoraLibre(response2[6].fecha, hora, lista)) + '</td>';
-                html_bd += '</tr>';
-            }
-            $('#bdTblSemanal').html(html_bd);
+                for (var dia of response2) {
+                    html_hd += '<th style="width: 12.5%;" class="' + (dia.fecha == '' ? 'header-semanal dia_inhabilitado' : 'header-semanal') + '">';
+                    html_hd += (dia.fecha == '' ? dias[i] : dias[i] + ' ' + fecha_formato_ddmmyyyy(dia.fecha) + '&nbsp;');
+                    html_hd += ver_btn_nueva_cita(dia.fecha);
+                    html_hd += '</th>';
+                    i++;
+                }
+                $('#hdTblSemanal > tr').html(html_hd);
+
+                for (var hora of data_horas) {
+                    html_bd += '<tr>';
+                    html_bd += '<td>' + hora + '</td>';
+                    html_bd += '<td style="padding: 5px;" class="' + (response2[0].fecha == '' ? 'dia_inhabilitado' : '') + ' ' + (fechasVacaciones.includes(response2[0].fecha) ? 'diaVacaciones' : '') + '">' + (response2[0].fecha == '' ? '' : (enviar_datos_zabuto(response2[0].fecha, hora)) + agregarHoraLibre(response2[0].fecha, hora, lista)) + '</td>';
+                    html_bd += '<td style="padding: 5px;" class="' + (response2[1].fecha == '' ? 'dia_inhabilitado' : '') + ' ' + (fechasVacaciones.includes(response2[1].fecha) ? 'diaVacaciones' : '') + '">' + (response2[1].fecha == '' ? '' : (enviar_datos_zabuto(response2[1].fecha, hora)) + agregarHoraLibre(response2[1].fecha, hora, lista)) + '</td>';
+                    html_bd += '<td style="padding: 5px;" class="' + (response2[2].fecha == '' ? 'dia_inhabilitado' : '') + ' ' + (fechasVacaciones.includes(response2[2].fecha) ? 'diaVacaciones' : '') + '">' + (response2[2].fecha == '' ? '' : (enviar_datos_zabuto(response2[2].fecha, hora)) + agregarHoraLibre(response2[2].fecha, hora, lista)) + '</td>';
+                    html_bd += '<td style="padding: 5px;" class="' + (response2[3].fecha == '' ? 'dia_inhabilitado' : '') + ' ' + (fechasVacaciones.includes(response2[3].fecha) ? 'diaVacaciones' : '') + '">' + (response2[3].fecha == '' ? '' : (enviar_datos_zabuto(response2[3].fecha, hora)) + agregarHoraLibre(response2[3].fecha, hora, lista)) + '</td>';
+                    html_bd += '<td style="padding: 5px;" class="' + (response2[4].fecha == '' ? 'dia_inhabilitado' : '') + ' ' + (fechasVacaciones.includes(response2[4].fecha) ? 'diaVacaciones' : '') + '">' + (response2[4].fecha == '' ? '' : (enviar_datos_zabuto(response2[4].fecha, hora)) + agregarHoraLibre(response2[4].fecha, hora, lista)) + '</td>';
+                    html_bd += '<td style="padding: 5px;" class="' + (response2[5].fecha == '' ? 'dia_inhabilitado' : '') + ' ' + (fechasVacaciones.includes(response2[5].fecha) ? 'diaVacaciones' : '') + '">' + (response2[5].fecha == '' ? '' : (enviar_datos_zabuto(response2[5].fecha, hora)) + agregarHoraLibre(response2[5].fecha, hora, lista)) + '</td>';
+                    html_bd += '<td style="padding: 5px;" class="' + (response2[6].fecha == '' ? 'dia_inhabilitado' : '') + ' ' + (fechasVacaciones.includes(response2[6].fecha) ? 'diaVacaciones' : '') + '">' + (response2[6].fecha == '' ? '' : (enviar_datos_zabuto(response2[6].fecha, hora)) + agregarHoraLibre(response2[6].fecha, hora, lista)) + '</td>';
+                    html_bd += '</tr>';
+                }
+                $('#bdTblSemanal').html(html_bd);
+
+            });
         }
     });
 

@@ -613,6 +613,10 @@
             $('#mdl_vacaciones').modal('show');
         }
 
+        $('#txtAgregar').on('click focus', function(){
+            $('#cboAño_').attr('disabled', true);
+        })
+
         function listarHorarios() {
             var id = $('#hdnIdPsicologo').val();
             var inicio = $('#txtInicio').val();
@@ -687,6 +691,15 @@
                     icon: "warning",
                     title: "Oops...",
                     text: "La fecha seleccionada no puede ser un día sábado o domingo.",
+                });
+                return;
+            }
+
+            if (otraFecha.substring(0, 4).toString() != $('#cboAño_').val().toString()){
+                Swal.fire({
+                    icon: "warning",
+                    title: "Oops...",
+                    text: "La fecha seleccionada debe pertenecer al año seleccionado.",
                 });
                 return;
             }
@@ -905,6 +918,7 @@
                             text: response.descripcion
                         });
                     }
+                    $('#cboAño_').removeAttr('disabled');
                 },
                 error: function (xhr) {
                     Swal.fire({
