@@ -23,42 +23,45 @@ namespace PsycoApp.BL
             string error = "";
             try
             {
-                if (oCita.fechas_adicionales.Count > 0)
+                if (oCita.fechas_adicionales != null)
                 {
-                    oCita.hora_cita = oCita.fechas_adicionales[0].hora;
-                    oCita.fecha_cita = oCita.fechas_adicionales[0].fecha;
-                }
-
-                res_ = citaDA.validar_cita(oCita, "NO", (oCita.fechas_adicionales.Count > 0 ? 1 : 0), main_path, random_str);
-                if (!res_.estado)
-                {
-                    error = res_.descripcion.Replace(".", ":") + " " + oCita.fecha_cita + " " + oCita.hora_cita;
-                    errores.Add(error);
-                }
-
-                if (oCita.fechas_adicionales != null && oCita.fechas_adicionales.Count > 0)
-                {
-                    int orden = 1;
-                    foreach (var adicional in oCita.fechas_adicionales)
+                    if (oCita.fechas_adicionales.Count > 0)
                     {
-                        if (orden > 1)
+                        oCita.hora_cita = oCita.fechas_adicionales[0].hora;
+                        oCita.fecha_cita = oCita.fechas_adicionales[0].fecha;
+                    }
+
+                    res_ = citaDA.validar_cita(oCita, "NO", (oCita.fechas_adicionales.Count > 0 ? 1 : 0), main_path, random_str);
+                    if (!res_.estado)
+                    {
+                        error = res_.descripcion.Replace(".", ":") + " " + oCita.fecha_cita + " " + oCita.hora_cita;
+                        errores.Add(error);
+                    }
+
+                    if (oCita.fechas_adicionales != null && oCita.fechas_adicionales.Count > 0)
+                    {
+                        int orden = 1;
+                        foreach (var adicional in oCita.fechas_adicionales)
                         {
-                            oCita.fecha_cita = adicional.fecha;
-                            oCita.hora_cita = adicional.hora;
-                            var res2 = citaDA.validar_cita(oCita, "SI", orden, main_path, random_str);
-                            if (!res2.estado)
+                            if (orden > 1)
                             {
-                                error = res2.descripcion.Replace(".", ":") + " " + oCita.fecha_cita + " " + oCita.hora_cita;
-                                errores.Add(error);
+                                oCita.fecha_cita = adicional.fecha;
+                                oCita.hora_cita = adicional.hora;
+                                var res2 = citaDA.validar_cita(oCita, "SI", orden, main_path, random_str);
+                                if (!res2.estado)
+                                {
+                                    error = res2.descripcion.Replace(".", ":") + " " + oCita.fecha_cita + " " + oCita.hora_cita;
+                                    errores.Add(error);
+                                }
                             }
+                            orden++;
                         }
-                        orden++;
                     }
                 }
 
                 if (errores.Count == 0)
                 {
-                    if (oCita.fechas_adicionales.Count > 0)
+                    if (oCita.fechas_adicionales != null && oCita.fechas_adicionales.Count > 0)
                     {
                         oCita.hora_cita = oCita.fechas_adicionales[0].hora;
                         oCita.fecha_cita = oCita.fechas_adicionales[0].fecha;

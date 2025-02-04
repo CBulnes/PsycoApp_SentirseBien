@@ -765,6 +765,15 @@
         }
 
         function comboHorario(orden, id, horario, tipo){
+            var valor = '-1';
+            if (tipo == 'Inicio'){
+                valor = $('#cboInicioM').val();
+            } else if (tipo == 'Refrigerio') {
+                valor = $('#cboRefrigerioM').val();
+            } else if (tipo == 'Fin'){
+                valor = $('#cboFinM').val();
+            }
+
             var html = `<select id="cbo${tipo}${orden}" onchange="actualizarLista('#cbo${tipo}${orden}')" class="cboHorario cbo${tipo}" data-id="${id}" data-orden="${orden}">`;
             for (var item of horarios){
                 html += '<option ' + (horario == item.id ? 'selected' : '') + ' value="' + item.id + '">' + item.valor + '</option>'

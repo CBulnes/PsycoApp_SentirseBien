@@ -606,6 +606,10 @@ function cerrar_modal_pagos_pendientes(){
 }
 
 function cerrar_modal_fechas_adicionales() {
+    $('#mdl_adicionales_').modal('hide');
+}
+
+function validar_modal_fechas_adicionales() {
     adicionales = [];
     var error = '';
 
@@ -624,7 +628,10 @@ function cerrar_modal_fechas_adicionales() {
     }
 
     if (error == '') {
-        $('#mdl_adicionales_').modal('hide');
+        Swal.fire({
+            icon: "success",
+            text: "Horarios validados correctamente.",
+        });
     } else {
         adicionales = [];
         Swal.fire({
@@ -730,7 +737,7 @@ function validarDiferenciaPago() {
             title: "Oops...",
             text: "El importe de pago no puede ser mayor al monto pendiente.",
         });
-        $('#txtMonto1').val(pendiente);
+        $('#txtMonto1').val(formatoDecimal(pendiente));
         diferencia = formatDecimal('0.00');
     } else {
         diferencia = pendiente - importe;
@@ -1121,7 +1128,7 @@ function guardar_cita() {
         monto_pactado: '0,00',
         id_servicio: id_servicio,
         id_sede: id_sede,
-        fechas_adicionales: adicionales,
+        fechas_adicionales: adicionales
     };
     if (feedback === 'sad') {
         data_.feedback = true; // Enviar true si es triste
@@ -1149,6 +1156,7 @@ function guardar_cita() {
                     $('.calendar-container').html('<div id="my-calendar"></div>');
                 }
                 cargar_citas();
+                adicionales = [];
             } else {
                 Swal.fire({
                     icon: "Error",
