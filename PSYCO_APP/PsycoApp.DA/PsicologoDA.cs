@@ -257,6 +257,7 @@ namespace PsycoApp.DA
                     entities.Psicologo item = new entities.Psicologo();
                     item.Id = Convert.ToInt32(row["id_psicologo"]);
                     item.Nombre = Convert.ToString(row["nombres"]);
+                    item.Sedes = Convert.ToString(row["sedes"]);
                     lista.Add(item);
                 }
             }

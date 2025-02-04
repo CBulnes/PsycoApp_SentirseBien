@@ -1020,7 +1020,7 @@ function cargar_lista_doctores() {
         },
         success: function (data) {
             for (var item of data) {
-                html += '<option value="' + item.id + '">' + item.nombre + '</option>';
+                html += '<option value="' + item.id + '" data-sedes="' + item.sedes + '">' + item.nombre + '</option>';
             }
         },
         error: function (response) {
@@ -1348,7 +1348,15 @@ function verificar_disponibilidad() {
         $('#txtHora').val('').attr('data-hora', '');
     }
 
-    validar_sede_usuario(id_doc, null);
+    var sedes = $("#cboDoctor option:selected").data("sedes");;
+    if (sedes != undefined) {
+        var listaSedes = sedes.split('/');
+        var valorDefault = listaSedes[0];
+
+        validar_sede_usuario(id_doc, valorDefault);
+    } else {
+        validar_sede_usuario(id_doc, null);
+    }
 }
 
 function validar_sede_usuario(id_doc, id_selected) {

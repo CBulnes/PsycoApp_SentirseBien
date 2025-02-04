@@ -23,6 +23,7 @@ namespace PsycoApp.entities
         public string Distrito { get; set; }
         public string Estado { get; set; }
         public List<Estudio> Estudios { get; set; }
+        public string Sedes { get; set; }
     }
 
     public class Estudio

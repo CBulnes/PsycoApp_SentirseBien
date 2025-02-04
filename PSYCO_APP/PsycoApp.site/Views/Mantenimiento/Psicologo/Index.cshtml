@@ -765,7 +765,6 @@
         }
 
         function comboHorario(orden, id, horario, tipo){
-            debugger;
             var valor = '-1';
             if (tipo == 'Inicio'){
                 valor = $('#cboInicioM').val();
@@ -777,7 +776,7 @@
 
             var html = `<select id="cbo${tipo}${orden}" onchange="actualizarLista('#cbo${tipo}${orden}')" class="cboHorario cbo${tipo}" data-id="${id}" data-orden="${orden}">`;
             for (var item of horarios){
-                html += '<option ' + (horario == item.id ? 'selected' : '') + ' value="' + item.id + '">' + item.valor + '</option>'
+                html += '<option ' + (horario == item.id ? 'selected' : (horario == '-1' && item.id == valor && valor != '-1' ? 'selected' : '')) + ' value="' + item.id + '">' + item.valor + '</option>'
             }
             html += '</select>';
             return html;
