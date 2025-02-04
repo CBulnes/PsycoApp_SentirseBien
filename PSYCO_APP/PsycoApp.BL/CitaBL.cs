@@ -31,7 +31,7 @@ namespace PsycoApp.BL
                         oCita.fecha_cita = oCita.fechas_adicionales[0].fecha;
                     }
 
-                    res_ = citaDA.validar_cita(oCita, "NO", (oCita.fechas_adicionales.Count > 0 ? 1 : 0), main_path, random_str);
+                    res_ = citaDA.validar_cita(oCita, "NO", (oCita.fechas_adicionales != null && oCita.fechas_adicionales.Count > 0 ? 1 : 0), main_path, random_str);
                     if (!res_.estado)
                     {
                         error = res_.descripcion.Replace(".", ":") + " " + oCita.fecha_cita + " " + oCita.hora_cita;
@@ -67,7 +67,7 @@ namespace PsycoApp.BL
                         oCita.fecha_cita = oCita.fechas_adicionales[0].fecha;
                     }
 
-                    res_ = citaDA.registrar_cita(oCita, "NO", (oCita.fechas_adicionales.Count > 0 ? 1 : 0), main_path, random_str);
+                    res_ = citaDA.registrar_cita(oCita, "NO", (oCita.fechas_adicionales != null && oCita.fechas_adicionales.Count > 0 ? 1 : 0), main_path, random_str);
                     //Cuando no hay fechas adicionales estaba arrojando error
                     if (oCita.fechas_adicionales != null && oCita.fechas_adicionales.Count > 0)
                     {

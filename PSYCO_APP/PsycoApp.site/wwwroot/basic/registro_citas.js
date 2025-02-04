@@ -726,6 +726,13 @@ function guardar_pago() {
     });
 }
 
+function setDecimalValue() {
+    setTimeout(() => {
+        var monto1 = $('#txtMonto1').val();
+        $('#txtMonto1').val(formatDecimal(monto1));
+    }, 200);
+}
+
 function validarDiferenciaPago() {
     var importe = $('#txtMonto1').val();
     var pendiente = $('#txtMonto2').val();
@@ -737,7 +744,7 @@ function validarDiferenciaPago() {
             title: "Oops...",
             text: "El importe de pago no puede ser mayor al monto pendiente.",
         });
-        $('#txtMonto1').val(formatoDecimal(pendiente));
+        $('#txtMonto1').val(pendiente);
         diferencia = formatDecimal('0.00');
     } else {
         diferencia = pendiente - importe;
