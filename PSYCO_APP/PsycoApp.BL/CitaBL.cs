@@ -20,18 +20,20 @@ namespace PsycoApp.BL
         {
             RespuestaUsuario res_ = new RespuestaUsuario();
             List<string> errores = new List<string>();
-
+            string error = "";
             try
             {
                 if (oCita.fechas_adicionales.Count > 0)
                 {
                     oCita.hora_cita = oCita.fechas_adicionales[0].hora;
+                    oCita.fecha_cita = oCita.fechas_adicionales[0].fecha;
                 }
 
                 res_ = citaDA.validar_cita(oCita, "NO", (oCita.fechas_adicionales.Count > 0 ? 1 : 0), main_path, random_str);
-                if (!res_.estado && res_.descripcion == "Ya hay una cita registrada:")
+                if (!res_.estado)
                 {
-                    errores.Add(res_.descripcion + " " + oCita.fecha_cita + " " + oCita.hora_cita);
+                    error = res_.descripcion.Replace(".", ":") + " " + oCita.fecha_cita + " " + oCita.hora_cita;
+                    errores.Add(error);
                 }
 
                 if (oCita.fechas_adicionales != null && oCita.fechas_adicionales.Count > 0)
@@ -44,9 +46,10 @@ namespace PsycoApp.BL
                             oCita.fecha_cita = adicional.fecha;
                             oCita.hora_cita = adicional.hora;
                             var res2 = citaDA.validar_cita(oCita, "SI", orden, main_path, random_str);
-                            if (!res2.estado && res2.descripcion == "Ya hay una cita registrada:")
+                            if (!res2.estado)
                             {
-                                errores.Add(res2.descripcion + " " + adicional.fecha + " " + adicional.hora);
+                                error = res2.descripcion.Replace(".", ":") + " " + oCita.fecha_cita + " " + oCita.hora_cita;
+                                errores.Add(error);
                             }
                         }
                         orden++;
@@ -55,6 +58,12 @@ namespace PsycoApp.BL
 
                 if (errores.Count == 0)
                 {
+                    if (oCita.fechas_adicionales.Count > 0)
+                    {
+                        oCita.hora_cita = oCita.fechas_adicionales[0].hora;
+                        oCita.fecha_cita = oCita.fechas_adicionales[0].fecha;
+                    }
+
                     res_ = citaDA.registrar_cita(oCita, "NO", (oCita.fechas_adicionales.Count > 0 ? 1 : 0), main_path, random_str);
                     //Cuando no hay fechas adicionales estaba arrojando error
                     if (oCita.fechas_adicionales != null && oCita.fechas_adicionales.Count > 0)
@@ -74,9 +83,10 @@ namespace PsycoApp.BL
                 } else
                 {
                     res_.estado = false;
+                    res_.descripcion = "";
                     foreach (var item in errores)
                     {
-                        res_.descripcion += item + "\n" + "<br/>";
+                        res_.descripcion += item + "\n";
                     }
                 }
             }

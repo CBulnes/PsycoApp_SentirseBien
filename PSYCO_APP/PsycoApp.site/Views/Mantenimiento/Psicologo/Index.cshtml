@@ -549,7 +549,8 @@
                             <td class="text-center">${psicologo.estado == "1" ? "Habilitado" : "Deshabilitado"}</td>
                             <td class="text-center">
                                 <button class="btn btn-sm sb-psi-container-table-button-edit" onclick="editarPsicologo(${psicologo.id})">Editar</button>
-                                <button class="btn btn-sm sb-psi-container-table-button-edit" onclick="editarHorarios(${psicologo.id})">Horarios</button>
+                                <button class="btn btn-sm sb-psi-container-table-button-edit" onclick="modalHorarios(${psicologo.id})">Horarios</button>
+                                <button class="btn btn-sm sb-psi-container-table-button-edit" onclick="modalVacaciones(${psicologo.id})">Vacaciones</button>
                                 <button class="btn btn-sm sb-psi-container-table-button-delet" onclick="eliminarPsicologo(${psicologo.id}, '${psicologo.estado}')">${psicologo.estado == "1" ? "Deshabilitar" : "Habilitar"}</button>
                             </td>
                         </tr>
