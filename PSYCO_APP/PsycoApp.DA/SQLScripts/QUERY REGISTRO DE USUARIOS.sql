@@ -30,3 +30,9 @@ GO
 
 UPDATE tbl_usuario SET email=CONCAT(num_documento,'@gmail.com'), id_sede=1 WHERE email='' AND id_sede IS NULL;
 GO
+
+UPDATE tbl_usuario SET id_tipousuario=1 WHERE num_documento='21810680';
+GO
+
+DELETE FROM tbl_psicologo WHERE DocumentoNumero='21810680';
+GO
