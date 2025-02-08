@@ -185,6 +185,62 @@ namespace PsycoApp.DA
             return res_;
         }
 
+        public RespuestaUsuario actualizar_servicio(int id_cita, int id_servicio)
+        {
+            RespuestaUsuario res_ = new RespuestaUsuario();
+            try
+            {
+                cn.Open();
+                SqlCommand cmd = new SqlCommand(Procedures.sp_actualizar_servicio, cn);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Add("@id_cita", SqlDbType.Int).Value = id_cita;
+                cmd.Parameters.Add("@id_servicio", SqlDbType.VarChar).Value = id_servicio;
+                SqlDataAdapter da = new SqlDataAdapter(cmd);
+                DataTable dt = new DataTable();
+                da.Fill(dt);
+                foreach (DataRow row in dt.Rows)
+                {
+                    res_.descripcion = Convert.ToString(row["rpta"]);
+                }
+                res_.estado = res_.descripcion == "OK" ? true : false;
+            }
+            catch (Exception e)
+            {
+                res_.estado = false;
+                res_.descripcion = "Ocurrió un error al actualizar el servicio.";
+            }
+            cn.Close();
+            return res_;
+        }
+
+        public RespuestaUsuario pago_gratuito(int id_cita)
+        {
+            RespuestaUsuario res_ = new RespuestaUsuario();
+            try
+            {
+                cn.Open();
+                SqlCommand cmd = new SqlCommand(Procedures.sp_pago_gratis, cn);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Add("@id_cita", SqlDbType.Int).Value = id_cita;
+
+                SqlDataAdapter da = new SqlDataAdapter(cmd);
+                DataTable dt = new DataTable();
+                da.Fill(dt);
+                foreach (DataRow row in dt.Rows)
+                {
+                    res_.descripcion = Convert.ToString(row["rpta"]);
+                }
+                res_.estado = res_.descripcion == "OK" ? true : false;
+            }
+            catch (Exception e)
+            {
+                res_.estado = false;
+                res_.descripcion = "Ocurrió un error al registrar el pago gratuito.";
+            }
+            cn.Close();
+            return res_;
+        }
+
         public RespuestaUsuario registrar_cuestionario(Cita oCita, string main_path, string random_str)
         {
             RespuestaUsuario res_ = new RespuestaUsuario();
@@ -292,6 +348,7 @@ namespace PsycoApp.DA
                     cita.siglas = Convert.ToString(row["siglas"]);
                     cita.feedback = Convert.ToBoolean(row["feedback"]);
                     cita.comentario = Convert.ToString(row["comentario"]);
+                    cita.pago_gratis = Convert.ToBoolean(row["pago_gratis"]);
                     lista.Add(cita);
                 }
             }

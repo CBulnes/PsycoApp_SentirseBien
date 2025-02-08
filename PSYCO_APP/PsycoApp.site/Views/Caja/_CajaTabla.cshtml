@@ -12,6 +12,7 @@
             <th>Forma&nbsp;de&nbsp;pago</th>
             <th>Detalle&nbsp;de&nbsp;transferencia</th>
             <th>Importe</th>
+            <th>Usuario</th>
             <th>Estado&nbsp;de&nbsp;orden</th>
         </tr>
     </thead>
@@ -30,6 +31,7 @@
                     <td>@pago.item.forma_pago</td>
                     <td>@pago.item.detalle_transferencia</td>
                     <td>@pago.item.importe</td>
+                    <td>@pago.item.usuario</td>
                     <td>@pago.item.estado_orden</td>
                 </tr>
             }
@@ -37,7 +39,7 @@
         else
         {
             <tr>
-                <td colspan="9">No se encontraron registros.</td>
+                <td colspan="11">No se encontraron registros.</td>
             </tr>
         }
     </tbody>

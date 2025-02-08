@@ -102,6 +102,38 @@ namespace PsycoApp.api.Controllers
             return res_;
         }
 
+        [HttpGet("actualizar_servicio/{id_cita}/{id_servicio}")]
+        public RespuestaUsuario ActualizarServicio(int id_cita, int id_servicio)
+        {
+            RespuestaUsuario res_ = new RespuestaUsuario();
+            try
+            {
+                res_ = citaBL.actualizar_servicio(id_cita, id_servicio);
+            }
+            catch (Exception)
+            {
+                res_.descripcion = "Ocurrió un error al actualizar el servicio.";
+                res_.estado = false;
+            }
+            return res_;
+        }
+
+        [HttpGet("pago_gratuito/{id_cita}")]
+        public RespuestaUsuario PagoGratuito(int id_cita)
+        {
+            RespuestaUsuario res_ = new RespuestaUsuario();
+            try
+            {
+                res_ = citaBL.pago_gratuito(id_cita);
+            }
+            catch (Exception)
+            {
+                res_.descripcion = "Ocurrió un error al registrar el pago gratuito.";
+                res_.estado = false;
+            }
+            return res_;
+        }
+
         [HttpPost("registrar_cuestionario")]
         public RespuestaUsuario Post2([FromBody] Cita oCita)
         {

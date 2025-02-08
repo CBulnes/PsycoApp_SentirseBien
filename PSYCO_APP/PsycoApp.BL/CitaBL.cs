@@ -146,6 +146,36 @@ namespace PsycoApp.BL
             return res_;
         }
 
+        public RespuestaUsuario actualizar_servicio(int id_cita, int id_servicio)
+        {
+            RespuestaUsuario res_ = new RespuestaUsuario();
+            try
+            {
+                res_ = citaDA.actualizar_servicio(id_cita, id_servicio);
+            }
+            catch (Exception)
+            {
+                res_.estado = false;
+                res_.descripcion = "Ocurrió un error al actualizar el servicio.";
+            }
+            return res_;
+        }
+
+        public RespuestaUsuario pago_gratuito(int id_cita)
+        {
+            RespuestaUsuario res_ = new RespuestaUsuario();
+            try
+            {
+                res_ = citaDA.pago_gratuito(id_cita);
+            }
+            catch (Exception)
+            {
+                res_.estado = false;
+                res_.descripcion = "Ocurrió un error al registrar el pago gratuito.";
+            }
+            return res_;
+        }
+
         public RespuestaUsuario registrar_cuestionario(Cita oCita, string main_path, string random_str)
         {
             RespuestaUsuario res_ = new RespuestaUsuario();
@@ -184,6 +214,7 @@ namespace PsycoApp.BL
                 lista.ForEach(item =>
                 {
                     item.historial = historialDA.listar_historial_cita(item.id_cita);
+                    item.historial2 = historialDA.listar_historial_paciente(item.id_paciente);
                 });
             }
             catch (Exception)

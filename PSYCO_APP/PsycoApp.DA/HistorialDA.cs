@@ -145,6 +145,36 @@ namespace PsycoApp.DA
             return lista;
         }
 
+        public List<HistorialPaciente> listar_historial_paciente(int id_paciente)
+        {
+            List<HistorialPaciente> lista = new List<HistorialPaciente>();
+            try
+            {
+                cn.Open();
+                SqlCommand cmd = new SqlCommand(Procedures.sp_listar_historial_paciente, cn);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Add("@id_paciente", SqlDbType.Int).Value = id_paciente;
+
+                SqlDataAdapter da = new SqlDataAdapter(cmd);
+                DataTable dt = new DataTable();
+                da.Fill(dt);
+
+                foreach (DataRow row in dt.Rows)
+                {
+                    HistorialPaciente historial = new HistorialPaciente();
+                    historial.doctor = Convert.ToString(row["doctor"]);
+                    historial.fecha_registro = Convert.ToString(row["fecha_registro"]);
+                    lista.Add(historial);
+                }
+            }
+            catch (Exception e)
+            {
+                lista.Clear();
+            }
+            cn.Close();
+            return lista;
+        }
+
 
     }
 }

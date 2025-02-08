@@ -45,6 +45,7 @@ namespace PsycoApp.site.Controllers
                     forma_pago = p.forma_pago,
                     detalle_transferencia = p.detalle_transferencia,
                     importe = p.importe,
+                    usuario = p.usuario,
                     estado_orden = p.estado_orden
                 }).ToList();
 
@@ -120,6 +121,7 @@ namespace PsycoApp.site.Controllers
                         forma_pago = p.forma_pago,
                         detalle_transferencia = p.detalle_transferencia,
                         importe = p.importe,
+                        usuario = p.usuario,
                         estado_orden = p.estado_orden
                     }).ToList(),
                     DynamicData = obj

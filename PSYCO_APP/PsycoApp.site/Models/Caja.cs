@@ -12,6 +12,7 @@ namespace PsycoApp.site.Models
         public string forma_pago { get; set; } = "";
         public string detalle_transferencia { get; set; } = "";
         public string importe { get; set; } = "";
+        public string usuario { get; set; } = "";
         public string estado_orden { get; set; } = "";
         public string sede { get; set; } = "";
     }

@@ -10,6 +10,7 @@ namespace PsycoApp.entities
         public int id_forma_pago { get; set; } = 0;
         public int id_detalle_transferencia { get; set; } = 0;
         public string usuario { get; set; } = "";
+        public string comentario { get; set; } = "";
         public decimal importe { get; set; } = 0;
     }
 

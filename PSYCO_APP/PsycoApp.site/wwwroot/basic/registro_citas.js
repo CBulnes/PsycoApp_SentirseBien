@@ -405,7 +405,8 @@ function ver_cita(e) {
     var id_sede = $(e).attr('data-id-sede');
     var feedback = $(e).attr('data-feedback');
     var comentario = $(e).attr('data-comentario');
-    console.log(id_especialista);
+    var pago_gratis = $(e).attr('data-pago-gratis');
+
     if (id_especialista == -1) {
 
         if ($('#hiddenDoctor').val()!=null) {
@@ -414,7 +415,7 @@ function ver_cita(e) {
        
 
     }
-    cargar_datos_cita(id_cita, id_especialista, id_paciente, fecha_cita, hora_Cita, estado, telefono, moneda, formatDecimal(monto_pactado), formatDecimal(monto_pagado), formatDecimal(monto_pendiente), id_servicio, id_sede, feedback,comentario);
+    cargar_datos_cita(id_cita, id_especialista, id_paciente, fecha_cita, hora_Cita, estado, telefono, moneda, formatDecimal(monto_pactado), formatDecimal(monto_pagado), formatDecimal(monto_pendiente), id_servicio, id_sede, feedback, comentario, pago_gratis);
 }
 
 function formatDecimal(num) {
@@ -647,6 +648,13 @@ function guardar_pago() {
     var id_forma_pago = $('#cboFormaPago').val();
     var id_detalle_transferencia = $('#cboDetalleTransferencia').val();
     var importe = $('#txtMonto1').val();
+    var comentario = null;
+
+    if ($('#txtComentario').val()) {
+        comentario = $('#txtComentario').val().trim();
+    } else {
+        comentario = '';
+    }
 
     if (id_forma_pago == -1) {
         Swal.fire({
@@ -679,7 +687,8 @@ function guardar_pago() {
         id_cita: $('#txtIdCita').val(),
         id_forma_pago: id_forma_pago,
         id_detalle_transferencia: id_detalle_transferencia,
-        importe: importe.replace('.', ',')
+        importe: importe.replace('.', ','),
+        comentario: comentario
     };
 
     $.ajax({
@@ -777,7 +786,7 @@ function cerrar_modal_pago2() {
     }, 250);
 }
 
-function cargar_datos_cita(id_cita, id_doctor, id_paciente, fecha, hora, estado, telefono, moneda, monto_pactado, monto_pagado, monto_pendiente, id_servicio, id_sede,feedback,comentario) {
+function cargar_datos_cita(id_cita, id_doctor, id_paciente, fecha, hora, estado, telefono, moneda, monto_pactado, monto_pagado, monto_pendiente, id_servicio, id_sede, feedback, comentario, pago_gratis) {
     $('#btnResumen').trigger('click');
     $('#ulTabs').hide();
     $('.fechasAdicionales').addClass('hide-element');
@@ -790,7 +799,7 @@ function cargar_datos_cita(id_cita, id_doctor, id_paciente, fecha, hora, estado,
     $('#txtMontoPactado').val(monto_pactado).attr('data-monto-pactado', monto_pactado);
     $('#txtMontoPagado').val(monto_pagado).attr('data-monto-pagado', monto_pagado);
     $('#txtMontoPendiente').val(monto_pendiente).attr('data-monto-pendiente', monto_pendiente);
-    $('#cboServicio').val(id_servicio);
+    $('#cboServicio, #cboServicioActualizar').val(id_servicio);
     $('#btnEstado').html(estado == '-' ? 'POR CITAR' : estado);
 
     $('#btnEstado').attr('class', 'evento_' + (estado == '-' ? 'CITADO' : estado).toLowerCase().replace(' ', '_'));
@@ -810,6 +819,10 @@ function cargar_datos_cita(id_cita, id_doctor, id_paciente, fecha, hora, estado,
     }
     $('#comment').val(comentario);
     $('.divMonto').hide();
+
+    $('#divPagoGratis').hide();
+    $('#ImgActualizarServicio').hide();
+
     if (id_cita == 0) {
         $('#txtFechaReasignar').val('');
         $('#divHorarios, .divConfirmar').show();
@@ -823,11 +836,12 @@ function cargar_datos_cita(id_cita, id_doctor, id_paciente, fecha, hora, estado,
             $('#divReprogramar, #divHorarios, #divConfirmar, #btnConfirmar, #btnCancelar, #divPagoPendiente').show();
             $('#divAtender').hide();
         } else if (estado == 'CONFIRMADO') {
-        //    $('#btnCancelar, #divPagoPendiente').show();
-        //    $('#divReprogramar, #divHorarios, .divConfirmar, #divAtender').hide();
-        //} else if (estado == 'EN PROCESO') {
-            $('#divAtender, #btnCancelar, #divPagoPendiente').show();
+            $('#divAtender, #btnCancelar, #divPagoPendiente, #ImgActualizarServicio').show();
             $('#divReprogramar, #divHorarios, .divConfirmar').hide();
+            
+            if (pago_gratis == 'false' || pago_gratis == false || !pago_gratis) {
+                $('#divPagoGratis').show();
+            }
         } else if (estado == 'ATENDIDO') {
             $('#divReprogramar, #divHorarios, .divConfirmar, #divAtender, #btnCancelar, #divPagoPendiente').hide();
         }
@@ -844,8 +858,11 @@ function cargar_datos_cita(id_cita, id_doctor, id_paciente, fecha, hora, estado,
 
 function mostrar_historial(id_cita) {
     var html = '';
+    var html2 = '';
+
     try {
         var historial = lista_citas.filter(x => x.id_cita == parseInt(id_cita))[0].historial;
+        var historial2 = lista_citas.filter(x => x.id_cita == parseInt(id_cita))[0].historial2;
         for (var item of historial) {
             html += '<div class="sb-reg-citas-popup-tab-historial-block"><div class="sb-reg-citas-popup-tab-historial-block-item">';
             html += '<p>' + item.fecha + '</p>';
@@ -855,10 +872,19 @@ function mostrar_historial(id_cita) {
             html += '<div class="sb-reg-citas-historial-user" ><p>Usuario: </p><span>' + item.usuario + '</span></div>';
             html += '</div></div>';
         }
+
+        for (var item of historial2) {
+            html2 += '<tr>'
+            html2 += '<td>' + item.doctor + '</td>'
+            html2 += '<td>' + item.fecha_registro + '</td>'
+            html2 += '</tr>'
+        }
     } catch (e) {
         html = '';
+        html2 = '';
     }
     $('#divHistorial').html(html);
+    $('#divHistorial2').html(html2);
 }
 function guardarPacienteCitas() {
     console.log('prueba');
@@ -1053,6 +1079,88 @@ $('#dtpicker1').datetimepicker({
 
 function isPrecise(num) {
     return String(num).split(".")[1]?.length == 2;
+}
+
+function registrarPagoGratis() {
+    $.ajax({
+        url: "/RegistroCitas/RegistrarPagoGratuito?id_cita=" + id_cita_,
+        type: "GET",
+        success: function (data) {
+            if (data.estado) {
+                Swal.fire({
+                    icon: "success",
+                    text: "Pago gratuito registrado exitosamente.",
+                });
+                $('#mdl_cita').modal('hide');
+
+                var tipoVista = TipoVista();
+                if (tipoVista == 'MENSUAL') {
+                    $('.calendar-container').html('<div id="my-calendar"></div>');
+                }
+                cargar_citas();
+            } else {
+                Swal.fire({
+                    icon: "Error",
+                    title: "Oops...",
+                    text: data.descripcion,
+                });
+            }
+        },
+        error: function (response) {
+            Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: "Ocurrió un error al registrar el pago gratuito.",
+            });
+        },
+        complete: function () {
+        }
+    });
+}
+
+function modalActualizarServicio() {
+    $('#mdlActualizarServicio').modal('show');
+}
+
+function cerrarModalActualizarServicio() {
+    $('#mdlActualizarServicio').modal('hide');
+}
+
+function actualizar_servicio() {
+    debugger;
+    var servicioOg = parseInt($('#cboServicio').val());
+    var servicioNew = parseInt($('#cboServicioActualizar').val());
+
+    if (servicioOg == servicioNew) {
+        Swal.fire({
+            icon: "warning",
+            title: "Oops...",
+            text: "El nuevo servicio debe ser uno diferente.",
+        });
+        return;
+    }
+    $.get(`/RegistroCitas/ActualizarServicio?id_cita=${id_cita_}&id_servicio=${servicioNew}`, function (data) {
+        if (data.estado) {
+            Swal.fire({
+                icon: "success",
+                text: "Servicio actualizado.",
+            });
+            cerrarModalActualizarServicio();
+            $('#mdl_cita').modal('hide');
+
+            var tipoVista = TipoVista();
+            if (tipoVista == 'MENSUAL') {
+                $('.calendar-container').html('<div id="my-calendar"></div>');
+            }
+            cargar_citas();
+        } else {
+            Swal.fire({
+                icon: "Error",
+                title: "Oops...",
+                text: data.descripcion,
+            });
+        }
+    });
 }
 
 function guardar_cita() {
@@ -1730,7 +1838,7 @@ function agregarHoraLibre(fecha, hora, libres) {
             } else {
                 html = '<div class="div_horario" style="background-color: #5c9d9d; color: #FFFFFF; padding: 5px; font-size: 12px; border-radius: 5px; cursor: pointer;"';
                 if (parseDate(fecha) >= parseDate(fecha_actual())) {
-                    html += ' data-id-cita="0" data-id-especialista="-1" data-id-paciente="-1" data-fecha-cita="' + fecha + '" data-hora-cita="" data-estado="-" data-telefono="--" data-moneda="S/." data-monto-pactado="0.00" data-monto-pagado="0.00" data-monto-pendiente="0.00" data-id-servicio="-1" data-id-sede="-1" onclick="ver_cita(this)" ';
+                    html += ' data-id-cita="0" data-id-especialista="-1" data-id-paciente="-1" data-fecha-cita="' + fecha + '" data-pago-gratis="0" data-hora-cita="" data-estado="-" data-telefono="--" data-moneda="S/." data-monto-pactado="0.00" data-monto-pagado="0.00" data-monto-pendiente="0.00" data-id-servicio="-1" data-id-sede="-1" onclick="ver_cita(this)" ';
                 }
                 html +='>' + libre[0].tipo + ' <br> ' + libre[0].hora_cita + '</div> ';
             }

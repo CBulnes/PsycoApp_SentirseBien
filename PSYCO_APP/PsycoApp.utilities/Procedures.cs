@@ -49,6 +49,8 @@ namespace PsycoApp.utilities
         public const string sp_confirmar_cita = "SP_CONFIRMAR_CITA";
         public const string sp_atender_cita = "SP_ATENDER_CITA";
         public const string sp_cancelar_cita = "SP_CANCELAR_CITA";
+        public const string sp_actualizar_servicio = "SP_ACTUALIZAR_SERVICIO_CITA";
+        public const string sp_pago_gratis = "SP_CITA_PAGO_GRATIS";
         public const string sp_registrar_cuestionario = "SP_REGISTRAR_CUESTIONARIO";
         public const string sp_listar_disponibilidad_doctor = "SP_LISTAR_DISPONIBILIDAD_DOCTOR";
         public const string sp_listar_citas_usuario = "SP_LISTAR_CITAS_USUARIO";

@@ -177,7 +177,7 @@
                 </div>
             </div>
 
-            <div class="row sb-reg-citas-list-filtro">
+            <div class="row sb-reg-citas-list-filtro" style="margin-bottom: 20px;">
                 <div class="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
                     <span class="label-form">N° de semana</span>
                     <select class="form-control" id="cboSemanaFiltro" onchange="recargar_vista_semanal()"></select>
@@ -196,7 +196,7 @@
                 <br />
                 <table>
                     <tr>
-                        <td><span style="font-weight: bold;">Vacaciones: </span></td>
+                        <td><span style="font-weight: bold;" class="spnVacaciones">Vacaciones: </span></td>
                         <td class="diaVacaciones" style="height: 40px; width: 80px;"></td>
                     </tr>
                 </table>
@@ -250,7 +250,7 @@
                                         <select class="form-control" id="cboDoctor" onchange="verificar_disponibilidad()">
                                             <option value="-1" data-sedes="-1">Seleccionar</option>
                                         </select>
-                                    </div>
+                        |            </div>
                                 </div>
                             </div>
 
@@ -285,7 +285,9 @@
 
                             <div class="sb-reg-citas-popup-tab-panel-block">
                                 <div class="sb-reg-citas-popup-tab-panel-block-item">
-                                    <span class="label-form">Servicio</span>
+                                    <span class="label-form">Servicio&nbsp;
+                                        <img id="ImgActualizarServicio" src="../images/free.png" style="height: 15px; width: auto; cursor: pointer; margin: 0px 0px 0px 5px; border-radius: 10px;" title="Actualizar servicio" onclick="modalActualizarServicio()" />
+                                    </span>
                                     <div class="input-group">
                                         <select class="form-control" id="cboServicio">
                                             <option value="-1" data-sesiones="0">Seleccionar</option>
@@ -373,12 +375,33 @@
                                 </div>
                             </div>
 
+                            <div class="sb-reg-citas-popup-tab-panel-block" id="divPagoGratis">
+                                <div class="sb-reg-citas-popup-tab-panel-block-item">
+                                    <button id="btnPagoGratis" type="button" onclick="registrarPagoGratis()" class="btn btn-primary">Registrar pago gratuito</button>
+                                </div>
+                            </div>
+
                         </div>
 
                     </div>
                     <!--historial-->
                     <div id="historial" class="tab-pane fade">
                         <div class="sb-reg-citas-popup-tab-historial" id="divHistorial"></div>
+                        <br />
+                        <div class="sb-reg-citas-popup-tab-historial">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th style="text-align: center;" colspan="2">Historial de atenciones</th>
+                                    </tr>
+                                    <tr>
+                                        <th style="text-align: center;">Especialista</th>
+                                        <th style="text-align: center;">Fecha</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="divHistorial2"></tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -388,6 +411,42 @@
                 <button type="button" class="btn btn-primary main_color divConfirmar sb-reg-citas-popup-button" onclick="confirmar_cita()" id="btnConfirmar">Confirmar</button>
                 <button type="button" class="btn btn-primary main_color sb-reg-citas-popup-button" onclick="atender_cita()" id="divAtender">Atender</button>
                 <button type="button" class="btn btn-primary main_color sb-reg-citas-popup-button" style="background-color: #eb5151 !important;" onclick="cancelar_cita()" id="btnCancelar">Cancelar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--MODAL CITA-->
+<div id="mdlActualizarServicio" class="modal" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="true">
+    <div class="modal-dialog modal-lg" role="document" style="height: 90%; display: grid; place-items: center;">
+        <div class="modal-content sb-reg-citas-popup-container">
+            <div class="modal-header sb-reg-citas-popup-title">
+                <h5 class="modal-title">Actualizar servicio</h5>
+            </div>
+            <div class="modal-body sb-reg-citas-popup-body">
+
+                <div class="sb-reg-citas-popup-tab-panel">
+
+                    <div class="sb-reg-citas-popup-tab-panel-block">
+                        <div class="sb-reg-citas-popup-tab-panel-block-item">
+                            <span class="label-form">Servicio</span>
+                            <div class="input-group">
+                                <select class="form-control" id="cboServicioActualizar">
+                                    <option value="-1" data-sesiones="0">Seleccionar</option>
+                                    @foreach (var prod in productos)
+                                    {
+                                        <option value="@prod.Id">@prod.Alias</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="modal-footer sb-reg-citas-popup-btn">
+                <button type="button" class="btn btn-secondary sb-reg-citas-popup-button-volver" onclick="cerrarModalActualizarServicio()">Volver</button>
+                <button type="button" class="btn btn-primary main_color sb-reg-citas-popup-button" onclick="actualizar_servicio()" id="btnActualizarServicio">Guardar</button>
             </div>
         </div>
     </div>
@@ -441,6 +500,13 @@
                                 <option value="2">BBVA - Ahorros S/.</option>
                                 <option value="3">Interbank - Ahorros S/.</option>
                             </select>
+                        </div>
+                    </div>
+
+                    <div class="sb-reg-citas-popup-tab-panel-block">
+                        <div class="sb-reg-citas-popup-tab-panel-block-item">
+                            <span class="label-form">Observación</span>
+                            <input class="form-control" type="text" id="txtComentario" autocomplete="off" maxlength="50" />
                         </div>
                     </div>
 

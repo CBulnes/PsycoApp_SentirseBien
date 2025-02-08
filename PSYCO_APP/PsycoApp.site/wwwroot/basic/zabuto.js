@@ -865,9 +865,13 @@ function contenido_cita(dia, mes, año, hora, btnNuevaCita = false, btnCita = fa
                     var clase_estado = 'div_evt_' + (item.esTaller == 1 ? 'taller' : item.estado.replace(' ','_').toLowerCase());
                     clase_estado += item.esEvaluacion == 1 ? ' div_evaluacion' : '';
 
-                    html += '<div class="div_cita ' + clase_estado + '" data-id-cita="' + item.id_cita + '" data-id-especialista="' + item.id_doctor_asignado + '" data-id-paciente="' + item.id_paciente + '" data-fecha-cita="' + item.fecha_cita + '" data-hora-cita="' + item.hora_cita + '" data-estado="' + item.estado + '" data-telefono="' + item.telefono + '" data-moneda="' + item.moneda + '" data-monto-pactado="' + item.monto_pactado + '" data-monto-pagado="' + item.monto_pagado + '" data-monto-pendiente="' + item.monto_pendiente + '" data-id-servicio="' + item.id_servicio + '" data-id-sede="' + item.id_sede + '" data-feedback="' + item.feedback + '" data-comentario="' + item.comentario + '" onclick="ver_cita(this)">';
+                    html += '<div class="div_cita ' + clase_estado + '" data-id-cita="' + item.id_cita + '" data-id-especialista="' + item.id_doctor_asignado + '" data-id-paciente="' + item.id_paciente + '" data-fecha-cita="' + item.fecha_cita + '" data-pago-gratis="' + item.pago_gratis + '" data-hora-cita="' + item.hora_cita + '" data-estado="' + item.estado + '" data-telefono="' + item.telefono + '" data-moneda="' + item.moneda + '" data-monto-pactado="' + item.monto_pactado + '" data-monto-pagado="' + item.monto_pagado + '" data-monto-pendiente="' + item.monto_pendiente + '" data-id-servicio="' + item.id_servicio + '" data-id-sede="' + item.id_sede + '" data-feedback="' + item.feedback + '" data-comentario="' + item.comentario + '" onclick="ver_cita(this)">';
                     html += 'Paciente: ' + (item.paciente + (' ' + item.siglas)).trim() + '<br/>';
                     html += 'Hora: ' + item.hora_cita;
+                    
+                    if (item.pago_gratis == 'true' || item.pago_gratis == true || item.pago_gratis || item.siglas == '(EG)') {
+                        html += '<img src="../images/free.png" style="height: 20px; width: auto; cursor: pointer; margin: 0px 0px 0px 5px; border-radius: 10px;" title="' + (item.siglas == '(EG)' ? 'Evaluación gratuita' : 'Pago gratuito') + '" />';
+                    }
                     html += '</div > ';
                 }
             }
@@ -878,9 +882,9 @@ function contenido_cita(dia, mes, año, hora, btnNuevaCita = false, btnCita = fa
         if (html != '-') {
             if (parseDate(fecha) >= parseDate(fecha_actual())) {
                 if (btnNuevaCita) {
-                    html = '<button data-id-cita="0" data-id-especialista="-1" data-id-paciente="-1" data-fecha-cita="' + fecha + '" data-hora-cita="" data-estado="-" data-telefono="--" data-moneda="S/." data-monto-pactado="0.00" data-monto-pagado="0.00" data-monto-pendiente="0.00" data-id-servicio="-1" data-id-sede="-1" onclick="ver_cita(this)" class="btn btn-primary main_color btn_nueva_cita">+</button>';
+                    html = '<button data-id-cita="0" data-id-especialista="-1" data-id-paciente="-1" data-fecha-cita="' + fecha + '" data-pago-gratis="0" data-hora-cita="" data-estado="-" data-telefono="--" data-moneda="S/." data-monto-pactado="0.00" data-monto-pagado="0.00" data-monto-pendiente="0.00" data-id-servicio="-1" data-id-sede="-1" onclick="ver_cita(this)" class="btn btn-primary main_color btn_nueva_cita">+</button>';
                 } else {
-                    html += '<button data-id-cita="0" data-id-especialista="-1" data-id-paciente="-1" data-fecha-cita="' + fecha + '" data-hora-cita="" data-estado="-" data-telefono="--" data-moneda="S/." data-monto-pactado="0.00" data-monto-pagado="0.00" data-monto-pendiente="0.00" data-id-servicio="-1" data-id-sede="-1" onclick="ver_cita(this)" class="btn btn-primary main_color btn_nueva_cita">+</button>';
+                    html += '<button data-id-cita="0" data-id-especialista="-1" data-id-paciente="-1" data-fecha-cita="' + fecha + '" data-pago-gratis="0" data-hora-cita="" data-estado="-" data-telefono="--" data-moneda="S/." data-monto-pactado="0.00" data-monto-pagado="0.00" data-monto-pendiente="0.00" data-id-servicio="-1" data-id-sede="-1" onclick="ver_cita(this)" class="btn btn-primary main_color btn_nueva_cita">+</button>';
                 }
             }
         }

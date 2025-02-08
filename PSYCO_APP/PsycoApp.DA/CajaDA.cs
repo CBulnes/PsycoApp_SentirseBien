@@ -28,6 +28,7 @@ namespace PsycoApp.DA
                 cmd.Parameters.Add("@id_detalle_transferencia", SqlDbType.Int).Value = oPago.id_detalle_transferencia;
                 cmd.Parameters.Add("@importe", SqlDbType.Decimal).Value = oPago.importe;
                 cmd.Parameters.Add("@usuario", SqlDbType.VarChar).Value = oPago.usuario;
+                cmd.Parameters.Add("@comentario", SqlDbType.VarChar).Value = oPago.comentario;
 
                 SqlDataAdapter da = new SqlDataAdapter(cmd);
                 DataTable dt = new DataTable();
@@ -114,6 +115,7 @@ namespace PsycoApp.DA
                     item.forma_pago = Convert.ToString(row["forma_pago"]);
                     item.detalle_transferencia = Convert.ToString(row["detalle_transferencia"]);
                     item.importe = Convert.ToString(row["importe"]);
+                    item.usuario = Convert.ToString(row["usuario"]);
                     item.estado_orden = Convert.ToString(row["estado_orden"]);
                     item.sede = Convert.ToString(row["Sede"]);
                     lista.Add(item);
