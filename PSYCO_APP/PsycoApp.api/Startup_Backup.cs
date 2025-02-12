@@ -18,9 +18,9 @@ using PsycoApp.utilities;
 
 namespace PsycoApp.api
 {
-    public class Startup
+    public class Startup_Backup
     {
-        public Startup(IConfiguration configuration)
+        public Startup_Backup(IConfiguration configuration)
         {
             Configuration = configuration;
         }
@@ -65,11 +65,11 @@ namespace PsycoApp.api
                 });
             });
 
-            //services.AddSwaggerGen(c =>
-            //{
-            //    c.SwaggerDoc("v1", new OpenApiInfo { Title = "Psyco App", Version = "1.0" });
-            //    c.ResolveConflictingActions(apiDescriptions => apiDescriptions.First());
-            //});
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Psyco App", Version = "1.0" });
+                c.ResolveConflictingActions(apiDescriptions => apiDescriptions.First());
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -81,10 +81,10 @@ namespace PsycoApp.api
             }
 
             // swagger
-            //app.UseSwagger();
-            //app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "App V1"));
+            app.UseSwagger();
+            app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "App V1"));
 
-            //app.UseHttpsRedirection();
+            app.UseHttpsRedirection();
 
             app.UseRouting();
 

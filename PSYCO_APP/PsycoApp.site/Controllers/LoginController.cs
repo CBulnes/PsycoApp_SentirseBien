@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using PsycoApp.entities;
 using PsycoApp.utilities;
+using Newtonsoft.Json.Linq;
 
 namespace PsycoApp.site.Controllers
 {
@@ -56,6 +57,13 @@ namespace PsycoApp.site.Controllers
                     HttpContext.Session.SetInt32("test_actual", usuario.test_actual);
                     HttpContext.Session.SetString("login", usuario.login);
                     HttpContext.Session.SetInt32("flag_chat", 1);
+                    HttpContext.Response.Cookies.Append("AuthToken", usuario.token, new CookieOptions
+                    {
+                        HttpOnly = true, 
+                        Secure = true,  
+                        SameSite = SameSiteMode.Strict,
+                        Expires = DateTime.UtcNow.AddHours(1) 
+                    });
                 }
             }
             catch (Exception ex)

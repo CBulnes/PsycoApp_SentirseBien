@@ -9,6 +9,9 @@ using Newtonsoft.Json;
 using PsycoApp.BL;
 using PsycoApp.utilities;
 using PsycoApp.entities;
+using PsycoApp.entities.DTO.DtoRequest;
+using AutoMapper;
+using PsycoApp.BL.Interfaces;
 
 namespace PsycoApp.api.Controllers
 {
@@ -16,19 +19,26 @@ namespace PsycoApp.api.Controllers
     [ApiController]
     public class UsuarioController : ControllerBase
     {
-        UsuarioBL usuarioBL = new UsuarioBL();
+        private readonly IUsuarioLogin _usuarioBL;
+        private readonly IMapper _mapper;
 
+        public UsuarioController(IUsuarioLogin usuarioBL, IMapper mapper)
+        {
+            _usuarioBL = usuarioBL;
+            _mapper = mapper;
+        }
         [HttpPost("validar_usuario")]
-        public ActionResult<RespuestaUsuario> validar_usuario([FromBody] Usuario usuario)
+        public ActionResult<RespuestaUsuario> validar_usuario([FromBody] UsuarioLoginDto usuarioDTO)
         {
             RespuestaUsuario respuesta = new RespuestaUsuario();
+  
             try
             {
-                usuario = usuarioBL.validar_usuario(usuario);
+                var usuario = _usuarioBL.validar_usuario(usuarioDTO);
+                respuesta = _mapper.Map<RespuestaUsuario>(usuario);
 
-                respuesta.estado = usuario.validacion == "OK" ? true : false;
-                respuesta.descripcion = usuario.validacion;
-                respuesta.data = usuario;
+                return Ok(respuesta);
+
             }
             catch (Exception e)
             {
@@ -44,7 +54,7 @@ namespace PsycoApp.api.Controllers
             RespuestaUsuario respuesta = new RespuestaUsuario();
             try
             {
-                usuario = usuarioBL.actualizar_contraseña(usuario);
+                usuario = _usuarioBL.actualizar_contraseña(usuario);
 
                 respuesta.estado = usuario.validacion == "OK" ? true : false;
                 respuesta.descripcion = usuario.validacion;

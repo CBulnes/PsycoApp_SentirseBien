@@ -22,5 +22,6 @@ namespace PsycoApp.entities
 		public string validacion { get; set; } = "";
 		public int test_actual { get; set; } = 0;
 		public string login { get; set; } = "";
-	}
+        public string token { get; set; } = "";
+    }
 }

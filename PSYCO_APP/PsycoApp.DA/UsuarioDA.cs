@@ -4,26 +4,30 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
+using PsycoApp.DA.Interfaces;
 using PsycoApp.DA.SQLConnector;
 using PsycoApp.entities;
+using PsycoApp.entities.DTO.DtoRequest;
 using PsycoApp.utilities;
 
 namespace PsycoApp.DA
 {
-    public class UsuarioDA
+    public class UsuarioDA : IUsuarioDA
     {
         SqlConnection cn = new SqlConnector().cadConnection_psyco;
         string rpta = "";
-
-        public Usuario validar_usuario(Usuario usuario)
+        
+        public Usuario validar_usuario(UsuarioLoginDto usuarioDTO)
         {
+            Usuario usuario = new Usuario();
             try
             {
+                
                 cn.Open();
                 SqlCommand cmd = new SqlCommand(Procedures.sp_validar_usuario, cn);
                 cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.Add("@usuario", SqlDbType.VarChar).Value = usuario.email;
-                cmd.Parameters.Add("@password", SqlDbType.VarChar).Value = usuario.password;
+                cmd.Parameters.Add("@usuario", SqlDbType.VarChar).Value = usuarioDTO.Email;
+                cmd.Parameters.Add("@password", SqlDbType.VarChar).Value = usuarioDTO.Password;
 
                 SqlDataAdapter da = new SqlDataAdapter(cmd);
                 DataTable dt = new DataTable();
