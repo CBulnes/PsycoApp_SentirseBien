@@ -47,6 +47,7 @@ namespace PsycoApp.DA
                     usuario.test_actual = Convert.ToInt32(row["test_actual"]);
                     usuario.login = Convert.ToString(row["login"]);
                     usuario.id_sede = Convert.ToInt32(row["id_sede"]);
+                    usuario.email = usuarioDTO.Email;
                 }
             }
             catch (Exception e)

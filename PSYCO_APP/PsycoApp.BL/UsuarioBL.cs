@@ -1,21 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.SqlClient;
+using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
 using System.Security.Claims;
 using System.Text;
-using System.Threading.Tasks;
 using AutoMapper;
-using Microsoft.IdentityModel.Tokens;
+using Microsoft.Extensions.Configuration;
 using PsycoApp.BL.Interfaces;
-using PsycoApp.DA;
 using PsycoApp.DA.Interfaces;
-using PsycoApp.DA.SQLConnector;
 using PsycoApp.entities;
 using PsycoApp.entities.DTO.DtoRequest;
-using PsycoApp.utilities;
 
 namespace PsycoApp.BL
 {
@@ -24,47 +17,77 @@ namespace PsycoApp.BL
         private readonly IMapper _mapper;
         private readonly IUsuarioDA _usuarioDA;
         private readonly string _key = "PsycoAppSuperSecureKey2024!!$$%%@@";
-        public UsuarioBL(IMapper mapper, IUsuarioDA usuarioDA)
+        public IConfiguration _configuration;
+    
+        public UsuarioBL(IConfiguration configuration, IMapper mapper, IUsuarioDA usuarioDA)
         {
             _mapper = mapper;
             _usuarioDA = usuarioDA;
+            _configuration = configuration;
         }
 
 
         public Usuario validar_usuario(UsuarioLoginDto usuarioDTO)
         {
-            
-            var usuario = _usuarioDA.validar_usuario(usuarioDTO);
-            var token = ValidarUsuarioYGenerarToken(usuario);
+ 
+        var usuario = _usuarioDA.validar_usuario(usuarioDTO);
+            var token = GenerarToken(usuario.email,usuario.nombres);
+
             usuario.token = token;
+
+         
             return usuario;
         }
 
-        public string ValidarUsuarioYGenerarToken(Usuario usuario)
+
+        public string GenerarToken(string Email, string Fullname)
         {
-            // Claims (datos del usuario dentro del token)
+
             var claims = new[]
             {
-        new Claim(JwtRegisteredClaimNames.Sub, usuario.id_usuario.ToString()),
-        new Claim(JwtRegisteredClaimNames.Email, usuario.email),
-        new Claim("rol", usuario.tipousuario), // Puedes agregar roles personalizados
-        new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
-    };
+                new Claim("email", Email),
+                new Claim("fullName", Fullname)
+            };
+            var llave = new SymmetricSecurityKey(
+                Encoding.UTF8.GetBytes("MiSuperClaveSeguraDeAlMenos32Caracteres!"));
 
-            // Clave de seguridad (mínimo 32 caracteres)
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_key));
-            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
-            // Crear el token
+            var credentials = new SigningCredentials(llave, SecurityAlgorithms.HmacSha256);
+
             var token = new JwtSecurityToken(
-                issuer: "www.sentirsebien.com",
-                audience: "www.sentirsebien.com",
-                claims: claims,
-                expires: DateTime.UtcNow.AddHours(1), // Expira en 1 hora
-                signingCredentials: creds
-            );
+                issuer: null,
+                audience: null,
+                claims,
+                   expires: DateTime.Now.AddHours(10),
+                signingCredentials: credentials
+                );
 
-            return new JwtSecurityTokenHandler().WriteToken(token); // Devuelve el token
+            return new JwtSecurityTokenHandler().WriteToken(token);
+
+        }
+        public string ValidarUsuarioYGenerarToken(Usuario usuario)
+        {
+            
+            var tokenHandler = new JwtSecurityTokenHandler(); // Generalmente, issuer y audience son iguales
+            var bitkey =Encoding.UTF8.GetBytes(_key);
+            var tokenDes = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(new Claim[]
+                {
+                    new Claim(ClaimTypes.Name, usuario.email),
+                    new Claim(ClaimTypes.Role, usuario.tipousuario),
+                    new Claim(ClaimTypes.NameIdentifier, usuario.id_usuario.ToString())
+                }),
+                Expires = DateTime.UtcNow.AddHours(1),
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(bitkey),
+                                                            SecurityAlgorithms.HmacSha256Signature)
+
+            };
+
+            var token = tokenHandler.CreateToken(tokenDes);
+
+
+            return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
         public Usuario actualizar_contraseña(Usuario usuario)

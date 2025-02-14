@@ -12,6 +12,7 @@ using PsycoApp.entities;
 using PsycoApp.entities.DTO.DtoRequest;
 using AutoMapper;
 using PsycoApp.BL.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 
 namespace PsycoApp.api.Controllers
 {
@@ -27,7 +28,21 @@ namespace PsycoApp.api.Controllers
             _usuarioBL = usuarioBL;
             _mapper = mapper;
         }
+        [AllowAnonymous]
+        [HttpGet("hora-localhost")]
+        public IActionResult ObtenerHoraLocalhost()
+        {
+            return Ok(new
+            {
+                HoraUTC = DateTime.UtcNow,  // Hora en UTC
+                HoraLocal = DateTime.Now,   // Hora en tu zona horaria
+                ZonaHoraria = TimeZoneInfo.Local.StandardName
+            });
+        }
+
+        [AllowAnonymous]
         [HttpPost("validar_usuario")]
+      
         public ActionResult<RespuestaUsuario> validar_usuario([FromBody] UsuarioLoginDto usuarioDTO)
         {
             RespuestaUsuario respuesta = new RespuestaUsuario();

@@ -5,9 +5,11 @@ using System.Collections.Generic;
 using System;
 using PsycoApp.entities;
 using PsycoApp.DA;
+using Microsoft.AspNetCore.Authorization;
 
 namespace PsycoApp.api.Controllers
 {
+  
     [Route("api/[controller]")]
     [ApiController]
     public class PsicologoController : ControllerBase
@@ -15,6 +17,8 @@ namespace PsycoApp.api.Controllers
 
         PsicologoBL _psicologoBL = new PsicologoBL();
 
+
+        [Authorize]
         [HttpGet("listar/{pagina}/{tamanoPagina}")]
         public ActionResult<List<Psicologo>> Listar(int pagina = 1, int tamanoPagina = 100)
         {
@@ -27,7 +31,7 @@ namespace PsycoApp.api.Controllers
                 return BadRequest(ex.Message);
             }
         }
-
+        [AllowAnonymous]
         [HttpPost("agregar")]
         public ActionResult Agregar([FromBody] Psicologo psicologo)
         {
@@ -71,7 +75,7 @@ namespace PsycoApp.api.Controllers
                 return BadRequest(ex.Message);
             }
         }
-
+        [AllowAnonymous]
         [HttpDelete("eliminar/{id}")]
         public ActionResult Eliminar(int id)
         {
@@ -102,7 +106,7 @@ namespace PsycoApp.api.Controllers
                 return BadRequest(ex.Message);
             }
         }
-
+        [AllowAnonymous]
         [HttpGet("listar_psicologos_combo")]
         public ActionResult<List<entities.Psicologo>> listar_psicologos_combo()
         {
@@ -117,7 +121,7 @@ namespace PsycoApp.api.Controllers
             }
             return lista;
         }
-
+        [AllowAnonymous]
         [HttpGet("listar_sedes_x_usuario_combo/{id_usuario}")]
         public ActionResult<List<entities.Sede>> listar_sedes_x_usuario_combo(int id_usuario)
         {
@@ -132,7 +136,7 @@ namespace PsycoApp.api.Controllers
             }
             return lista;
         }
-
+        [AllowAnonymous]
         [HttpGet("listar_sedes")]
         public ActionResult<List<entities.Sede>> listar_sedes_combo()
         {
@@ -147,7 +151,7 @@ namespace PsycoApp.api.Controllers
             }
             return lista;
         }
-
+        [AllowAnonymous]
         [HttpGet("horarios_psicologo/{id_psicologo}/{inicio}/{fin}/{dias}")]
         public List<entities.Horario> horarios_psicologo(int id_psicologo, string inicio, string fin, string dias)
         {
@@ -162,7 +166,7 @@ namespace PsycoApp.api.Controllers
             }
             return res_;
         }
-
+        [AllowAnonymous]
         [HttpGet("vacaciones_psicologo/{id_psicologo}/{inicio}/{fin}/{año}")]
         public List<entities.Horario> vacaciones_psicologo(int id_psicologo, string inicio, string fin, int año)
         {
@@ -177,7 +181,7 @@ namespace PsycoApp.api.Controllers
             }
             return res_;
         }
-
+        [AllowAnonymous]
         [HttpPost("guardar_horarios_psicologo")]
         public RespuestaUsuario guardar_horarios_psicologo(List<entities.Horario> lista)
         {
@@ -193,7 +197,7 @@ namespace PsycoApp.api.Controllers
             }
             return res_;
         }
-
+        [AllowAnonymous]
         [HttpPost("guardar_vacaciones_psicologo")]
         public RespuestaUsuario guardar_vacaciones_psicologo(List<entities.Horario> lista)
         {
