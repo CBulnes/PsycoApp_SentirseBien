@@ -18,7 +18,7 @@ namespace PsycoApp.api.Controllers
         PsicologoBL _psicologoBL = new PsicologoBL();
 
 
-        [Authorize]
+        [Authorize(AuthenticationSchemes = "Bearer")]
         [HttpGet("listar/{pagina}/{tamanoPagina}")]
         public ActionResult<List<Psicologo>> Listar(int pagina = 1, int tamanoPagina = 100)
         {

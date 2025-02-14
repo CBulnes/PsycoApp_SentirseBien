@@ -7,6 +7,9 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using PsycoApp.BL;
+using Newtonsoft.Json.Serialization;
+using Microsoft.AspNetCore.Mvc.NewtonsoftJson;
+using Newtonsoft.Json;
 using PsycoApp.BL.Interfaces;
 using PsycoApp.DA.Interfaces;
 using PsycoApp.DA;
@@ -16,16 +19,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using PsycoApp.api;
 using System;
-
+using PsycoApp.api.UsuarioJwt;
 var builder = WebApplication.CreateBuilder(args);
-
-
-
-// Agregar servicios
-builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-//builder.Services.AddOpenApi("v1", options => { options.AddDocumentTransformer<BearerSecuritySchemeTransformer>(); });
 
 // Se le agrega la seguridad a los controladores para que se le envie el token valido
 //builder.Services.AddControllers(opt =>
@@ -34,6 +29,12 @@ builder.Services.AddEndpointsApiExplorer();
 //    opt.Filters.Add(new AuthorizeFilter(policy));
 
 //});
+
+// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+builder.Services.AddEndpointsApiExplorer();
+
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddOpenApi("v1", options => { options.AddDocumentTransformer<BearerSecuritySchemeTransformer>(); });
 
 // Configuración de CORS
 string url_site = Helper.GetUrlSite();
@@ -49,18 +50,19 @@ builder.Services.AddCors(opt =>
     });
 });
 
+
 builder.Services.AddOptions();
 
-// Configurar Swagger solo en desarrollo
-//if (isDevelopment)
-//{
-//    builder.Services.AddSwaggerGen(c =>
-//    {
-//        c.SwaggerDoc("v1", new OpenApiInfo { Title = "Psyco App", Version = "1.0" });
-//        c.ResolveConflictingActions(apiDescriptions => apiDescriptions.First());
-//    });
-//}
 
+//configuracion de Swagger
+builder.Services.AddSwaggerGen(c => {
+
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "Api Fasi", Version = "v1" });
+    c.CustomSchemaIds(c => c.FullName); //Nombre completos api controllers
+
+});
+var IssuerSigningKeye = new SymmetricSecurityKey(
+              Encoding.UTF8.GetBytes(builder.Configuration["ConfiguracionJwt:Llave"]));
 //autenticacion jwt
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
@@ -71,58 +73,61 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidateAudience = false,
             ValidateIssuerSigningKey = true,
             IssuerSigningKey = new SymmetricSecurityKey(
-                Encoding.UTF8.GetBytes("MiSuperClaveSeguraDeAlMenos32Caracteres!")
-            ),
-             ClockSkew = TimeSpan.Zero // ? Evita la tolerancia de tiempo por defecto (5 min)
+                Encoding.UTF8.GetBytes(builder.Configuration["ConfiguracionJwt:Llave"] ?? string.Empty)
+            )
         };
     });
 
-
-
 // Registrar dependencias
-//builder.Services.AddOpenApi();
+builder.Services.AddOpenApi();
 builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.AddScoped<IUsuarioLogin, UsuarioBL>();
 builder.Services.AddScoped<IUsuarioDA, UsuarioDA>(); // Register UsuarioDA
+builder.Services.AddScoped<IManejoJwt, ManejoJwt>();
+builder.Services.AddControllers();
 
-
-
+builder.Services.AddAuthorization();
 var app = builder.Build();
-app.UseCors("Todos");
-// Configuración del middleware
-//if (isDevelopment)
-//{
-//    app.UseDeveloperExceptionPage();
-//    app.UseSwagger();
-//    app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Psyco App V1"));
-//}
 
-// Redirección HTTPS
+app.UseCors("CorsPolicy");
+
+app.UseCors("Todos");
+app.UseCors("SoloSentirseBien");
+// Configure the HTTP request pipeline.
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+
+    //indica la ruta para generar la configuración de swagger
+    app.UseSwaggerUI(c =>
+    {
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "Psyco App V1");
+    });
+
+}
+
 app.UseHttpsRedirection();
 
-//// Configuración de CORS
-//app.UseCors("SoloSentirseBien");
-
-
-// Autenticación y autorización
 app.UseAuthentication();
+
 app.UseAuthorization();
+
+app.MapControllers();
 
 // Mapear controladores y OpenAPI
 app.MapControllers();
-//app.MapOpenApi();
+app.MapOpenApi();
 
-//app.MapScalarApiReference(options =>
- 
-// {
-//     options.Title = "Scalar Api";
-//     options.Theme = ScalarTheme.BluePlanet;
-//     options.DefaultHttpClient = new(ScalarTarget.CSharp, ScalarClient.HttpClient);
-//     options.CustomCss = "";
-//     options.ShowSidebar = true;
-// }
-//    );
+app.MapScalarApiReference(options =>
 
-
-
+ {
+     options.Title = "Scalar Api";
+     options.Theme = ScalarTheme.BluePlanet;
+     options.DefaultHttpClient = new(ScalarTarget.CSharp, ScalarClient.HttpClient);
+     options.CustomCss = "";
+     options.ShowSidebar = true;
+ }
+    );
 app.Run();
+
+

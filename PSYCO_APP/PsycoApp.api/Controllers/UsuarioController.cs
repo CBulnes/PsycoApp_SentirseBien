@@ -13,6 +13,8 @@ using PsycoApp.entities.DTO.DtoRequest;
 using AutoMapper;
 using PsycoApp.BL.Interfaces;
 using Microsoft.AspNetCore.Authorization;
+using System.IdentityModel.Tokens.Jwt;
+using Newtonsoft.Json.Linq;
 
 namespace PsycoApp.api.Controllers
 {
@@ -22,11 +24,54 @@ namespace PsycoApp.api.Controllers
     {
         private readonly IUsuarioLogin _usuarioBL;
         private readonly IMapper _mapper;
-
-        public UsuarioController(IUsuarioLogin usuarioBL, IMapper mapper)
+        private IManejoJwt manejoJwt;
+        public UsuarioController(IUsuarioLogin usuarioBL, IMapper mapper, IManejoJwt manejoJwt)
         {
             _usuarioBL = usuarioBL;
             _mapper = mapper;
+            this.manejoJwt = manejoJwt;
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        [Route("debug-token")]
+        [Consumes("application/json")]  // Asegura que solo acepte JSON
+        public IActionResult DebugToken([FromBody] TokenRequest request)
+        {
+            if (string.IsNullOrEmpty(request?.Token))
+            {
+                return BadRequest("Token no proporcionado.");
+            }
+
+            var handler = new JwtSecurityTokenHandler();
+            try
+            {
+                var jwtToken = handler.ReadJwtToken(request?.Token);
+                return Ok(new
+                {
+                    Issuer = jwtToken.Issuer,
+                    Audience = jwtToken.Audiences,
+                    Expiration = jwtToken.ValidTo,
+                    Claims = jwtToken.Claims.Select(c => new { c.Type, c.Value })
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest($"Error al leer el token: {ex.Message}");
+            }
+        }
+
+        [AllowAnonymous]
+        [HttpPost("Autenticar")]
+        public string Obtener()
+        {
+            
+
+            var token = this.manejoJwt.GenerarToken("admin@abc.com", "Juan");
+
+
+
+            return "Token: " + token;
         }
         [AllowAnonymous]
         [HttpGet("hora-localhost")]
@@ -50,6 +95,8 @@ namespace PsycoApp.api.Controllers
             try
             {
                 var usuario = _usuarioBL.validar_usuario(usuarioDTO);
+                var token = this.manejoJwt.GenerarToken(usuario.email, usuario.nombres);
+                usuario.token = token;
                 respuesta = _mapper.Map<RespuestaUsuario>(usuario);
 
                 return Ok(respuesta);

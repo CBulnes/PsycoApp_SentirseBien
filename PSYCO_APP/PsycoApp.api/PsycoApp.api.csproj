@@ -16,19 +16,21 @@
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="13.0.1" />
     <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.22.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.4.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.2" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="9.0.2" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.2" />
-    <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="8.4.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="Scalar.AspNetCore" Version="2.0.12" />
     <PackageReference Include="Swashbuckle" Version="5.6.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="5.6.3" />
     <PackageReference Include="Swashbuckle.AspNetCore.Swagger" Version="5.6.3" />
     <PackageReference Include="System.Data.SqlClient" Version="4.9.0" />
+    
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\PsycoApp.BL\PsycoApp.BL.csproj" />
+    <ProjectReference Include="..\PsycoApp.DA\PsycoApp.DA.csproj" />
     <ProjectReference Include="..\PsycoApp.Entities\PsycoApp.entities.csproj" />
     <ProjectReference Include="..\PsycoApp.utilities\PsycoApp.utilities.csproj" />
   </ItemGroup>
