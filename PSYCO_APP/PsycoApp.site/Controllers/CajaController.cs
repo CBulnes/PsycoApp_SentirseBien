@@ -9,6 +9,7 @@ using Newtonsoft.Json;
 using PsycoApp.entities;
 using PsycoApp.utilities;
 using System.Net.Http;
+using Microsoft.CodeAnalysis.FlowAnalysis;
 
 namespace PsycoApp.site.Controllers
 {
@@ -31,6 +32,7 @@ namespace PsycoApp.site.Controllers
             if (!string.IsNullOrEmpty(HttpContext.Session.GetString("nombres") as string))
             {
                 var usuario = Convert.ToString(HttpContext.Session.GetString("login"));
+                usuario = string.IsNullOrEmpty(usuario) ? "-" : usuario;
                 // Construir la URL para la API dependiendo de si hay un término de búsqueda
                 string url = $"{apiUrl}/listar_cuadre_caja/{usuario}/{pageNumber}/{pageSize}/{mes}/{anio}/{sede}";
 
@@ -90,6 +92,7 @@ namespace PsycoApp.site.Controllers
             if (!string.IsNullOrEmpty(HttpContext.Session.GetString("nombres") as string))
             {
                 var usuario = Convert.ToString(HttpContext.Session.GetString("login"));
+                usuario = string.IsNullOrEmpty(usuario) ? "-" : usuario;
                 string url = $"{apiUrl}/listar_cuadre_caja/{usuario}/{pageNumber}/{pageSize}/{mes}/{anio}/{sede}";
 
                 var registros = await GetFromApiAsync<List<PsycoApp.entities.CuadreCaja>>(url);
