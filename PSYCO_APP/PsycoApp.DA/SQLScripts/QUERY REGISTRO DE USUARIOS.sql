@@ -6,10 +6,7 @@ GO
 
 DECLARE @estudios AS type_estudios_psicologo
 INSERT INTO @estudios (Id,IdPsicologo,GradoAcademico,Institucion,Carrera) VALUES (1,0,1,1,1);
-GO
 
-PRINT 'INSERT PSICOLOGOS/USUARIOS'
-GO
 
 EXEC [dbo].[sp_agregar_psicologo] 'CAROLINA','MONGE PARRA','1991-09-10','1','72381584','987721924','13:00','08:00','17:00',1,-1,1,'--','150140','1',@estudios;
 EXEC [dbo].[sp_agregar_psicologo] 'CINTHIA ISABEL','MALDONADO MENDOZA','1995-05-28','1','75335536','932594459','13:00','08:00','17:00',1,-1,1,'--','150140','1',@estudios;

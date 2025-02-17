@@ -1066,6 +1066,7 @@ function verificar_si_es_psicologo() {
     if (id_tipousuario == 4) {
         $('#cboDoctorFiltro, #cboDoctor').attr('disabled', true);
         $('#cboDoctorFiltro, #cboDoctor').val(id_psicologo);
+        $('#divTelefono').hide();
     }
 }
 

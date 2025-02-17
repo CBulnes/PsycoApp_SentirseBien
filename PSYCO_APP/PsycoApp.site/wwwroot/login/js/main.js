@@ -21,7 +21,7 @@ $(document).ready(function () {
     });
 
     $('#txtEmail').focus();
-    $('#btn_ing').attr('disabled', true);
+    //$('#btn_ing').attr('disabled', true);
 });
 
 var input = $('.validate-input .input100');
@@ -74,7 +74,7 @@ $('#txtEmail, #txtPassword').on('input', function (e) {
             if (response.estado) {
                 $('#btn_ing').removeAttr('disabled');
             } else {
-                $('#btn_ing').attr('disabled', true);
+                /*$('#btn_ing').attr('disabled', true);*/
             }
         }
     });
