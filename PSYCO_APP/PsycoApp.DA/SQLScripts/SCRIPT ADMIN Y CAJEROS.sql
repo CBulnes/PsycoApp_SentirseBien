@@ -5,7 +5,7 @@ DECLARE @estudios AS type_estudios_psicologo
 INSERT INTO @estudios (Id,IdPsicologo,GradoAcademico,Institucion,Carrera) VALUES (1,0,1,1,1);
 
 
-EXEC [dbo].[sp_agregar_psicologo] 'ESPOSO','DRA GINA','1950-01-01','1','00000000','999999999','13:00','08:00','17:00',1,-1,1,'--','150140','1',@estudios;
+EXEC [dbo].[sp_agregar_psicologo] 'NESTOR','ESCUDERO','1950-01-01','1','00000000','999999999','13:00','08:00','17:00',1,-1,1,'--','150140','1',@estudios;
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 EXEC [dbo].[sp_agregar_psicologo] 'MARIA JOSE','LANGUASCO RODRIGUEZ','1997-07-13','1','70806582','933747334','13:00','08:00','17:00',1,-1,1,'--','150140','1',@estudios;
 EXEC [dbo].[sp_agregar_psicologo] 'LUIS','REYES MARTINEZ','1995-02-21','1','72881690','943093366','13:00','08:00','17:00',1,-1,1,'--','150140','1',@estudios;
@@ -13,7 +13,9 @@ EXEC [dbo].[sp_agregar_psicologo] 'JOSE','ESTEBAN CIEZA','1996-05-03','1','75343
 EXEC [dbo].[sp_agregar_psicologo] 'ANDREA','CORRALES ROJAS','1995-12-20','1','76536973','972294222','13:00','08:00','17:00',1,-1,1,'--','150140','1',@estudios;
 GO
 
-UPDATE tbl_usuario SET email=CONCAT(num_documento,'@gmail.com'), id_sede=1 WHERE num_documento in ('00000000'); --La molina
+UPDATE tbl_usuario SET email='NESCUDERO', id_sede=1 WHERE num_documento in ('00000000'); --La molina
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+UPDATE tbl_usuario SET email='GROJAS' WHERE num_documento in ('21810680');
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 UPDATE tbl_usuario SET email='MLANGUASCO', id_sede=1 WHERE num_documento in ('70806582'); --La molina
 UPDATE tbl_usuario SET email='LREYES', id_sede=1 WHERE num_documento in ('72881690'); --La molina
