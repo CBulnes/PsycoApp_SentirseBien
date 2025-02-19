@@ -52,7 +52,7 @@ $.fn.zabuto_calendar = function (options) {
 
             var tableClassHtml = ($calendarElement.data('cellBorder') === true) ? ' table-bordered' : '';
 
-            $tableObj = $('<table class="table' + tableClassHtml + '"></table>');
+            $tableObj = $('<table class="table active-table-modulo' + tableClassHtml + '"></table>');
             $tableObj = drawTable($calendarElement, $tableObj, dateInitObj.getFullYear(), dateInitObj.getMonth());
 
             $legendObj = drawLegend($calendarElement);

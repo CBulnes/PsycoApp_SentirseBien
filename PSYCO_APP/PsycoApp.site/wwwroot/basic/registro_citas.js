@@ -94,9 +94,9 @@ $(document).ready(function () {
         for (var i = 0; i < sesiones; i++) {
             var fecha = addDays(parseDate(fecha_yyyyMMdd(fechaInicial)), i*7);
             html += '<tr>';
-            html += '<td><input class="form-control fechaAd" type="date" id="txtFecha' + i + '" autocomplete="off" max="2050-12-31" min="2022-08-01" value="' + formatDateISO(fecha) + '" onkeydown="return false" ' + disabled + ' /></td>';
+            html += '<td><input class="form-control fechaAd active-input-modulo" type="date" id="txtFecha' + i + '" autocomplete="off" max="2050-12-31" min="2022-08-01" value="' + formatDateISO(fecha) + '" onkeydown="return false" ' + disabled + ' /></td>';
 
-            html += '<td><select class="form-control horarioAd" id="cboHorario' + i + '">' + obtener_horarios_fecha(formatDateISO(fecha)) + '</select></td>';
+            html += '<td><select class="form-control horarioAd active-select-modulo" id="cboHorario' + i + '">' + obtener_horarios_fecha(formatDateISO(fecha)) + '</select></td>';
 
             html += '</tr>';
         }

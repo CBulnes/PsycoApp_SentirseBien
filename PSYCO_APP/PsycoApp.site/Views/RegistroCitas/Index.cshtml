@@ -67,62 +67,62 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css" />
 <div class="sb-reg-citas-container">
     <div class="btn-group" role="group" aria-label="Basic example">
-        <button type="button" class="btn btn-secondary btn-vista active" data-tipo="MENSUAL">Mensual</button>
-        <button type="button" class="btn btn-secondary btn-vista" data-tipo="SEMANAL">Semanal</button>
+        <button type="button" class="btn btn-secondary btn-vista active-botonera-modulo active" data-tipo="MENSUAL">Mensual</button>
+        <button type="button" class="btn btn-secondary btn-vista active-botonera-modulo" data-tipo="SEMANAL">Semanal</button>
     </div>
     <input type="hidden" id="hiddenDoctor" name="hiddenDoctor" />
     <div class="sb-reg-citas-title">
-        <p>Registro de Citas</p>
+        <p class="active-titular-modulo">Registro de Citas</p>
     </div>
     <input type="hidden" id="hiddenIdSede" value="@(Model?.DynamicData?.id_sede)" />
     <div class="sb-reg-citas-list-colores">
         <div class="sb-reg-citas-color-citado">
-            <p>Citado</p>
+            <p class="active-texto-modulo">Citado</p>
         </div>
         <div class="sb-reg-citas-color-confirmado">
-            <p>Confirmado</p>
+            <p class="active-texto-modulo">Confirmado</p>
         </div>
         @* <div class="sb-reg-citas-color-en_proceso">
             <p>En proceso</p>
             </div> *@
         <div class="sb-reg-citas-color-atendido">
-            <p>Atendido</p>
+            <p class="active-texto-modulo">Atendido</p>
         </div>
         <div class="sb-reg-citas-color-evaluacion">
-            <p>Evaluación</p>
+            <p class="active-texto-modulo">Evaluación</p>
         </div>
   
     </div>
 
     <div class="row sb-reg-citas-list-filtro">
-        <div class="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
-            <span class="label-form">Paciente</span>
-            <select class="form-control" id="cboPacienteFiltro" onchange="recargar_citas()" data-placeholder="Elija Paciente">
+        <div class="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4 active-buscador-bloque-modulo">
+            <span class="label-form active-texto-modulo">Paciente</span>
+            <select class="form-control active-select-modulo" id="cboPacienteFiltro" onchange="recargar_citas()" data-placeholder="Elija Paciente">
+                <option value="-1">Todos</option>
+            </select>
+        </div>
+
+        <div class="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4 active-buscador-bloque-modulo">
+            <span class="label-form active-texto-modulo">Especialista</span>
+            <select class="form-control active-select-modulo" id="cboDoctorFiltro" onchange="recargar_citas()" data-placeholder="Eija Doctor">
                 <option value="-1">Todos</option>
             </select>
         </div>
 
         <div class="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
-            <span class="label-form">Especialista</span>
-            <select class="form-control" id="cboDoctorFiltro" onchange="recargar_citas()" data-placeholder="Eija Doctor">
-                <option value="-1">Todos</option>
-            </select>
-        </div>
+            <span class="label-form active-texto-modulo">Sede</span>
 
-        <div class="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
-            <span class="label-form">Sede</span>
-
-            <select class="form-control" id="cboSedeFiltro" onchange="recargar_citas()" data-placeholder="Eija cita">
+            <select class="form-control active-select-modulo" id="cboSedeFiltro" onchange="recargar_citas()" data-placeholder="Eija cita">
                 <option value="-1">Todos</option>
                 <option value="1">La Molina</option>
                 <option value="2">Surco</option>
             </select>
         </div>
-        <a onclick="$('#pacientesModal').modal('show');" class="btn modal-trigger sb-reg-citas-button"><p>Acceso a Pacientes</p></a>
+        <a onclick="$('#pacientesModal').modal('show');" class="btn modal-trigger sb-reg-citas-button active-botonera-modulo"><p>Acceso a Pacientes</p></a>
     </div>
 
     <div class="sb-reg-citas-table-calendar table-responsive calendar-container my-calendar">
-        <div id="my-calendar"></div>
+        <div id="my-calendar" class=""></div>
     </div>
 
    @*  <div class="sb-reg-citas-table-calendar my-calendar2 hide-element">
@@ -157,19 +157,19 @@
         <div>
             <div class="row sb-reg-citas-list-filtro">
                 <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                    <table class="table">
+                    <table class="table active-table-modulo">
                         <tr class="calendar-month-header">
                             <th>
                                 <div class="calendar-month-navigation trigger_mes_anterior" style="cursor: pointer;">
-                                    <span class="sb-reg-citas-arrow-left">&lt;</span>
+                                    <span class="sb-reg-citas-arrow-left active-texto-modulo">&lt;</span>
                                 </div>
                             </th>
                             <th>
-                                <select id="trigger_seleccion_mes" style="color: #004A92; font-size: 18px; font-weight: bold; border: 0px; text-decoration: none; cursor: pointer;" disabled="true"></select>
+                                <select id="trigger_seleccion_mes" class="active-select-modulo" style="color: #004A92; font-size: 18px; font-weight: bold; border: 0px; text-decoration: none; cursor: pointer;" disabled="true"></select>
                             </th>
                             <th>
                                 <div class="calendar-month-navigation trigger_mes_siguiente" style="cursor: pointer;">
-                                    <span class="sb-reg-citas-arrow-right">&gt;</span>
+                                    <span class="sb-reg-citas-arrow-right active-texto-modulo">&gt;</span>
                                 </div>
                             </th>
                         </tr>
@@ -179,14 +179,14 @@
 
             <div class="row sb-reg-citas-list-filtro" style="margin-bottom: 20px;">
                 <div class="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
-                    <span class="label-form">N° de semana</span>
-                    <select class="form-control" id="cboSemanaFiltro" onchange="recargar_vista_semanal()"></select>
+                    <span class="label-form active-texto-modulo">N° de semana</span>
+                    <select class="form-control active-select-modulo" id="cboSemanaFiltro" onchange="recargar_vista_semanal()"></select>
                 </div>
             </div>
 
             <div class="row sb-reg-citas-list-filtro">
-                <table id="tblSemanal" style="width: 100%;">
-                    <thead id="hdTblSemanal">
+                <table id="tblSemanal" class="active-table-modulo" style="width: 100%;">
+                    <thead id="hdTblSemanal" class="active-table-semanal-modulo">
                         <tr></tr>
                     </thead>
                     <tbody id="bdTblSemanal">
@@ -196,7 +196,7 @@
                 <br />
                 <table>
                     <tr>
-                        <td><span style="font-weight: bold;" class="spnVacaciones">Vacaciones: </span></td>
+                        <td><span style="font-weight: bold;" class="spnVacaciones active-texto-modulo">Vacaciones: </span></td>
                         <td class="diaVacaciones" style="height: 40px; width: 80px;"></td>
                     </tr>
                 </table>

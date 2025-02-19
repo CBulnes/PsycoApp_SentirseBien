@@ -78,6 +78,10 @@
     vertical-align: baseline;
 }
 
+.active-table-modulo.caja td, .active-table-modulo.caja th {
+    background-color: transparent !important;
+}
+
 /* Botones Tabla de los modulos */
 
 .active-button-tabla-modulo {
@@ -107,6 +111,101 @@
     background-color: var(--colorletra_sin_seleccionar_oscura) !important;
     color: #FFF !important;
 }
+
+/* Botonera de los modulos */
+
+.active-botonera-modulo {
+    color: var(--colorletra_oscura) !important;
+    background-color: transparent !important;
+    border: 1px solid var(--colorborderbutton_oscura) !important;
+}
+
+.active-botonera-modulo.active {
+    color: var(--colorletra_oscura) !important;
+    background-color: var(--colorfondobutton_oscura) !important;
+    border: 1px solid var(--colorborderbutton_oscura) !important;
+}
+
+.active-botonera-modulo i {
+    color: #FFF !important;
+}
+
+.active-botonera-modulo:hover {
+    color: var(--colorletra_oscura) !important;
+    background-color: var(--colorfondobutton_oscura) !important;
+    border: 1px solid var(--colorborderbutton_oscura) !important;
+}
+
+/* Registro de citas de modulos */
+
+.active-buscador-modulo {
+    color: var(--colorletra_oscura) !important;
+    background-color: var(--colorfondoletra_oscura) !important;
+}
+
+.active-buscador-bloque-modulo input {
+    color: var(--colorletra_oscura) !important;
+    background-color: var(--colorfondoletra_oscura) !important;
+}
+
+.active-buscador-bloque-modulo select {
+    color: var(--colorletra_oscura) !important;
+    background-color: var(--colorfondoletra_oscura) !important;
+}
+
+.active-buscador-bloque-modulo select option {
+    color: var(--colorletra_oscura) !important;
+}
+
+.active-buscador-bloque-modulo div {
+    color: var(--colorletra_oscura) !important;
+    background-color: var(--colorfondoletra_oscura) !important;
+}
+
+/* Tabla registro de citas de modulos */
+
+.active-table-modulo .calendar-dow-header th {
+    color: var(--colorletra_oscura) !important;
+}
+
+.active-table-modulo .calendar-month-header th div span {
+    color: var(--colorletra_oscura) !important;
+}
+
+.active-table-modulo .calendar-month-header th select {
+    color: var(--colorletra_oscura) !important;
+    background-color: var(--colorfondoletra_oscura) !important;
+    font-weight: 500 !important;
+}
+
+.active-table-modulo .calendar-month-header th select option {
+    color: var(--colorletra_oscura) !important;
+}
+
+/* Tabla registro de citas (Semanal) de modulos */
+
+.active-table-semanal-modulo {
+    background-color: var(--colormodular_oscura);
+}
+
+    .active-table-semanal-modulo td {
+        background-color: var(--colormodular_oscura) !important;
+    }
+
+    .active-table-semanal-modulo th {
+        background-color: var(--colormodular_oscura) !important;
+    }
+
+    .active-table-semanal-modulo td, .active-table-modulo th {
+        color: var(--colorletra_oscura) !important;
+        vertical-align: baseline;
+    }
+
+
+
+
+
+
 
 
 
