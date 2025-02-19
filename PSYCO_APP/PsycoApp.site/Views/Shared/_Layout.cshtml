@@ -45,39 +45,21 @@
     <link href="~/assets/plugins/morrisjs/morris.css" rel="stylesheet">
 
     <style>
-        .sb-admninistrator, .bd-example {
-            background-color: #3d3d3d !important;
-        }
-
-        .sb-pa-container-buscador-block-item .custom-select {
-            background-color: #FFFFFF !important;
-        }
-
-        .sb-psi-container-buscar-title p, .sb-psi-container-buscador-block-item span,
-        .sb-pa-container-buscar-title p, .sb-pa-container-buscador-block-item span,
-        .sb-reg-citas-title p, .sb-reg-citas-list-filtro div span,
-        .sb-his-citas-title p, .sb-his-citas-item div span,
-        .sb-pa-container-buscador-block-item label,
-        .sb-pa-container-resume-title p,
-        .spnVacaciones
-        {
-            color: #FFFFFF !important;
-        }
 
         .table-striped {
-            background-color: #1656a0 !important;
+            background-color: #1656a0;
         }
 
         .table-striped tbody tr td {
-            color: #FFFFFF !important;
+            color: #FFFFFF;
         }
 
             .table-striped tbody tr:nth-of-type(odd) td {
-                color: #124187 !important;
+                color: #124187;
             }
 
-            .table-striped thead tr th {
-                color: #FFFFFF !important;
+            .table-striped thead tr:nth-of-type(odd) th {
+                color: #FFFFFF;
             }
 
             #trigger_seleccion_mes,
@@ -102,6 +84,7 @@
     <!-- SB - STYLE -->
 
     <link rel="stylesheet" href="~/src/css/sb-styles.css" />
+    <link rel="stylesheet" href="~/src/css/sb-modo-oscuro.css" />
     <link rel="stylesheet" href="~/src/plugin/sweetalert2/css/sweetalert2.min.css" />
 
 </head>
@@ -116,8 +99,8 @@
     @* SB-Administador *@
 
     <div class="sb-main-hm">
-        <div class="sb-aside">
-            <div class="sb-aside-container">
+        <div class="sb-aside active-modular-oscuro">
+            <div class="sb-aside-container active-modular2-oscuro">
                 <div class="sb-aside-user">
                     <div class="sb-aside-user-photo">
                         <img src="../images/user.png" alt="">
@@ -401,7 +384,7 @@
             </div>
         </div>
 
-        <div class="sb-admninistrator">
+        <div class="sb-admninistrator active-fondo-oscuro">
 
             @RenderBody()
 

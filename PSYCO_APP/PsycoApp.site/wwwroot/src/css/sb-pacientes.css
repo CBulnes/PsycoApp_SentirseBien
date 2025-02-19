@@ -81,8 +81,8 @@
     padding: .8rem 2.5rem;
     cursor: pointer;
     background-color: #FFF;
-    border: 1px solid var(--colorbase2) !important;
-    color: var(--colorbase2) !important;
+    border: 1px solid var(--colorbase2);
+    color: var(--colorbase2);
     transition: .3s;
 }
 
@@ -92,11 +92,11 @@
 
 .sb-pa-container-buscador-block-item button:hover {
     background-color: var(--colorbase2);
-    color: #FFF !important;
+    color: #FFF;
 }
 
 .sb-pa-container-buscador-block-item button:hover i {
-    color: #FFF !important;
+    color: #FFF;
 }
 
 /* Lista de Tabla */
@@ -132,7 +132,7 @@
 
 .sb-pa-container-table table tbody tr td .sb-pa-container-table-button-delet {
     background-color: #FFF;
-    color: var(--colorbase2) !important;
+    color: var(--colorbase2) ;
     border-color: var(--colorbase2);
     box-shadow: none;
     font-weight: 600;
@@ -140,7 +140,7 @@
 
 .sb-pa-container-table table tbody tr td .sb-pa-container-table-button-delet:hover {
     color: #FFF !important;
-    background-color: var(--colorbase2) !important;
+    background-color: var(--colorbase2);
 }
 
 /* Lista de Paginado */
