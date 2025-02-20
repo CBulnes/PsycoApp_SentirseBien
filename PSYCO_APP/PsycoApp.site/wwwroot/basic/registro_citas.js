@@ -406,14 +406,10 @@ function ver_cita(e) {
     var feedback = $(e).attr('data-feedback');
     var comentario = $(e).attr('data-comentario');
     var pago_gratis = $(e).attr('data-pago-gratis');
-
     if (id_especialista == -1) {
-
-        if ($('#hiddenDoctor').val()!=null) {
+        if ($('#hiddenDoctor').val() != null && $('#hiddenDoctor').val() != '') {
             id_especialista = $('#hiddenDoctor').val();
         }
-       
-
     }
     cargar_datos_cita(id_cita, id_especialista, id_paciente, fecha_cita, hora_Cita, estado, telefono, moneda, formatDecimal(monto_pactado), formatDecimal(monto_pagado), formatDecimal(monto_pendiente), id_servicio, id_sede, feedback, comentario, pago_gratis);
 }
@@ -1513,12 +1509,14 @@ function disponibilidad_doctor() {
             }
         },
         success: function (data) {
+            var i = 0;
             if (data.length > 0) {
                 for (item of data) {
-                    var clase = item.estado == 'DISPONIBLE' ? 'item_disponible' : 'item_reservado';
+                    var clase = item.estado == 'DISPONIBLE' ? 'item_disponible item_clase' + i.toString() : 'item_reservado';
                     var hora = item.estado == 'DISPONIBLE' ? item.hora_cita : '';
                     var accion = ' onclick="seleccionar_hora_disponible(this)" data-hora="' + hora + '"';
-                    html += '<tr class="' + clase + '"' + accion + '><td class="text-center">' + item.hora_cita + '</td><td class="text-center">' + item.estado + '</td></tr>';
+                    html += '<tr data-option="item_clase' + i.toString() + '" class="' + clase + '"' + accion + '><td class="text-center">' + item.hora_cita + '</td><td class="text-center">' + item.estado + '</td></tr>';
+                    i++;
                 }
             }
         },
@@ -1559,10 +1557,10 @@ function disponibilidad_reasignar_doctor() {
         success: function (data) {
             if (data.length > 0) {
                 for (item of data) {
-                    var clase = item.estado == 'DISPONIBLE' ? 'item_disponible' : 'item_reservado';
+                    var clase = item.estado == 'DISPONIBLE' ? 'item_disponible item_clase' + i.toString() : 'item_reservado';
                     var hora = item.estado == 'DISPONIBLE' ? item.hora_cita : '';
                     var accion = ' onclick="seleccionar_hora_disponible(this)" data-hora="' + hora + '"';
-                    html += '<tr class="' + clase + '"' + accion + '><td class="text-center">' + item.hora_cita + '</td><td class="text-center">' + item.estado + '</td></tr>';
+                    html += '<tr data-option="item_clase' + i.toString() + '" class="' + clase + '"' + accion + '><td class="text-center">' + item.hora_cita + '</td><td class="text-center">' + item.estado + '</td></tr>';
                 }
             }
         },
@@ -1594,6 +1592,10 @@ function toggleComment(show) {
 }
 function seleccionar_hora_disponible(e) {
     var hora = $(e).attr('data-hora');
+    var option = $(e).attr('data-option');
+
+    $('.item_disponible').removeClass('item_separado');
+    $('.' + option).addClass('item_separado');
 
     if (hora == '') {
         Swal.fire({
