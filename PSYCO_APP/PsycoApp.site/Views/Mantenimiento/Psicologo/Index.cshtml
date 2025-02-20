@@ -35,6 +35,15 @@
                 <div class="sb-psi-container-buscador-block-item">
                     <span class="label-form active-texto-modulo">Nombre del psicólogo: </span>
                     <input id="txtBuscarNombre" class="active-input-modulo" name="Nombre" placeholder="Ingrese nombre para buscar" type="text" required />
+
+                    <span class="label-form active-texto-modulo">Sede: </span>
+                    <select class="active-input-modulo" id="cboBuscarSede">
+                        <option value="-1">Todos</option>
+                        <option value="1">La Molina</option>
+                        <option value="2">Surco</option>
+                        <option value="-2">Ambas</option>
+                    </select>
+
                     <button class="active-button-modulo" type="button" onclick="buscarPsicologo()">
                         <i class="fa fa-search"></i>&nbsp;Buscar
                     </button>
@@ -50,7 +59,8 @@
                             <tr>
                             <th class="text-center" style="width: 80px;">N°</th>
                                 <th class="text-center">Nombres y apellidos</th>
-                                <th class="text-center">Documento</th>
+                                <th class="text-center">Documento</th
+                                <th class="text-center">Sede</th>
                                 <th class="text-center">Fecha de nacimiento</th>
                                 <th class="text-center">Estado</th>
                                 <th class="text-center">Acción</th>
@@ -63,6 +73,7 @@
                                     <td class="text-center">@(psicologo.index + 1)</td>
                                     <td class="text-center">@psicologo.item.Nombre @psicologo.item.Apellido</td>
                                     <td class="text-center">@psicologo.item.DocumentoTipo - @psicologo.item.DocumentoNumero</td>
+                                    <td class="text-center">@psicologo.item.Sedes</td>
                                     <td class="text-center">@psicologo.item.FechaNacimiento.ToString().Substring(0, 10)</td>
                                     <td class="text-center">@(psicologo.item.Estado == "1" ? "Habilitado" : "Deshabilitado")</td>
                                     <td class="text-center ">
@@ -536,7 +547,8 @@
 
         function buscarPsicologo() {
             let nombre = document.getElementById('txtBuscarNombre').value;
-            $.post('/Mantenimiento/Psicologo/Buscar', { nombre: nombre }, function (data) {
+            let sede = document.getElementById('cboBuscarSede').value;
+            $.post('/Mantenimiento/Psicologo/Buscar', { nombre: nombre, sede: sede }, function (data) {
                 let tableBody = $('#bdPsicologos');
                 tableBody.empty();
                 data.forEach((psicologo, index) => {
@@ -545,13 +557,14 @@
                             <td class="text-center">${index + 1}</td>
                             <td class="text-center">${psicologo.nombre + ' ' + psicologo.apellido }</td>
                             <td class="text-center">${psicologo.documentoTipo + ' - ' + psicologo.documentoNumero}</td>
+                            <td class="text-center">${psicologo.sedes}</td>
                             <td class="text-center">${formatFechaNacimiento(psicologo.fechaNacimiento)}</td>
                             <td class="text-center">${psicologo.estado == "1" ? "Habilitado" : "Deshabilitado"}</td>
                             <td class="text-center">
-                                <button class="btn btn-sm sb-psi-container-table-button-edit" onclick="editarPsicologo(${psicologo.id})">Editar</button>
-                                <button class="btn btn-sm sb-psi-container-table-button-edit" onclick="modalHorarios(${psicologo.id})">Horarios</button>
-                                <button class="btn btn-sm sb-psi-container-table-button-edit" onclick="modalVacaciones(${psicologo.id})">Vacaciones</button>
-                                <button class="btn btn-sm sb-psi-container-table-button-delet" onclick="eliminarPsicologo(${psicologo.id}, '${psicologo.estado}')">${psicologo.estado == "1" ? "Deshabilitar" : "Habilitar"}</button>
+                                <button class="btn btn-sm sb-psi-container-table-button-edit active-button-tabla-modulo" onclick="editarPsicologo(${psicologo.id})">Editar</button>
+                                <button class="btn btn-sm sb-psi-container-table-button-edit active-button-tabla-modulo" onclick="modalHorarios(${psicologo.id})">Horarios</button>
+                                <button class="btn btn-sm sb-psi-container-table-button-edit active-button-tabla-modulo" onclick="modalVacaciones(${psicologo.id})">Vacaciones</button>
+                                <button class="btn btn-sm sb-psi-container-table-button-delet active-button-tabla-modulo" onclick="eliminarPsicologo(${psicologo.id}, '${psicologo.estado}')">${psicologo.estado == "1" ? "Deshabilitar" : "Habilitar"}</button>
                             </td>
                         </tr>
                     `);

@@ -21,6 +21,7 @@ namespace PsycoApp.site.Models
         public string Direccion { get; set; }
         public string Distrito { get; set; }
         public string Estado { get; set; }
+        public string Sedes { get; set; }
         public List<Estudio> Estudios { get; set; }
     }
 

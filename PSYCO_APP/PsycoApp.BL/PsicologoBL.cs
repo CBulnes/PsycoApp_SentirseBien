@@ -2,6 +2,7 @@
 using PsycoApp.entities;
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 using System.Text;
 
@@ -18,7 +19,17 @@ namespace PsycoApp.BL
 
         public List<Psicologo> ListarPsicologos(int pagina, int tamanoPagina)
         {
-            return _psicologoDA.ListarPsicologos(pagina, tamanoPagina);
+            var list = _psicologoDA.ListarPsicologos(pagina, tamanoPagina);
+            list.ForEach(x => {
+                var sedes = _psicologoDA.listar_sedes_x_usuario_combo(x.Id);
+                x.Sedes = sedes.Count == 0 ? "---" : (sedes.Count == 1 ? sedes[0].Nombre : (string.Concat(sedes[0].Nombre, "/", sedes[1].Nombre)));
+                if (sedes.Count >= 1)
+                {
+                    x.IdSedePrincipal = sedes[0].Id;
+                    x.IdSedeSecundaria = sedes.Count == 2 ? sedes[1].Id : 0;
+                }
+            });
+            return list;
         }
 
         public void AgregarPsicologo(Psicologo psicologo)
@@ -27,7 +38,17 @@ namespace PsycoApp.BL
         }
         public List<Psicologo> BuscarPsicologo(string nombre)
         {
-           return _psicologoDA.BuscarPsicologo(nombre);
+            var list = _psicologoDA.BuscarPsicologo(nombre);
+            list.ForEach(x => {
+                var sedes = _psicologoDA.listar_sedes_x_usuario_combo(x.Id);
+                x.Sedes = sedes.Count == 0 ? "---" : (sedes.Count == 1 ? sedes[0].Nombre : (string.Concat(sedes[0].Nombre, "/", sedes[1].Nombre)));
+                if (sedes.Count >= 1)
+                {
+                    x.IdSedePrincipal = sedes[0].Id;
+                    x.IdSedeSecundaria = sedes.Count == 2 ? sedes[1].Id : 0;
+                }
+            });
+            return list;
         }
         
         public Psicologo BuscarPsicologoId(int id)

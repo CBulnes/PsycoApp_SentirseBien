@@ -42,7 +42,8 @@ namespace PsycoApp.site.Controllers.Mantenimiento
                     Direccion = p.Direccion,
                     Distrito = p.Distrito,
                     Telefono = p.Telefono,
-                    Refrigerio = p.Refrigerio
+                    Refrigerio = p.Refrigerio,
+                    Sedes = p.Sedes
                     //Estudios = p.Estudios.Select(q => new PsycoApp.site.Models.Estudio
                     //{
                     //    Id = q.Id,
@@ -108,10 +109,20 @@ namespace PsycoApp.site.Controllers.Mantenimiento
 
         [Route("/Mantenimiento/Psicologo/Buscar")]
         [HttpPost]
-        public async Task<IActionResult> Buscar(string nombre)
+        public async Task<IActionResult> Buscar(string nombre, int sede = -1)
         {
             string url = $"{apiUrl}/buscar?nombre={nombre}";
             var psicologos = await GetFromApiAsync<List<entities.Psicologo>>(url);
+            if (sede == 1) //La molina
+            {
+                psicologos = psicologos.Where(x => x.IdSedePrincipal == 1 || x.IdSedeSecundaria == 1).ToList();
+            } else if (sede == 2) //Surco
+            {
+                psicologos = psicologos.Where(x => x.IdSedePrincipal == 2 || x.IdSedeSecundaria == 2).ToList();
+            } else if (sede == -2) //Ambas
+            {
+                psicologos = psicologos.Where(x => (x.IdSedePrincipal == 1 || x.IdSedeSecundaria == 1) && (x.IdSedePrincipal == 2 || x.IdSedeSecundaria == 2)).ToList();
+            }
             return Json(psicologos);
         }
 
