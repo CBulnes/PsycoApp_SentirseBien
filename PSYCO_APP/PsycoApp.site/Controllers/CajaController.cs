@@ -213,6 +213,7 @@ namespace PsycoApp.site.Controllers
             List<entities.CuadreCaja> lista = new List<entities.CuadreCaja>();
             string res = "";
             string usuario = Convert.ToString(HttpContext.Session.GetString("login"));
+            usuario = string.IsNullOrEmpty(usuario) ? "-" : usuario;
             try
             {
                 url = Endpoints.apiUrl + "/api" + Endpoints.Caja.url_resumen_caja_x_usuario + "/" + usuario + "/" + mes + "/" + anio + "/" + sede;
@@ -232,6 +233,7 @@ namespace PsycoApp.site.Controllers
             List<entities.CuadreCaja> lista = new List<entities.CuadreCaja>();
             string res = "";
             string usuario = Convert.ToString(HttpContext.Session.GetString("login"));
+            usuario = string.IsNullOrEmpty(usuario) ? "-" : usuario;
             try
             {
                 url = Endpoints.apiUrl + "/api" + Endpoints.Caja.url_resumen_caja_x_forma_pago + "/" + usuario + "/" + mes + "/" + anio + "/" + sede;
