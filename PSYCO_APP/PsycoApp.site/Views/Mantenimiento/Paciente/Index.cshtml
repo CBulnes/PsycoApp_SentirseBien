@@ -83,21 +83,21 @@
 
             <div class="sb-frm-agregar-block">
                 <div class="sb-frm-agregar-block-item">
-                    <span class="label-form active-texto-modulo">Nombres completos</span>
+                    <span class="label-form active-texto-modulo">Nombres (*)</span>
                     <input id="txtNombre" name="Nombre" class="form-control active-input-modulo" type="text" required />
                 </div>
             </div>
 
             <div class="sb-frm-agregar-block">
                 <div class="sb-frm-agregar-block-item">
-                    <span class="label-form active-texto-modulo">Apellidos completos</span>
+                    <span class="label-form active-texto-modulo">Apellidos (*)</span>
                     <input id="txtApellido" name="apellido" class="form-control active-input-modulo" type="text" required />
                 </div>
             </div>
 
             <div class="sb-frm-agregar-block">
                 <div class="sb-frm-agregar-block-item">
-                    <span class="label-form active-texto-modulo">Fecha de nacimiento</span>
+                    <span class="label-form active-texto-modulo">Fecha de nacimiento (*)</span>
                     <input id="txtFecha" name="FechaNacimiento" class="form-control active-input-modulo" type="date" required />
 
                 </div>
@@ -109,13 +109,13 @@
                     <select class="form-control active-select-modulo" id="cboEstadoCivil" name="EstadoCivil" required></select>
                 </div>
             </div>
-            <div class="sb-frm-agregar-block">
+            <div class="sb-frm-agregar-block" style="display: none;">
                 <div class="sb-frm-agregar-block-item">
                     <span class="label-form active-texto-modulo">Sexo</span>
                     <select class="form-control active-select-modulo" id="cboSexo" name="Sexo" required></select>
                 </div>
             </div>
-            <div class="sb-frm-agregar-block">
+            <div class="sb-frm-agregar-block" style="display: none;">
                 <div class="sb-frm-agregar-block-item">
                     <span class="label-form active-texto-modulo">Estado</span>
                     <select class="form-control active-select-modulo" id="cboEstado" name="Estado" required></select>
@@ -168,7 +168,7 @@
         ];
 
         var estados = [
-            { id: -1, valor: 'Seleccionar' },
+            // { id: -1, valor: 'Seleccionar' },
             { id: 1, valor: 'Habilitado' },
             { id: 0, valor: 'Deshabilitado' }
         ];
@@ -214,6 +214,7 @@
             $('#containerFormulario').css('display', 'flex');
             $('#containerFormulario input').val('');
             $('#containerFormulario select').val('-1');
+            $('#cboDocumento').val('1');
         }
 
         function editarPaciente(id) {
@@ -246,6 +247,32 @@
         }
 
         function guardarPaciente() {
+            //validar
+            if ($('#txtNombre').val() == ''){
+                Swal.fire({
+                    icon: "Error",
+                    title: "Oops...",
+                    text: "Ingrese el nombre del paciente."
+                });
+                return;
+            }
+            if ($('#txtApellido').val() == ''){
+                Swal.fire({
+                    icon: "Error",
+                    title: "Oops...",
+                    text: "Ingrese los apellidos del paciente."
+                });
+                return;
+            }
+            if ($('#txtFecha').val() == ''){
+                Swal.fire({
+                    icon: "Error",
+                    title: "Oops...",
+                    text: "Seleccione la fecha de nacimiento del paciente."
+                });
+                return;
+            }
+
             let paciente = {
                 Id: parseInt($('#hdnPacienteId').val()) || 0,
                 Nombre: $('#txtNombre').val(),

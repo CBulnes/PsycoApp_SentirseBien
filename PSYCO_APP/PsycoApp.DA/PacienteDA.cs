@@ -144,7 +144,7 @@ namespace PsycoApp.DA
                 command.Parameters.AddWithValue("@Telefono", paciente.Telefono);
                 command.Parameters.AddWithValue("@EstadoCivil", paciente.EstadoCivil);
                 command.Parameters.AddWithValue("@Sexo", paciente.Sexo);
-                command.Parameters.AddWithValue("@Estado", paciente.Estado);
+                command.Parameters.AddWithValue("@Estado", paciente.Estado == null ? "1" : paciente.Estado);
 
                 _connection.Open();
                 command.ExecuteNonQuery();
