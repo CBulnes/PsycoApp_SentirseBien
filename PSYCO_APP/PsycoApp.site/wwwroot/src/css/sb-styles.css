@@ -18,6 +18,16 @@
     --colorbase: #23527F;
     --colorbase2: #1656A0;
     --colorsecundario: #EB284E;
+    --colorletra_oscura: #FFF;
+    --colorletra_titular_oscura: #7eaaff;
+    --colorletra_sin_seleccionar_oscura: #9aa0a6;
+    --colorfondoletra_oscura: #18202d;
+    --colorfondobutton_oscura: #1e2d40;
+    --colorborderbutton_oscura: #365582;
+    --colormodular_oscura: #3e4454;
+    --colormodular2_oscura: #1c1c1a;
+    --colorfondo_oscura: #111217;
+    --colorfondo_popup_oscura: #202125;
 }
 
 .sb-main-hm {

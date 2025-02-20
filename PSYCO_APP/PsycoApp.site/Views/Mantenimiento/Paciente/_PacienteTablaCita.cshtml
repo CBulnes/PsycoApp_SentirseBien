@@ -1,6 +1,6 @@
 ﻿@model IEnumerable<PsycoApp.site.Models.Paciente>
 
-<table class="table table-striped">
+<table class="table table-striped active-table-modulo">
     <thead>
         <tr>
             <th>Nº</th>
@@ -24,15 +24,15 @@
                     <td>
                         @if (@paciente.item.Estado == "1")
                         {
-                            <span>Habilitado</span>
+                            <span class="active-texto-modulo">Habilitado</span>
                         }
                         else if (@paciente.item.Estado == "0")
                         {
-                            <span>Deshabilitado</span>
+                            <span class="active-texto-modulo">Deshabilitado</span>
                         }
                         else
                         {
-                            <span>Desconocido</span> <!-- Por si hay otros estados no contemplados -->
+                            <span class="active-texto-modulo">Desconocido</span> <!-- Por si hay otros estados no contemplados -->
                         }
                     </td>
                     <td>@paciente.item.FechaNacimiento.ToString().Substring(0, 10)</td>
@@ -40,13 +40,13 @@
                     <td>
                         <div class="sb-pa-container-tble-td">
                             <!-- Acciones como editar o eliminar -->
-                            <button class="btn btn-sm sb-pa-container-table-button-edit" onclick="editarPaciente(@paciente.item.Id)">Editar</button>
-                            <button class="btn btn-sm sb-psi-container-table-button-delet" onclick="eliminarPaciente(@paciente.item.Id, @paciente.item.Estado)">@(paciente.item.Estado == "1" ? "Deshabilitar" : "Habilitar")</button>
+                            <button class="btn btn-sm sb-pa-container-table-button-edit active-button-tabla-modulo" onclick="editarPaciente(@paciente.item.Id)">Editar</button>
+                            <button class="btn btn-sm sb-psi-container-table-button-delet active-button-tabla-modulo" onclick="eliminarPaciente(@paciente.item.Id, @paciente.item.Estado)">@(paciente.item.Estado == "1" ? "Deshabilitar" : "Habilitar")</button>
                             @if (paciente.item.Estado == "1")
                             {
-                        <button class="btn btn-sm sb-pa-container-table-button-search" onclick="seleccionarPaciente(@paciente.item.Id)">
+                            <button class="btn btn-sm sb-pa-container-table-button-search active-button-tabla-modulo" onclick="seleccionarPaciente(@paciente.item.Id)">
                             <i class="fa fa-hand-pointer"></i> Seleccionar
-                        </button>
+                            </button>
                         }
                         </div>
                     </td>
@@ -66,7 +66,7 @@
 @if (ViewBag.PageNumber != null && ViewBag.PageSize != null)
 {
     <nav aria-label="Paginación">
-        <ul class="pagination sb-pa-container-nav">
+        <ul class="pagination sb-pa-container-nav active-paginacion-tabla-modulo">
             <li class="page-item @(ViewBag.PageNumber == 1 ? "disabled" : "")">
                 <a class="page-link" href="javascript:void(0)" onclick="buscarPaciente(@(ViewBag.PageNumber - 1))"><span>&#60;</span></a>
             </li>

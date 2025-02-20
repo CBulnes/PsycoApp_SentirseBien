@@ -77,8 +77,8 @@
     padding: .6rem 2rem;
     cursor: pointer;
     background-color: #FFF;
-    border: 1px solid var(--colorbase2) !important;
-    color: var(--colorbase2) !important;
+    border: 1px solid var(--colorbase2);
+    color: var(--colorbase2);
     transition: .3s;
 }
 
@@ -88,11 +88,11 @@
 
     .sb-his-citas-item-button button:hover {
         background-color: var(--colorbase2);
-        color: #FFF !important;
+        color: #FFF;
     }
 
         .sb-his-citas-item-button button:hover i {
-            color: #FFF !important;
+            color: #FFF;
         }
 
 /* Lista de Tabla */

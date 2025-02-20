@@ -371,14 +371,14 @@
         padding: .6rem 2rem;
         cursor: pointer;
         background-color: #FFF;
-        border: 1px solid var(--colorbase2) !important;
-        color: var(--colorbase2) !important;
+        border: 1px solid var(--colorbase2);
+        color: var(--colorbase2);
         transition: .3s;
     }
 
         .modal-footer > .modal-close:hover {
-            background-color: var(--colorbase2) !important;
-            color: #FFF !important;
+            background-color: var(--colorbase2);
+            color: #FFF;
         }
 
 
