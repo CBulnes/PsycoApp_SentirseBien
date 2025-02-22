@@ -209,3 +209,26 @@
         </table>
     </div>
 </div>
+
+<script>
+    function cargarCombo(array, idCombo) {
+        var html = '';
+        for (var item of array) {
+            html += '<option value="' + item.id + '">' + item.valor + '</option>';
+        }
+        $('#' + idCombo).html(html);
+    }
+
+    var anios = [
+        { id: -1, valor: 'Todos' }
+    ];
+    let anioIni = 2025;
+    let anioFin = new Date().getFullYear();
+
+    while(anioIni <= anioFin){
+        anios.push({ id: anioIni, valor: anioIni });
+        anioIni++;
+    }
+
+    cargarCombo(anios, 'cboAnio');
+</script>
