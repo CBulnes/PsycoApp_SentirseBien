@@ -8,6 +8,9 @@ using System.Web.Http;
 
 namespace PsycoApp.api.Controllers
 {
+
+    [Route("api/[controller]")]
+    [ApiController]
     public class PaqueteController : Controller
     {
         private readonly IPaquete _paqueteBL;
