@@ -12,6 +12,7 @@ namespace PsycoApp.utilities
         public const string sp_listar_psicologos_combo = "SP_LISTAR_PSICOLOGOS_COMBO";
         public const string sp_listar_pacientes_combo = "SP_LISTAR_PACIENTES_COMBO";
         public const string sp_listar_pacientes_combo_dinamico = "SP_LISTAR_PACIENTES_COMBO_DINAMICO";
+        public const string sp_listar_paquetes = "sp_ObtenerPaquetes";
         
         public const string sp_listar_productos_combo = "SP_LISTAR_PRODUCTOS_COMBO";
 

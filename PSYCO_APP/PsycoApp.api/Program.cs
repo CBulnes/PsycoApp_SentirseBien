@@ -83,6 +83,8 @@ builder.Services.AddOpenApi();
 builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.AddScoped<IUsuarioLogin, UsuarioBL>();
 builder.Services.AddScoped<IUsuarioDA, UsuarioDA>(); // Register UsuarioDA
+builder.Services.AddScoped<IPaquete, PaqueteBL>();
+builder.Services.AddScoped<IPaqueteDA, PaqueteDA>(); // Register PaqueteDA
 builder.Services.AddScoped<IManejoJwt, ManejoJwt>();
 builder.Services.AddControllers();
 
