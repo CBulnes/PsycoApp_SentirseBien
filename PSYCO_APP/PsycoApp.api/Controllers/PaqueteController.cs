@@ -5,6 +5,7 @@ using PsycoApp.entities.DTO.DtoResponse;
 using AutoMapper;
 using PsycoApp.BL.Interfaces;
 using System.Web.Http;
+using PsycoApp.entities.DTO.DtoRequest;
 
 namespace PsycoApp.api.Controllers
 {
@@ -23,12 +24,19 @@ namespace PsycoApp.api.Controllers
             this.manejoJwt = manejoJwt;
         }
         [AllowAnonymous]
-        [Microsoft.AspNetCore.Mvc.HttpGet("listar/{pagina}/{tamanoPagina}")]
-        public ActionResult<List<PaqueteDTO>> Listar(int pagina = 1, int tamanoPagina = 100)
+        [Microsoft.AspNetCore.Mvc.HttpGet("listar")]
+        public ActionResult<PaquetePageDTO> Listar([FromQuery] PaquetePageParamDTO paquetePageParamDTO)
         {
             try
             {
-                return _paqueteBL.Listar(pagina, tamanoPagina);
+                int vartotalReg = 0;
+                var paquetes = _paqueteBL.Listar(paquetePageParamDTO.pagina, paquetePageParamDTO.tamanoPagina, ref vartotalReg);
+                var paquetesDTO = _mapper.Map<List<PaqueteDTO>>(paquetes);
+                return new PaquetePageDTO
+                {
+                    Paquetes = paquetesDTO,
+                    totalReg = vartotalReg
+                };
             }
             catch (Exception ex)
             {

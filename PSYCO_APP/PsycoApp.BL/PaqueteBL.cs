@@ -26,9 +26,9 @@ namespace PsycoApp.BL
             _configuration = configuration;
         }
 
-        public List<PaqueteDTO> Listar(int pagina, int tamanoPagina)
+        public List<PaqueteDTO> Listar(int pagina, int tamanoPagina, ref int totalReg)
         {
-            return _paqueteDA.Listar(pagina, tamanoPagina);
+            return _paqueteDA.Listar(pagina, tamanoPagina,ref totalReg);
         }
     }
 }

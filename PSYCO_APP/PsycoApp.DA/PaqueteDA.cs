@@ -23,7 +23,7 @@ namespace PsycoApp.DA
             _connection = cn;
         }
 
-        public List<PaqueteDTO> Listar(int pagina, int tamanoPagina)
+        public List<PaqueteDTO> Listar(int pagina, int tamanoPagina, ref int totalReg )
         {
             var psicologos = new List<PaqueteDTO>();
 
@@ -32,7 +32,14 @@ namespace PsycoApp.DA
                 command.CommandType = CommandType.StoredProcedure;
                 command.Parameters.AddWithValue("@Pagina", pagina);
                 command.Parameters.AddWithValue("@TamanoPagina", tamanoPagina);
-
+                // Agregamos el parámetro de salida para obtener el total de registros
+                var totalRegParam = new SqlParameter("@TotalReg", SqlDbType.Int)
+                {
+                    Direction = ParameterDirection.Output
+                };
+                command.Parameters.Add(totalRegParam);
+                // Agregamos el parámetro de salida para obtener el total de registros
+                //var totalRegParam = new SqlParameter("@TotalReg", SqlDbType.Int);
                 _connection.Open();
 
                 using (var reader = command.ExecuteReader())
@@ -52,6 +59,8 @@ namespace PsycoApp.DA
                     }
                 }
 
+                // Obtener el valor del parámetro de salida después de ejecutar el procedimiento
+                totalReg = (int)totalRegParam.Value;
                 _connection.Close();
             }
 

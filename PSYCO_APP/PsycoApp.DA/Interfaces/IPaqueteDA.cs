@@ -9,6 +9,6 @@ namespace PsycoApp.DA.Interfaces
 {
     public interface IPaqueteDA
     {
-        public List<PaqueteDTO> Listar(int pagina, int tamanoPagina);
+        public List<PaqueteDTO> Listar(int pagina, int tamanoPagina, ref int totalReg);
     }
 }
