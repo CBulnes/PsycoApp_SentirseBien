@@ -388,8 +388,32 @@ function validar_cambio_fecha() {
         disponibilidad_reasignar_doctor();
     })
 }
+function copiarOpciones() {
+    let cboOrigen = document.getElementById("cboPacienteFiltro");
+    let cboDestino = document.getElementById("cboPaciente");
+
+    // Limpiar opciones previas en el destino
+    cboDestino.innerHTML = "";
+
+    // Copiar todas las opciones
+    cboOrigen.querySelectorAll("option").forEach(option => {
+        let nuevaOpcion = document.createElement("option");
+        nuevaOpcion.value = option.value;
+        nuevaOpcion.textContent = option.textContent;
+        cboDestino.appendChild(nuevaOpcion);
+    });
+
+    // Mantener el atributo `data-id-paciente`
+    cboDestino.setAttribute("data-id-paciente", cboOrigen.value);
+
+    // Seleccionar en el destino el mismo valor que está seleccionado en el origen
+    cboDestino.value = cboOrigen.value;
+    console.log('cambiado');
+}
+
 
 function ver_cita(e) {
+    console.log('ver cita');
     var id_cita = $(e).attr('data-id-cita');
     var id_especialista = $(e).attr('data-id-especialista');
     var id_paciente = $(e).attr('data-id-paciente');
@@ -411,7 +435,16 @@ function ver_cita(e) {
             id_especialista = $('#hiddenDoctor').val();
         }
     }
+    
     cargar_datos_cita(id_cita, id_especialista, id_paciente, fecha_cita, hora_Cita, estado, telefono, moneda, formatDecimal(monto_pactado), formatDecimal(monto_pagado), formatDecimal(monto_pendiente), id_servicio, id_sede, feedback, comentario, pago_gratis);
+
+   
+
+    setTimeout(() => {
+        copiarOpciones();
+    }, 1000);
+
+
 }
 
 function formatDecimal(num) {
@@ -897,7 +930,7 @@ function guardarPacienteCitas() {
         Sexo: $('#cboSexo').val(),
     };
 
-    searchPatients(String(Id), currentPage);
+    searchPatients(String(paciente.Id), currentPage);
     let url = paciente.Id ? '/Mantenimiento/Paciente/Editar' : '/Mantenimiento/Paciente/Agregar';
     $.ajax({
         type: 'POST',
