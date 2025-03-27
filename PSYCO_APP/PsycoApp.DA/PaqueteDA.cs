@@ -6,22 +6,97 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
-using System.Data.SqlClient;
+using Microsoft.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Linq.Expressions;
 
 namespace PsycoApp.DA
 {
     public class PaqueteDA :IPaqueteDA
     {
         private readonly SqlConnection _connection;
-        SqlConnection cn = new SqlConnector().cadConnection_psyco;
         string rpta = "";
         public PaqueteDA()
         {
-            _connection = cn;
+            var sqlConnector = new SqlConnectorMicrosoft();
+            _connection = sqlConnector.GetConnection();
         }
+
+        public async Task Actualizar(PaqueteDTO paquete)
+        {
+            using (var command = new SqlCommand("sp_ActualizarPaquete", _connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+
+                command.Parameters.AddWithValue("@Id", paquete.Id);
+                command.Parameters.AddWithValue("@Nombre", paquete.Nombre);
+                command.Parameters.AddWithValue("@Precio", paquete.Precio);
+                command.Parameters.AddWithValue("@Color", paquete.Color);
+                command.Parameters.AddWithValue("@EsEvaluacion", paquete.EsEvaluacion);
+                command.Parameters.AddWithValue("@NumSesiones", paquete.NumSesiones);
+                command.Parameters.AddWithValue("@Siglas", paquete.Siglas);
+
+                try
+                {
+                    await _connection.OpenAsync();
+                    await command.ExecuteNonQueryAsync();
+                }
+
+                finally
+                {
+                    await _connection.CloseAsync();
+                }
+                
+            }
+        }
+
+        public async Task<int> Eliminar(int id)
+        {
+            using (var command = new SqlCommand("sp_EliminarPaquete", _connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.Parameters.AddWithValue("@Id", id);
+
+                try
+                {
+                    await _connection.OpenAsync();
+                    object result = await command.ExecuteScalarAsync();
+                    return (result != null) ? Convert.ToInt32(result) : 0;
+                }
+                finally
+                {
+                    await _connection.CloseAsync();
+                }
+            }
+        }
+
+        public async Task Grabar(PaqueteDTO paquete)
+        {
+            using (var command = new SqlCommand("sp_InsertarPaquete", _connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+
+                command.Parameters.AddWithValue("@Nombre", paquete.Nombre);
+                command.Parameters.AddWithValue("@Precio", paquete.Precio);
+                command.Parameters.AddWithValue("@Color", paquete.Color);
+                command.Parameters.AddWithValue("@EsEvaluacion", paquete.EsEvaluacion);
+                command.Parameters.AddWithValue("@NumSesiones", paquete.NumSesiones);
+                command.Parameters.AddWithValue("@Siglas", paquete.Siglas);
+
+                try
+                {
+                    await _connection.OpenAsync(); 
+                    await command.ExecuteNonQueryAsync();
+                }
+                finally
+                {
+                    await _connection.CloseAsync(); 
+                }
+            }
+        }
+
 
         public List<PaqueteDTO> Listar(int pagina, int tamanoPagina, ref int totalReg )
         {

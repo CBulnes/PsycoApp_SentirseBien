@@ -10,5 +10,11 @@ namespace PsycoApp.BL.Interfaces
     public interface IPaquete
     {
         public List<PaqueteDTO> Listar(int pagina, int tamanoPagina,ref int vartotalReg);
+        Task<PaqueteDTO> Grabar(PaqueteDTO paquete);
+
+        Task<PaqueteDTO> Actualizar(PaqueteDTO paquete);
+
+        Task<int> Eliminar(int id);
+
     }
 }

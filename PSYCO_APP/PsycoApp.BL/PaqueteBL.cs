@@ -26,6 +26,23 @@ namespace PsycoApp.BL
             _configuration = configuration;
         }
 
+        public async Task<PaqueteDTO> Actualizar(PaqueteDTO paquete)
+        {
+             await _paqueteDA.Actualizar(paquete);
+            return paquete;
+        }
+
+        public async Task<int> Eliminar(int id)
+        {
+            return await _paqueteDA.Eliminar(id);
+        }
+
+        public async Task<PaqueteDTO> Grabar(PaqueteDTO paquete)
+        {
+             await _paqueteDA.Grabar(paquete);
+            return paquete;
+        }
+
         public List<PaqueteDTO> Listar(int pagina, int tamanoPagina, ref int totalReg)
         {
             return _paqueteDA.Listar(pagina, tamanoPagina,ref totalReg);

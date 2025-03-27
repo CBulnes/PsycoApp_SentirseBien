@@ -23,8 +23,8 @@ namespace PsycoApp.api.Controllers
         List<Menu> lista = new List<Menu>();
 
         // GET api/values
-        [HttpGet("{id_usuario}/{id_tipousuario}")]
-        public ActionResult<RespuestaMenu> Get(int id_usuario, int id_tipousuario)
+        [HttpGet("{id_usuario}/{id_tipousuario}/{portal}")]
+        public ActionResult<RespuestaMenu> Get(int id_usuario, int id_tipousuario,int portal=0)
         {
             usuario.id_usuario = id_usuario;
             usuario.id_tipousuario = id_tipousuario;
@@ -32,6 +32,7 @@ namespace PsycoApp.api.Controllers
             try
             {
                 lista = menuBL.listar_menu(id_usuario, id_tipousuario);
+
                 oRespuesta.data = lista;
 
                 // vlidar si hay error
