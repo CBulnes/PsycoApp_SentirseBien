@@ -15,5 +15,7 @@ namespace PsycoApp.entities.DTO.DtoResponse
         public bool? EsEvaluacion { get; set; }
         public int? NumSesiones { get; set; }
         public string? Siglas { get; set; }
+
+        public bool? Activo { get; set; }
     }
 }

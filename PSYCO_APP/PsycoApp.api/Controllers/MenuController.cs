@@ -31,7 +31,7 @@ namespace PsycoApp.api.Controllers
 
             try
             {
-                lista = menuBL.listar_menu(id_usuario, id_tipousuario);
+                lista = menuBL.listar_menu(id_usuario, id_tipousuario,portal);
 
                 oRespuesta.data = lista;
 

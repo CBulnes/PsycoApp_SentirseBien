@@ -72,6 +72,26 @@ namespace PsycoApp.DA
             }
         }
 
+        public async Task<int> Activar(int id)
+        {
+            using (var command = new SqlCommand("sp_ActivarPaquete", _connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.Parameters.AddWithValue("@Id", id);
+
+                try
+                {
+                    await _connection.OpenAsync();
+                    object result = await command.ExecuteScalarAsync();
+                    return (result != null) ? Convert.ToInt32(result) : 0;
+                }
+                finally
+                {
+                    await _connection.CloseAsync();
+                }
+            }
+        }
+
         public async Task Grabar(PaqueteDTO paquete)
         {
             using (var command = new SqlCommand("sp_InsertarPaquete", _connection))
@@ -129,7 +149,8 @@ namespace PsycoApp.DA
                             Color = reader.IsDBNull(3) ? string.Empty : reader.GetString(3), // Maneja NULL en Color
                             EsEvaluacion = reader.GetBoolean(4),
                             NumSesiones = reader.GetInt32(5),
-                            Siglas = reader.IsDBNull(6) ? string.Empty : reader.GetString(6)  // Maneja NULL en Siglas
+                            Siglas = reader.IsDBNull(6) ? string.Empty : reader.GetString(6),  // Maneja NULL en Siglas
+                            Activo = reader.IsDBNull(7) ? null : reader.GetBoolean(7)
                         });
                     }
                 }
@@ -142,5 +163,41 @@ namespace PsycoApp.DA
             return psicologos;
         }
 
+
+        public async Task<PaqueteDTO> ObtenerPorId(int id)
+        {
+            PaqueteDTO paquete = null;
+
+            using (var command = new SqlCommand(Procedures.sp_ObtenerPaquetesById, _connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.Parameters.AddWithValue("@Id", id);
+
+                await _connection.OpenAsync();
+                using (var reader = await command.ExecuteReaderAsync())
+                {
+                    if (await reader.ReadAsync())
+                    {
+                        paquete = new PaqueteDTO
+                        {
+                            Id = reader.GetInt32(0),
+                            Nombre = reader.GetString(1),
+                            Precio = reader.GetDecimal(2),
+                            Color = reader.IsDBNull(3) ? string.Empty : reader.GetString(3),
+                            EsEvaluacion = reader.GetBoolean(4),
+                            NumSesiones = reader.GetInt32(5),
+                            Siglas = reader.IsDBNull(6) ? string.Empty : reader.GetString(6),
+                            Activo = reader.IsDBNull(7) ? (bool?)null : reader.GetBoolean(7)
+                        };
+                    }
+                }
+                await _connection.CloseAsync();
+            }
+
+            return paquete;
+        }
+
     }
+
+
 }

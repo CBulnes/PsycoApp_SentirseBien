@@ -77,13 +77,51 @@ namespace PsycoApp.api.Controllers
                 var idR = await _paqueteBL.Eliminar(id);
 
                 if (idR > 0)
-                    return Ok(new { mensaje = "El paquete se eliminó correctamente.", id = idR });
+                    return Ok(new { mensaje = "El paquete se desactivo correctamente.", id = idR });
 
                 return NotFound($"No se encontró el paquete con Id {id}");
             }
             catch (Exception ex)
             {
                 return BadRequest(new { mensaje = "Error al eliminar el paquete.", error = ex.Message });
+            }
+        }
+
+
+        [HttpDelete("activar/{id}")]
+        public async Task<IActionResult> activar(int id)
+        {
+            try
+            {
+                var idR = await _paqueteBL.Activar(id);
+
+                if (idR > 0)
+                    return Ok(new { mensaje = "El paquete se Activo correctamente.", id = idR });
+
+                return NotFound($"No se encontró el paquete con Id {id}");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { mensaje = "Error al eliminar el paquete.", error = ex.Message });
+            }
+        }
+
+
+        [HttpGet("Recuperar/{id}")]
+        public async Task<IActionResult> Recuperar(int id)
+        {
+            try
+            {
+                var idR = await _paqueteBL.Recuperar(id);
+
+                if (idR != null)
+                    return Ok(idR);
+
+                return NotFound($"No se encontró el paquete con Id {id}");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { mensaje = "Error al buscar el paquete.", error = ex.Message });
             }
         }
 

@@ -13,7 +13,8 @@ namespace PsycoApp.BL.Interfaces
         Task<PaqueteDTO> Grabar(PaqueteDTO paquete);
 
         Task<PaqueteDTO> Actualizar(PaqueteDTO paquete);
-
+        Task <PaqueteDTO> Recuperar(int Id);
+        Task<int> Activar(int id);
         Task<int> Eliminar(int id);
 
     }

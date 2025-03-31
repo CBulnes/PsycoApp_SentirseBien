@@ -36,6 +36,10 @@ namespace PsycoApp.BL
         {
             return await _paqueteDA.Eliminar(id);
         }
+        public async Task<int> Activar(int id)
+        {
+            return await _paqueteDA.Activar(id);
+        }
 
         public async Task<PaqueteDTO> Grabar(PaqueteDTO paquete)
         {
@@ -46,6 +50,11 @@ namespace PsycoApp.BL
         public List<PaqueteDTO> Listar(int pagina, int tamanoPagina, ref int totalReg)
         {
             return _paqueteDA.Listar(pagina, tamanoPagina,ref totalReg);
+        }
+
+        public Task<PaqueteDTO> Recuperar(int Id)
+        {
+            return _paqueteDA.ObtenerPorId(Id);
         }
     }
 }

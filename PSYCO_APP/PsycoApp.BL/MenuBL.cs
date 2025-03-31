@@ -15,9 +15,9 @@ namespace PsycoApp.BL
     {
         MenuDA menuDA = new MenuDA();
 
-        public List<Menu> listar_menu(int id_usuario, int id_tipousuario)
+        public List<Menu> listar_menu(int id_usuario, int id_tipousuario, int portal=0)
         {
-            return menuDA.listar_menu(id_usuario, id_tipousuario);
+            return menuDA.listar_menu(id_usuario, id_tipousuario,portal);
         }
     }
 }

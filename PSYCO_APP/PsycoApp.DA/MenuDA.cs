@@ -14,13 +14,21 @@ namespace PsycoApp.DA
     {
         SqlConnection cn = new SqlConnector().cadConnection_psyco;
 
-        public List<Menu> listar_menu(int id_usuario, int id_tipousuario)
+        public List<Menu> listar_menu(int id_usuario, int id_tipousuario, int portal=0)
         {
             List<Menu> lista_output = new List<Menu>();
             try
             {
                 cn.Open();
-                SqlCommand cmd = new SqlCommand(Procedures.sp_listar_menu, cn);
+                SqlCommand cmd;
+                if (portal==2)
+                {
+                     cmd = new SqlCommand("SP_LISTAR_MENU_ADMINISTRADOR", cn);
+                }
+                else
+                {
+                     cmd = new SqlCommand(Procedures.sp_listar_menu, cn);
+                }
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.Add("@id_usuario", SqlDbType.Int).Value = id_usuario;
                 cmd.Parameters.Add("@id_tipousuario", SqlDbType.Int).Value = id_tipousuario;
