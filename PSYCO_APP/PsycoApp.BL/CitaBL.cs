@@ -211,11 +211,34 @@ namespace PsycoApp.BL
             try
             {
                 lista = citaDA.citas_usuario(id_usuario, id_paciente, id_doctor, id_sede, main_path, random_str);
-                lista.ForEach(item =>
-                {
-                    item.historial = historialDA.listar_historial_cita(item.id_cita);
-                    item.historial2 = historialDA.listar_historial_paciente(item.id_paciente);
-                });
+            }
+            catch (Exception)
+            {
+                lista.Clear();
+            }
+            return lista;
+        }
+
+        public List<HistorialCita> historial_cita(int id_cita)
+        {
+            List<HistorialCita> lista = new List<HistorialCita>();
+            try
+            {
+                lista = historialDA.listar_historial_cita(id_cita);
+            }
+            catch (Exception)
+            {
+                lista.Clear();
+            }
+            return lista;
+        }
+
+        public List<HistorialPaciente> historial_paciente(int id_paciente)
+        {
+            List<HistorialPaciente> lista = new List<HistorialPaciente>();
+            try
+            {
+                lista = historialDA.listar_historial_paciente(id_paciente);
             }
             catch (Exception)
             {

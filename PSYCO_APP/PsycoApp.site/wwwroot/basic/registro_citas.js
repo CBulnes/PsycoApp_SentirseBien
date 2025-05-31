@@ -438,13 +438,9 @@ function ver_cita(e) {
     
     cargar_datos_cita(id_cita, id_especialista, id_paciente, fecha_cita, hora_Cita, estado, telefono, moneda, formatDecimal(monto_pactado), formatDecimal(monto_pagado), formatDecimal(monto_pendiente), id_servicio, id_sede, feedback, comentario, pago_gratis);
 
-   
-
     setTimeout(() => {
         copiarOpciones();
     }, 1000);
-
-
 }
 
 function formatDecimal(num) {
@@ -881,39 +877,85 @@ function cargar_datos_cita(id_cita, id_doctor, id_paciente, fecha, hora, estado,
 
     verificar_si_es_psicologo();
     verificar_disponibilidad();
-    mostrar_historial(id_cita);
+    mostrar_historial(id_cita, id_paciente);
     validar_sede_usuario(id_doctor, id_sede);
 }
 
-function mostrar_historial(id_cita) {
+function mostrar_historial(id_cita, id_paciente) {
     var html = '';
     var html2 = '';
 
-    try {
-        var historial = lista_citas.filter(x => x.id_cita == parseInt(id_cita))[0].historial;
-        var historial2 = lista_citas.filter(x => x.id_cita == parseInt(id_cita))[0].historial2;
-        for (var item of historial) {
-            html += '<div class="sb-reg-citas-popup-tab-historial-block"><div class="sb-reg-citas-popup-tab-historial-block-item">';
-            html += '<p>' + item.fecha + '</p>';
-            html += '</div>';
-            html += '<div class="sb-reg-citas-popup-tab-historial-block-item-2">';
-            html += '<button type="button" class="evento_' + item.evento.toLowerCase().replace(' ', '_') + '">' + item.evento + '</button>';
-            html += '<div class="sb-reg-citas-historial-user" ><p>Usuario: </p><span>' + item.usuario + '</span></div>';
-            html += '</div></div>';
-        }
+    var historial = [];
+    var historial2 = [];
 
-        for (var item of historial2) {
-            html2 += '<tr>'
-            html2 += '<td>' + item.doctor + '</td>'
-            html2 += '<td>' + item.fecha_registro + '</td>'
-            html2 += '</tr>'
+    $.ajax({
+        url: "/RegistroCitas/Historial?idCita=" + id_cita + "&idPaciente=" + id_paciente,
+        type: "GET",
+        async: false,
+        beforeSend: function () {
+            historial = [];
+            historial2 = [];
+        },
+        success: function (data) {
+            historial = data.historial1;
+            historial2 = data.historial2;
+        },
+        error: function (response) {
+            historial = [];
+            historial2 = [];
+        },
+        complete: function () {
+            try {
+                for (var item of historial) {
+                    html += '<div class="sb-reg-citas-popup-tab-historial-block"><div class="sb-reg-citas-popup-tab-historial-block-item">';
+                    html += '<p>' + item.fecha + '</p>';
+                    html += '</div>';
+                    html += '<div class="sb-reg-citas-popup-tab-historial-block-item-2">';
+                    html += '<button type="button" class="evento_' + item.evento.toLowerCase().replace(' ', '_') + '">' + item.evento + '</button>';
+                    html += '<div class="sb-reg-citas-historial-user" ><p>Usuario: </p><span>' + item.usuario + '</span></div>';
+                    html += '</div></div>';
+                }
+
+                for (var item of historial2) {
+                    html2 += '<tr>'
+                    html2 += '<td>' + item.doctor + '</td>'
+                    html2 += '<td>' + item.fecha_registro + '</td>'
+                    html2 += '</tr>'
+                }
+            } catch (e) {
+                html = '';
+                html2 = '';
+            }
+            $('#divHistorial').html(html);
+            $('#divHistorial2').html(html2);
         }
-    } catch (e) {
-        html = '';
-        html2 = '';
-    }
-    $('#divHistorial').html(html);
-    $('#divHistorial2').html(html2);
+    });
+
+    //try {
+    //    var historial = lista_citas.filter(x => x.id_cita == parseInt(id_cita))[0].historial;
+    //    var historial2 = lista_citas.filter(x => x.id_cita == parseInt(id_cita))[0].historial2;
+    //    for (var item of historial) {
+    //        html += '<div class="sb-reg-citas-popup-tab-historial-block"><div class="sb-reg-citas-popup-tab-historial-block-item">';
+    //        html += '<p>' + item.fecha + '</p>';
+    //        html += '</div>';
+    //        html += '<div class="sb-reg-citas-popup-tab-historial-block-item-2">';
+    //        html += '<button type="button" class="evento_' + item.evento.toLowerCase().replace(' ', '_') + '">' + item.evento + '</button>';
+    //        html += '<div class="sb-reg-citas-historial-user" ><p>Usuario: </p><span>' + item.usuario + '</span></div>';
+    //        html += '</div></div>';
+    //    }
+
+    //    for (var item of historial2) {
+    //        html2 += '<tr>'
+    //        html2 += '<td>' + item.doctor + '</td>'
+    //        html2 += '<td>' + item.fecha_registro + '</td>'
+    //        html2 += '</tr>'
+    //    }
+    //} catch (e) {
+    //    html = '';
+    //    html2 = '';
+    //}
+    //$('#divHistorial').html(html);
+    //$('#divHistorial2').html(html2);
 }
 function guardarPacienteCitas() {
     console.log('prueba');

@@ -186,6 +186,25 @@ namespace PsycoApp.api.Controllers
             return lista;
         }
 
+        [HttpGet("historial/{id_cita}/{id_paciente}")]
+        public Historial historial(int id_cita, int id_paciente)
+        {
+            Historial historial = new Historial();
+            historial.historial1 = new List<HistorialCita>();
+            historial.historial2 = new List<HistorialPaciente>();
+
+            try
+            {
+                historial.historial1 = citaBL.historial_cita(id_cita);
+                historial.historial2 = citaBL.historial_paciente(id_paciente);
+            }
+            catch (Exception)
+            {
+                historial = new Historial();
+            }
+            return historial;
+        }
+
         [HttpGet("horarios_doctor/{inicio}/{fin}/{id_doctor}")]
         public List<Cita> horarios_doctor(string inicio, string fin, int id_doctor)
         {

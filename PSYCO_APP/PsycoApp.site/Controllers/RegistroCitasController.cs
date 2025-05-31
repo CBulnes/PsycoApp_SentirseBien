@@ -30,6 +30,7 @@ namespace PsycoApp.site.Controllers
         private string url_disponibilidad_doctor = Helper.GetUrlApi() + "/api/cita/disponibilidad_doctor";
         private string url_horarios_doctor = Helper.GetUrlApi() + "/api/cita/horarios_doctor";
         private string url_citas_usuario = Helper.GetUrlApi() + "/api/cita/citas_usuario";
+        private string url_historial = Helper.GetUrlApi() + "/api/cita/historial";
         private string url_productos_combo = Helper.GetUrlApi() + "/api/producto/listar_productos_combo";
         private string url_combo_sedes_x_usuario = Helper.GetUrlApi() + "/api/psicologo/listar_sedes_x_usuario_combo";
         private string url_combo_sedes = Helper.GetUrlApi() + "/api/psicologo/listar_sedes";
@@ -380,6 +381,25 @@ namespace PsycoApp.site.Controllers
                 lista.Clear();
             }
             return lista;
+        }
+
+        [HttpGet]
+        public async Task<Historial> Historial(int idCita, int idPaciente)
+        {
+            Historial historial = new Historial();
+            string res = "";
+
+            try
+            {
+                url = url_historial + "/" + idCita + "/" + idPaciente;
+                res = ApiCaller.consume_endpoint_method(url, null, "GET");
+                historial = JsonConvert.DeserializeObject<Historial>(res);
+            }
+            catch (Exception)
+            {
+                historial = new Historial();
+            }
+            return historial;
         }
 
         [HttpGet]

@@ -25,4 +25,10 @@ namespace PsycoApp.entities
         public string usuario { get; set; } = "";
         public string fecha { get; set; } = "";
     }
+
+    public class Historial
+    {
+        public List<HistorialCita> historial1 { get; set; }
+        public List<HistorialPaciente> historial2 { get; set; }
+    }
 }
