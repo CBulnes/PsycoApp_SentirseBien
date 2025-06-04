@@ -37,12 +37,7 @@
                     <input id="txtBuscarNombre" class="active-input-modulo" name="Nombre" placeholder="Ingrese nombre para buscar" type="text" required />
 
                     <span class="label-form active-texto-modulo">Sede: </span>
-                    <select class="active-input-modulo" id="cboBuscarSede">
-                        <option value="-1">Todos</option>
-                        <option value="1">La Molina</option>
-                        <option value="2">Surco</option>
-                        <option value="-2">Ambas</option>
-                    </select>
+                    <select class="active-input-modulo" id="cboBuscarSede"></select>
 
                     <button class="active-button-modulo" type="button" onclick="buscarPsicologo()">
                         <i class="fa fa-search"></i>&nbsp;Buscar
@@ -495,6 +490,30 @@
             { id: '14:00', valor: '02:00 PM - 03:00 PM' }
         ];
 
+        var sedes = [];
+        var tipoUsuario = $('#hdnIdTipoUsuario').val().toString();
+        if (tipoUsuario == '1'){
+            tipoUsuario = 'ADMIN';
+        } else if (tipoUsuario == '3') {
+            tipoUsuario = 'COUNTER';
+        } else {
+            tipoUsuario = 'PSICOLOGO';
+        }
+
+        var idSedePrincipal = $('#hdnIdSede').val().toString();
+        var sedePrincipal = (idSedePrincipal == '1' ? 'La Molina' : 'Surco');
+
+        if (tipoUsuario == 'ADMIN') //si es ADMIN ve todo
+        {
+            sedes.push({ id: '-1', valor: 'Todos' });
+            sedes.push({ id: '1', valor: 'La Molina' });
+            sedes.push({ id: '2', valor: 'Surco' });
+            sedes.push({ id: '-2', valor: 'Ambas' });
+        } else {
+            // caso contrario ve solo lo de su sede asignada
+            sedes.push({ id: idSedePrincipal, valor: sedePrincipal });
+        }
+
         function cargarCombo(array, idCombo) {
             var html = '';
             for (var item of array) {
@@ -512,6 +531,8 @@
         cargarCombo(horarios, 'cboInicioM');
         cargarCombo(horarios, 'cboRefrigerioM');
         cargarCombo(horarios, 'cboFinM');
+
+        cargarCombo(sedes, 'cboBuscarSede');
 
         function cargarSedes() {
             var html = '';
