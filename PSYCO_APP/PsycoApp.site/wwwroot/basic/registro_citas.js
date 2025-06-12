@@ -143,7 +143,6 @@ function searchPatientsModal(filtro) {
                 choicesT.destroy();
             }
 
-            
             const selectElement = document.querySelector('#cboPacienteFiltro');
             choicesT = new Choices(selectElement, {
                 searchEnabled: true, // Habilita la barra de búsqueda dentro del combo
@@ -163,6 +162,7 @@ function searchPatientsModal(filtro) {
 
                 // Actualizar combo con resultados de búsqueda
                 choicesT.setChoices(pacientes, "value", "label", true);
+                choicesT.setChoiceByValue(parseInt(filtro));
             } else {
                 // Sin resultados
                 choicesT.setChoices([
@@ -244,20 +244,20 @@ function loadPatients(filtro= "", page) {
 }
 
 function seleccionarPaciente(id) {
-    console.log('choices');
-    
+    console.log('choices');    
     
     debounceTimer = setTimeout(() => {
-     
         currentPage = 1; // Resetear a la primera página cuando se realiza una nueva búsqueda
         choicesT.clearChoices(); // Limpiar las opciones actuales
         searchPatientsModal(String(id), currentPage); // Cargar los pacientes con el filtro
-        choicesT.setChoiceByValue(String(id));
-    /*        recargar_citas_dinamico(String(id));*/
+        choicesT.setChoiceByValue(id);
+        /*recargar_citas_dinamico(String(id));*/
         recargar_citas();
     }, 300); // 300ms de debounce
-   
-    
+
+    //var pac = $("#cboPacienteFiltro option[value='" + id + "']").text();
+    //alert(pac);
+
     $('#pacientesModal').modal('hide');
 }
 function addDays(date, days) {
@@ -306,6 +306,10 @@ function cargar_citas_dinamico(id) {
         url: '/RegistroCitas/CitasUsuario?idPaciente=' + filtroPaciente + '&idDoctor=' + filtroDoctor + '&idSede=' + filtroSede + '&tipoVista=' + tipoVista,
         type: "GET",
         data: {},
+        beforeSend: function () {
+            $('.preloader').removeAttr('style');
+            $('.preloader').removeClass('hide-element');
+        },
         success: function (data) {
             lista_citas = data;
         },
@@ -318,6 +322,9 @@ function cargar_citas_dinamico(id) {
             lista_citas = [];
         },
         complete: function () {
+            $('.preloader').removeAttr('style');
+            $('.preloader').removeClass('hide-element');
+
             if (tipoVista == 'MENSUAL') {
                 $("#my-calendar").zabuto_calendar({
                     legend: []
@@ -349,6 +356,10 @@ function cargar_citas() {
         url: '/RegistroCitas/CitasUsuario?idPaciente=' + filtroPaciente + '&idDoctor=' + filtroDoctor + '&idSede=' + filtroSede + '&tipoVista=' + tipoVista,
         type: "GET",
         data: {},
+        beforeSend: function () {
+            $('.preloader').removeAttr('style');
+            $('.preloader').removeClass('hide-element');
+        },
         success: function (data) {
             lista_citas = data;
         },
@@ -361,6 +372,7 @@ function cargar_citas() {
             lista_citas = [];
         },
         complete: function () {
+            $('.preloader').addClass('hide-element');
             if (tipoVista == 'MENSUAL') {
                 $("#my-calendar").zabuto_calendar({
                     legend: []
