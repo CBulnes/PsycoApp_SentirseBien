@@ -72,6 +72,7 @@ namespace PsycoApp.DA
                 cmd.Parameters.Add("@monto_pactado", SqlDbType.Decimal).Value = oCita.monto_pactado;
                 cmd.Parameters.Add("@id_servicio", SqlDbType.Int).Value = oCita.id_servicio;
                 cmd.Parameters.Add("@id_sede", SqlDbType.Int).Value = oCita.id_sede;
+                cmd.Parameters.Add("@tipo_cita", SqlDbType.VarChar).Value = oCita.tipo_cita;
                 cmd.Parameters.Add("@usuario", SqlDbType.VarChar).Value = oCita.usuario;
                 cmd.Parameters.Add("@adicional", SqlDbType.VarChar).Value = adicional;
                 cmd.Parameters.Add("@feedback", SqlDbType.Bit).Value = oCita.feedback;
@@ -345,6 +346,7 @@ namespace PsycoApp.DA
                     cita.id_servicio = Convert.ToInt32(row["id_servicio"]);
                     cita.nombre_servicio = Convert.ToString(row["nombre_servicio"]);
                     cita.id_sede = Convert.ToInt32(row["id_sede"]);
+                    cita.tipo_cita = Convert.ToString(row["tipo_cita"]);
                     cita.esEvaluacion = Convert.ToBoolean(row["esEvaluacion"]);
                     cita.siglas = Convert.ToString(row["siglas"]);
                     cita.feedback = Convert.ToBoolean(row["feedback"]);

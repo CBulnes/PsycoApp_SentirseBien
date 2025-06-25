@@ -1258,6 +1258,7 @@ function guardar_cita() {
     var paciente = $('#cboPaciente').val();
     var id_servicio = $('#cboServicio').val();
     var id_sede = $('#cboSedeChange').val();
+    var tipo_cita = $('#cboTipoCita').val();
 
     if (doctor == '-1') {
         Swal.fire({
@@ -1327,6 +1328,7 @@ function guardar_cita() {
         monto_pactado: '0,00',
         id_servicio: id_servicio,
         id_sede: id_sede,
+        tipo_cita: tipo_cita,
         fechas_adicionales: adicionales
     };
     if (feedback === 'sad') {
@@ -1348,6 +1350,7 @@ function guardar_cita() {
                 //recargarInstruccion();
                 $('#txtHora').val('');
                 $('#cboDoctor, #cboPaciente, #cboServicio').val('-1');
+                $('#cboTipoCita').val('P');
                 $('#mdl_cita').modal('hide');
 
                 var tipoVista = TipoVista();
