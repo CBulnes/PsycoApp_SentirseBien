@@ -401,26 +401,29 @@ function validar_cambio_fecha() {
     })
 }
 function copiarOpciones() {
+    debugger;
     let cboOrigen = document.getElementById("cboPacienteFiltro");
     let cboDestino = document.getElementById("cboPaciente");
 
-    // Limpiar opciones previas en el destino
-    cboDestino.innerHTML = "";
+    if (cboOrigen.value.toString() != '-1') {
+        // Limpiar opciones previas en el destino
+        cboDestino.innerHTML = "";
 
-    // Copiar todas las opciones
-    cboOrigen.querySelectorAll("option").forEach(option => {
-        let nuevaOpcion = document.createElement("option");
-        nuevaOpcion.value = option.value;
-        nuevaOpcion.textContent = option.textContent;
-        cboDestino.appendChild(nuevaOpcion);
-    });
+        // Copiar todas las opciones
+        cboOrigen.querySelectorAll("option").forEach(option => {
+            let nuevaOpcion = document.createElement("option");
+            nuevaOpcion.value = option.value;
+            nuevaOpcion.textContent = option.textContent;
+            cboDestino.appendChild(nuevaOpcion);
+        });
 
-    // Mantener el atributo `data-id-paciente`
-    cboDestino.setAttribute("data-id-paciente", cboOrigen.value);
+        // Mantener el atributo `data-id-paciente`
+        cboDestino.setAttribute("data-id-paciente", cboOrigen.value);
 
-    // Seleccionar en el destino el mismo valor que está seleccionado en el origen
-    cboDestino.value = cboOrigen.value;
-    console.log('cambiado');
+        // Seleccionar en el destino el mismo valor que está seleccionado en el origen
+        cboDestino.value = cboOrigen.value;
+        console.log('cambiado');
+    }
 }
 
 
