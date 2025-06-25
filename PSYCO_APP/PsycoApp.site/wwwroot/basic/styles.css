@@ -499,6 +499,10 @@ button.main_color {
     color: #171717;
 }
 
+.div_evt_informe {
+    background-color: #ebb41b;
+}
+
 /*leyendas agenda*/
 button.evento_citado, button.evento_confirmado, button.evento_en_proceso, button.evento_atendido, button.evento_evaluacion, button.evento_taller {
     text-align: center;

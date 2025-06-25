@@ -24,6 +24,7 @@ namespace PsycoApp.entities
         public decimal monto_pagado { get; set; } = 0;
         public decimal monto_pendiente { get; set; } = 0;
         public int id_servicio { get; set; } = 0;
+        public string nombre_servicio { get; set; } = "";
         public int id_sede { get; set; } = 0;
         public bool esEvaluacion { get; set; } = false;
         public bool feedback{ get; set; } = false;

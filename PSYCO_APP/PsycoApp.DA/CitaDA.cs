@@ -343,6 +343,7 @@ namespace PsycoApp.DA
                     cita.monto_pagado = Convert.ToDecimal(row["monto_pagado"]);
                     cita.monto_pendiente = Convert.ToDecimal(row["monto_pendiente"]);
                     cita.id_servicio = Convert.ToInt32(row["id_servicio"]);
+                    cita.nombre_servicio = Convert.ToString(row["nombre_servicio"]);
                     cita.id_sede = Convert.ToInt32(row["id_sede"]);
                     cita.esEvaluacion = Convert.ToBoolean(row["esEvaluacion"]);
                     cita.siglas = Convert.ToString(row["siglas"]);

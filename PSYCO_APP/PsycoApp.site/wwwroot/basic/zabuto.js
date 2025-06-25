@@ -862,15 +862,23 @@ function contenido_cita(dia, mes, año, hora, btnNuevaCita = false, btnCita = fa
                 html = '-';
             } else {
                 if (item.tipo == 'CITA') {
-                    var clase_estado = 'div_evt_' + (item.esTaller == 1 ? 'taller' : item.estado.replace(' ','_').toLowerCase());
+                    var INFORMES = ['CSC', 'I30'];
+                    var servicioGratuito = false;
+
+                    var clase_estado = 'div_evt_' + (item.esTaller == 1 ? 'taller' : item.estado.replace(' ', '_').toLowerCase());
+                    if (INFORMES.includes(item.siglas.replace('(', '').replace(')', ''))) {
+                        clase_estado = 'div_evt_informe';
+                        servicioGratuito = true;
+                    }
                     clase_estado += item.esEvaluacion == 1 ? ' div_evaluacion' : '';
 
                     //cambiar el HTML si es vista mensual o semanal
                     var tipoVista = TipoVista();
                     html += '<div class="div_cita ' + clase_estado + '" data-id-cita="' + item.id_cita + '" data-id-especialista="' + item.id_doctor_asignado + '" data-id-paciente="' + item.id_paciente + '" data-fecha-cita="' + item.fecha_cita + '" data-pago-gratis="' + item.pago_gratis + '" data-hora-cita="' + item.hora_cita + '" data-estado="' + item.estado + '" data-telefono="' + item.telefono + '" data-moneda="' + item.moneda + '" data-monto-pactado="' + item.monto_pactado + '" data-monto-pagado="' + item.monto_pagado + '" data-monto-pendiente="' + item.monto_pendiente + '" data-id-servicio="' + item.id_servicio + '" data-id-sede="' + item.id_sede + '" data-feedback="' + item.feedback + '" data-comentario="' + item.comentario + '" onclick="ver_cita(this)">';
-                    html += item.hora_cita.replace(' ', '').replace('M', '') + ' ' + (item.paciente + (' ' + item.siglas)).trim();
+                    html += item.hora_cita.replace(' ', '').replace('M', '') + ' ';
+                    html += ((servicioGratuito ? item.nombre_servicio.toUpperCase() : item.paciente) + (' ' + item.siglas)).trim();
                     
-                    if (item.pago_gratis == 'true' || item.pago_gratis == true || item.pago_gratis || item.siglas == '(EG)') {
+                    if (item.pago_gratis == 'true' || item.pago_gratis == true || item.pago_gratis || item.siglas == '(_CSC)'|| item.siglas == '(_I30)') {
                         html += '<img src="../images/free.png" style="height: 20px; width: auto; cursor: pointer; margin: 0px 0px 0px 5px; border-radius: 10px;" title="' + (item.siglas == '(EG)' ? 'Evaluación gratuita' : 'Pago gratuito') + '" />';
                     }
                     html += '</div > ';
