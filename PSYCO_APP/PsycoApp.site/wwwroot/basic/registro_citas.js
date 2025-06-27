@@ -3,6 +3,7 @@
 var lista_citas = [];
 var lista_horarios = [];
 var id_cita_ = 0;
+var id_paciente_ = 0;
 var estado_ = '';
 var sesiones = 0;
 var adicionales = [];
@@ -13,6 +14,7 @@ let currentPage = 1;
 const pageSize = 10; // Tamaño de la página fijo
 let searchTerm = '';
 let debounceTimer;
+let pago_gratis_;
 document.addEventListener('DOMContentLoaded', function () {
   
     const element = document.querySelector('#cboDoctorFiltro');
@@ -401,7 +403,6 @@ function validar_cambio_fecha() {
     })
 }
 function copiarOpciones() {
-    debugger;
     let cboOrigen = document.getElementById("cboPacienteFiltro");
     let cboDestino = document.getElementById("cboPaciente");
 
@@ -847,8 +848,9 @@ function cargar_datos_cita(id_cita, id_doctor, id_paciente, fecha, hora, estado,
     $('#spnPagado').html('Monto pagado (' + moneda + ')');
     var btnAbonar = (estado == 'EN PROCESO' ? '&nbsp;<img id="PagoPendiente" src="../images/warning.jpg" style="height: 15px; width: auto; cursor: pointer;" title="Verificar pagos" onclick="form_pago()" />' : '');
     $('#spnPendiente').html('Monto pendiente (' + moneda + ')' + btnAbonar);
+    pago_gratis_ = pago_gratis;
     
-    $('#cboDoctor, #cboPaciente, #txtHora, #cboServicio').removeAttr('disabled');
+    $('#cboDoctor, #cboPaciente, #txtHora, #cboServicio, #cboSedeChange, #cboTipoCita').removeAttr('disabled');
     // Asignar el feedback
     if (feedback) { // Si feedback es true, es "sad"
         $('#sad').prop('checked', true);
@@ -889,6 +891,7 @@ function cargar_datos_cita(id_cita, id_doctor, id_paciente, fecha, hora, estado,
 
     estado_ = estado;
     id_cita_ = id_cita;
+    id_paciente_ = id_paciente;
 
     verificar_si_es_psicologo();
     verificar_disponibilidad();
@@ -1396,11 +1399,23 @@ function confirmar_cita() {
                     text: "Cita confirmada exitosamente.",
                 });
 
-                //$("#load_data").hide();
-                //recargarInstruccion();
-                $('#txtHora').val('');
-                $('#cboDoctor, #cboPaciente, #cboServicio').val('-1');
-                $('#mdl_cita').modal('hide');
+                //$('#txtHora').val('');
+                //$('#cboDoctor, #cboPaciente, #cboServicio').val('-1');
+                //$('#mdl_cita').modal('hide');
+
+                //BEGIN: acciones cuando la cita se confirma
+                $('#divAtender, #btnCancelar, #divPagoPendiente, #ImgActualizarServicio').show();
+                $('#divReprogramar, #divHorarios, .divConfirmar').hide();
+                if (pago_gratis_ == 'false' || pago_gratis_ == false || !pago_gratis_) {
+                    $('#divPagoGratis').show();
+                } else {
+                    $('#divPagoGratis').hide();
+                }
+                $('#btnEstado').html('CONFIRMADO').removeClass('evento_citado').addClass('evento_confirmado');
+                $('#cboDoctor, #cboPaciente, #txtHora, #cboServicio, #cboSedeChange, #cboTipoCita').attr('disabled', true);
+                verificar_si_es_psicologo();
+                mostrar_historial(id_cita_, id_paciente_);
+                //END: acciones cuando la cita se confirma
 
                 var tipoVista = TipoVista();
                 if (tipoVista == 'MENSUAL') {
@@ -1441,11 +1456,17 @@ function atender_cita() {
                     text: "Cita atendida exitosamente.",
                 });
 
-                //$("#load_data").hide();
-                //recargarInstruccion();
-                $('#txtHora').val('');
-                $('#cboDoctor, #cboPaciente, #cboServicio').val('-1');
-                $('#mdl_cita').modal('hide');
+                //$('#txtHora').val('');
+                //$('#cboDoctor, #cboPaciente, #cboServicio').val('-1');
+                //$('#mdl_cita').modal('hide');
+
+                //BEGIN: acciones cuando la cita se atiende
+                $('#divReprogramar, #divHorarios, .divConfirmar, #divAtender, #btnCancelar, #divPagoPendiente, #divPagoGratis').hide();
+                $('#btnEstado').html('ATENDIDO').removeClass('evento_confirmado').addClass('evento_atendido');
+                $('#cboDoctor, #cboPaciente, #txtHora, #cboServicio, #cboSedeChange, #cboTipoCita').attr('disabled', true);
+                verificar_si_es_psicologo();
+                mostrar_historial(id_cita_, id_paciente_);
+                //END: acciones cuando la cita se atiende
 
                 var tipoVista = TipoVista();
                 if (tipoVista == 'MENSUAL') {
