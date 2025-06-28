@@ -1,7 +1,7 @@
 ﻿var path = ruta;
 
 // timeout session
-var timeoutInMiliseconds = 600000; //5 minutos = 300000
+var timeoutInMiliseconds = 2400000;
 var timeoutId;
 
 function startTimer() {
