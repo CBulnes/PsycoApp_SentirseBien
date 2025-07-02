@@ -7,16 +7,52 @@ var idCita = 0;
 var estado = "";
 var fecha = "";
 
+document.addEventListener('DOMContentLoaded', function () {
+    const element = document.querySelector('#cboDoctor');
+    const choices = new Choices(element, {
+        placeholder: true,
+        searchPlaceholderValue: "Buscar...",
+        itemSelectText: "Todos",
+    });
+});
+
+function cargar_lista_doctores() {
+    var html = '';
+    $.ajax({
+        url: "/RegistroCitas/listar_doctores",
+        type: "GET",
+        data: {},
+        async: false,
+        beforeSend: function () {
+            html += '<option value="-1">Todos</option>';
+        },
+        success: function (data) {
+            for (var item of data) {
+                html += '<option value="' + item.id + '" data-sedes="' + item.sedes + '">' + item.nombre + '</option>';
+            }
+        },
+        error: function (response) {
+            html = '<option value="-1">Todos</option>';
+        },
+        complete: function () {
+            $('#cboDoctor').html(html);
+            cargar_historial();
+        }
+    });
+}
+cargar_lista_doctores();
+
 function cargar_historial() {
     var html = '';
 
     var fecha = $('#txtFecha').val();
+    var id_doctor = $('#cboDoctor').val();
     var id_estado = $('#cboEstado').val();
-    var i = 1;
     var ver_sin_reserva = $('#cboVerSinReserva').val();
+    var i = 1;
 
     $.ajax({
-        url: '/HistorialCitas/CitasDoctor?fecha=' + (fecha == '' ? '-' : fecha) + '&id_estado=' + id_estado + '&ver_sin_reserva=' + ver_sin_reserva,
+        url: '/HistorialCitas/CitasDoctor?fecha=' + (fecha == '' ? '-' : fecha) + '&id_doctor=' + id_doctor + '&id_estado=' + id_estado + '&ver_sin_reserva=' + ver_sin_reserva,
         type: "GET",
         data: {},
         beforeSend: function () {
@@ -49,7 +85,6 @@ function cargar_historial() {
         }
     });
 }
-cargar_historial();
 
 function accion_estado(estado) {
     var html_estado = '';

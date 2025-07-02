@@ -8,6 +8,7 @@
 <!-- SB - STYLE -->
 
 <link rel="stylesheet" href="~/src/css/sb-historial-citas.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css" />
 
 <div class="sb-his-citas-container">
 
@@ -20,6 +21,15 @@
             <div class="form-group">
                 <span class="label-form active-texto-modulo">Fecha</span>
                 <input id="txtFecha" class="form-control active-input-modulo" type="date" max="2050-12-31" />
+            </div>
+        </div>
+
+        <div class="sb-his-citas-item">
+            <div class="form-group">
+                <span class="label-form active-texto-modulo">Especialista</span>
+                <select class="form-control active-select-modulo cbo-search" id="cboDoctor" data-placeholder="Seleccionar especialista">
+                    <option value="-1">Todos</option>
+                </select>
             </div>
         </div>
 
@@ -41,8 +51,10 @@
             <div class="form-group">
                 <span class="label-form active-texto-modulo">Ver registros</span>
                 <select class="form-control cbo-search active-select-modulo" id="cboVerSinReserva">
-                    <option value="2">Todos</option>
-                    <option value="1">Sin reserva en 15 días</option>
+                    <option value="-1">Seleccionar</option>
+                    <option value="1">Pacientes nuevos</option>
+                    <option value="2">Sin reserva en 15 días</option>
+                    <option value="3">Sin reserva en 30 días</option>
                 </select>
             </div>
         </div>
@@ -285,6 +297,6 @@
 @section Scripts{
     <script src="~/basic/moments.js?f=@dHoy.ToString("yyyyMMddhhmmss")"></script>
     <script src="~/basic/datetimepicker.js?f=@dHoy.ToString("yyyyMMddhhmmss")"></script>
-
     <script src="~/basic/historial_citas.js?f=@dHoy.ToString("yyyyMMddhhmmss")"></script>
+    <script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
 }
