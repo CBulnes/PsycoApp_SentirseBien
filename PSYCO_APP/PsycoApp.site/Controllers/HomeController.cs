@@ -17,6 +17,8 @@ using PsycoApp.entities;
 using PsycoApp.utilities;
 using Microsoft.AspNetCore.Hosting;
 using System.Drawing;
+using static PsycoApp.utilities.Endpoints;
+using System.Net.Http;
 
 namespace PsycoApp.site.Controllers
 {
@@ -26,6 +28,8 @@ namespace PsycoApp.site.Controllers
         private string url_punto_visita = Helper.GetUrlApi() + "/api/puntovisitado";
         private string url_encuesta = Helper.GetUrlApi() + "/api/encuesta";
         private string url_visita = Helper.GetUrlApi() + "/api/visita";
+        private string url_config = Helper.GetUrlApi() + "/api/config/obtener_configuracion";
+        private string url_config2 = Helper.GetUrlApi() + "/api/config/actualizar_valor";
         private string url = "";
 
         RespuestaMenu oRespuesta = new RespuestaMenu();
@@ -410,6 +414,53 @@ namespace PsycoApp.site.Controllers
                 oListaArticulos.Clear();
             }
             return oListaArticulos;
+        }
+
+        [HttpGet]
+        public async Task<List<Configuracion>> ObtenerConfiguracion()
+        {
+            List<Configuracion> lista = new List<Configuracion>();
+            string res = "";
+            try
+            {
+                url = url_config;
+                res = ApiCaller.consume_endpoint_method(url, null, "GET");
+                lista = JsonConvert.DeserializeObject<List<Configuracion>>(res);
+            }
+            catch (Exception)
+            {
+                lista.Clear();
+            }
+            return lista;
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> ActualizarConfig(string key, string value)
+        {
+            if (ModelState.IsValid)
+            {
+                url = url_config2;
+                Configuracion conf = new Configuracion()
+                {
+                    Id = 0,
+                    ConfigKey = key,
+                    ConfigValue = value
+                };
+                var response = await PutToApiAsync(url, conf);
+                if (response.IsSuccessStatusCode)
+                {
+                    return Ok(new { message = "Actualización correcta." });
+                }
+                return StatusCode((int)response.StatusCode, "Error al realizar la acción.");
+            }
+            return BadRequest("Modelo no válido.");
+        }
+
+        private async Task<HttpResponseMessage> PutToApiAsync<T>(string url, T data)
+        {
+            using var client = new HttpClient();
+            var content = new StringContent(JsonConvert.SerializeObject(data), System.Text.Encoding.UTF8, "application/json");
+            return await client.PutAsync(url, content);
         }
 
         [HttpPost]

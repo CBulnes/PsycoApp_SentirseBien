@@ -536,34 +536,64 @@ function GetFechaActual() {
 }
 
 function form_pago() {
-    $('#mdl_cita').modal('hide');
-    var fechaActual = GetFechaActual();
-    var nombrePaciente = $("#cboPaciente option:selected").text();
-    var pendiente = $('#txtMontoPendiente').val();
+    $.ajax({
+        url: "/Home/ObtenerConfiguracion",
+        type: "GET",
+        async: false,
+        success: function (data) {
+            if (data.length > 0) {
+                for (var item of data) {
+                    if (item.configKey == 'CAJA') {
+                        if (item.configValue == '0') {
+                            Swal.fire({
+                                icon: "Error",
+                                title: "Oops...",
+                                text: "El registro de caja se encuentra deshabilitado, comunicarse con el administrador.",
+                            });
+                        } else {
 
-    if (pendiente == '0.00') {
-        setTimeout(() => {
-            listar_pagos_pendientes($('#cboPaciente').val());
-            $('#mdl_otros_pagos_pendientes').modal('show');
-        }, 250);
-        return;
-    }
+                            $('#mdl_cita').modal('hide');
+                            var fechaActual = GetFechaActual();
+                            var nombrePaciente = $("#cboPaciente option:selected").text();
+                            var pendiente = $('#txtMontoPendiente').val();
 
-    setTimeout(() => {
-        $('#mdl_pago').modal('show');
-    }, 250);
+                            if (pendiente == '0.00') {
+                                setTimeout(() => {
+                                    listar_pagos_pendientes($('#cboPaciente').val());
+                                    $('#mdl_otros_pagos_pendientes').modal('show');
+                                }, 250);
+                                return;
+                            }
 
-    $('#txtIdCita').val(id_cita_);
-    $('#txtFechaPago').val(fecha_formato_ddmmyyyy(fechaActual));
-    $('#txtPaciente').val(nombrePaciente);
-    $('#cboFormaPago').val(-1);
-    validarSiEsTransferencia();
+                            setTimeout(() => {
+                                $('#mdl_pago').modal('show');
+                            }, 250);
 
-    $("#txtMonto1, #txtMonto2, #txtMonto3").inputmask({ 'alias': 'numeric', allowMinus: false, digits: 2, max: 999.99 });
-    $('#txtMonto1').val('0.00');    //importe pago
-    $('#txtMonto2').val(pendiente); //pendiente
-    $('#txtMonto3').val(pendiente); //diferencia
-    recargar_pagos_pendientes = false;
+                            $('#txtIdCita').val(id_cita_);
+                            $('#txtFechaPago').val(fecha_formato_ddmmyyyy(fechaActual));
+                            $('#txtPaciente').val(nombrePaciente);
+                            $('#cboFormaPago').val(-1);
+                            validarSiEsTransferencia();
+
+                            $("#txtMonto1, #txtMonto2, #txtMonto3").inputmask({ 'alias': 'numeric', allowMinus: false, digits: 2, max: 999.99 });
+                            $('#txtMonto1').val('0.00');    //importe pago
+                            $('#txtMonto2').val(pendiente); //pendiente
+                            $('#txtMonto3').val(pendiente); //diferencia
+                            recargar_pagos_pendientes = false;
+
+                        }
+                    }
+                }
+            }
+        },
+        error: function (response) {
+            Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: "Ocurrió un error al obtener la información."
+            });
+        }
+    });
 }
 
 function listar_pagos_pendientes(id_paciente) {
