@@ -336,6 +336,7 @@ namespace PsycoApp.DA
                     cita.id_doctor_asignado = Convert.ToInt32(row["id_doctor_asignado"]);
                     cita.doctor_asignado = Convert.ToString(row["doctor_asignado"]);
                     cita.id_paciente = Convert.ToInt32(row["id_paciente"]);
+                    cita.dni_paciente = Convert.ToString(row["dni_paciente"]);
                     cita.paciente = Convert.ToString(row["paciente"]);
                     cita.tipo = Convert.ToString(row["tipo"]);
                     cita.telefono = Convert.ToString(row["telefono"]);

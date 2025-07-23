@@ -16,6 +16,7 @@ namespace PsycoApp.entities
         public int id_doctor_asignado { get; set; } = 0;
         public string doctor_asignado { get; set; } = "";
         public int id_paciente { get; set; } = 0;
+        public string dni_paciente { get; set; } = "";
         public string paciente { get; set; } = "";
         public string tipo { get; set; } = "";
         public string telefono { get; set; } = "";
