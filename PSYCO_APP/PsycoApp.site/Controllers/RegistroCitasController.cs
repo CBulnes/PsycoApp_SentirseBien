@@ -404,6 +404,36 @@ namespace PsycoApp.site.Controllers
         }
 
         [HttpGet]
+        public async Task<List<Models.CuadreCaja>> HistorialPago(int id_cita = 0)
+        {
+            List<Models.CuadreCaja> historial = new List<Models.CuadreCaja>();
+            string res = "";
+
+            var usuario = Convert.ToString(HttpContext.Session.GetString("login"));
+            usuario = string.IsNullOrEmpty(usuario) ? "-" : usuario;
+            
+            string apiUrl = Helper.GetUrlApi() + "/api/caja"; // URL base de la API
+            string url = $"{apiUrl}/listar_cuadre_caja/{usuario}/{1}/{100}/{-1}/{-1}/{-1}/{id_cita}";
+            
+            var registros = await GetFromApiAsync<List<PsycoApp.entities.CuadreCaja>>(url);
+            historial = registros.Select(p => new PsycoApp.site.Models.CuadreCaja
+            {
+                paciente = p.paciente,
+                sede = p.sede,
+                fecha_transaccion = p.fecha_transaccion,
+                estado_cita = p.estado_cita,
+                servicio = p.servicio,
+                forma_pago = p.forma_pago,
+                detalle_transferencia = p.detalle_transferencia,
+                importe = p.importe,
+                usuario = p.usuario,
+                estado_orden = p.estado_orden
+            }).ToList();
+
+            return historial;
+        }
+
+        [HttpGet]
         public ActionResult<List<entities.Sede>> listar_sedes_x_usuario(int id_doc)
         {
             int id_sede = Convert.ToInt32(HttpContext.Session.GetInt32("id_sede"));

@@ -66,15 +66,15 @@ namespace PsycoApp.api.Controllers
             return lista;
         }
 
-        [HttpGet("listar_cuadre_caja/{usuario}/{pagina}/{tamanoPagina}/{mes}/{anio}/{sede}")]
-        public List<CuadreCaja> listar_cuadre_caja(string usuario, int pagina = 1, int tamanoPagina = 100, int mes = -1, int anio = -1, int sede = -1)
+        [HttpGet("listar_cuadre_caja/{usuario}/{pagina}/{tamanoPagina}/{mes}/{anio}/{sede}/{id_cita}")]
+        public List<CuadreCaja> listar_cuadre_caja(string usuario, int pagina = 1, int tamanoPagina = 100, int mes = -1, int anio = -1, int sede = -1, int id_cita = 0)
         {
             List<CuadreCaja> lista = new List<CuadreCaja>();
             random_str = ru.RandomString(8) + "|" + ru.CurrentDate();
 
             try
             {
-                lista = cajaBL.listar_cuadre_caja(usuario, pagina, tamanoPagina, mes, anio, sede);
+                lista = cajaBL.listar_cuadre_caja(usuario, pagina, tamanoPagina, mes, anio, sede, id_cita);
             }
             catch (Exception)
             {

@@ -928,6 +928,7 @@ function cargar_datos_cita(id_cita, id_doctor, id_paciente, fecha, hora, estado,
     verificar_si_es_psicologo();
     verificar_disponibilidad();
     mostrar_historial(id_cita, id_paciente);
+    mostrar_historial_pago(id_cita);
     validar_sede_usuario(id_doctor, id_sede);
 }
 
@@ -966,11 +967,17 @@ function mostrar_historial(id_cita, id_paciente) {
                     html += '</div></div>';
                 }
 
-                for (var item of historial2) {
-                    html2 += '<tr>'
-                    html2 += '<td>' + item.doctor + '</td>'
-                    html2 += '<td>' + item.fecha_registro + '</td>'
-                    html2 += '</tr>'
+                if (historial2.length > 0) {
+                    for (var item of historial2) {
+                        html2 += '<tr>';
+                        html2 += '<td>' + item.doctor + '</td>';
+                        html2 += '<td>' + item.fecha_registro + '</td>';
+                        html2 += '</tr>';
+                    }
+                } else {
+                    html2 += '<tr style="text-align: center;">';
+                    html2 += '<td colspan="2">Sin registros</td>';
+                    html2 += '</tr>';
                 }
             } catch (e) {
                 html = '';
@@ -1006,6 +1013,53 @@ function mostrar_historial(id_cita, id_paciente) {
     //}
     //$('#divHistorial').html(html);
     //$('#divHistorial2').html(html2);
+}
+
+function mostrar_historial_pago(id_cita) {
+    var html = '';
+    var historial = [];
+
+    $.ajax({
+        url: "/RegistroCitas/HistorialPago?id_cita=" + id_cita,
+        type: "GET",
+        async: false,
+        beforeSend: function () {
+            historial = [];
+        },
+        success: function (data) {
+            historial = data;
+        },
+        error: function (response) {
+            historial = [];
+        },
+        complete: function () {
+            try {
+                if (historial.length > 0) {
+                    for (var item of historial) {
+                        html += '<tr>';
+                        html += '<td>' + item.paciente + '</td>';
+                        html += '<td>' + item.sede + '</td>';
+                        html += '<td>' + item.fecha_transaccion + '</td>';
+                        html += '<td>' + item.estado_cita + '</td>';
+                        html += '<td>' + item.servicio + '</td>';
+                        html += '<td>' + item.forma_pago + '</td>';
+                        html += '<td>' + item.detalle_transferencia + '</td>';
+                        html += '<td>' + item.importe + '</td>';
+                        html += '<td>' + item.usuario + '</td>';
+                        html += '<td>' + item.estado_orden + '</td>';
+                        html += '</tr>';
+                    }
+                } else {
+                    html += '<tr style="text-align: center;">';
+                    html += '<td colspan="10">Sin registros</td>';
+                    html += '</tr>';
+                }
+            } catch (e) {
+                html = '';
+            }
+            $('#divHistorial3').html(html);
+        }
+    });
 }
 function guardarPacienteCitas() {
     console.log('prueba');
@@ -1447,6 +1501,7 @@ function confirmar_cita() {
                 $('#cboDoctor, #cboPaciente, #txtHora, #cboServicio, #cboSedeChange, #cboTipoCita').attr('disabled', true);
                 verificar_si_es_psicologo();
                 mostrar_historial(id_cita_, id_paciente_);
+                mostrar_historial_pago(id_cita_);
                 //END: acciones cuando la cita se confirma
 
                 var tipoVista = TipoVista();
@@ -1498,6 +1553,7 @@ function atender_cita() {
                 $('#cboDoctor, #cboPaciente, #txtHora, #cboServicio, #cboSedeChange, #cboTipoCita').attr('disabled', true);
                 verificar_si_es_psicologo();
                 mostrar_historial(id_cita_, id_paciente_);
+                mostrar_historial_pago(id_cita_);
                 //END: acciones cuando la cita se atiende
 
                 var tipoVista = TipoVista();

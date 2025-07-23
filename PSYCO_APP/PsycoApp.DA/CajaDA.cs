@@ -86,7 +86,7 @@ namespace PsycoApp.DA
             return lista;
         }
 
-        public List<CuadreCaja> listar_cuadre_caja(string usuario, int pagina, int tamanoPagina, int mes, int anio, int sede)
+        public List<CuadreCaja> listar_cuadre_caja(string usuario, int pagina, int tamanoPagina, int mes, int anio, int sede, int id_cita = 0)
         {
             List<CuadreCaja> lista = new List<CuadreCaja>();
             try
@@ -100,6 +100,7 @@ namespace PsycoApp.DA
                 cmd.Parameters.Add("@mes", SqlDbType.Int).Value = mes;
                 cmd.Parameters.Add("@anio", SqlDbType.Int).Value = anio;
                 cmd.Parameters.Add("@sede", SqlDbType.Int).Value = sede;
+                cmd.Parameters.Add("@id_cita", SqlDbType.Int).Value = id_cita;
 
                 SqlDataAdapter da = new SqlDataAdapter(cmd);
                 DataTable dt = new DataTable();
