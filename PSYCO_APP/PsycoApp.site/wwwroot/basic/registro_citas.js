@@ -928,7 +928,6 @@ function cargar_datos_cita(id_cita, id_doctor, id_paciente, fecha, hora, estado,
     verificar_si_es_psicologo();
     verificar_disponibilidad();
     mostrar_historial(id_cita, id_paciente);
-    mostrar_historial_pago(id_cita);
     validar_sede_usuario(id_doctor, id_sede);
 }
 
@@ -1015,51 +1014,70 @@ function mostrar_historial(id_cita, id_paciente) {
     //$('#divHistorial2').html(html2);
 }
 
+function modal_historial_pago(mostrar) {
+    alert(id_cita_);
+    if (mostrar) {
+        $('#mdl_cita').modal('hide');
+        $('#mdl_historial_pago').modal('show');
+    } else {
+        $('#mdl_cita').modal('show');
+        $('#mdl_historial_pago').modal('hide');
+    }
+    mostrar_historial_pago(id_cita_);
+}
+
 function mostrar_historial_pago(id_cita) {
     var html = '';
     var historial = [];
 
-    $.ajax({
-        url: "/RegistroCitas/HistorialPago?id_cita=" + id_cita,
-        type: "GET",
-        async: false,
-        beforeSend: function () {
-            historial = [];
-        },
-        success: function (data) {
-            historial = data;
-        },
-        error: function (response) {
-            historial = [];
-        },
-        complete: function () {
-            try {
-                if (historial.length > 0) {
-                    for (var item of historial) {
-                        html += '<tr>';
-                        html += '<td>' + item.paciente + '</td>';
-                        html += '<td>' + item.sede + '</td>';
-                        html += '<td>' + item.fecha_transaccion + '</td>';
-                        html += '<td>' + item.estado_cita + '</td>';
-                        html += '<td>' + item.servicio + '</td>';
-                        html += '<td>' + item.forma_pago + '</td>';
-                        html += '<td>' + item.detalle_transferencia + '</td>';
-                        html += '<td>' + item.importe + '</td>';
-                        html += '<td>' + item.usuario + '</td>';
-                        html += '<td>' + item.estado_orden + '</td>';
+    if (id_cita > 0) {
+        $.ajax({
+            url: "/RegistroCitas/HistorialPago?id_cita=" + id_cita,
+            type: "GET",
+            async: false,
+            beforeSend: function () {
+                historial = [];
+            },
+            success: function (data) {
+                historial = data;
+            },
+            error: function (response) {
+                historial = [];
+            },
+            complete: function () {
+                try {
+                    if (historial.length > 0) {
+                        for (var item of historial) {
+                            html += '<tr>';
+                            html += '<td>' + item.paciente + '</td>';
+                            html += '<td>' + item.sede + '</td>';
+                            html += '<td>' + item.fecha_transaccion + '</td>';
+                            html += '<td>' + item.estado_cita + '</td>';
+                            html += '<td>' + item.servicio + '</td>';
+                            html += '<td>' + item.forma_pago + '</td>';
+                            html += '<td>' + item.detalle_transferencia + '</td>';
+                            html += '<td>' + item.importe + '</td>';
+                            html += '<td>' + item.usuario + '</td>';
+                            html += '<td>' + item.estado_orden + '</td>';
+                            html += '</tr>';
+                        }
+                    } else {
+                        html += '<tr style="text-align: center;">';
+                        html += '<td colspan="10">Sin registros</td>';
                         html += '</tr>';
                     }
-                } else {
-                    html += '<tr style="text-align: center;">';
-                    html += '<td colspan="10">Sin registros</td>';
-                    html += '</tr>';
+                } catch (e) {
+                    html = '';
                 }
-            } catch (e) {
-                html = '';
+                $('#divHistorial3').html(html);
             }
-            $('#divHistorial3').html(html);
-        }
-    });
+        });
+    } else {
+        html += '<tr style="text-align: center;">';
+        html += '<td colspan="10">Sin registros</td>';
+        html += '</tr>';
+        $('#divHistorial3').html(html);
+    }
 }
 function guardarPacienteCitas() {
     console.log('prueba');

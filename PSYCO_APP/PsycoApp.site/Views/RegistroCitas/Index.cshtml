@@ -343,9 +343,12 @@
                                                 <option value="@prod.Id" data-sesiones="@prod.NumSesiones">@prod.Alias</option>
                                             }
                                         </select>
-                                        <div class="input-group-append" id="divPagoPendiente">
-                                            <span class="input-group-text" id="basic-addon2" style="height: 100%; display: block;">
+                                        <div class="input-group-append" id="divPagoPendiente" style="width: 70px;">
+                                            <span class="input-group-text" id="basic-addon2" style="height: 100%; display: inline-block;">
                                                 <img id="PagoPendiente" src="../images/warning.jpg" style="height: 15px; width: auto; cursor: pointer; margin: 10px 6px 10px 6px;" title="Verificar pagos" onclick="form_pago()" />
+                                            </span>
+                                            <span class="input-group-text" id="basic-addon3" style="height: 100%; display: inline-block;">
+                                                <img id="PagosHistorial" src="../images/lupa.png" style="height: 19px; width: auto; cursor: pointer; margin: 10px 6px 10px 6px;" title="Ver pagos" onclick="modal_historial_pago(true)" />
                                             </span>
                                         </div>
                                     </div>
@@ -445,29 +448,6 @@
                     <!--historial-->
                     <div id="historial" class="tab-pane fade">
                         <div class="sb-reg-citas-popup-tab-historial" id="divHistorial"></div>
-                        <br />
-                        <div class="sb-reg-citas-popup-tab-historial">
-                            <table class="table">
-                                <thead>
-                                    <tr>
-                                        <th style="text-align: center;" colspan="10">Historial de pagos</th>
-                                    </tr>
-                                    <tr>
-                                        <th style="text-align: center;">Paciente</th>
-                                        <th style="text-align: center;">Sede</th>
-                                        <th style="text-align: center;">Fecha&nbsp;transacción</th>
-                                        <th style="text-align: center;">Estado&nbsp;cita</th>
-                                        <th style="text-align: center;">Servicio</th>
-                                        <th style="text-align: center;">Forma&nbsp;de&nbsp;pago</th>
-                                        <th style="text-align: center;">Detalle&nbsp;de&nbsp;transferencia</th>
-                                        <th style="text-align: center;">Importe</th>
-                                        <th style="text-align: center;">Usuario</th>
-                                        <th style="text-align: center;">Estado&nbsp;de&nbsp;orden</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="divHistorial3"></tbody>
-                            </table>
-                        </div>
                         <br />
                         <div class="sb-reg-citas-popup-tab-historial">
                             <table class="table">
@@ -623,6 +603,7 @@
 </div>
 <!-- Referencia la vista parcial de pacientes dentro del modal -->
 @Html.Partial("/Views/Mantenimiento/Paciente/_PacientesModal.cshtml", Model.Pacientes)
+
 <!--MODAL OTROS PAGOS PENDIENTES-->
 <div id="mdl_otros_pagos_pendientes" class="modal" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="true">
     <div class="modal-dialog modal-lg" role="document" style="height: 90%; display: grid; place-items: center; max-width: fit-content;">
@@ -654,6 +635,50 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary sb-reg-citas-popup-button-volver" onclick="cerrar_modal_pagos_pendientes()">Volver</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--MODAL HISTORIAL PAGOS CITA-->
+<div id="mdl_historial_pago" class="modal" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="true">
+    <div class="modal-dialog modal-lg" role="document" style="height: 90%; display: grid; place-items: center; max-width: fit-content;">
+        <div class="modal-content sb-reg-citas-popup-container" style=" width: fit-content;">
+            <div class="modal-header sb-reg-citas-popup-title">
+                <h5 class="modal-title">Historial de pagos</h5>
+            </div>
+            <div class="modal-body sb-reg-citas-popup-body">
+
+                <div class="sb-reg-citas-popup-tab-historial">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th style="text-align: center;" colspan="10">Historial de pagos</th>
+                            </tr>
+                            <tr>
+                                <th style="text-align: center;">Paciente</th>
+                                <th style="text-align: center;">Sede</th>
+                                <th style="text-align: center;">Fecha&nbsp;transacción</th>
+                                <th style="text-align: center;">Estado&nbsp;cita</th>
+                                <th style="text-align: center;">Servicio</th>
+                                <th style="text-align: center;">Forma&nbsp;de&nbsp;pago</th>
+                                <th style="text-align: center;">Detalle&nbsp;de&nbsp;transferencia</th>
+                                <th style="text-align: center;">Importe</th>
+                                <th style="text-align: center;">Usuario</th>
+                                <th style="text-align: center;">Estado&nbsp;de&nbsp;orden</th>
+                            </tr>
+                        </thead>
+                        <tbody id="divHistorial3">
+                            <tr>
+                                <td colspan="10">Sin registros</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary sb-reg-citas-popup-button-volver" onclick="modal_historial_pago(false)">Volver</button>
             </div>
         </div>
     </div>
