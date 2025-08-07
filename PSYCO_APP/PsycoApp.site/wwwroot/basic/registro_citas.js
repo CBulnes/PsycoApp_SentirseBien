@@ -15,6 +15,30 @@ const pageSize = 10; // Tamaño de la página fijo
 let searchTerm = '';
 let debounceTimer;
 let pago_gratis_;
+
+$('#cboPaciente').on('change', function () {
+    var idPaciente = $(this).val();
+
+    $.ajax({
+        url: "/Mantenimiento/Paciente/Get/" + idPaciente,
+        type: "GET",
+        async: false,
+        beforeSend: function () {
+            $('#txtTelefono, #txtDniPaciente').val('--');
+        },
+        success: function (data) {
+            if (data == null) {
+                $('#txtTelefono, #txtDniPaciente').val('--');
+            } else {
+                $('#txtTelefono').val(data.telefono);
+                $('#txtDniPaciente').val(data.documentoNumero);
+            }
+        },
+        error: function (response) {
+            $('#txtTelefono, #txtDniPaciente').val('--');
+        }
+    });
+})
 document.addEventListener('DOMContentLoaded', function () {
   
     const element = document.querySelector('#cboDoctorFiltro');
