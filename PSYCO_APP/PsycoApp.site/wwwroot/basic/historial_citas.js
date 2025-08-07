@@ -25,6 +25,8 @@ function cargar_lista_doctores() {
         async: false,
         beforeSend: function () {
             html += '<option value="-1">Todos</option>';
+
+            $('#txtInicio, #txtFin').val(fechaActualYYYYMMDD());
         },
         success: function (data) {
             for (var item of data) {
@@ -45,14 +47,15 @@ cargar_lista_doctores();
 function cargar_historial() {
     var html = '';
 
-    var fecha = $('#txtFecha').val();
+    var inicio = $('#txtInicio').val();
+    var fin = $('#txtFin').val();
     var id_doctor = $('#cboDoctor').val();
     var id_estado = $('#cboEstado').val();
     var ver_sin_reserva = $('#cboVerSinReserva').val();
     var i = 1;
 
     $.ajax({
-        url: '/HistorialCitas/CitasDoctor?fecha=' + (fecha == '' ? '-' : fecha) + '&id_doctor=' + id_doctor + '&id_estado=' + id_estado + '&ver_sin_reserva=' + ver_sin_reserva,
+        url: '/HistorialCitas/CitasDoctor?inicio=' + (inicio == '' ? '-' : inicio) + '&fin=' + (fin == '' ? '-' : fin) + '&id_doctor=' + id_doctor + '&id_estado=' + id_estado + '&ver_sin_reserva=' + ver_sin_reserva,
         type: "GET",
         data: {},
         beforeSend: function () {
