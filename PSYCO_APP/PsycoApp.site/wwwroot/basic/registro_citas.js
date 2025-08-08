@@ -806,6 +806,10 @@ function guardar_pago() {
 
                     $('#txtMontoPagado').val(formatDecimal(parseFloat(pagado) + parseFloat(importe)));
                     $('#txtMontoPendiente').val(formatDecimal(parseFloat(pactado) - (parseFloat(pagado) + parseFloat(importe))));
+
+                    //$('#cita' + id_cita_).attr('data-monto-pactado', '');
+                    $('#cita' + id_cita_).attr('data-monto-pagado', formatDecimal(parseFloat(pagado) + parseFloat(importe)));
+                    $('#cita' + id_cita_).attr('data-monto-pendiente', formatDecimal(parseFloat(pactado) - (parseFloat(pagado) + parseFloat(importe))));
                 } else {
                     cerrar_modal_pago2();
                     listar_pagos_pendientes($('#cboPaciente').val());
