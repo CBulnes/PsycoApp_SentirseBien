@@ -29,7 +29,33 @@ var input = $('.validate-input .input100');
 $('#btn_ing').on('click', function () {
     var email = $('#txtEmail').val().trim();
     var pass = $('#txtPassword').val().trim();
+    var centro = $('#cboCentro').val().trim();
     var check = true;
+
+    if (email == '') {
+        Swal.fire({
+            icon: "Error",
+            title: "Oops...",
+            text: "Ingrese su usuario"
+        });
+        check = false;
+    }
+    if (pass == '') {
+        Swal.fire({
+            icon: "Error",
+            title: "Oops...",
+            text: "Ingrese su password"
+        });
+        check = false;
+    }
+    if (centro == '-1') {
+        Swal.fire({
+            icon: "Error",
+            title: "Oops...",
+            text: "Seleccione su centro"
+        });
+        check = false;
+    }
 
     if (check) {
 
@@ -37,7 +63,7 @@ $('#btn_ing').on('click', function () {
             $.ajax({
                 type: "POST",
                 url: path + "/Login/validar_usuario",
-                data: { "email": email, "password": pass },
+                data: { "email": email, "password": pass, "id_sede": parseInt(centro) },
                 accept: 'application/json',
                 beforeSend: function () {
                     $('.preloader').removeClass('hide-element');

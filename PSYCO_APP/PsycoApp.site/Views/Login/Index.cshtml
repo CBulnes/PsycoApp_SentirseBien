@@ -95,13 +95,21 @@
             </div>
             <div class="sb-login-form">
                 <p>Login</p>
-                <div class="sb-login-form-block sb-lg-cplt" data-validate="Ingresa tu email">
+                <div class="sb-login-form-block sb-lg-cplt" data-validate="Ingresa tu usuario">
                     <input class="sb-lg-input" placeholder="" name="email" id="txtEmail" autocomplete="off" />
-                    <label class="sb-lg-label" for="txtEmail">Email</label>
+                    <label class="sb-lg-label" for="txtEmail">Usuario</label>
                 </div>
                 <div class="sb-login-form-block sb-lg-cplt" data-validate="Ingresa tu contraseña">
                     <input class="sb-lg-input" placeholder="" type="password" name="password" id="txtPassword" autocomplete="off" />
                     <label class="sb-lg-label" for="txtPassword">Contraseña</label>
+                </div>
+                <div class="sb-login-form-block sb-lg-cplt">
+                    <select id="cboCentro" class="input100 sb-lg-input" style="padding: 10px;">
+                        <option value="-1">Seleccionar</option>
+                        <option value="1" data-ubicacion="La Molina">Sentirse bien</option>
+                        <option value="2" data-ubicacion="Surco">Lidérate</option>
+                    </select>
+                    <label class="sb-lg-label" for="cboCentro">Centro</label>
                 </div>
                 <div class="sb-login-form-block sb-lg-btn">
                     <button type="button" id="btn_ing">

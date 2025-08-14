@@ -1,7 +1,10 @@
 ﻿@model dynamic
+@using Microsoft.AspNetCore.Http
 @using PsycoApp.utilities;
 @{
     var dHoy = DateTime.Now;
+    var centro_nombre = Context.Session.GetInt32("id_sede") == 1 ? "Sentirse bien" : "Lidérate";
+    var logo = (Context.Session.GetInt32("id_sede") == 1 ? "sentirse_bien" : "liderate") + ".jpg";
 }
 
 <!DOCTYPE html>
@@ -103,11 +106,11 @@
             <div class="sb-aside-container active-modular2-oscuro">
                 <div class="sb-aside-user">
                     <div class="sb-aside-user-photo">
-                        <img src="../images/user.png" alt="">
+                        <img src="../images/@logo" alt="">
                     </div>
                     <div class="sb-aside-user-info">
                         <span id="lbl_TipoUsuario" runat="server">@Model.DynamicData.nombres @Model.DynamicData.apellidos</span>
-                        <p>Sentirse Bien</p>
+                        <p>@centro_nombre</p>
                     </div>
                     <input id="hdnIdTipoUsuario" type="hidden" value="@Model.DynamicData.id_tipousuario" />
                     <input id="hdnIdSede" type="hidden" value="@Model.DynamicData.id_sede" />
