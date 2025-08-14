@@ -27,14 +27,14 @@ namespace PsycoApp.site.Controllers
         List<ReporteNPS> listaReporteNPS = new List<ReporteNPS>();
 
         [Route("Caja")]
-        public async Task<IActionResult> Index(int pageNumber = 1, int pageSize = 10, int mes = -1, int anio = -1, int sede = -1)
+        public async Task<IActionResult> Index(int pageNumber = 1, int pageSize = 10, int mes = -1, int anio = -1, int sede = -1, int id_cita = 0)
         {
             if (!string.IsNullOrEmpty(HttpContext.Session.GetString("nombres") as string))
             {
                 var usuario = Convert.ToString(HttpContext.Session.GetString("login"));
                 usuario = string.IsNullOrEmpty(usuario) ? "-" : usuario;
                 // Construir la URL para la API dependiendo de si hay un término de búsqueda
-                string url = $"{apiUrl}/listar_cuadre_caja/{usuario}/{pageNumber}/{pageSize}/{mes}/{anio}/{sede}";
+                string url = $"{apiUrl}/listar_cuadre_caja/{usuario}/{pageNumber}/{pageSize}/{mes}/{anio}/{sede}/{id_cita}";
 
                 var registros = await GetFromApiAsync<List<PsycoApp.entities.CuadreCaja>>(url);
                 var pacientesViewModel = registros.Select(p => new PsycoApp.site.Models.CuadreCaja
@@ -88,13 +88,13 @@ namespace PsycoApp.site.Controllers
 
         [Route("/Caja/Buscar")]
         [HttpPost]
-        public async Task<IActionResult> Buscar(int pageNumber = 1, int pageSize = 10, int mes = -1, int anio = -1, int sede = -1)
+        public async Task<IActionResult> Buscar(int pageNumber = 1, int pageSize = 10, int mes = -1, int anio = -1, int sede = -1, int id_cita = 0)
         {
             if (!string.IsNullOrEmpty(HttpContext.Session.GetString("nombres") as string))
             {
                 var usuario = Convert.ToString(HttpContext.Session.GetString("login"));
                 usuario = string.IsNullOrEmpty(usuario) ? "-" : usuario;
-                string url = $"{apiUrl}/listar_cuadre_caja/{usuario}/{pageNumber}/{pageSize}/{mes}/{anio}/{sede}";
+                string url = $"{apiUrl}/listar_cuadre_caja/{usuario}/{pageNumber}/{pageSize}/{mes}/{anio}/{sede}/{id_cita}";
 
                 var registros = await GetFromApiAsync<List<PsycoApp.entities.CuadreCaja>>(url);
 
