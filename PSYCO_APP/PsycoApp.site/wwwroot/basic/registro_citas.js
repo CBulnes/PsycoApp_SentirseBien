@@ -1043,7 +1043,6 @@ function mostrar_historial(id_cita, id_paciente) {
 }
 
 function modal_historial_pago(mostrar) {
-    alert(id_cita_);
     if (mostrar) {
         $('#mdl_cita').modal('hide');
         $('#mdl_historial_pago').modal('show');
