@@ -200,6 +200,12 @@
                                 </div>
                             </a>
                         }
+                        <a href="javascript:void(0)" class="sb-aside-item" onclick="ConfigCambioPwd()">
+                            <div class="sb-aside-item-bloc">
+                                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0" /><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round" /><g id="SVGRepo_iconCarrier"> <path d="M3 8C3 5.17157 3 3.75736 3.87868 2.87868C4.75736 2 6.17157 2 9 2H15C17.8284 2 19.2426 2 20.1213 2.87868C21 3.75736 21 5.17157 21 8V16C21 18.8284 21 20.2426 20.1213 21.1213C19.2426 22 17.8284 22 15 22H9C6.17157 22 4.75736 22 3.87868 21.1213C3 20.2426 3 18.8284 3 16V8Z" stroke="#FFF" stroke-width="1.5" /> <path d="M8 2.5V22" stroke="#FFF" stroke-width="1.5" stroke-linecap="round" /> <path d="M2 12H4" stroke="#FFF" stroke-width="1.5" stroke-linecap="round" /> <path d="M2 16H4" stroke="#FFF" stroke-width="1.5" stroke-linecap="round" /> <path d="M2 8H4" stroke="#FFF" stroke-width="1.5" stroke-linecap="round" /> <path d="M11.5 6.5H16.5" stroke="#FFF" stroke-width="1.5" stroke-linecap="round" /> <path d="M11.5 10H16.5" stroke="#FFF" stroke-width="1.5" stroke-linecap="round" /> </g></svg>
+                                <p>Actualizar password</p>
+                            </div>
+                        </a>
                         @if ((int)@Model.DynamicData.id_tipousuario == 1)
                         {
                             <a href="/Caja" class="sb-aside-item">
@@ -894,7 +900,7 @@
         <div class="modal-dialog modal-md" role="document" style="height: 90%; display: grid; place-items: center;">
             <div class="modal-content sb-reg-citas-popup-container">
                 <div class="modal-header sb-reg-citas-popup-title">
-                    <h5 class="modal-title">Selección de sede</h5>
+                    <h5 class="modal-title">Selección de centro</h5>
                 </div>
                 <div class="modal-body sb-reg-citas-popup-body">
 
@@ -902,7 +908,7 @@
 
                         <div class="sb-reg-citas-popup-tab-panel-block">
                             <div class="sb-reg-citas-popup-tab-panel-block-item">
-                                <span class="label-form">Sede</span>
+                                <span class="label-form">Centro</span>
                                 <select class="form-control" id="cboSedeChange"></select>
                             </div>
                         </div>
@@ -935,6 +941,45 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-primary main_color sb-reg-citas-popup-button" onclick="ActualizarConfigCaja()">Aceptar</button>
                     <button type="button" class="btn btn-primary main_color sb-reg-citas-popup-button" onclick="$('#mdl_config_caja').modal('hide')">Volver</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="mdl_cambio_pwd" class="modal" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="true">
+        <div class="modal-dialog modal-md" role="document" style="height: 90%; display: grid; place-items: center;">
+            <div class="modal-content sb-reg-citas-popup-container">
+                <div class="modal-header sb-reg-citas-popup-title">
+                    <h5 class="modal-title">Actualización de contraseña</h5>
+                </div>
+                <div class="modal-body sb-reg-citas-popup-body">
+                    <div class="sb-reg-citas-popup-tab-panel">
+                        <div class="sb-reg-citas-popup-tab-panel-block">
+                            <div class="sb-reg-citas-popup-tab-panel-block-item">
+                                <span class="label-form" id="">DNI:</span>
+                                @if ((int)@Model.DynamicData.id_tipousuario == 1) /*ADMIN*/
+                                {
+                                    <input id="txtDniBuscar" type="text" class="form-control" value="" maxlength="8" onkeypress="return onlyNumberKey(event)" />
+                                }
+                                else
+                                {
+                                    <input id="txtDniBuscar" type="text" class="form-control" value="@Model.DynamicData.num_documento" disabled="disabled" style="background-color: #ffffff; color: #000000;" />
+                                }
+                            </div>
+                            <div class="sb-reg-citas-popup-tab-panel-block-item">
+                                <span class="label-form" id="">Contraseña:</span>
+                                <input id="txtPwd1" type="text" class="form-control" value="" />
+                            </div>
+                            <div class="sb-reg-citas-popup-tab-panel-block-item">
+                                <span class="label-form" id="">Repetir contraseña:</span>
+                                <input id="txtPwd2" type="text" class="form-control" value="" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary main_color sb-reg-citas-popup-button" onclick="ActualizarContraseña()">Actualizar</button>
+                    <button type="button" class="btn btn-primary main_color sb-reg-citas-popup-button" onclick="$('#mdl_cambio_pwd').modal('hide')">Volver</button>
                 </div>
             </div>
         </div>
@@ -1045,130 +1090,224 @@
     @{
         if (Model.DynamicData.vista == "HOME")
         {
-            <script>
-                function guardar_sede() {
-                    var id_sede = $('#cboSedeChange').val();
+                <script>
+                    function guardar_sede() {
+                        var id_sede = $('#cboSedeChange').val();
 
-                    if (id_sede == -1) {
-                        Swal.fire({
-                            icon: "error",
-                            title: "Oops...",
-                            text: "Seleccione la sede en la que se encuentra."
-                        });
-                        return;
-                    }
+                        if (id_sede == -1) {
+                            Swal.fire({
+                                icon: "error",
+                                title: "Oops...",
+                                text: "Seleccione el centro en el que se encuentra."
+                            });
+                            return;
+                        }
 
-                    $.ajax({
-                        url: "/RegistroCitas/guardar_sede_sesion?id_sede=" + id_sede,
-                        type: "GET",
-                        data: {},
-                        async: false,
-                        success: function (data) {
-                            if (data.estado) {
-                                Swal.fire({
-                                    icon: "success",
-                                    text: "Sede guardada exitosamente."
-                                });
-                                $('#mdl_sede').modal('hide');
-                            } else {
+                        $.ajax({
+                            url: "/RegistroCitas/guardar_sede_sesion?id_sede=" + id_sede,
+                            type: "GET",
+                            data: {},
+                            async: false,
+                            success: function (data) {
+                                if (data.estado) {
+                                    Swal.fire({
+                                        icon: "success",
+                                        text: "Centro guardado exitosamente."
+                                    });
+                                    $('#mdl_sede').modal('hide');
+                                } else {
+                                    Swal.fire({
+                                        icon: "error",
+                                        title: "Oops...",
+                                        text: data.descripcion
+                                    });
+                                }
+                            },
+                            error: function (response) {
                                 Swal.fire({
                                     icon: "error",
                                     title: "Oops...",
-                                    text: data.descripcion
+                                    text: "Ocurrió un error al guardar el centro."
                                 });
                             }
+                        });
+                    }
+                </script>
+        }
+        else if (Model.DynamicData.vista == "CAJA")
+        {
+                <script src="~/assets/plugins/flot/excanvas.js"></script>
+                <script src="~/assets/plugins/flot/jquery.flot.js"></script>
+                <script src="~/assets/plugins/flot/jquery.flot.pie.js"></script>
+                <script src="~/assets/plugins/flot.tooltip/js/jquery.flot.tooltip.min.js"></script>
+
+                <script src="~/assets/plugins/raphael/raphael-min.js"></script>
+                <script src="~/assets/plugins/morrisjs/morris.js"></script>
+
+                <script type="text/javascript" src="~/basic/caja.js?f=@dHoy.ToString("yyyyMMddhhmmss")"></script>
+
+                <script src="~/assets/plugins/echarts/echarts-all.js"></script>
+        }
+
+            <script>
+                var key = '';
+                var value = '';
+                var config = [];
+
+                function obtenerConfig() {
+                    $.ajax({
+                        url: "/Home/ObtenerConfiguracion",
+                        type: "GET",
+                        async: false,
+                        success: function (data) {
+                            config = data;
                         },
                         error: function (response) {
                             Swal.fire({
                                 icon: "error",
                                 title: "Oops...",
-                                text: "Ocurrió un error al guardar la sede."
+                                text: "Ocurrió un error al obtener la información."
+                            });
+                        }
+                    });
+                }
+                obtenerConfig();
+
+                function ConfigCaja() {
+                    if (config.length > 0) {
+                        $('#mdl_config_caja').modal('show');
+                        for (var item of config) {
+                            if (item.configKey == 'CAJA') {
+                                key = 'CAJA';
+                                value = item.configValue;
+
+                                $('#spnConfigCaja').html(value == '1' ? 'La caja se encuentra habilitada, ¿desea deshabilitarla?' : 'La caja se encuentra deshabilitada, ¿desea habilitarla?');
+                            }
+                        }
+                    }
+                }
+
+                function ActualizarConfigCaja() {
+                    ActualizarConfiguracion(key, value);
+                }
+
+                function ConfigCambioPwd() {
+                    $('#txtDniBuscar, #txtPwd1, #txtPwd2').val('');
+                    $('#mdl_cambio_pwd').modal('show');
+                }
+
+                function ActualizarContraseña(){
+                    var dni = $('#txtDniBuscar').val().trim();
+                    var pwd1 = $('#txtPwd1').val().trim();
+                    var pwd2 = $('#txtPwd2').val().trim();
+
+                    if (dni == ''){
+                        Swal.fire({
+                            icon: "error",
+                            title: "Oops...",
+                            text: "Ingrese el DNI."
+                        });
+                        return;
+                    }
+
+                    if (dni.length < 8){
+                        Swal.fire({
+                            icon: "error",
+                            title: "Oops...",
+                            text: "El DNI no es válido."
+                        });
+                        return;
+                    }
+
+                    if (pwd1 == ''){
+                        Swal.fire({
+                            icon: "error",
+                            title: "Oops...",
+                            text: "Ingrese la nueva contraseña."
+                        });
+                        return;
+                    }
+
+                    if (pwd2 == ''){
+                        Swal.fire({
+                            icon: "error",
+                            title: "Oops...",
+                            text: "Repita la nueva contraseña."
+                        });
+                        return;
+                    }
+
+                    if (pwd1 != pwd2){
+                        Swal.fire({
+                            icon: "error",
+                            title: "Oops...",
+                            text: "Las contraseñas no coinciden."
+                        });
+                        return;
+                    }
+
+                    $.ajax({
+                        type: "POST",
+                        url: "/Login/actualizar_password",
+                    data: { "email": dni, "password": pwd1, "nuevo_pass1": pwd1 },
+                        accept: 'application/json',
+                        beforeSend: function () {
+                            $('.preloader').removeAttr('style');
+                        },
+                        success: function (response) {
+                            $('.preloader').attr('style', 'display: none');
+
+                            if (response.estado) {
+                                $('#mdl_cambio_pwd').modal('hide');
+                                Swal.fire({
+                                    icon: "success",
+                                    text: "Contraseña actualizada."
+                                });
+                            } else {
+                                Swal.fire({
+                                    icon: "Error",
+                                    title: "Oops...",
+                                    text: response.descripcion,
+                                });
+                            }
+                        }
+                    });
+                }
+
+                $('#txtDniBuscar').on('input', function () { 
+                    $(this).val($(this).val().trim());
+                })
+
+                function onlyNumberKey(evt) {
+                    let ASCIICode = (evt.which) ? evt.which : evt.keyCode
+                    if (ASCIICode > 31 && (ASCIICode < 48 || ASCIICode > 57))
+                        return false;
+                    return true;
+                }
+
+                function ActualizarConfiguracion(key, value) {
+                    $.ajax({
+                        url: "/Home/ActualizarConfig?key=" + key + "&value=" + value,
+                        type: "GET",
+                        async: false,
+                        success: function (data) {
+                            $('#mdl_config_caja').modal('hide');
+                            obtenerConfig();
+                            Swal.fire({
+                                icon: "success",
+                                title: "Información actualizada.",
+                            });
+                        },
+                        error: function (response) {
+                            Swal.fire({
+                                icon: "error",
+                                title: "Oops...",
+                                text: "Ocurrió un error al actualizar la información."
                             });
                         }
                     });
                 }
             </script>
-        }
-        else if (Model.DynamicData.vista == "CAJA")
-        {
-            <script src="~/assets/plugins/flot/excanvas.js"></script>
-            <script src="~/assets/plugins/flot/jquery.flot.js"></script>
-            <script src="~/assets/plugins/flot/jquery.flot.pie.js"></script>
-            <script src="~/assets/plugins/flot.tooltip/js/jquery.flot.tooltip.min.js"></script>
-
-            <script src="~/assets/plugins/raphael/raphael-min.js"></script>
-            <script src="~/assets/plugins/morrisjs/morris.js"></script>
-
-            <script type="text/javascript" src="~/basic/caja.js?f=@dHoy.ToString("yyyyMMddhhmmss")"></script>
-
-            <script src="~/assets/plugins/echarts/echarts-all.js"></script>
-        }
-
-        <script>
-            var key = '';
-            var value = '';
-            var config = [];
-
-            function obtenerConfig() {
-                $.ajax({
-                    url: "/Home/ObtenerConfiguracion",
-                    type: "GET",
-                    async: false,
-                    success: function (data) {
-                        config = data;
-                    },
-                    error: function (response) {
-                        Swal.fire({
-                            icon: "error",
-                            title: "Oops...",
-                            text: "Ocurrió un error al obtener la información."
-                        });
-                    }
-                });
-            }
-            obtenerConfig();
-
-            function ConfigCaja() {
-                if (config.length > 0) {
-                    $('#mdl_config_caja').modal('show');
-                    for (var item of config) {
-                        if (item.configKey == 'CAJA') {
-                            key = 'CAJA';
-                            value = item.configValue;
-
-                            $('#spnConfigCaja').html(value == '1' ? 'La caja se encuentra habilitada, ¿desea deshabilitarla?' : 'La caja se encuentra deshabilitada, ¿desea habilitarla?');
-                        }
-                    }
-                }
-            }
-
-            function ActualizarConfigCaja() {
-                ActualizarConfiguracion(key, value);
-            }
-
-            function ActualizarConfiguracion(key, value) {
-                $.ajax({
-                    url: "/Home/ActualizarConfig?key=" + key + "&value=" + value,
-                    type: "GET",
-                    async: false,
-                    success: function (data) {
-                        $('#mdl_config_caja').modal('hide');
-                        obtenerConfig();
-                        Swal.fire({
-                            icon: "success",
-                            title: "Información actualizada.",
-                        });
-                    },
-                    error: function (response) {
-                        Swal.fire({
-                            icon: "error",
-                            title: "Oops...",
-                            text: "Ocurrió un error al actualizar la información."
-                        });
-                    }
-                });
-            }
-        </script>
 
         // <script type="text/javascript" src="~/basic/voz.js?f=@dHoy.ToString("yyyyMMddhhmmss")"></script>
         // <script type="text/javascript" src="~/basic/call.js?f=@dHoy.ToString("yyyyMMddhhmmss")"></script>

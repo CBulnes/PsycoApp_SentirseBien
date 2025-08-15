@@ -69,6 +69,25 @@ namespace PsycoApp.site.Controllers
         }
 
         [HttpPost]
+        public ActionResult<RespuestaUsuario> actualizar_password(Usuario usuario)
+        {
+            try
+            {
+                url = url_api + "/api/usuario/actualizar_contraseña";
+                obj = (dynamic)usuario;
+                res = ApiCaller.consume_endpoint_method(url, obj, "POST");
+                oRespuesta = JsonConvert.DeserializeObject<RespuestaUsuario>(res);
+                usuario = oRespuesta.data;
+            }
+            catch (Exception ex)
+            {
+                oRespuesta.estado = false;
+                oRespuesta.descripcion = "Ocurrió un error al actualizar la contraseña.";
+            }
+            return oRespuesta;
+        }
+
+        [HttpPost]
         public ActionResult<RespuestaUsuario> validar_credenciales(Usuario usuario)
         {
             try
