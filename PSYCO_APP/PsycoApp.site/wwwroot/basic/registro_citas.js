@@ -1437,7 +1437,7 @@ function guardar_cita() {
         Swal.fire({
             icon: "warning",
             title: "Oops...",
-            text: "Seleccione la sede.",
+            text: "Seleccione el centro.",
         });
         return;
     }

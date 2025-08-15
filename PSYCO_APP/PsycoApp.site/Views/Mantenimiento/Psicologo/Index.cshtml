@@ -36,7 +36,7 @@
                     <span class="label-form active-texto-modulo">Nombre del psicólogo: </span>
                     <input id="txtBuscarNombre" class="active-input-modulo" name="Nombre" placeholder="Ingrese nombre para buscar" type="text" required />
 
-                    <span class="label-form active-texto-modulo">Sede: </span>
+                    <span class="label-form active-texto-modulo">Centro: </span>
                     <select class="active-input-modulo" id="cboBuscarSede"></select>
 
                     <button class="active-button-modulo" type="button" onclick="buscarPsicologo()">
@@ -55,7 +55,7 @@
                             <th class="text-center" style="width: 80px;">N°</th>
                                 <th class="text-center">Nombres y apellidos</th>
                                 <th class="text-center">Documento</th>
-                                <th class="text-center">Sede</th>
+                                <th class="text-center">Centro</th>
                                 <th class="text-center">Fecha de nacimiento</th>
                                 <th class="text-center">Estado</th>
                                 <th class="text-center">Acción</th>
@@ -204,13 +204,13 @@
             <div class="row">
                 <div class="col-6">
                     <div class="sb-frm-psi-agregar-block-item">
-                        <span class="label-form active-texto-modulo">Sede principal</span>
+                        <span class="label-form active-texto-modulo">Centro principal</span>
                         <select class="form-control active-select-modulo" id="cboSedePrincipal" name="SedePrincipal" required></select>
                     </div>
                 </div>
                 <div class="col-6">
                     <div class="sb-frm-psi-agregar-block-item">
-                        <span class="label-form active-texto-modulo">Sede opcional</span>
+                        <span class="label-form active-texto-modulo">Centro opcional</span>
                         <select class="form-control active-select-modulo" id="cboSedeSecundaria" name="SedeSecundaria"></select>
                     </div>
                 </div>
@@ -1119,7 +1119,7 @@
                 Swal.fire({
                     icon: "error",
                     title: "Oops...",
-                    text: "La sede principal y la opcional no pueden ser las mismas.",
+                    text: "El centro principal y el opcional no pueden ser los mismos.",
                 });
                 return;
             }
