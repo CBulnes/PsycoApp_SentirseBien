@@ -1192,7 +1192,11 @@
                 }
 
                 function ConfigCambioPwd() {
-                    $('#txtDniBuscar, #txtPwd1, #txtPwd2').val('');
+                    if ($('#hdnIdTipoUsuario').val() == '1')
+                    {
+                        $('#txtDniBuscar').val('');
+                    }
+                    $('#txtPwd1, #txtPwd2').val('');
                     $('#mdl_cambio_pwd').modal('show');
                 }
 
