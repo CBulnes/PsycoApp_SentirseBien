@@ -154,7 +154,7 @@
         <div class="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
             <span class="label-form active-texto-modulo">Centro</span>
 
-            <select class="form-control active-select-modulo" id="cboSedeFiltro" onchange="recargar_citas()" data-placeholder="Eija cita">
+            <select class="form-control active-select-modulo" id="cboSedeFiltro" onchange="recargar_citas()" data-placeholder="Eija cita" style="background-color: #18202d !important; color: #FFFFFF !important; opacity: 1; border: 1px solid #1656a0;" disabled="disabled">
                 @* <option value="-1">Todos</option>
                 <option value="1">La Molina</option>
                 <option value="2">Surco</option> *@
@@ -726,13 +726,13 @@
         }
 
         var idSedePrincipal = $('#hdnIdSede').val().toString();
-        var sedePrincipal = (idSedePrincipal == '1' ? 'La Molina' : 'Surco');
+        var sedePrincipal = (idSedePrincipal == '1' ? 'Sentirse bien' : 'Lidérate');
 
         if (tipoUsuario == 'ADMIN') //si es ADMIN ve todo
         {
             sedes.push({ id: '-1', valor: 'Todos' });
-            sedes.push({ id: '1', valor: 'La Molina' });
-            sedes.push({ id: '2', valor: 'Surco' });
+            sedes.push({ id: '1', valor: 'Sentirse bien' });
+            sedes.push({ id: '2', valor: 'Lidérate' });
             // sedes.push({ id: '-2', valor: 'Ambas' });
         } else {
             // caso contrario ve solo lo de su sede asignada

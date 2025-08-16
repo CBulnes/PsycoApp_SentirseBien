@@ -86,7 +86,7 @@ namespace PsycoApp.DA
             return lista;
         }
 
-        public List<CuadreCaja> listar_cuadre_caja(string usuario, int pagina, int tamanoPagina, int mes, int anio, int sede, int id_cita = 0)
+        public List<CuadreCaja> listar_cuadre_caja(string usuario, int pagina, int tamanoPagina, string fecha, int buscar_por, int sede, int id_usuario, int id_cita = 0)
         {
             List<CuadreCaja> lista = new List<CuadreCaja>();
             try
@@ -97,9 +97,10 @@ namespace PsycoApp.DA
                 cmd.Parameters.Add("@usuario", SqlDbType.VarChar).Value = usuario;
                 cmd.Parameters.Add("@pagina", SqlDbType.Int).Value = pagina;
                 cmd.Parameters.Add("@tamanoPagina", SqlDbType.Int).Value = tamanoPagina;
-                cmd.Parameters.Add("@mes", SqlDbType.Int).Value = mes;
-                cmd.Parameters.Add("@anio", SqlDbType.Int).Value = anio;
+                cmd.Parameters.Add("@fecha", SqlDbType.VarChar).Value = fecha;
+                cmd.Parameters.Add("@buscar_por", SqlDbType.Int).Value = buscar_por;
                 cmd.Parameters.Add("@sede", SqlDbType.Int).Value = sede;
+                cmd.Parameters.Add("@id_usuario", SqlDbType.Int).Value = id_usuario;
                 cmd.Parameters.Add("@id_cita", SqlDbType.Int).Value = id_cita;
 
                 SqlDataAdapter da = new SqlDataAdapter(cmd);
@@ -130,7 +131,7 @@ namespace PsycoApp.DA
             return lista;
         }
 
-        public List<CuadreCaja> resumen_caja_x_usuario(string usuario, int mes, int año, int sede)
+        public List<CuadreCaja> resumen_caja_x_usuario(string usuario, string fecha, int buscar_por, int sede, int id_usuario)
         {
             List<CuadreCaja> lista = new List<CuadreCaja>();
             try
@@ -139,9 +140,10 @@ namespace PsycoApp.DA
                 SqlCommand cmd = new SqlCommand(Procedures.sp_resumen_caja_x_usuario, cn);
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.Add("@usuario", SqlDbType.VarChar).Value = usuario;
-                cmd.Parameters.Add("@mes", SqlDbType.Int).Value = mes;
-                cmd.Parameters.Add("@año", SqlDbType.Int).Value = año;
+                cmd.Parameters.Add("@fecha", SqlDbType.VarChar).Value = fecha;
+                cmd.Parameters.Add("@buscar_por", SqlDbType.Int).Value = buscar_por;
                 cmd.Parameters.Add("@sede", SqlDbType.Int).Value = sede;
+                cmd.Parameters.Add("@id_usuario", SqlDbType.Int).Value = id_usuario;
 
                 SqlDataAdapter da = new SqlDataAdapter(cmd);
                 DataTable dt = new DataTable();
@@ -163,7 +165,7 @@ namespace PsycoApp.DA
             return lista;
         }
 
-        public List<CuadreCaja> resumen_caja_x_forma_pago(string usuario, int mes, int año, int sede)
+        public List<CuadreCaja> resumen_caja_x_forma_pago(string usuario, string fecha, int buscar_por, int sede, int id_usuario)
         {
             List<CuadreCaja> lista = new List<CuadreCaja>();
             try
@@ -172,9 +174,10 @@ namespace PsycoApp.DA
                 SqlCommand cmd = new SqlCommand(Procedures.sp_resumen_caja_x_forma_pago, cn);
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.Add("@usuario", SqlDbType.VarChar).Value = usuario;
-                cmd.Parameters.Add("@mes", SqlDbType.Int).Value = mes;
-                cmd.Parameters.Add("@año", SqlDbType.Int).Value = año;
+                cmd.Parameters.Add("@fecha", SqlDbType.VarChar).Value = fecha;
+                cmd.Parameters.Add("@buscar_por", SqlDbType.Int).Value = buscar_por;
                 cmd.Parameters.Add("@sede", SqlDbType.Int).Value = sede;
+                cmd.Parameters.Add("@id_usuario", SqlDbType.Int).Value = id_usuario;
 
                 SqlDataAdapter da = new SqlDataAdapter(cmd);
                 DataTable dt = new DataTable();

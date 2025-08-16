@@ -1,21 +1,19 @@
 ﻿var colors = ["#a09b9b", "#6788d2", "#ff8128", "#4f5467", "#7460ee", "#26c6da", "#009efb"];
 $(document).ready(function () {
-
-var idSede = document.getElementById("hiddenIdSede").value;
-
-// Establece el valor seleccionado en el <select>
+    var idSede = document.getElementById("hiddenIdSede").value;
+    // Establece el valor seleccionado en el <select>
     var select = document.getElementById("cboSede");
-
-select.value = idSede;
-
+    select.value = idSede;
 });
+
 function buscarPago(pageNumber = 1) {
     let pageSize = 10;
-    var mes = $('#cboMes').val();
-    var anio = $('#cboAnio').val();
+    var fecha = $('#txtFecha').val();
+    var buscar_por = parseInt($('#cboBuscarPor').val());
     var sede = $('#cboSede').val();
+    var id_usuario = parseInt($('#cboUsuario').val());
 
-    $.post('/Caja/Buscar', { pageNumber: pageNumber, pageSize: pageSize, mes: mes, anio: anio, sede: sede })
+    $.post('/Caja/Buscar', { pageNumber: pageNumber, pageSize: pageSize, fecha: fecha, buscar_por: buscar_por, sede: sede, id_usuario: id_usuario })
         .done(function (data) {
             $('#containerTabla').html(data);
             verResumenUsuario(false);
@@ -31,22 +29,23 @@ function buscarPago(pageNumber = 1) {
 verResumenUsuario(true);
 
 function verResumenUsuario(recargar) {
-    if (recargar) {
-        $('#cboMes').val(-1);
-        $('#cboAnio').val(-1);
-        $('#cboSede').val(-1);
-    }
+    //if (recargar) {
+    //    $('#cboMes').val(-1);
+    //    $('#cboAnio').val(-1);
+    //    $('#cboSede').val(-1);
+    //}
 
-    var mes = $('#cboMes').val();
-    var anio = $('#cboAnio').val();
+    var fecha = $('#txtFecha').val();
+    var buscar_por = parseInt($('#cboBuscarPor').val());
     var sede = $('#cboSede').val();
+    var id_usuario = parseInt($('#cboUsuario').val());
     var html = '';
     var contador = 1;
 
     $('.preloader').removeAttr('style');
     $('.preloader').removeClass('hide-element');
 
-    $.get('/Caja/ListarResumenCajaPorUsuario?mes=' + mes + "&anio=" + anio + "&sede=" + sede)
+    $.get('/Caja/ListarResumenCajaPorUsuario?fecha=' + fecha + "&buscar_por=" + buscar_por + "&sede=" + sede + "&id_usuario=" + id_usuario)
         .done(function (data) {
             if (data.length > 0) {
                 for (var item of data) {
@@ -63,7 +62,7 @@ function verResumenUsuario(recargar) {
                 html += '</tr>';
             }
             $('#bdResumen').html(html);
-            getResumenTipoPago(mes, anio, sede);
+            getResumenTipoPago(fecha, buscar_por, sede, id_usuario);
         })
         .fail(function () {
             Swal.fire({
@@ -71,16 +70,16 @@ function verResumenUsuario(recargar) {
                 title: "Oops...",
                 text: "Ocurrió un error al obtener los registros.",
             });
-            getResumenTipoPago(mes, anio, sede);
+            getResumenTipoPago(fecha, buscar_por, sede, id_usuario);
         });
 }
 
-function getResumenTipoPago(mes, anio, sede) {
+function getResumenTipoPago(fecha, buscar_por, sede, id_usuario) {
     data_resumen = [];
     var html = '';
     var contador = 1;
 
-    $.get('/Caja/ListarResumenCajaPorFormaPago?mes=' + mes + "&anio=" + anio + "&sede=" + sede)
+    $.get('/Caja/ListarResumenCajaPorFormaPago?fecha=' + fecha + "&buscar_por=" + buscar_por + "&sede=" + sede + "&id_usuario=" + id_usuario)
         .done(function (data) {
             var data_resumen = [];
 
