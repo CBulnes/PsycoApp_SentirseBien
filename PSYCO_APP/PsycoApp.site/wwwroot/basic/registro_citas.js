@@ -1257,9 +1257,8 @@ loadPatients();
 function cargar_lista_doctores() {
     var html = '';
     $.ajax({
-        url: "/RegistroCitas/listar_doctores",
+        url: "/RegistroCitas/listar_doctores?filtrar_por_sede=1",
         type: "GET",
-        data: {},
         async: false,
         beforeSend: function () {
             html += '<option value="-1">Todos</option>';

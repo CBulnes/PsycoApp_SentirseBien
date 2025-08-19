@@ -139,7 +139,7 @@ namespace PsycoApp.site.Controllers
         }
 
         [HttpGet]
-        public ActionResult<List<entities.Psicologo>> listar_doctores()
+        public ActionResult<List<entities.Psicologo>> listar_doctores(int filtrar_por_sede)
         {
             List<entities.Psicologo> lista = new List<entities.Psicologo>();
             string res = "";
@@ -148,6 +148,12 @@ namespace PsycoApp.site.Controllers
                 url = url_lista_psicologos;
                 res = ApiCaller.consume_endpoint_method(url, null, "GET");
                 lista = JsonConvert.DeserializeObject<List<entities.Psicologo>>(res);
+
+                if (filtrar_por_sede == 1)
+                {
+                    var id_sede = HttpContext.Session.GetInt32("id_sede");
+                    lista = lista.Where(x => x.Sedes.Contains(id_sede.ToString())).ToList();
+                }
             }
             catch (Exception ex)
             {
