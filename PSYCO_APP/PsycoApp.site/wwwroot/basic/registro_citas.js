@@ -269,6 +269,12 @@ function loadPatients(filtro= "", page) {
     });
 }
 
+$('#cboPacienteFiltro').on('change', function () {
+    //var id = $('#cboPacienteFiltro').val();
+    //let cboOrigen = document.getElementById("cboPacienteFiltro");
+    //alert(cboOrigen.value.toString());
+})
+
 function seleccionarPaciente(id) {
     console.log('choices');    
     
@@ -427,12 +433,16 @@ function validar_cambio_fecha() {
     })
 }
 function copiarOpciones() {
+    var cboOrigenId = $('#cboPacienteFiltro').parent().find('.choices__list--single').find('div').attr('data-value');
+    if (cboOrigenId == '')
+        cboOrigenId = '-1';
+
     let cboOrigen = document.getElementById("cboPacienteFiltro");
     let cboDestino = document.getElementById("cboPaciente");
 
-    if (cboOrigen.value.toString() != '-1') {
+    if (cboOrigenId != '-1') {
         // Limpiar opciones previas en el destino
-        cboDestino.innerHTML = "";
+        //cboDestino.innerHTML = "";
 
         // Copiar todas las opciones
         cboOrigen.querySelectorAll("option").forEach(option => {
@@ -446,7 +456,7 @@ function copiarOpciones() {
         cboDestino.setAttribute("data-id-paciente", cboOrigen.value);
 
         // Seleccionar en el destino el mismo valor que está seleccionado en el origen
-        cboDestino.value = cboOrigen.value;
+        cboDestino.value = cboOrigenId;
         console.log('cambiado');
     }
 }
@@ -478,10 +488,6 @@ function ver_cita(e) {
     }
     
     cargar_datos_cita(id_cita, id_especialista, id_paciente, fecha_cita, hora_Cita, estado, telefono, moneda, formatDecimal(monto_pactado), formatDecimal(monto_pagado), formatDecimal(monto_pendiente), id_servicio, id_sede, feedback, comentario, pago_gratis, dni_paciente);
-
-    setTimeout(() => {
-        copiarOpciones();
-    }, 1000);
 }
 
 function formatDecimal(num) {
@@ -929,6 +935,10 @@ function cargar_datos_cita(id_cita, id_doctor, id_paciente, fecha, hora, estado,
         $('#txtFechaReasignar').val('');
         $('#divHorarios, .divConfirmar').show();
         $('#divReprogramar, #btnConfirmar, #divAtender, #divEstado, #btnCancelar, #divPagoPendiente').hide();
+
+        setTimeout(() => {
+            copiarOpciones();
+        }, 800);
     } else {
         $('#ulTabs').show();
         $('#txtFechaReasignar').val(fecha);
