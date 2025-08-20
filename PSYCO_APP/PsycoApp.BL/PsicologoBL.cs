@@ -75,6 +75,11 @@ namespace PsycoApp.BL
             return _psicologoDA.listar_psicologos_combo();
         }
 
+        public List<entities.Usuario> listar_usuarios_caja_combo()
+        {
+            return _psicologoDA.listar_usuarios_caja_combo();
+        }
+
         public List<entities.Sede> listar_sedes_x_usuario_combo(int id_usuario)
         {
             return _psicologoDA.listar_sedes_x_usuario_combo(id_usuario);

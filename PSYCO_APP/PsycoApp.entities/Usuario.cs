@@ -12,6 +12,7 @@ namespace PsycoApp.entities
 		public string nuevo_pass2 { get; set; } = "";
 		public int id_usuario { get; set; } = 0;
 		public string nombres { get; set; } = "";
+		public string sedes { get; set; } = "";
 		public string apellidos { get; set; } = "";
 		public int id_tipousuario { get; set; } = 0;
 		public int id_psicologo { get; set; } = 0;

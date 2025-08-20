@@ -269,6 +269,36 @@ namespace PsycoApp.DA
             return lista;
         }
 
+        public List<entities.Usuario> listar_usuarios_caja_combo()
+        {
+            List<entities.Usuario> lista = new List<entities.Usuario>();
+            try
+            {
+                cn.Open();
+                SqlCommand cmd = new SqlCommand(Procedures.sp_listar_usuarios_caja_combo, cn);
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                SqlDataAdapter da = new SqlDataAdapter(cmd);
+                DataTable dt = new DataTable();
+                da.Fill(dt);
+
+                foreach (DataRow row in dt.Rows)
+                {
+                    entities.Usuario item = new entities.Usuario();
+                    item.id_usuario = Convert.ToInt32(row["id_usuario"]);
+                    item.nombres = Convert.ToString(row["nombres"]);
+                    item.sedes = Convert.ToString(row["sedes"]);
+                    lista.Add(item);
+                }
+            }
+            catch (Exception e)
+            {
+                lista.Clear();
+            }
+            cn.Close();
+            return lista;
+        }
+
         public List<entities.Sede> listar_sedes_x_usuario_combo(int id_usuario)
         {
             List<entities.Sede> lista = new List<entities.Sede>();

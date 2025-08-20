@@ -247,4 +247,28 @@
     }
 
     $('#txtFecha').val(fechaActualYYYYMMDD());
+
+    function cargar_lista_usuarios_caja() {
+        var html = '';
+        $.ajax({
+            url: "/RegistroCitas/listar_usuarios_caja?filtrar_por_sede=0",
+            type: "GET",
+            async: false,
+            beforeSend: function () {
+                html += '<option value="-1">Todos</option>';
+            },
+            success: function (data) {
+                for (var item of data) {
+                    html += '<option value="' + item.id_usuario + '" >' + item.nombres + '</option>';
+                }
+            },
+            error: function (response) {
+                html = '<option value="-1">Todos</option>';
+            },
+            complete: function () {
+                $('#cboUsuario').html(html);
+            }
+        });
+    }
+    cargar_lista_usuarios_caja();
 </script>

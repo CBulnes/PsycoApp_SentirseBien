@@ -18,6 +18,7 @@ namespace PsycoApp.site.Controllers
 
         private string url_centros_atencion = Helper.GetUrlApi() + "/api/centroatencion/listar_centros";
         private string url_lista_psicologos = Helper.GetUrlApi() + "/api/psicologo/listar_psicologos_combo";
+        private string url_lista_usuarios_caja = Helper.GetUrlApi() + "/api/psicologo/listar_usuarios_caja_combo";
         private string url_lista_psicologos_dinamico = Helper.GetUrlApi() + "/api/paciente/listar_pacientes_combo_dinamico";
         
         private string url_lista_pacientes = Helper.GetUrlApi() + "/api/paciente/listar_pacientes_combo";
@@ -153,6 +154,31 @@ namespace PsycoApp.site.Controllers
                 {
                     var id_sede = HttpContext.Session.GetInt32("id_sede");
                     lista = lista.Where(x => x.Sedes.Contains(id_sede.ToString())).ToList();
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                lista.Clear();
+            }
+            return lista;
+        }
+
+        [HttpGet]
+        public ActionResult<List<entities.Usuario>> listar_usuarios_caja(int filtrar_por_sede)
+        {
+            List<entities.Usuario> lista = new List<entities.Usuario>();
+            string res = "";
+            try
+            {
+                url = url_lista_usuarios_caja;
+                res = ApiCaller.consume_endpoint_method(url, null, "GET");
+                lista = JsonConvert.DeserializeObject<List<entities.Usuario>>(res);
+
+                if (filtrar_por_sede == 1)
+                {
+                    var id_sede = HttpContext.Session.GetInt32("id_sede");
+                    lista = lista.Where(x => x.sedes.Contains(id_sede.ToString())).ToList();
                 }
             }
             catch (Exception ex)

@@ -118,6 +118,21 @@ namespace PsycoApp.api.Controllers
             return lista;
         }
 
+        [HttpGet("listar_usuarios_caja_combo")]
+        public ActionResult<List<entities.Usuario>> listar_usuarios_caja_combo()
+        {
+            List<entities.Usuario> lista = new List<entities.Usuario>();
+            try
+            {
+                lista = _psicologoBL.listar_usuarios_caja_combo();
+            }
+            catch (Exception e)
+            {
+                lista.Clear();
+            }
+            return lista;
+        }
+
         [HttpGet("listar_sedes_x_usuario_combo/{id_usuario}")]
         public ActionResult<List<entities.Sede>> listar_sedes_x_usuario_combo(int id_usuario)
         {
