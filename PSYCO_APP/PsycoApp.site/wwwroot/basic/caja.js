@@ -28,6 +28,10 @@ function buscarPago(pageNumber = 1) {
 }
 verResumenUsuario(true);
 
+function formatDecimal(num) {
+    return (Math.round(num * 100) / 100).toFixed(2);
+}
+
 function verResumenUsuario(recargar) {
     //if (recargar) {
     //    $('#cboMes').val(-1);
@@ -47,21 +51,32 @@ function verResumenUsuario(recargar) {
 
     $.get('/Caja/ListarResumenCajaPorUsuario?fecha=' + fecha + "&buscar_por=" + buscar_por + "&sede=" + sede + "&id_usuario=" + id_usuario)
         .done(function (data) {
-            if (data.length > 0) {
+            var total = data.find(x => x.usuario == 'TOTAL');
+
+            if (data.length - 1 > 0) {
                 for (var item of data) {
-                    html += '<tr>';
-                    html += '<td class="text-center">' + contador + '</td>';
-                    html += '<td>' + item.importe + '</td>';
-                    html += '<td class="text-center">' + item.usuario + '</td>';
-                    html += '</tr>';
-                    contador++;
+                    if (item.usuario != 'TOTAL') {
+                        html += '<tr>';
+                        html += '<td class="text-center">' + contador + '</td>';
+                        html += '<td class="text-center">' + item.usuario + '</td>';
+                        html += '<td style="text-align: right;">' + item.importe + '</td>';
+                        html += '</tr>';
+                        contador++;
+                    }
                 }
+
+                html += '<tr>';
+                html += '<td class="text-center" style="background-color: #FFFFFF !important;">&nbsp;</td>';
+                html += '<td class="text-center" style="background-color: #FFFFFF !important;">&nbsp;</td>';
+                html += '<td style="text-align: right;">' + total.importe + '</td>';
+                html += '</tr>';
             } else {
                 html += '<tr>';
                 html += '<td style="text-align: center;" colspan="3">No hay datos para mostrar</td>';
                 html += '</tr>';
             }
             $('#bdResumen').html(html);
+            
             getResumenTipoPago(fecha, buscar_por, sede, id_usuario);
         })
         .fail(function () {
@@ -81,21 +96,32 @@ function getResumenTipoPago(fecha, buscar_por, sede, id_usuario) {
 
     $.get('/Caja/ListarResumenCajaPorFormaPago?fecha=' + fecha + "&buscar_por=" + buscar_por + "&sede=" + sede + "&id_usuario=" + id_usuario)
         .done(function (data) {
+            var total = data.find(x => x.forma_pago == 'TOTAL' && x.detalle_transferencia == 'TOTAL');
             var data_resumen = [];
 
-            if (data.length > 0) {
+            if (data.length - 1 > 0) {
                 data_resumen = data;
 
                 for (var item of data_resumen) {
-                    html += '<tr>';
-                    html += '<td class="text-center">' + contador + '</td>';
-                    html += '<td class="text-center">' + item.cantidad + '</td>';
-                    html += '<td>' + item.importe + '</td>';
-                    html += '<td class="text-center">' + item.forma_pago + '</td>';
-                    html += '<td class="text-center">' + item.detalle_transferencia + '</td>';
-                    html += '</tr>';
-                    contador++;
+                    if (item.forma_pago != 'TOTAL' && item.detalle_transferencia != 'TOTAL') {
+                        html += '<tr>';
+                        html += '<td class="text-center">' + contador + '</td>';
+                        html += '<td class="text-center">' + item.cantidad + '</td>';
+                        html += '<td class="text-center">' + item.forma_pago + '</td>';
+                        html += '<td class="text-center">' + item.detalle_transferencia + '</td>';
+                        html += '<td style="text-align: right;">' + item.importe + '</td>';
+                        html += '</tr>';
+                        contador++;
+                    }
                 }
+
+                html += '<tr>';
+                html += '<td class="text-center" style="background-color: #FFFFFF !important;">&nbsp;</td>';
+                html += '<td class="text-center" style="background-color: #FFFFFF !important;">&nbsp;</td>';
+                html += '<td class="text-center" style="background-color: #FFFFFF !important;">&nbsp;</td>';
+                html += '<td class="text-center" style="background-color: #FFFFFF !important;">&nbsp;</td>';
+                html += '<td style="text-align: right;">' + total.importe + '</td>';
+                html += '</tr>';
             } else {
                 data_resumen = [{ 'cantidad': 1, 'forma_pago': 'Sin registros', 'detalle_transferencia': '' }];
 
@@ -196,13 +222,15 @@ function generar_grafico(data_nps) {
         }
     });
     for (var item of data_nps) {
-        i++;
-        var item_ = {
-            label: item.forma_pago + (item.detalle_transferencia == '' ? '' : (' - ') + item.detalle_transferencia) + ' - ' + item.importe,
-            data: parseInt(item.cantidad),
-            color: colors[i]
-        };
-        data_nps_dona.push(item_);
+        if (item.detalle_transferencia != 'TOTAL' && item.forma_pago != 'TOTAL') {
+            i++;
+            var item_ = {
+                label: item.forma_pago + (item.detalle_transferencia == '' ? '' : (' - ') + item.detalle_transferencia) + ' - ' + item.importe,
+                data: parseInt(item.cantidad),
+                color: colors[i]
+            };
+            data_nps_dona.push(item_);
+        }
     }
 
     var data = data_nps_dona;
