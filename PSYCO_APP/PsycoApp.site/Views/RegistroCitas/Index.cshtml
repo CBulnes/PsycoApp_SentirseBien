@@ -359,8 +359,10 @@
                                 <div class="sb-reg-citas-popup-tab-panel-block-item">
                                     <span class="label-form">Centro</span>
                                     <div class="input-group">
-                                        <select class="form-control" id="cboSedeChange">
+                                        <select class="form-control" id="cboSedeChange_" disabled="disabled">
                                             <option value="-1">Seleccionar</option>
+                                            @* <option value="1">Sentirse bien</option>
+                                            <option value="2">Lidérate</option> *@
                                         </select>
                                     </div>
                                 </div>
@@ -739,6 +741,7 @@
             sedes.push({ id: idSedePrincipal, valor: sedePrincipal });
         }
         cargarCombo(sedes, 'cboSedeFiltro');
+        cargarCombo(sedes, 'cboSedeChange_');
 
         document.addEventListener('DOMContentLoaded', function () {
             var elems = document.querySelectorAll('.modal');

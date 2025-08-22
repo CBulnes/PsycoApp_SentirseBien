@@ -120,9 +120,9 @@ $(document).ready(function () {
         for (var i = 0; i < sesiones; i++) {
             var fecha = addDays(parseDate(fecha_yyyyMMdd(fechaInicial)), i*7);
             html += '<tr>';
-            html += '<td><input class="form-control fechaAd active-input-modulo" type="date" id="txtFecha' + i + '" autocomplete="off" max="2050-12-31" min="2022-08-01" value="' + formatDateISO(fecha) + '" onkeydown="return false" ' + disabled + ' /></td>';
+            html += '<td><input class="form-control fechaAd active-input-modulo" type="date" id="txtFecha' + i + '" autocomplete="off" max="2050-12-31" min="2022-08-01" value="' + formatDateISO(fecha) + '" onkeydown="return false" ' + disabled + ' oninput="validarHorarioFecha(' + i + ')" /></td>';
 
-            html += '<td><select class="form-control horarioAd active-select-modulo" id="cboHorario' + i + '">' + obtener_horarios_fecha(formatDateISO(fecha)) + '</select></td>';
+            html += '<td id="tdHorario' + i + '"><select class="form-control horarioAd active-select-modulo" id="cboHorario' + i + '">' + obtener_horarios_fecha(formatDateISO(fecha)) + '</select></td>';
 
             html += '</tr>';
         }
@@ -712,6 +712,14 @@ function cerrar_modal_fechas_adicionales() {
     $('#mdl_adicionales_').modal('hide');
 }
 
+function validarHorarioFecha(i) {
+    //fechaAd
+    var idFecha = 'txtFecha' + i;
+    var fechaRecargar = $('#' + idFecha).val();
+    var html = '<select class="form-control horarioAd active-select-modulo" id="cboHorario' + i + '">' + obtener_horarios_fecha(fechaRecargar) + '</select>';
+    $('#tdHorario' + i).html(html);
+}
+
 function validar_modal_fechas_adicionales() {
     adicionales = [];
     var error = '';
@@ -916,7 +924,7 @@ function cargar_datos_cita(id_cita, id_doctor, id_paciente, fecha, hora, estado,
     $('#spnPendiente').html('Monto pendiente (' + moneda + ')' + btnAbonar);
     pago_gratis_ = pago_gratis;
     
-    $('#cboDoctor, #cboPaciente, #txtHora, #cboServicio, #cboSedeChange, #cboTipoCita').removeAttr('disabled');
+    $('#cboDoctor, #cboPaciente, #txtHora, #cboServicio, #cboTipoCita').removeAttr('disabled');
     // Asignar el feedback
     if (feedback) { // Si feedback es true, es "sad"
         $('#sad').prop('checked', true);
@@ -939,10 +947,15 @@ function cargar_datos_cita(id_cita, id_doctor, id_paciente, fecha, hora, estado,
         setTimeout(() => {
             copiarOpciones();
         }, 800);
+
+        var idSede = document.getElementById("hiddenIdSede").value;
+        var select = document.getElementById("cboSedeChange_");
+        select.value = idSede;
     } else {
         $('#ulTabs').show();
         $('#txtFechaReasignar').val(fecha);
         $('#divEstado').show();
+        $('#cboSedeChange_').val(id_sede);
 
         if (estado == 'CITADO') {
             $('#divReprogramar, #divHorarios, #divConfirmar, #btnConfirmar, #btnCancelar, #divPagoPendiente').show();
@@ -966,7 +979,7 @@ function cargar_datos_cita(id_cita, id_doctor, id_paciente, fecha, hora, estado,
     verificar_si_es_psicologo();
     verificar_disponibilidad();
     mostrar_historial(id_cita, id_paciente);
-    validar_sede_usuario(id_doctor, id_sede);
+    //validar_sede_usuario(id_doctor, id_sede);
 }
 
 function mostrar_historial(id_cita, id_paciente) {
@@ -1403,7 +1416,7 @@ function guardar_cita() {
     var doctor = $('#cboDoctor').val();
     var paciente = $('#cboPaciente').val();
     var id_servicio = $('#cboServicio').val();
-    var id_sede = $('#cboSedeChange').val();
+    var id_sede = $('#cboSedeChange_').val();
     var tipo_cita = $('#cboTipoCita').val();
 
     if (doctor == '-1') {
@@ -1552,7 +1565,7 @@ function confirmar_cita() {
                     $('#divPagoGratis').hide();
                 }
                 $('#btnEstado').html('CONFIRMADO').removeClass('evento_citado').addClass('evento_confirmado');
-                $('#cboDoctor, #cboPaciente, #txtHora, #cboServicio, #cboSedeChange, #cboTipoCita').attr('disabled', true);
+                $('#cboDoctor, #cboPaciente, #txtHora, #cboServicio, #cboSedeChange_, #cboTipoCita').attr('disabled', true);
                 verificar_si_es_psicologo();
                 mostrar_historial(id_cita_, id_paciente_);
                 mostrar_historial_pago(id_cita_);
@@ -1604,7 +1617,7 @@ function atender_cita() {
                 //BEGIN: acciones cuando la cita se atiende
                 $('#divReprogramar, #divHorarios, .divConfirmar, #divAtender, #btnCancelar, #divPagoPendiente, #divPagoGratis').hide();
                 $('#btnEstado').html('ATENDIDO').removeClass('evento_confirmado').addClass('evento_atendido');
-                $('#cboDoctor, #cboPaciente, #txtHora, #cboServicio, #cboSedeChange, #cboTipoCita').attr('disabled', true);
+                $('#cboDoctor, #cboPaciente, #txtHora, #cboServicio, #cboSedeChange_, #cboTipoCita').attr('disabled', true);
                 verificar_si_es_psicologo();
                 mostrar_historial(id_cita_, id_paciente_);
                 mostrar_historial_pago(id_cita_);
@@ -1709,6 +1722,9 @@ function verificar_disponibilidad() {
         $('#txtHora').val('').attr('data-hora', '');
     }
 
+
+    console.log('Se omiitirá la validación de sedes');
+    return;
     var sedes = $("#cboDoctor option:selected").data("sedes");;
     if (sedes != undefined) {
         var listaSedes = sedes.split('/');
@@ -1741,9 +1757,9 @@ function validar_sede_usuario(id_doc, id_selected) {
             html = '<option value="-1">Seleccionar</option>';
         },
         complete: function () {
-            $('#cboSedeChange').html(html);
+            $('#cboSedeChange_').html(html);
             if (id_selected != null) {
-                $('#cboSedeChange').val(id_selected);
+                $('#cboSedeChange_').val(id_selected);
             }
         }
     });
