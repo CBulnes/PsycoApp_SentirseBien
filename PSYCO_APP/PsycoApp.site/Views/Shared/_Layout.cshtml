@@ -3,8 +3,8 @@
 @using PsycoApp.utilities;
 @{
     var dHoy = DateTime.Now;
-    var centro_nombre = Context.Session.GetInt32("id_sede") == 1 ? "Sentirse bien" : "Lidérate";
-    var logo = (Context.Session.GetInt32("id_sede") == 1 ? "sentirse_bien" : "liderate") + ".jpg";
+    var centro_nombre = Context.Session.GetInt32("id_sede") == 1 ? "Sentirse bien" : "Transforma";
+    var logo = (Context.Session.GetInt32("id_sede") == 1 ? "sentirse_bien" : "transforma") + ".jpg";
 }
 
 <!DOCTYPE html>

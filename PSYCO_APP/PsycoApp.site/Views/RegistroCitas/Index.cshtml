@@ -362,7 +362,7 @@
                                         <select class="form-control" id="cboSedeChange_" disabled="disabled">
                                             <option value="-1">Seleccionar</option>
                                             @* <option value="1">Sentirse bien</option>
-                                            <option value="2">Lidérate</option> *@
+                                            <option value="2">Transforma</option> *@
                                         </select>
                                     </div>
                                 </div>
@@ -728,13 +728,13 @@
         }
 
         var idSedePrincipal = $('#hdnIdSede').val().toString();
-        var sedePrincipal = (idSedePrincipal == '1' ? 'Sentirse bien' : 'Lidérate');
+        var sedePrincipal = (idSedePrincipal == '1' ? 'Sentirse bien' : 'Transforma');
 
         if (tipoUsuario == 'ADMIN') //si es ADMIN ve todo
         {
             sedes.push({ id: '-1', valor: 'Todos' });
             sedes.push({ id: '1', valor: 'Sentirse bien' });
-            sedes.push({ id: '2', valor: 'Lidérate' });
+            sedes.push({ id: '2', valor: 'Transforma' });
             // sedes.push({ id: '-2', valor: 'Ambas' });
         } else {
             // caso contrario ve solo lo de su sede asignada
