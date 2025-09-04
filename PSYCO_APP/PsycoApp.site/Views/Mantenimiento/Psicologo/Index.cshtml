@@ -501,13 +501,13 @@
         }
 
         var idSedePrincipal = $('#hdnIdSede').val().toString();
-        var sedePrincipal = (idSedePrincipal == '1' ? 'La Molina' : 'Surco');
+        var sedePrincipal = (idSedePrincipal == '1' ? 'Sentirse bien' : 'Transforma');
 
         if (tipoUsuario == 'ADMIN') //si es ADMIN ve todo
         {
             sedes.push({ id: '-1', valor: 'Todos' });
-            sedes.push({ id: '1', valor: 'La Molina' });
-            sedes.push({ id: '2', valor: 'Surco' });
+            sedes.push({ id: '1', valor: 'Sentirse bien' });
+            sedes.push({ id: '2', valor: 'Transforma' });
             sedes.push({ id: '-2', valor: 'Ambas' });
         } else {
             // caso contrario ve solo lo de su sede asignada
