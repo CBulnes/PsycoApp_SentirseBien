@@ -687,18 +687,49 @@
                 return;
             }
 
-            $.get(`/Mantenimiento/Psicologo/horarios_psicologo/${id}/${inicio}/${fin}/${dias}`, function (data) {
-                horarios_psicologo = data;
-                var html = '';
-                for (var item of data){
-                    html += '<tr>';
-                    html += '<td>' + item.nombreDia + ' ' + item.fecha + '</td>';
-                    html += '<td>' + comboHorario(item.orden, item.id, item.inicio, 'Inicio') + '</td>';
-                    html += '<td>' + comboHorario(item.orden, item.id, item.refrigerio, 'Refrigerio') + '</td>';
-                    html += '<td>' + comboHorario(item.orden, item.id, item.fin, 'Fin') + '</td>';
-                    html += '</tr>';
+            // $.get(`/Mantenimiento/Psicologo/horarios_psicologo/${id}/${inicio}/${fin}/${dias}`, function (data) {
+            //     horarios_psicologo = data;
+            //     var html = '';
+            //     for (var item of data){
+            //         html += '<tr>';
+            //         html += '<td>' + item.nombreDia + ' ' + item.fecha + '</td>';
+            //         html += '<td>' + comboHorario(item.orden, item.id, item.inicio, 'Inicio') + '</td>';
+            //         html += '<td>' + comboHorario(item.orden, item.id, item.refrigerio, 'Refrigerio') + '</td>';
+            //         html += '<td>' + comboHorario(item.orden, item.id, item.fin, 'Fin') + '</td>';
+            //         html += '</tr>';
+            //     }
+            //     $('#bdHorarios').html(html);
+            // });
+            
+            $.ajax({
+                url: `/Mantenimiento/Psicologo/horarios_psicologo/${id}/${inicio}/${fin}/${dias}`,
+                type: 'GET',
+                beforeSend: function() {
+                    //console.log("La petición está a punto de realizarse");
+                },
+                success: function(data) {
+                    horarios_psicologo = data;
+                    var html = '';
+                    for (var item of data) {
+                        html += '<tr>';
+                        html += '<td>' + item.nombreDia + ' ' + item.fecha + '</td>';
+                        html += '<td>' + comboHorario(item.orden, item.id, item.inicio, 'Inicio') + '</td>';
+                        html += '<td>' + comboHorario(item.orden, item.id, item.refrigerio, 'Refrigerio') + '</td>';
+                        html += '<td>' + comboHorario(item.orden, item.id, item.fin, 'Fin') + '</td>';
+                        html += '</tr>';
+                    }
+                    $('#bdHorarios').html(html);
+                },
+                error: function(xhr, status, error) {
+                    //console.error("Ocurrió un error al realizar la petición: " + error);
+                    alert("Hubo un problema al cargar los horarios, por favor intente nuevamente.");
+                },
+                complete: function() {
+                    //console.log("La petición ha terminado.");
+                    $('.cboInicio').change();
+                    $('.cboRefrigerio').change();
+                    $('.cboFin').change();
                 }
-                $('#bdHorarios').html(html);
             });
         }
 
