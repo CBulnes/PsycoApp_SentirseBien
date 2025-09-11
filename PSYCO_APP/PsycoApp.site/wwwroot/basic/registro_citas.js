@@ -160,6 +160,7 @@ function searchPatientsModal(filtro) {
     console.log("Buscando pacientes con filtro:", filtro);
 
     // Llamada AJAX para búsqueda dinámica
+    console.log('1');
     $.ajax({
         url: `/RegistroCitas/listar_pacientes_dinamico?filtro=${filtro}&page=1&pageSize=10`,
         type: "GET",
@@ -207,6 +208,7 @@ function searchPatientsModal(filtro) {
 function searchPatients(filtro) {
     console.log("Buscando pacientes con filtro:", filtro);
 
+    console.log('2');
     // Llamada AJAX para búsqueda dinámica
     $.ajax({
         url: `/RegistroCitas/listar_pacientes_dinamico?filtro=${filtro}&page=1&pageSize=10`,
@@ -222,7 +224,7 @@ function searchPatients(filtro) {
             if (res && res.length > 0) {
                 const pacientes = res.map((item) => ({
                     value: item.id,
-                    label: item.nombre,
+                    label: item.nombre
                 }));
 
                 // Actualizar combo con resultados de búsqueda
@@ -240,9 +242,15 @@ function searchPatients(filtro) {
         },
     });
 }
-function loadPatients(filtro= "", page) {
-    console.log('pacientes');
 
+$('#cboPacienteFiltro').on('change', function () {
+    const selectedOption = $('#cboPacienteFiltro option:selected').val();
+    $('#cboPacienteFiltro').parent().find('.choices__list--single').find('div').attr('data-value', selectedOption);
+})
+
+function loadPatients(filtro = "", page) {
+    console.log('pacientes');
+    console.log('3');
     var html = '';
     $.ajax({
         url: `/RegistroCitas/listar_pacientes_dinamico?filtro=${filtro}&page=${page}&pageSize=10`,
@@ -263,8 +271,6 @@ function loadPatients(filtro= "", page) {
         complete: function () {
             $('#cboPaciente').html(html);
             $('#cboPacienteFiltro').html(html);
-           
-
         }
     });
 }
@@ -439,10 +445,10 @@ function copiarOpciones() {
 
     let cboOrigen = document.getElementById("cboPacienteFiltro");
     let cboDestino = document.getElementById("cboPaciente");
-
+    
     if (cboOrigenId != '-1') {
         // Limpiar opciones previas en el destino
-        //cboDestino.innerHTML = "";
+        cboDestino.innerHTML = "";
 
         // Copiar todas las opciones
         cboOrigen.querySelectorAll("option").forEach(option => {
@@ -453,10 +459,11 @@ function copiarOpciones() {
         });
 
         // Mantener el atributo `data-id-paciente`
-        cboDestino.setAttribute("data-id-paciente", cboOrigen.value);
+        cboDestino.setAttribute("data-id-paciente", cboOrigenId); // cboOrigen.value);
 
         // Seleccionar en el destino el mismo valor que está seleccionado en el origen
         cboDestino.value = cboOrigenId;
+        $("#cboPaciente").change();
         console.log('cambiado');
     }
 }
@@ -1370,7 +1377,6 @@ function cerrarModalActualizarServicio() {
 }
 
 function actualizar_servicio() {
-    debugger;
     var servicioOg = parseInt($('#cboServicio').val());
     var servicioNew = parseInt($('#cboServicioActualizar').val());
 

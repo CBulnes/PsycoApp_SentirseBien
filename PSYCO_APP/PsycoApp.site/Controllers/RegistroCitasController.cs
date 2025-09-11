@@ -83,8 +83,8 @@ namespace PsycoApp.site.Controllers
                 var pacientesViewModel = pacientes.Select(p => new PsycoApp.site.Models.Paciente
                 {
                     Id = p.Id,
-                    Nombre = p.Nombre,
-                    Apellido = p.Apellido,
+                    Nombre = p.Nombre.Trim().ToUpper(),
+                    Apellido = p.Apellido.Trim().ToUpper(),
                     DocumentoNumero = p.DocumentoNumero,
                     Estado = p.Estado,
                     DocumentoTipo = p.DocumentoTipo,
@@ -218,6 +218,11 @@ namespace PsycoApp.site.Controllers
                 var res =  ApiCaller.consume_endpoint_method(apiUrl, null, "GET");
 
                 listaPacientes = JsonConvert.DeserializeObject<List<entities.Paciente>>(res);
+
+                foreach (var obj in listaPacientes)
+                {
+                    obj.Nombre = obj.Nombre.Trim().ToUpper();
+                }
             }
             catch (Exception ex)
             {
