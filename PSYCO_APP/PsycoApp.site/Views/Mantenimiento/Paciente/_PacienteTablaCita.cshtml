@@ -1,6 +1,15 @@
 ﻿@model IEnumerable<PsycoApp.site.Models.Paciente>
 
-<table class="table table-striped active-table-modulo">
+<style type="text/css">
+    .table-view-cita tr:nth-of-type(odd) {
+        background-color: var(--colormodular_oscura) !important;
+    }
+    .table-view-cita tr:nth-of-type(even) {
+        background-color: var(--colorletra_sin_seleccionar_oscura) !important;
+    }
+</style>
+
+<table class="table table-striped active-table-modulo table-view-cita">
     <thead>
         <tr>
             <th>Nº</th>
