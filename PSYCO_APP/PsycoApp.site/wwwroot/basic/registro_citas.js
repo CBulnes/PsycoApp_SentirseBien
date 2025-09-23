@@ -419,6 +419,10 @@ function cargar_citas() {
                 recargar_vista_semanal()
             }
             validar_cambio_fecha();
+
+            setTimeout(() => {
+                $('#cboPacienteFiltro').parent().parent().find('.choices__list--dropdown').find('.choices__list').find('.is-highlighted').removeClass('is-highlighted');
+            }, 1000);
         }
     });
 
@@ -440,13 +444,16 @@ function validar_cambio_fecha() {
 }
 function copiarOpciones() {
     var cboOrigenId = $('#cboPacienteFiltro').parent().find('.choices__list--single').find('div').attr('data-value');
-    if (cboOrigenId == '')
+    var cboOrigenAlternativoId = $('#cboPacienteFiltro').parent().parent().find('.choices__list--dropdown').find('.choices__list').find('.is-selected').attr('data-value');
+    if (cboOrigenId == '' || cboOrigenId == null || cboOrigenId == undefined)
         cboOrigenId = '-1';
+    if (cboOrigenAlternativoId == '' || cboOrigenAlternativoId == null || cboOrigenAlternativoId == undefined)
+        cboOrigenAlternativoId = '-1';
 
     let cboOrigen = document.getElementById("cboPacienteFiltro");
     let cboDestino = document.getElementById("cboPaciente");
     
-    if (cboOrigenId != '-1') {
+    if (cboOrigenId != '-1' || cboOrigenAlternativoId != '-1') {
         // Limpiar opciones previas en el destino
         cboDestino.innerHTML = "";
 
@@ -459,10 +466,10 @@ function copiarOpciones() {
         });
 
         // Mantener el atributo `data-id-paciente`
-        cboDestino.setAttribute("data-id-paciente", cboOrigenId); // cboOrigen.value);
+        cboDestino.setAttribute("data-id-paciente", cboOrigenId == '-1' ? cboOrigenAlternativoId : cboOrigenId); // cboOrigen.value);
 
         // Seleccionar en el destino el mismo valor que está seleccionado en el origen
-        cboDestino.value = cboOrigenId;
+        cboDestino.value = cboOrigenId == '-1' ? cboOrigenAlternativoId : cboOrigenId;
         $("#cboPaciente").change();
         console.log('cambiado');
     }
