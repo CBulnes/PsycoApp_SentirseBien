@@ -581,6 +581,8 @@ function GetFechaActual() {
 }
 
 function form_pago() {
+
+
     $.ajax({
         url: "/Home/ObtenerConfiguracion",
         type: "GET",
@@ -618,6 +620,7 @@ function form_pago() {
                             $('#txtFechaPago').val(fecha_formato_ddmmyyyy(fechaActual));
                             $('#txtPaciente').val(nombrePaciente);
                             $('#cboFormaPago').val(-1);
+                            $('#txtComentario').val('');
                             validarSiEsTransferencia();
 
                             $("#txtMonto1, #txtMonto2, #txtMonto3").inputmask({ 'alias': 'numeric', allowMinus: false, digits: 2, max: 999.99 });
@@ -769,98 +772,102 @@ function validar_modal_fechas_adicionales() {
 }
 
 function guardar_pago() {
-    var id_forma_pago = $('#cboFormaPago').val();
-    var id_detalle_transferencia = $('#cboDetalleTransferencia').val();
-    var importe = $('#txtMonto1').val();
-    var comentario = null;
+    setTimeout(() => {
+        debugger;
+        var id_forma_pago = $('#cboFormaPago').val();
+        var id_detalle_transferencia = $('#cboDetalleTransferencia').val();
+        var importe = $('#txtMonto1').val();
+        var comentario = null;
 
-    if ($('#txtComentario').val()) {
-        comentario = $('#txtComentario').val().trim();
-    } else {
-        comentario = '';
-    }
+        if ($('#txtComentario').val()) {
+            comentario = $('#txtComentario').val().trim();
+        } else {
+            comentario = '';
+        }
 
-    if (id_forma_pago == -1) {
-        Swal.fire({
-            icon: "warning",
-            title: "Oops...",
-            text: "Seleccione una forma de pago.",
-        });
-        return;
-    }
+        if (id_forma_pago == -1) {
+            Swal.fire({
+                icon: "warning",
+                title: "Oops...",
+                text: "Seleccione una forma de pago.",
+            });
+            return;
+        }
 
-    if (id_forma_pago == 1 && id_detalle_transferencia == -1) {
-        Swal.fire({
-            icon: "warning",
-            title: "Oops...",
-            text: "Seleccione el detalle de transferencia.",
-        });
-        return;
-    }
+        if (id_forma_pago == 1 && id_detalle_transferencia == -1) {
+            Swal.fire({
+                icon: "warning",
+                title: "Oops...",
+                text: "Seleccione el detalle de transferencia.",
+            });
+            return;
+        }
 
-    if (importe == '0.00' || (importe != '' && !isPrecise(importe))) {
-        Swal.fire({
-            icon: "warning",
-            title: "Oops...",
-            text: "Para registrar el pago debe ingresar un importe de pago válido.",
-        });
-        return;
-    }
+        if (importe == '0.00' || (importe != '' && !isPrecise(importe))) {
+            Swal.fire({
+                icon: "warning",
+                title: "Oops...",
+                text: "Para registrar el pago debe ingresar un importe de pago válido.",
+            });
+            return;
+        }
 
-    var data_ = {
-        id_cita: $('#txtIdCita').val(),
-        id_forma_pago: id_forma_pago,
-        id_detalle_transferencia: id_detalle_transferencia,
-        importe: importe.replace('.', ','),
-        comentario: comentario
-    };
+        var data_ = {
+            id_cita: $('#txtIdCita').val(),
+            id_forma_pago: id_forma_pago,
+            id_detalle_transferencia: id_detalle_transferencia,
+            importe: importe, //.replace('.', ','),
+            comentario: comentario
+        };
 
-    $.ajax({
-        url: "/Caja/RegistrarPago",
-        type: "POST",
-        data: data_,
-        success: function (data) {
-            if (data.estado) {
-                Swal.fire({
-                    icon: "success",
-                    text: "Pago registrado exitosamente.",
-                });
+        $.ajax({
+            url: "/Caja/RegistrarPago",
+            type: "POST",
+            data: data_,
+            success: function (data) {
+                if (data.estado) {
+                    Swal.fire({
+                        icon: "success",
+                        text: "Pago registrado exitosamente.",
+                    });
 
-                if (!recargar_pagos_pendientes) {
-                    cerrar_modal_pago();
+                    if (!recargar_pagos_pendientes) {
+                        cerrar_modal_pago();
 
-                    var pactado = $('#txtMontoPactado').val();
-                    var pagado = $('#txtMontoPagado').val();
+                        var pactado = $('#txtMontoPactado').val();
+                        var pagado = $('#txtMontoPagado').val();
 
-                    $('#txtMontoPagado').val(formatDecimal(parseFloat(pagado) + parseFloat(importe)));
-                    $('#txtMontoPendiente').val(formatDecimal(parseFloat(pactado) - (parseFloat(pagado) + parseFloat(importe))));
+                        $('#txtMontoPagado').val(formatDecimal(parseFloat(pagado) + parseFloat(importe)));
+                        $('#txtMontoPendiente').val(formatDecimal(parseFloat(pactado) - (parseFloat(pagado) + parseFloat(importe))));
 
-                    //$('#cita' + id_cita_).attr('data-monto-pactado', '');
-                    $('#cita' + id_cita_).attr('data-monto-pagado', formatDecimal(parseFloat(pagado) + parseFloat(importe)));
-                    $('#cita' + id_cita_).attr('data-monto-pendiente', formatDecimal(parseFloat(pactado) - (parseFloat(pagado) + parseFloat(importe))));
+                        //$('#cita' + id_cita_).attr('data-monto-pactado', '');
+                        $('#cita' + id_cita_).attr('data-monto-pagado', formatDecimal(parseFloat(pagado) + parseFloat(importe)));
+                        $('#cita' + id_cita_).attr('data-monto-pendiente', formatDecimal(parseFloat(pactado) - (parseFloat(pagado) + parseFloat(importe))));
+                    } else {
+                        cerrar_modal_pago2();
+                        listar_pagos_pendientes($('#cboPaciente').val());
+                    }
                 } else {
-                    cerrar_modal_pago2();
-                    listar_pagos_pendientes($('#cboPaciente').val());
+                    Swal.fire({
+                        icon: "error",
+                        title: "Oops...",
+                        text: data.descripcion,
+                    });
                 }
-            } else {
+            },
+            error: function (response) {
                 Swal.fire({
                     icon: "error",
                     title: "Oops...",
-                    text: data.descripcion,
+                    text: "Ocurrió un error al guardar la cita.",
                 });
+                //$("#load_data").hide();
+            },
+            complete: function () {
             }
-        },
-        error: function (response) {
-            Swal.fire({
-                icon: "error",
-                title: "Oops...",
-                text: "Ocurrió un error al guardar la cita.",
-            });
-            //$("#load_data").hide();
-        },
-        complete: function () {
-        }
-    });
+        });
+
+    }, 500);
 }
 
 function setDecimalValue() {
