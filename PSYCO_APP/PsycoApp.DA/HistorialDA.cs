@@ -155,26 +155,30 @@ namespace PsycoApp.DA
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.Add("@id_paciente", SqlDbType.Int).Value = id_paciente;
 
-                SqlDataAdapter da = new SqlDataAdapter(cmd);
-                DataTable dt = new DataTable();
-                da.Fill(dt);
-
-                foreach (DataRow row in dt.Rows)
+                using (SqlDataReader reader = cmd.ExecuteReader())
                 {
-                    HistorialPaciente historial = new HistorialPaciente();
-                    historial.doctor = Convert.ToString(row["doctor"]);
-                    historial.fecha_registro = Convert.ToString(row["fecha_registro"]);
-                    lista.Add(historial);
+                    while (reader.Read())
+                    {
+                        HistorialPaciente historial = new HistorialPaciente
+                        {
+                            doctor = reader["doctor"].ToString(),
+                            fecha_registro = reader["fecha_registro"].ToString()
+                        };
+                        lista.Add(historial);
+                    }
                 }
             }
             catch (Exception e)
             {
+                // Aquí puedes manejar mejor el error si es necesario
                 lista.Clear();
             }
-            cn.Close();
+            finally
+            {
+                cn.Close();
+            }
             return lista;
         }
-
 
     }
 }
