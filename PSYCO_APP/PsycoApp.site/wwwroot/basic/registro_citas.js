@@ -773,7 +773,6 @@ function validar_modal_fechas_adicionales() {
 
 function guardar_pago() {
     setTimeout(() => {
-        debugger;
         var id_forma_pago = $('#cboFormaPago').val();
         var id_detalle_transferencia = $('#cboDetalleTransferencia').val();
         var importe = $('#txtMonto1').val();
