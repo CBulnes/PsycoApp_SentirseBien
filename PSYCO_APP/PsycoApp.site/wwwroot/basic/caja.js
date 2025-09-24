@@ -13,6 +13,16 @@ function buscarPago(pageNumber = 1) {
     var sede = $('#cboSede').val();
     var id_usuario = parseInt($('#cboUsuario').val());
 
+    if (fecha == '') {
+        Swal.fire({
+            icon: "Error",
+            title: "Oops...",
+            text: "Ingrese una fecha válida.",
+        });
+        $('#containerTabla').html([]);
+        return;
+    }
+
     $.post('/Caja/Buscar', { pageNumber: pageNumber, pageSize: pageSize, fecha: fecha, buscar_por: buscar_por, sede: sede, id_usuario: id_usuario })
         .done(function (data) {
             $('#containerTabla').html(data);
@@ -22,7 +32,7 @@ function buscarPago(pageNumber = 1) {
             Swal.fire({
                 icon: "Error",
                 title: "Oops...",
-                text: "Ocurrió un error al obtener los registros.",
+                text: "Ocurrió un error al obtener los datos de la caja.",
             });
         });
 }
