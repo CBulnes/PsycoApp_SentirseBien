@@ -211,10 +211,11 @@ namespace PsycoApp.site.Controllers
         [HttpGet]
         public ActionResult<List<entities.Paciente>> listar_pacientes_dinamico(int page = 1, string filtro = "", int pageSize = 10)
         {
-            List<entities.Paciente> listaPacientes = new List<entities.Paciente>();
+            var id_sede = HttpContext.Session.GetInt32("id_sede");
+            List <entities.Paciente> listaPacientes = new List<entities.Paciente>();
             try
             {
-                string apiUrl = url_lista_psicologos_dinamico + $"?page={page}&pageSize={pageSize}&search={filtro}";
+                string apiUrl = url_lista_psicologos_dinamico + $"?page={page}&pageSize={pageSize}&search={filtro}&sede={id_sede}";
                 var res =  ApiCaller.consume_endpoint_method(apiUrl, null, "GET");
 
                 listaPacientes = JsonConvert.DeserializeObject<List<entities.Paciente>>(res);
@@ -406,13 +407,14 @@ namespace PsycoApp.site.Controllers
         public async Task<List<Cita>> CitasUsuario(int idPaciente, int idDoctor, int idSede, string tipoVista)
         {
             int id_usuario = Convert.ToInt32(HttpContext.Session.GetInt32("id_usuario"));
+            var id_sede = HttpContext.Session.GetInt32("id_sede");
             List<Cita> lista = new List<Cita>();
             string res = "";
             try
             {
                 url = url_citas_usuario + "/" + id_usuario + "/" + idPaciente + "/" + idDoctor + "/" + idSede;
                 res = ApiCaller.consume_endpoint_method(url, null, "GET");
-                lista = JsonConvert.DeserializeObject<List<Cita>>(res);
+                lista = JsonConvert.DeserializeObject<List<Cita>>(res).Where(x => x.id_sede == id_sede).ToList();
             }
             catch (Exception)
             {

@@ -16,5 +16,6 @@ namespace PsycoApp.entities
         public string EstadoCivil { get; set; }
         public string Sexo { get; set; }
         public string Estado { get; set; }
+        public int id_sede { get; set; }
     }
 }

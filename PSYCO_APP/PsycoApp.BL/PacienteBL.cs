@@ -50,9 +50,9 @@ namespace PsycoApp.BL
         {
             return _pacienteDA.listar_pacientes_combo();
         }
-        public List<entities.Paciente> listar_pacientes_combo_dinamico(int page, int pageSize, string search)
+        public List<entities.Paciente> listar_pacientes_combo_dinamico(int page, int pageSize, string search, int sede)
         {
-            return _pacienteDA.listar_pacientes_combo_dinamico(page, pageSize, search); // Llamada a la capa de datos
+            return _pacienteDA.listar_pacientes_combo_dinamico(page, pageSize, search, sede); // Llamada a la capa de datos
         }
 
 

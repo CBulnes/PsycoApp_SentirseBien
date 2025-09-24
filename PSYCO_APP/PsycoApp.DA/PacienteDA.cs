@@ -217,7 +217,7 @@ namespace PsycoApp.DA
             return lista;
         }
 
-        public List<entities.Paciente> listar_pacientes_combo_dinamico(int page, int pageSize, string search)
+        public List<entities.Paciente> listar_pacientes_combo_dinamico(int page, int pageSize, string search, int sede)
         {
             List<entities.Paciente> lista = new List<entities.Paciente>();
             try
@@ -229,6 +229,7 @@ namespace PsycoApp.DA
                 cmd.Parameters.AddWithValue("@Page", page);
                 cmd.Parameters.AddWithValue("@PageSize", pageSize); // Se agrega pageSize
                 cmd.Parameters.AddWithValue("@Search", search ?? string.Empty);
+                cmd.Parameters.AddWithValue("@IdSede", sede);
 
                 SqlDataAdapter da = new SqlDataAdapter(cmd);
                 DataTable dt = new DataTable();
@@ -239,6 +240,7 @@ namespace PsycoApp.DA
                     entities.Paciente item = new entities.Paciente();
                     item.Id = Convert.ToInt32(row["id_paciente"]);
                     item.Nombre = Convert.ToString(row["nombres"]);
+                    item.id_sede = Convert.ToInt32(row["id_sede"]);
                     lista.Add(item);
                 }
             }
