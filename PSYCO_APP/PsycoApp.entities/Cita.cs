@@ -6,6 +6,7 @@ namespace PsycoApp.entities
 {
     public class Cita
     {
+        public long Fila { get; set; }
         public int id_cita { get; set; } = 0;
         public int id_usuario { get; set; } = 0;
         public string usuario { get; set; } = "";
@@ -36,6 +37,12 @@ namespace PsycoApp.entities
         public List<HistorialCita> historial { get; set; }
         public List<HistorialPaciente> historial2 { get; set; }
         public List<Subcita> fechas_adicionales { get; set; }
+    }
+
+    public class DataCitas
+    {
+        public int TotalRegistros { get; set; }
+        public List<Cita> Registros { get; set; }
     }
 
     public class Subcita

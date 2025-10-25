@@ -73,7 +73,6 @@ namespace PsycoApp.BL
                 return new Respuesta<DataPacientes>(-1, "Ocurrió un error al listar los pacientes.", null);
             }
         }
-
         #endregion
 
     }

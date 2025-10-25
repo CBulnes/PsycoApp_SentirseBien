@@ -633,8 +633,7 @@ namespace PsycoApp.DA
                             lista.Add(item);
                         }
 
-                        if (lista.Any())
-                            respuesta = new Respuesta<List<entities.Sede>>(0, "Lista de sedes obtenida correctamente.", lista);
+                        respuesta = new Respuesta<List<entities.Sede>>(0, "Lista de sedes obtenida correctamente.", lista);
                     }
                 }
             }

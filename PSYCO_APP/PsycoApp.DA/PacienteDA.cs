@@ -294,8 +294,7 @@ namespace PsycoApp.DA
                             });
                         }
 
-                        if (pacientes.Any())
-                            respuesta = new Respuesta<List<Paciente>>(0, "Lista de pacientes obtenida correctamente.", pacientes);
+                        respuesta = new Respuesta<List<Paciente>>(0, "Lista de pacientes obtenida correctamente.", pacientes);
                     }
                     _connection.Close();
                 }

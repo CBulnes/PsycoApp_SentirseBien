@@ -1,15 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Hosting;
+﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using PsycoApp.BL;
+using PsycoApp.BL.Interfaces;
 using PsycoApp.DA;
 using PsycoApp.entities;
+using PsycoApp.entities.Dto;
 using PsycoApp.utilities;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace PsycoApp.api.Controllers
 {
@@ -17,31 +19,22 @@ namespace PsycoApp.api.Controllers
     [ApiController]
     public class CitaController : ControllerBase
     {
-        private readonly IWebHostEnvironment _host;
-        private string main_path;
+        private readonly ICitaBL citaBL;
+        private readonly IHistorialBL historialBL;
 
-        public CitaController(IWebHostEnvironment host)
+        public CitaController(ICitaBL citaBL, IHistorialBL historialBL)
         {
-            this._host = host;
-            main_path = _host.ContentRootPath;
+            this.citaBL = citaBL;
+            this.historialBL = historialBL;
         }
 
-        CitaBL citaBL = new CitaBL();
-        HistorialBL historialBL = new HistorialBL();
-        RandomUtilities ru = new RandomUtilities();
-
-        string res = "";
-        string random_str = "";
-
-        // POST api/values
         [HttpPost("registrar_cita")]
         public RespuestaUsuario PostRegistrar([FromBody] Cita oCita)
         {
             RespuestaUsuario res_ = new RespuestaUsuario();
-            random_str = ru.RandomString(8) + "|" + ru.CurrentDate();
             try
             {
-                res_ = citaBL.registrar_cita(oCita, main_path, random_str);
+                res_ = citaBL.registrar_cita(oCita, "", "");
             }
             catch (Exception)
             {
@@ -55,10 +48,9 @@ namespace PsycoApp.api.Controllers
         public RespuestaUsuario PostConfirmar([FromBody] Cita oCita)
         {
             RespuestaUsuario res_ = new RespuestaUsuario();
-            random_str = ru.RandomString(8) + "|" + ru.CurrentDate();
             try
             {
-                res_ = citaBL.confirmar_cita(oCita, main_path, random_str);
+                res_ = citaBL.confirmar_cita(oCita, "", "");
             }
             catch (Exception)
             {
@@ -72,10 +64,9 @@ namespace PsycoApp.api.Controllers
         public RespuestaUsuario PostAtender([FromBody] Cita oCita)
         {
             RespuestaUsuario res_ = new RespuestaUsuario();
-            random_str = ru.RandomString(8) + "|" + ru.CurrentDate();
             try
             {
-                res_ = citaBL.atender_cita(oCita, main_path, random_str);
+                res_ = citaBL.atender_cita(oCita, "", "");
             }
             catch (Exception)
             {
@@ -89,10 +80,9 @@ namespace PsycoApp.api.Controllers
         public RespuestaUsuario PostCancelar([FromBody] Cita oCita)
         {
             RespuestaUsuario res_ = new RespuestaUsuario();
-            random_str = ru.RandomString(8) + "|" + ru.CurrentDate();
             try
             {
-                res_ = citaBL.cancelar_cita(oCita, main_path, random_str);
+                res_ = citaBL.cancelar_cita(oCita, "", "");
             }
             catch (Exception)
             {
@@ -138,11 +128,10 @@ namespace PsycoApp.api.Controllers
         public RespuestaUsuario Post2([FromBody] Cita oCita)
         {
             RespuestaUsuario res_ = new RespuestaUsuario();
-            random_str = ru.RandomString(8) + "|" + ru.CurrentDate();
 
             try
             {
-                res_ = citaBL.registrar_cuestionario(oCita, main_path, random_str);
+                res_ = citaBL.registrar_cuestionario(oCita, "", "");
             }
             catch (Exception)
             {
@@ -156,11 +145,10 @@ namespace PsycoApp.api.Controllers
         public List<Cita> disponibilidad_doctor(int id_doctor, string fecha)
         {
             List<Cita> lista = new List<Cita>();
-            random_str = ru.RandomString(8) + "|" + ru.CurrentDate();
 
             try
             {
-                lista = citaBL.disponibilidad_doctor(id_doctor, fecha, main_path, random_str);
+                lista = citaBL.disponibilidad_doctor(id_doctor, fecha, "", "");
             }
             catch (Exception)
             {
@@ -173,11 +161,10 @@ namespace PsycoApp.api.Controllers
         public List<Cita> citas_usuario(int id_usuario, int id_paciente, int id_doctor, int id_sede)
         {
             List<Cita> lista = new List<Cita>();
-            random_str = ru.RandomString(8) + "|" + ru.CurrentDate();
 
             try
             {
-                lista = citaBL.citas_usuario(id_usuario, id_paciente, id_doctor, id_sede, main_path, random_str);
+                lista = citaBL.citas_usuario(id_usuario, id_paciente, id_doctor, id_sede, "", "");
             }
             catch (Exception)
             {
@@ -254,7 +241,6 @@ namespace PsycoApp.api.Controllers
         public RespuestaUsuario RegistrarHistorial([FromBody] HistorialPaciente oHistorial)
         {
             RespuestaUsuario res_ = new RespuestaUsuario();
-            random_str = ru.RandomString(8) + "|" + ru.CurrentDate();
 
             try
             {
@@ -272,7 +258,6 @@ namespace PsycoApp.api.Controllers
         public List<entities.Semana> dias_x_semana_mes(int semana, int mes, int año)
         {
             List<entities.Semana> res_ = new List<entities.Semana>();
-            random_str = ru.RandomString(8) + "|" + ru.CurrentDate();
 
             try
             {
@@ -284,6 +269,15 @@ namespace PsycoApp.api.Controllers
             }
             return res_;
         }
+
+        #region "version react"
+        [HttpGet("listarHistorialCitas")]
+        public async Task<IActionResult> HistorialCitas([FromQuery] ListHistorialCitasDto request)
+        {
+            var respuesta = await historialBL.HistorialCitas(request);
+            return Ok(respuesta);
+        }
+        #endregion
 
     }
 }

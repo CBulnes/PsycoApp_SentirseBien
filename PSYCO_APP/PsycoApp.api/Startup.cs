@@ -39,6 +39,8 @@ namespace PsycoApp.api
             services.AddScoped<IUsuarioBL, UsuarioBL>();
             services.AddScoped<IPsicologoBL, PsicologoBL>();
             services.AddScoped<IPacienteBL, PacienteBL>();
+            services.AddScoped<ICitaBL, CitaBL>();
+            services.AddScoped<IHistorialBL, HistorialBL>();
             #endregion
 
             services.AddControllers();

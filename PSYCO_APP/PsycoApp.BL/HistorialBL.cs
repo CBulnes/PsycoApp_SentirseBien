@@ -1,5 +1,8 @@
-﻿using PsycoApp.DA.SQLConnector;
+﻿using PsycoApp.BL.Interfaces;
+using PsycoApp.DA;
+using PsycoApp.DA.SQLConnector;
 using PsycoApp.entities;
+using PsycoApp.entities.Dto;
 using PsycoApp.utilities;
 using System;
 using System.Collections.Generic;
@@ -7,11 +10,10 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
-using PsycoApp.DA;
 
 namespace PsycoApp.BL
 {
-    public class HistorialBL
+    public class HistorialBL : IHistorialBL
     {
         HistorialDA historialDA = new HistorialDA();
 
@@ -57,6 +59,27 @@ namespace PsycoApp.BL
             }
             return lista;
         }
+
+        #region "version react"
+        public async Task<Respuesta<DataCitas>> HistorialCitas(ListHistorialCitasDto request)
+        {
+            var dataCitas = new DataCitas();
+            var respuesta = await historialDA.HistorialCitas(request);
+            request.pagina = 0;
+            request.tamanoPagina = 0;
+            var respuestaTotal = await historialDA.GetTotalHistorialCitas(request);
+            if ((respuesta != null && respuesta.Codigo == 0) && (respuestaTotal != null && respuestaTotal.Codigo == 0))
+            {
+                dataCitas.TotalRegistros = respuestaTotal.Data;
+                dataCitas.Registros = respuesta.Data;
+                return new Respuesta<DataCitas>(0, "", dataCitas);
+            }
+            else
+            {
+                return new Respuesta<DataCitas>(-1, "Ocurrió un error al listar el historial de citas.", null);
+            }
+        }
+        #endregion
 
     }
 }

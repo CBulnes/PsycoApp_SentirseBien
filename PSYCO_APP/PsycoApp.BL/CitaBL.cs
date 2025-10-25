@@ -8,10 +8,11 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
 using PsycoApp.DA;
+using PsycoApp.BL.Interfaces;
 
 namespace PsycoApp.BL
 {
-    public class CitaBL
+    public class CitaBL : ICitaBL
     {
         CitaDA citaDA = new CitaDA();
         HistorialDA historialDA = new HistorialDA();
