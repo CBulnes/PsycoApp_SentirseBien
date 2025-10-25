@@ -196,7 +196,6 @@ namespace PsycoApp.BL
                 return new Respuesta<DataPsicologos>(-1, "Ocurrió un error al listar los psicólogos.", null);
             }
         }
-
         #endregion
     }
 }

@@ -1,11 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.SqlClient;
-using System.Data;
-using System.Text;
+﻿using PsycoApp.DA.SQLConnector;
 using PsycoApp.entities;
-using PsycoApp.DA.SQLConnector;
+using PsycoApp.entities.Dto;
 using PsycoApp.utilities;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace PsycoApp.DA
 {
@@ -255,6 +258,92 @@ namespace PsycoApp.DA
             }
             return lista;
         }
+
+        #region "version react"
+        public async Task<Respuesta<List<Paciente>>> GetList(ListPacientesDto request)
+        {
+            var respuesta = new Respuesta<List<Paciente>>(-1, "No se encontraron pacientes o error al listar.");
+            var pacientes = new List<Paciente>();
+
+            try
+            {
+                await _connection.OpenAsync();
+                using (var command = new SqlCommand(Procedures.listar_pacientes_paginado_v2, _connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.AddWithValue("@Pagina", request.pagina);
+                    command.Parameters.AddWithValue("@TamanoPagina", request.tamanoPagina);
+
+                    using (var reader = await command.ExecuteReaderAsync())
+                    {
+                        while (await reader.ReadAsync())
+                        {
+                            pacientes.Add(new Paciente
+                            {
+                                Fila = reader.GetInt64(0),
+                                Id = reader.GetInt32(1),
+                                Nombre = reader.GetString(2),
+                                Apellido = reader.GetString(3),
+                                FechaNacimiento = reader.GetDateTime(4),
+                                DocumentoTipo = reader.GetString(5),
+                                DocumentoNumero = reader.GetString(6),
+                                Telefono = reader.GetString(7),
+                                EstadoCivil = reader.GetString(8),
+                                Sexo = reader.GetString(9),
+                                Estado = reader.GetString(10)
+                            });
+                        }
+
+                        if (pacientes.Any())
+                            respuesta = new Respuesta<List<Paciente>>(0, "Lista de pacientes obtenida correctamente.", pacientes);
+                    }
+                    _connection.Close();
+                }
+            }
+            catch (Exception ex)
+            {
+                respuesta = new Respuesta<List<Paciente>>(-1, "Error al listar pacientes: " + ex.Message);
+            }
+            finally
+            {
+                await _connection.CloseAsync();
+            }
+            return respuesta;
+        }
+
+        public async Task<Respuesta<int>> GetTotalList(ListPacientesDto request)
+        {
+            var respuesta = new Respuesta<int>(-1, "No se encontraron pacientes o error al contar.");
+            try
+            {
+                await _connection.OpenAsync();
+                using (var command = new SqlCommand(Procedures.listar_pacientes_paginado_v2, _connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.AddWithValue("@Pagina", request.pagina);
+                    command.Parameters.AddWithValue("@TamanoPagina", request.tamanoPagina);
+
+                    using (var reader = await command.ExecuteReaderAsync())
+                    {
+                        if (await reader.ReadAsync())
+                        {
+                            int total = reader.GetInt32(0);
+                            respuesta = new Respuesta<int>(0, "Total de pacientes obtenido correctamente.", total);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                respuesta = new Respuesta<int>(-1, "Error al obtener el total de pacientes: " + ex.Message);
+            }
+            finally
+            {
+                await _connection.CloseAsync();
+            }
+            return respuesta;
+        }
+        #endregion
 
     }
 }

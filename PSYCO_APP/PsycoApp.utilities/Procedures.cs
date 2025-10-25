@@ -74,6 +74,7 @@ namespace PsycoApp.utilities
         public const string listar_psicologos = "dbo.sp_listar_psicologos";                         //posiblemente deprecado
         public const string listar_psicologos_paginado = "dbo.sp_listar_psicologos_paginado";
         public const string listar_psicologos_paginado_v2 = "dbo.sp_listar_psicologos_paginado_v2";
+        public const string listar_pacientes_paginado_v2 = "dbo.sp_listar_pacientes_paginado_v2";
         public const string agregar_psicologo = "dbo.sp_agregar_psicologo";
         public const string actualizar_psicologo = "dbo.sp_actualizar_psicologo";
         public const string eliminar_psicologo = "dbo.sp_eliminar_psicologo";

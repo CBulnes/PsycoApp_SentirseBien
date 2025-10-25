@@ -605,7 +605,6 @@ namespace PsycoApp.DA
             {
                 await _connection.CloseAsync();
             }
-
             return respuesta;
         }
 

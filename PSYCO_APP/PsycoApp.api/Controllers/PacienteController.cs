@@ -1,9 +1,12 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using PsycoApp.BL;
-using System.Collections.Generic;
-using System;
+using PsycoApp.BL.Interfaces;
 using PsycoApp.entities;
+using PsycoApp.entities.Dto;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace PsycoApp.api.Controllers
 {
@@ -11,15 +14,19 @@ namespace PsycoApp.api.Controllers
     [ApiController]
     public class PacienteController : ControllerBase
     {
-   
-        PacienteBL _pacienteBL = new PacienteBL();
+        private readonly IPacienteBL pacienteBL;
+
+        public PacienteController(IPacienteBL pacienteBL)
+        {
+            this.pacienteBL = pacienteBL;
+        }
 
         [HttpGet("listar/{pagina}/{tamanoPagina}")]
         public ActionResult<List<Paciente>> Listar(int pagina = 1, int tamanoPagina = 100)
         {
             try
             {
-                var pacientes = _pacienteBL.ListarPacientes(pagina, tamanoPagina);
+                var pacientes = pacienteBL.ListarPacientes(pagina, tamanoPagina);
                 return Ok(pacientes);
             }
             catch (Exception ex)
@@ -33,7 +40,7 @@ namespace PsycoApp.api.Controllers
         {
             try
             {
-                _pacienteBL.AgregarPaciente(paciente);
+                pacienteBL.AgregarPaciente(paciente);
                 return Ok();
             }
             catch (Exception ex)
@@ -49,7 +56,7 @@ namespace PsycoApp.api.Controllers
                 nombre = "";
             try
             {
-                var pacientes = _pacienteBL.BuscarPaciente(nombre, pageNumber, pageSize);
+                var pacientes = pacienteBL.BuscarPaciente(nombre, pageNumber, pageSize);
                 return Ok(pacientes);
             }
             catch (Exception ex)
@@ -63,7 +70,7 @@ namespace PsycoApp.api.Controllers
         {
             try
             {
-                _pacienteBL.ActualizarPaciente(paciente);
+                pacienteBL.ActualizarPaciente(paciente);
                 return Ok();
             }
             catch (Exception ex)
@@ -77,7 +84,7 @@ namespace PsycoApp.api.Controllers
         {
             try
             {
-                _pacienteBL.EliminarPaciente(id);
+                pacienteBL.EliminarPaciente(id);
                 return Ok();
             }
             catch (Exception ex)
@@ -90,7 +97,7 @@ namespace PsycoApp.api.Controllers
         {
             try
             {
-                var paciente = _pacienteBL.BuscarPacienteId(id);
+                var paciente = pacienteBL.BuscarPacienteId(id);
                 if (paciente == null)
                 {
                     return NotFound("Paciente no encontrado.");
@@ -108,7 +115,7 @@ namespace PsycoApp.api.Controllers
             List<entities.Paciente> lista = new List<entities.Paciente>();
             try
             {
-                lista = _pacienteBL.listar_pacientes_combo_dinamico(page, pageSize, search, sede); // Llamada al método BL con paginación y filtro
+                lista = pacienteBL.listar_pacientes_combo_dinamico(page, pageSize, search, sede); // Llamada al método BL con paginación y filtro
             }
             catch (Exception e)
             {
@@ -123,7 +130,7 @@ namespace PsycoApp.api.Controllers
             List<entities.Paciente> lista = new List<entities.Paciente>();
             try
             {
-                lista = _pacienteBL.listar_pacientes_combo();
+                lista = pacienteBL.listar_pacientes_combo();
             }
             catch (Exception e)
             {
@@ -131,5 +138,14 @@ namespace PsycoApp.api.Controllers
             }
             return lista;
         }
+
+        #region "version react"
+        [HttpGet("listarPacientes")]
+        public async Task<IActionResult> GetList([FromQuery] ListPacientesDto request)
+        {
+            var respuesta = await pacienteBL.GetList(request);
+            return Ok(respuesta);
+        }
+        #endregion
     }
 }

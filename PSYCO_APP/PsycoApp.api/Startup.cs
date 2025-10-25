@@ -38,6 +38,7 @@ namespace PsycoApp.api
             #region "inyeccion de dependencias"
             services.AddScoped<IUsuarioBL, UsuarioBL>();
             services.AddScoped<IPsicologoBL, PsicologoBL>();
+            services.AddScoped<IPacienteBL, PacienteBL>();
             #endregion
 
             services.AddControllers();
