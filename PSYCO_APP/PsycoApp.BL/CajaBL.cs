@@ -1,5 +1,8 @@
-﻿using PsycoApp.DA.SQLConnector;
+﻿using PsycoApp.BL.Interfaces;
+using PsycoApp.DA;
+using PsycoApp.DA.SQLConnector;
 using PsycoApp.entities;
+using PsycoApp.entities.Dto;
 using PsycoApp.utilities;
 using System;
 using System.Collections.Generic;
@@ -7,11 +10,10 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
-using PsycoApp.DA;
 
 namespace PsycoApp.BL
 {
-    public class CajaBL
+    public class CajaBL : ICajaBL
     {
         CajaDA cajaDA = new CajaDA();
 
@@ -58,9 +60,9 @@ namespace PsycoApp.BL
             return lista;
         }
 
-        public List<CuadreCaja> resumen_caja_x_usuario(string usuario, string fecha, int buscar_por, int sede, int id_usuario)
+        public List<ResumenCajaUsuario> resumen_caja_x_usuario(string usuario, string fecha, int buscar_por, int sede, int id_usuario)
         {
-            List<CuadreCaja> lista = new List<CuadreCaja>();
+            List<ResumenCajaUsuario> lista = new List<ResumenCajaUsuario>();
             try
             {
                 lista = cajaDA.resumen_caja_x_usuario(usuario, fecha, buscar_por, sede, id_usuario);
@@ -72,9 +74,9 @@ namespace PsycoApp.BL
             return lista;
         }
 
-        public List<CuadreCaja> resumen_caja_x_forma_pago(string usuario, string fecha, int buscar_por, int sede, int id_usuario)
+        public List<ResumenCajaFormaPago> resumen_caja_x_forma_pago(string usuario, string fecha, int buscar_por, int sede, int id_usuario)
         {
-            List<CuadreCaja> lista = new List<CuadreCaja>();
+            List<ResumenCajaFormaPago> lista = new List<ResumenCajaFormaPago>();
             try
             {
                 lista = cajaDA.resumen_caja_x_forma_pago(usuario, fecha, buscar_por, sede, id_usuario);
@@ -85,6 +87,31 @@ namespace PsycoApp.BL
             }
             return lista;
         }
+
+        #region "version react"
+        public async Task<Respuesta<DataCaja>> GetList(ListCajaDto request)
+        {
+            var dataCaja = new DataCaja();
+            var respuesta1 = await cajaDA.ListarCuadreCaja(request);
+            var respuesta2 = await cajaDA.ListarResumenUsuario(request);
+            var respuesta3 = await cajaDA.ListarResumenFormaPago(request);
+            request.pagina = 0;
+            request.tamanoPagina = 0;
+            var respuestaTotal = await cajaDA.GetTotalCuadreCaja(request);
+            if ((respuesta1 != null && respuesta1.Codigo == 0) && (respuesta2 != null && respuesta2.Codigo == 0) && (respuesta3 != null && respuesta3.Codigo == 0) && (respuestaTotal != null && respuestaTotal.Codigo == 0))
+            {
+                dataCaja.Registros1 = respuesta1.Data;
+                dataCaja.Registros2 = respuesta2.Data;
+                dataCaja.Registros3 = respuesta3.Data;
+                dataCaja.TotalRegistros = respuestaTotal.Data;
+                return new Respuesta<DataCaja>(0, "", dataCaja);
+            }
+            else
+            {
+                return new Respuesta<DataCaja>(-1, "Ocurrió un error al listar el detalle de caja.", null);
+            }
+        }
+        #endregion
 
     }
 }

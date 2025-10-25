@@ -1,9 +1,11 @@
 ﻿using PsycoApp.DA.SQLConnector;
 using PsycoApp.entities;
+using PsycoApp.entities.Dto;
 using PsycoApp.utilities;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.Common;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
@@ -12,16 +14,20 @@ namespace PsycoApp.DA
 {
     public class CajaDA
     {
+        private readonly SqlConnection _connection;
         SqlConnection cn = new SqlConnector().cadConnection_psyco;
-        string rpta = "";
+        public CajaDA()
+        {
+            _connection = cn;
+        }
 
         public RespuestaUsuario registrar_caja(Pago oPago, string main_path, string random_str)
         {
             RespuestaUsuario res_ = new RespuestaUsuario();
             try
             {
-                cn.Open();
-                SqlCommand cmd = new SqlCommand(Procedures.sp_registrar_pago, cn);
+                _connection.Open();
+                SqlCommand cmd = new SqlCommand(Procedures.sp_registrar_pago, _connection);
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.Add("@id_cita", SqlDbType.Int).Value = oPago.id_cita;
                 cmd.Parameters.Add("@id_forma_pago", SqlDbType.Int).Value = oPago.id_forma_pago;
@@ -45,7 +51,7 @@ namespace PsycoApp.DA
                 res_.estado = false;
                 res_.descripcion = "Ocurrió un error al registrar el pago.";
             }
-            cn.Close();
+            _connection.Close();
             return res_;
         }
 
@@ -54,8 +60,8 @@ namespace PsycoApp.DA
             List<PagosPendientes> lista = new List<PagosPendientes>();
             try
             {
-                cn.Open();
-                SqlCommand cmd = new SqlCommand(Procedures.sp_pagos_pendientes, cn);
+                _connection.Open();
+                SqlCommand cmd = new SqlCommand(Procedures.sp_pagos_pendientes, _connection);
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.Add("@id_paciente", SqlDbType.Int).Value = id_paciente;
 
@@ -82,7 +88,7 @@ namespace PsycoApp.DA
             {
                 lista.Clear();
             }
-            cn.Close();
+            _connection.Close();
             return lista;
         }
 
@@ -91,8 +97,8 @@ namespace PsycoApp.DA
             List<CuadreCaja> lista = new List<CuadreCaja>();
             try
             {
-                cn.Open();
-                SqlCommand cmd = new SqlCommand(Procedures.sp_cuadre_caja, cn);
+                _connection.Open();
+                SqlCommand cmd = new SqlCommand(Procedures.sp_cuadre_caja, _connection);
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.Add("@usuario", SqlDbType.VarChar).Value = usuario;
                 cmd.Parameters.Add("@pagina", SqlDbType.Int).Value = pagina;
@@ -127,17 +133,17 @@ namespace PsycoApp.DA
             {
                 lista.Clear();
             }
-            cn.Close();
+            _connection.Close();
             return lista;
         }
 
-        public List<CuadreCaja> resumen_caja_x_usuario(string usuario, string fecha, int buscar_por, int sede, int id_usuario)
+        public List<ResumenCajaUsuario> resumen_caja_x_usuario(string usuario, string fecha, int buscar_por, int sede, int id_usuario)
         {
-            List<CuadreCaja> lista = new List<CuadreCaja>();
+            List<ResumenCajaUsuario> lista = new List<ResumenCajaUsuario>();
             try
             {
-                cn.Open();
-                SqlCommand cmd = new SqlCommand(Procedures.sp_resumen_caja_x_usuario, cn);
+                _connection.Open();
+                SqlCommand cmd = new SqlCommand(Procedures.sp_resumen_caja_x_usuario, _connection);
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.Add("@usuario", SqlDbType.VarChar).Value = usuario;
                 cmd.Parameters.Add("@fecha", SqlDbType.VarChar).Value = fecha;
@@ -151,7 +157,7 @@ namespace PsycoApp.DA
 
                 foreach (DataRow row in dt.Rows)
                 {
-                    CuadreCaja item = new CuadreCaja();
+                    ResumenCajaUsuario item = new ResumenCajaUsuario();
                     item.usuario = Convert.ToString(row["usuario"]);
                     item.importe = Convert.ToString(row["importe"]);
                     lista.Add(item);
@@ -161,17 +167,17 @@ namespace PsycoApp.DA
             {
                 lista.Clear();
             }
-            cn.Close();
+            _connection.Close();
             return lista;
         }
 
-        public List<CuadreCaja> resumen_caja_x_forma_pago(string usuario, string fecha, int buscar_por, int sede, int id_usuario)
+        public List<ResumenCajaFormaPago> resumen_caja_x_forma_pago(string usuario, string fecha, int buscar_por, int sede, int id_usuario)
         {
-            List<CuadreCaja> lista = new List<CuadreCaja>();
+            List<ResumenCajaFormaPago> lista = new List<ResumenCajaFormaPago>();
             try
             {
-                cn.Open();
-                SqlCommand cmd = new SqlCommand(Procedures.sp_resumen_caja_x_forma_pago, cn);
+                _connection.Open();
+                SqlCommand cmd = new SqlCommand(Procedures.sp_resumen_caja_x_forma_pago, _connection);
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.Add("@usuario", SqlDbType.VarChar).Value = usuario;
                 cmd.Parameters.Add("@fecha", SqlDbType.VarChar).Value = fecha;
@@ -185,7 +191,7 @@ namespace PsycoApp.DA
 
                 foreach (DataRow row in dt.Rows)
                 {
-                    CuadreCaja item = new CuadreCaja();
+                    ResumenCajaFormaPago item = new ResumenCajaFormaPago();
                     item.cantidad = Convert.ToInt32(row["cantidad"]);
                     item.importe = Convert.ToString(row["importe"]);
                     item.forma_pago = Convert.ToString(row["forma_pago"]);
@@ -197,9 +203,199 @@ namespace PsycoApp.DA
             {
                 lista.Clear();
             }
-            cn.Close();
+            _connection.Close();
             return lista;
         }
+
+        #region "version react"
+        public async Task<Respuesta<List<CuadreCaja>>> ListarCuadreCaja(ListCajaDto request)
+        {
+            var respuesta = new Respuesta<List<CuadreCaja>>(-1, "No se encontraron registros o error al listar.");
+            var citas = new List<CuadreCaja>();
+
+            try
+            {
+                await _connection.OpenAsync();
+                using (var command = new SqlCommand(Procedures.listar_cuadre_caja_v2, _connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.AddWithValue("@usuario", request.usuario);
+                    command.Parameters.AddWithValue("@fecha", request.fecha);
+                    command.Parameters.AddWithValue("@buscar_por", request.buscar_por);
+                    command.Parameters.AddWithValue("@sede", request.sede);
+                    command.Parameters.AddWithValue("@id_usuario", request.id_usuario);
+                    command.Parameters.AddWithValue("@id_cita", request.id_cita);
+                    command.Parameters.AddWithValue("@pagina", request.pagina);
+                    command.Parameters.AddWithValue("@tamanoPagina", request.tamanoPagina);
+
+                    using (var reader = await command.ExecuteReaderAsync())
+                    {
+                        while (await reader.ReadAsync())
+                        {
+                            citas.Add(new CuadreCaja
+                            {
+                                Fila = reader.GetInt64(0),
+                                paciente = reader.GetString(1),
+                                fecha_transaccion = reader.GetString(2),
+                                estado_cita = reader.GetString(3),
+                                servicio = reader.GetString(4),
+                                forma_pago = reader.GetString(5),
+                                detalle_transferencia = reader.GetString(6),
+                                importe = reader.GetString(7),
+                                estado_orden = reader.GetString(8),
+                                usuario = reader.GetString(9),
+                                sede = reader.GetString(10)
+                            });
+                        }
+
+                        respuesta = new Respuesta<List<CuadreCaja>>(0, "Cuadre de caja obtenido correctamente.", citas);
+                    }
+                    _connection.Close();
+                }
+            }
+            catch (Exception ex)
+            {
+                respuesta = new Respuesta<List<CuadreCaja>>(-1, "Error al listar cuadre de caja: " + ex.Message);
+            }
+            finally
+            {
+                await _connection.CloseAsync();
+            }
+            return respuesta;
+        }
+        public async Task<Respuesta<int>> GetTotalCuadreCaja(ListCajaDto request)
+        {
+            var respuesta = new Respuesta<int>(-1, "No se encontraron datos de la caja o error al contar.");
+            try
+            {
+                await _connection.OpenAsync();
+                using (var command = new SqlCommand(Procedures.listar_cuadre_caja_v2, _connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.AddWithValue("@usuario", request.usuario);
+                    command.Parameters.AddWithValue("@fecha", request.fecha);
+                    command.Parameters.AddWithValue("@buscar_por", request.buscar_por);
+                    command.Parameters.AddWithValue("@sede", request.sede);
+                    command.Parameters.AddWithValue("@id_usuario", request.id_usuario);
+                    command.Parameters.AddWithValue("@id_cita", request.id_cita);
+                    command.Parameters.AddWithValue("@pagina", request.pagina);
+                    command.Parameters.AddWithValue("@tamanoPagina", request.tamanoPagina);
+
+                    using (var reader = await command.ExecuteReaderAsync())
+                    {
+                        if (await reader.ReadAsync())
+                        {
+                            int total = reader.GetInt32(0);
+                            respuesta = new Respuesta<int>(0, "Total de datos de la caja obtenido correctamente.", total);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                respuesta = new Respuesta<int>(-1, "Error al obtener el total de datos de la caja: " + ex.Message);
+            }
+            finally
+            {
+                await _connection.CloseAsync();
+            }
+            return respuesta;
+        }
+        public async Task<Respuesta<List<ResumenCajaUsuario>>> ListarResumenUsuario(ListCajaDto request)
+        {
+            var respuesta = new Respuesta<List<ResumenCajaUsuario>>(-1, "No se encontraron registros o error al listar.");
+            var citas = new List<ResumenCajaUsuario>();
+
+            try
+            {
+                await _connection.OpenAsync();
+                using (var command = new SqlCommand(Procedures.listar_resumen_caja_x_usuario_v2, _connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.AddWithValue("@usuario", request.usuario);
+                    command.Parameters.AddWithValue("@fecha", request.fecha);
+                    command.Parameters.AddWithValue("@buscar_por", request.buscar_por);
+                    command.Parameters.AddWithValue("@sede", request.sede);
+                    command.Parameters.AddWithValue("@id_usuario", request.id_usuario);
+
+                    using (var reader = await command.ExecuteReaderAsync())
+                    {
+                        while (await reader.ReadAsync())
+                        {
+                            citas.Add(new ResumenCajaUsuario
+                            {
+                                Fila = reader.GetInt64(0),
+                                importe = reader.GetString(1),
+                                usuario = reader.GetString(2),
+                                mes = reader.GetInt32(3),
+                                anho = reader.GetInt32(4)
+                            });
+                        }
+
+                        respuesta = new Respuesta<List<ResumenCajaUsuario>>(0, "Resumen de caja por usuario obtenido correctamente.", citas);
+                    }
+                    _connection.Close();
+                }
+            }
+            catch (Exception ex)
+            {
+                respuesta = new Respuesta<List<ResumenCajaUsuario>>(-1, "Error al listar resumen de caja por usuario: " + ex.Message);
+            }
+            finally
+            {
+                await _connection.CloseAsync();
+            }
+            return respuesta;
+        }
+        public async Task<Respuesta<List<ResumenCajaFormaPago>>> ListarResumenFormaPago(ListCajaDto request)
+        {
+            var respuesta = new Respuesta<List<ResumenCajaFormaPago>>(-1, "No se encontraron registros o error al listar.");
+            var citas = new List<ResumenCajaFormaPago>();
+
+            try
+            {
+                await _connection.OpenAsync();
+                using (var command = new SqlCommand(Procedures.listar_resumen_caja_x_forma_pago_v2, _connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.AddWithValue("@usuario", request.usuario);
+                    command.Parameters.AddWithValue("@fecha", request.fecha);
+                    command.Parameters.AddWithValue("@buscar_por", request.buscar_por);
+                    command.Parameters.AddWithValue("@sede", request.sede);
+                    command.Parameters.AddWithValue("@id_usuario", request.id_usuario);
+
+                    using (var reader = await command.ExecuteReaderAsync())
+                    {
+                        while (await reader.ReadAsync())
+                        {
+                            citas.Add(new ResumenCajaFormaPago
+                            {
+                                Fila = reader.GetInt64(0),
+                                cantidad = reader.GetInt32(1),
+                                importe = reader.GetString(2),
+                                forma_pago = reader.GetString(3),
+                                detalle_transferencia = reader.GetString(4),
+                                mes = reader.GetInt32(5),
+                                anho = reader.GetInt32(6)
+                            });
+                        }
+
+                        respuesta = new Respuesta<List<ResumenCajaFormaPago>>(0, "Resumen de caja por forma de pago obtenido correctamente.", citas);
+                    }
+                    _connection.Close();
+                }
+            }
+            catch (Exception ex)
+            {
+                respuesta = new Respuesta<List<ResumenCajaFormaPago>>(-1, "Error al listar resumen de caja por forma de pago: " + ex.Message);
+            }
+            finally
+            {
+                await _connection.CloseAsync();
+            }
+            return respuesta;
+        }
+        #endregion
 
     }
 }

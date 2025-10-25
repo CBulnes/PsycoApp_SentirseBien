@@ -1,15 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Hosting;
+﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using PsycoApp.BL;
+using PsycoApp.BL.Interfaces;
 using PsycoApp.DA;
 using PsycoApp.entities;
+using PsycoApp.entities.Dto;
 using PsycoApp.utilities;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace PsycoApp.api.Controllers
 {
@@ -17,29 +19,20 @@ namespace PsycoApp.api.Controllers
     [ApiController]
     public class CajaController : ControllerBase
     {
-        private readonly IWebHostEnvironment _host;
-        private string main_path;
+        private readonly ICajaBL cajaBL;
 
-        public CajaController(IWebHostEnvironment host)
+        public CajaController(ICajaBL cajaBL)
         {
-            this._host = host;
-            main_path = _host.ContentRootPath;
+            this.cajaBL = cajaBL;
         }
-
-        CajaBL cajaBL = new CajaBL();
-        RandomUtilities ru = new RandomUtilities();
-
-        string res = "";
-        string random_str = "";
 
         [HttpPost("registrar_pago")]
         public RespuestaUsuario RegistrarPago([FromBody] Pago oPago)
         {
             RespuestaUsuario res_ = new RespuestaUsuario();
-            random_str = ru.RandomString(8) + "|" + ru.CurrentDate();
             try
             {
-                res_ = cajaBL.registrar_pago(oPago, main_path, random_str);
+                res_ = cajaBL.registrar_pago(oPago, "", "");
             }
             catch (Exception)
             {
@@ -53,8 +46,6 @@ namespace PsycoApp.api.Controllers
         public List<PagosPendientes> listar_pagos_pendientes(int id_paciente)
         {
             List<PagosPendientes> lista = new List<PagosPendientes>();
-            random_str = ru.RandomString(8) + "|" + ru.CurrentDate();
-
             try
             {
                 lista = cajaBL.listar_pagos_pendientes(id_paciente);
@@ -70,8 +61,6 @@ namespace PsycoApp.api.Controllers
         public List<CuadreCaja> listar_cuadre_caja(string usuario, int pagina = 1, int tamanoPagina = 100, string fecha = "", int buscar_por = 1, int sede = -1, int id_usuario = -1, int id_cita = 0)
         {
             List<CuadreCaja> lista = new List<CuadreCaja>();
-            random_str = ru.RandomString(8) + "|" + ru.CurrentDate();
-
             try
             {
                 lista = cajaBL.listar_cuadre_caja(usuario, pagina, tamanoPagina, fecha, buscar_por, sede, id_usuario, id_cita);
@@ -84,11 +73,9 @@ namespace PsycoApp.api.Controllers
         }
 
         [HttpGet("resumen_caja_x_usuario/{usuario}/{fecha}/{buscar_por}/{sede}/{id_usuario}")]
-        public List<CuadreCaja> resumen_caja_x_usuario(string usuario, string fecha = "", int buscar_por = 1, int sede = -1, int id_usuario = -1)
+        public List<ResumenCajaUsuario> resumen_caja_x_usuario(string usuario, string fecha = "", int buscar_por = 1, int sede = -1, int id_usuario = -1)
         {
-            List<CuadreCaja> lista = new List<CuadreCaja>();
-            random_str = ru.RandomString(8) + "|" + ru.CurrentDate();
-
+            List<ResumenCajaUsuario> lista = new List<ResumenCajaUsuario>();
             try
             {
                 lista = cajaBL.resumen_caja_x_usuario(usuario, fecha, buscar_por, sede, id_usuario);
@@ -101,11 +88,9 @@ namespace PsycoApp.api.Controllers
         }
 
         [HttpGet("resumen_caja_x_forma_pago/{usuario}/{fecha}/{buscar_por}/{sede}/{id_usuario}")]
-        public List<CuadreCaja> resumen_caja_x_forma_pago(string usuario, string fecha = "", int buscar_por = 1, int sede = -1, int id_usuario = -1)
+        public List<ResumenCajaFormaPago> resumen_caja_x_forma_pago(string usuario, string fecha = "", int buscar_por = 1, int sede = -1, int id_usuario = -1)
         {
-            List<CuadreCaja> lista = new List<CuadreCaja>();
-            random_str = ru.RandomString(8) + "|" + ru.CurrentDate();
-
+            List<ResumenCajaFormaPago> lista = new List<ResumenCajaFormaPago>();
             try
             {
                 lista = cajaBL.resumen_caja_x_forma_pago(usuario, fecha, buscar_por, sede, id_usuario);
@@ -116,6 +101,15 @@ namespace PsycoApp.api.Controllers
             }
             return lista;
         }
+
+        #region "version react"
+        [HttpGet("listarCaja")]
+        public async Task<IActionResult> GetList([FromQuery] ListCajaDto request)
+        {
+            var respuesta = await cajaBL.GetList(request);
+            return Ok(respuesta);
+        }
+        #endregion
 
     }
 }
