@@ -1,10 +1,13 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using PsycoApp.BL;
-using System.Collections.Generic;
-using System;
-using PsycoApp.entities;
+using PsycoApp.BL.Interfaces;
 using PsycoApp.DA;
+using PsycoApp.entities;
+using PsycoApp.entities.Dto;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace PsycoApp.api.Controllers
 {
@@ -13,14 +16,19 @@ namespace PsycoApp.api.Controllers
     public class PsicologoController : ControllerBase
     {
 
-        PsicologoBL _psicologoBL = new PsicologoBL();
+        private readonly IPsicologoBL psicologoBL;
+
+        public PsicologoController(IPsicologoBL psicologoBL)
+        {
+            this.psicologoBL = psicologoBL;
+        }
 
         [HttpGet("listar/{pagina}/{tamanoPagina}")]
         public ActionResult<List<Psicologo>> Listar(int pagina = 1, int tamanoPagina = 100)
         {
             try
             {
-                return _psicologoBL.ListarPsicologos(pagina, tamanoPagina);
+                return psicologoBL.ListarPsicologos(pagina, tamanoPagina);
             }
             catch (Exception ex)
             {
@@ -33,7 +41,7 @@ namespace PsycoApp.api.Controllers
         {
             try
             {
-                _psicologoBL.AgregarPsicologo(psicologo);
+                psicologoBL.AgregarPsicologo(psicologo);
                 return Ok();
             }
             catch (Exception ex)
@@ -49,7 +57,7 @@ namespace PsycoApp.api.Controllers
                 nombre = "";
             try
             {
-                var psicologos = _psicologoBL.BuscarPsicologo(nombre);
+                var psicologos = psicologoBL.BuscarPsicologo(nombre);
                 return Ok(psicologos);
             }
             catch (Exception ex)
@@ -63,7 +71,7 @@ namespace PsycoApp.api.Controllers
         {
             try
             {
-                _psicologoBL.ActualizarPsicologo(psicologo);
+                psicologoBL.ActualizarPsicologo(psicologo);
                 return Ok();
             }
             catch (Exception ex)
@@ -77,7 +85,7 @@ namespace PsycoApp.api.Controllers
         {
             try
             {
-                _psicologoBL.EliminarPsicologo(id);
+                psicologoBL.EliminarPsicologo(id);
                 return Ok();
             }
             catch (Exception ex)
@@ -90,7 +98,7 @@ namespace PsycoApp.api.Controllers
         {
             try
             {
-                var psicologo = _psicologoBL.BuscarPsicologoId(id);
+                var psicologo = psicologoBL.BuscarPsicologoId(id);
                 if (psicologo == null)
                 {
                     return NotFound("Psicologo no encontrado.");
@@ -109,7 +117,7 @@ namespace PsycoApp.api.Controllers
             List<entities.Psicologo> lista = new List<entities.Psicologo>();
             try
             {
-                lista = _psicologoBL.listar_psicologos_combo();
+                lista = psicologoBL.listar_psicologos_combo();
             }
             catch (Exception e)
             {
@@ -124,7 +132,7 @@ namespace PsycoApp.api.Controllers
             List<entities.Usuario> lista = new List<entities.Usuario>();
             try
             {
-                lista = _psicologoBL.listar_usuarios_caja_combo();
+                lista = psicologoBL.listar_usuarios_caja_combo();
             }
             catch (Exception e)
             {
@@ -139,7 +147,7 @@ namespace PsycoApp.api.Controllers
             List<entities.Sede> lista = new List<entities.Sede>();
             try
             {
-                lista = _psicologoBL.listar_sedes_x_usuario_combo(id_usuario);
+                lista = psicologoBL.listar_sedes_x_usuario_combo(id_usuario);
             }
             catch (Exception e)
             {
@@ -154,7 +162,7 @@ namespace PsycoApp.api.Controllers
             List<entities.Sede> lista = new List<entities.Sede>();
             try
             {
-                lista = _psicologoBL.listar_sedes_combo();
+                lista = psicologoBL.listar_sedes_combo();
             }
             catch (Exception e)
             {
@@ -169,7 +177,7 @@ namespace PsycoApp.api.Controllers
             List<entities.Horario> res_ = new List<entities.Horario>();
             try
             {
-                res_ = _psicologoBL.horarios_psicologo(id_psicologo, inicio, fin, dias);
+                res_ = psicologoBL.horarios_psicologo(id_psicologo, inicio, fin, dias);
             }
             catch (Exception)
             {
@@ -184,7 +192,7 @@ namespace PsycoApp.api.Controllers
             List<entities.Horario> res_ = new List<entities.Horario>();
             try
             {
-                res_ = _psicologoBL.vacaciones_psicologo(id_psicologo, inicio, fin, año);
+                res_ = psicologoBL.vacaciones_psicologo(id_psicologo, inicio, fin, año);
             }
             catch (Exception)
             {
@@ -199,7 +207,7 @@ namespace PsycoApp.api.Controllers
             var res_ = new RespuestaUsuario();
             try
             {
-                res_ = _psicologoBL.guardar_horarios_psicologo(lista);
+                res_ = psicologoBL.guardar_horarios_psicologo(lista);
             }
             catch (Exception)
             {
@@ -215,7 +223,7 @@ namespace PsycoApp.api.Controllers
             var res_ = new RespuestaUsuario();
             try
             {
-                res_ = _psicologoBL.guardar_vacaciones_psicologo(lista);
+                res_ = psicologoBL.guardar_vacaciones_psicologo(lista);
             }
             catch (Exception)
             {
@@ -224,5 +232,14 @@ namespace PsycoApp.api.Controllers
             }
             return res_;
         }
+
+        #region "version react"
+        [HttpGet("listarPsicologos")]
+        public async Task<IActionResult> GetList([FromQuery] ListPsicologosDto request)
+        {
+            var respuesta = await psicologoBL.GetList(request);
+            return Ok(respuesta);
+        }
+        #endregion
     }
 }

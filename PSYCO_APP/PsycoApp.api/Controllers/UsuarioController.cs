@@ -1,14 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Hosting;
+﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using PsycoApp.BL;
-using PsycoApp.utilities;
+using PsycoApp.BL.Interfaces;
+using PsycoApp.DA;
 using PsycoApp.entities;
+using PsycoApp.entities.Dto;
+using PsycoApp.utilities;
+using System;
+using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
+using System.Security.Claims;
+using System.Text;
+using System.Threading.Tasks;
+using static Microsoft.ApplicationInsights.MetricDimensionNames.TelemetryContext;
 
 namespace PsycoApp.api.Controllers
 {
@@ -16,7 +25,14 @@ namespace PsycoApp.api.Controllers
     [ApiController]
     public class UsuarioController : ControllerBase
     {
-        UsuarioBL usuarioBL = new UsuarioBL();
+        private readonly IUsuarioBL usuarioBL;
+        private readonly IConfiguration configuration;
+
+        public UsuarioController(IUsuarioBL usuarioBL, IConfiguration configuration)
+        {
+            this.usuarioBL = usuarioBL;
+            this.configuration = configuration;
+        }
 
         [HttpPost("validar_usuario")]
         public ActionResult<RespuestaUsuario> validar_usuario([FromBody] Usuario usuario)
@@ -57,6 +73,51 @@ namespace PsycoApp.api.Controllers
             }
             return respuesta;
         }
+
+        #region "version react"
+        [HttpPost("loginV2")]
+        public async Task<IActionResult> LoginV2([FromBody] LoginDto request)
+        {
+            var respuesta = await usuarioBL.LoginV2(request);
+            if (respuesta.Codigo == 0)
+            {
+                respuesta.Data.id_sede = request.idCentro;
+                var token = GenerateJwtToken(respuesta.Data);
+
+                return Ok(new{ Codigo = 0, Texto = "Autenticación exitosa", Datos = token });
+            }
+            else
+            {
+                return Ok(respuesta);
+            }
+        }
+
+        private string GenerateJwtToken(Usuario usuario)
+        {
+            var jwtKey = configuration["Jwt:Key"];
+            var key = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(jwtKey));
+            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+
+            var claims = new[]
+            {
+                new Claim("idUsuario", usuario.id_usuario.ToString()),
+                new Claim("nombres", usuario.nombres),
+                new Claim("apellidos", usuario.apellidos),
+                new Claim("usuario", usuario.email),
+                new Claim("tipoUsuario", usuario.tipousuario),
+                new Claim("idSede", usuario.id_sede.ToString()),
+                new Claim("idPsicologo", usuario.id_psicologo.ToString())
+            };
+
+            var token = new JwtSecurityToken(
+                claims: claims,
+                expires: DateTime.UtcNow.AddHours(1),
+                signingCredentials: creds
+            );
+
+            return new JwtSecurityTokenHandler().WriteToken(token);
+        }
+        #endregion
 
     }
 }

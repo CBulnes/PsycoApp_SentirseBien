@@ -14,6 +14,8 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using PsycoApp.BL;
+using PsycoApp.BL.Interfaces;
 using PsycoApp.utilities;
 
 namespace PsycoApp.api
@@ -32,7 +34,12 @@ namespace PsycoApp.api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddApplicationInsightsTelemetry(Configuration["APPLICATIONINSIGHTS_CONNECTION_STRING"]);
-            
+
+            #region "inyeccion de dependencias"
+            services.AddScoped<IUsuarioBL, UsuarioBL>();
+            services.AddScoped<IPsicologoBL, PsicologoBL>();
+            #endregion
+
             services.AddControllers();
 
             string semilla = "PsycoApp2024";

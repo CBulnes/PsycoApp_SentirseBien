@@ -1,12 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.SqlClient;
-using System.Data;
-using System.Text;
+﻿using PsycoApp.DA.SQLConnector;
 using PsycoApp.entities;
-using PsycoApp.DA.SQLConnector;
+using PsycoApp.entities.Dto;
 using PsycoApp.utilities;
+using System;
 using System.Collections;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace PsycoApp.DA
 {
@@ -520,5 +523,132 @@ namespace PsycoApp.DA
             return res;
         }
 
+        #region "version react"
+        public async Task<Respuesta<List<Psicologo>>> GetList(ListPsicologosDto request)
+        {
+            var respuesta = new Respuesta<List<Psicologo>>(-1, "No se encontraron psicólogos o error al listar.");
+            var psicologos = new List<Psicologo>();
+
+            try
+            {
+                await _connection.OpenAsync();
+                using (var command = new SqlCommand(Procedures.listar_psicologos_paginado_v2, _connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.AddWithValue("@Pagina", request.pagina);
+                    command.Parameters.AddWithValue("@TamanoPagina", request.tamanoPagina);
+
+                    using (var reader = await command.ExecuteReaderAsync())
+                    {
+                        while (await reader.ReadAsync())
+                        {
+                            psicologos.Add(new Psicologo
+                            {
+                                Fila = reader.GetInt64(0),
+                                Id = reader.GetInt32(1),
+                                Nombre = reader.GetString(2),
+                                Apellido = reader.GetString(3),
+                                FechaNacimiento = reader.GetDateTime(4),
+                                DocumentoTipo = reader.GetString(5),
+                                DocumentoNumero = reader.GetString(6),
+                                Telefono = reader.GetString(7),
+                                Refrigerio = reader.GetString(8),
+                                Especialidad = reader.GetInt32(9),
+                                Direccion = reader.GetString(10),
+                                Distrito = reader.GetString(11),
+                                Estado = reader.GetString(12)
+                            });
+                        }
+
+                        if (psicologos.Any())
+                            respuesta = new Respuesta<List<Psicologo>>(0, "Lista de psicólogos obtenida correctamente.", psicologos);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                respuesta = new Respuesta<List<Psicologo>>(-1, "Error al listar psicólogos: " + ex.Message);
+            }
+            finally
+            {
+                await _connection.CloseAsync();
+            }
+            return respuesta;
+        }
+        public async Task<Respuesta<int>> GetTotalList(ListPsicologosDto request)
+        {
+            var respuesta = new Respuesta<int>(-1, "No se encontraron psicólogos o error al contar.");
+            try
+            {
+                await _connection.OpenAsync();
+                using (var command = new SqlCommand(Procedures.listar_psicologos_paginado_v2, _connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.AddWithValue("@Pagina", request.pagina);
+                    command.Parameters.AddWithValue("@TamanoPagina", request.tamanoPagina);
+
+                    using (var reader = await command.ExecuteReaderAsync())
+                    {
+                        if (await reader.ReadAsync())
+                        {
+                            int total = reader.GetInt32(0);
+                            respuesta = new Respuesta<int>(0, "Total de psicólogos obtenido correctamente.", total);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                respuesta = new Respuesta<int>(-1, "Error al obtener el total de psicólogos: " + ex.Message);
+            }
+            finally
+            {
+                await _connection.CloseAsync();
+            }
+
+            return respuesta;
+        }
+
+        public async Task<Respuesta<List<entities.Sede>>> GetSedesPorUsuario(int id_usuario)
+        {
+            var respuesta = new Respuesta<List<entities.Sede>>(-1, "No se encontraron sedes o error al obtener la lista.");
+            var lista = new List<entities.Sede>();
+
+            try
+            {
+                await cn.OpenAsync();
+                using (SqlCommand cmd = new SqlCommand(Procedures.listar_sedes_x_usuario, cn))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@id_psicologo", id_usuario);
+
+                    using (SqlDataReader reader = await cmd.ExecuteReaderAsync())
+                    {
+                        while (await reader.ReadAsync())
+                        {
+                            var item = new entities.Sede
+                            {
+                                Id = Convert.ToInt32(reader["Id_Sede"]),
+                                Nombre = Convert.ToString(reader["Nombre"])
+                            };
+                            lista.Add(item);
+                        }
+
+                        if (lista.Any())
+                            respuesta = new Respuesta<List<entities.Sede>>(0, "Lista de sedes obtenida correctamente.", lista);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                respuesta = new Respuesta<List<entities.Sede>>(-1, "Error al obtener las sedes: " + ex.Message);
+            }
+            finally
+            {
+                await cn.CloseAsync();
+            }
+            return respuesta;
+        }
+        #endregion
     }
 }

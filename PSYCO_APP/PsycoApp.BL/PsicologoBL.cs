@@ -1,14 +1,17 @@
-﻿using PsycoApp.DA;
+﻿using PsycoApp.BL.Interfaces;
+using PsycoApp.DA;
 using PsycoApp.entities;
+using PsycoApp.entities.Dto;
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace PsycoApp.BL
 {
-    public class PsicologoBL
+    public class PsicologoBL : IPsicologoBL
     {
         private readonly PsicologoDA _psicologoDA;
 
@@ -155,5 +158,45 @@ namespace PsycoApp.BL
             }
             return res;
         }
+
+        #region "version react"
+        public async Task<Respuesta<DataPsicologos>> GetList(ListPsicologosDto request)
+        {
+            var dataPsicologos = new DataPsicologos();
+            var respuesta = await _psicologoDA.GetList(request);
+            var respuestaTotal = await _psicologoDA.GetTotalList(new ListPsicologosDto() { pagina = 0, tamanoPagina = 0 });
+            if ((respuesta != null && respuesta.Codigo == 0) && (respuestaTotal != null && respuestaTotal.Codigo == 0))
+            {
+                foreach (var psicologo in respuesta.Data)
+                {
+                    var sedesRespuesta = await _psicologoDA.GetSedesPorUsuario(psicologo.Id);
+                    if (sedesRespuesta != null && sedesRespuesta.Codigo == 0 && sedesRespuesta.Data != null)
+                    {
+                        var sedes = sedesRespuesta.Data;
+                        psicologo.Sedes = sedes.Count == 0 ? "---" : (sedes.Count == 1 ? sedes[0].Nombre : string.Concat(sedes[0].Nombre, "/", sedes[1].Nombre));
+
+                        if (sedes.Count >= 1)
+                        {
+                            psicologo.IdSedePrincipal = sedes[0].Id;
+                            psicologo.IdSedeSecundaria = sedes.Count == 2 ? sedes[1].Id : 0;
+                        }
+                    }
+                    else
+                    {
+                        psicologo.Sedes = "---";
+                        psicologo.IdSedePrincipal = 0;
+                        psicologo.IdSedeSecundaria = 0;
+                    }
+                }
+                dataPsicologos.TotalRegistros = respuestaTotal.Data;
+                dataPsicologos.Registros = respuesta.Data;
+                return new Respuesta<DataPsicologos>(0, "", dataPsicologos);
+            } else
+            {
+                return new Respuesta<DataPsicologos>(-1, "Ocurrió un error al listar los psicólogos.", null);
+            }
+        }
+
+        #endregion
     }
 }

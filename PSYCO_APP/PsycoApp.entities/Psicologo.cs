@@ -6,6 +6,7 @@ namespace PsycoApp.entities
 {
     public class Psicologo
     {
+        public long Fila { get; set; }
         public int Id { get; set; }
         public string Nombre { get; set; }
         public string Apellido { get; set; }
@@ -24,6 +25,12 @@ namespace PsycoApp.entities
         public string Estado { get; set; }
         public List<Estudio> Estudios { get; set; }
         public string Sedes { get; set; }
+    }
+
+    public class DataPsicologos
+    {
+        public int TotalRegistros { get; set; }
+        public List<Psicologo> Registros { get; set; }
     }
 
     public class Estudio
