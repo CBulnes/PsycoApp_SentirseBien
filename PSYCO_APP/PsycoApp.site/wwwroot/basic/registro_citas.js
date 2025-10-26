@@ -928,7 +928,8 @@ function cargar_datos_cita(id_cita, id_doctor, id_paciente, fecha, hora, estado,
     $('#txtFecha').attr('data-fecha', fecha).val(fecha_formato_ddmmyyyy(fecha));
     $('#txtHora').val(hora).attr('data-hora', hora);
     $('#cboDoctor').val(id_doctor).attr('data-id-doctor', id_doctor);
-    $('#cboPaciente').html('<option value="' + id_paciente + '">' + paciente + '</option>');
+    if (id_paciente > 0)
+        $('#cboPaciente').html('<option value="' + id_paciente + '">' + paciente + '</option>');
     $('#cboPaciente').val(id_paciente).attr('data-id-paciente', id_paciente);
     $('#txtTelefono').val(telefono).attr('data-telefono', telefono);
     $('#txtDniPaciente').val(dni_paciente).attr('data-dni-paciente', dni_paciente);
