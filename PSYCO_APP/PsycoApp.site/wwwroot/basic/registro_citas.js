@@ -1005,6 +1005,8 @@ function cargar_datos_cita(id_cita, id_doctor, id_paciente, fecha, hora, estado,
     $('#divPagoGratis').hide();
     $('#ImgActualizarServicio').hide();
 
+    $('#divEspecialista').removeClass('hide-element');
+
     if (id_cita == 0) {
         $('#txtFechaReasignar').val('');
         $('#divHorarios, .divConfirmar').show();
