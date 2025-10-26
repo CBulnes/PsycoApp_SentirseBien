@@ -106,11 +106,14 @@ $(document).ready(function () {
     $('#cboServicio').on('change', function () {
         $('.fechasAdicionales').addClass('hide-element');
         sesiones = $(this).find(':selected').attr('data-sesiones');
+
         if (sesiones > 0) {
             $('.fechasAdicionales').removeClass('hide-element');
             $('#divHorarios').addClass('hide-element');
+            $('#divEspecialista').addClass('hide-element');
         } else {
             $('#divHorarios').removeClass('hide-element');
+            $('#divEspecialista').removeClass('hide-element');
         }
 
         var fechaInicial = $('#txtFecha').val();
@@ -122,7 +125,9 @@ $(document).ready(function () {
             html += '<tr>';
             html += '<td><input class="form-control fechaAd active-input-modulo" type="date" id="txtFecha' + i + '" autocomplete="off" max="2050-12-31" min="2022-08-01" value="' + formatDateISO(fecha) + '" onkeydown="return false" ' + disabled + ' oninput="validarHorarioFecha(' + i + ')" /></td>';
 
-            html += '<td id="tdHorario' + i + '"><select class="form-control horarioAd active-select-modulo" id="cboHorario' + i + '">' + obtener_horarios_fecha(formatDateISO(fecha)) + '</select></td>';
+            html += '<td id="tdEspecialista' + i + '"><select class="form-control especialistaAd active-select-modulo" id="cboEspecialista' + i + '" onchange="obtener_horarios_especialista(' + i + ')">' + obtener_especialistas() + '</select></td>';
+
+            html += '<td id="tdHorario' + i + '"><select class="form-control horarioAd active-select-modulo" id="cboHorario' + i + '">' + '<option value="-1">Seleccionar horario</option>' + /*obtener_horarios_fecha(formatDateISO(fecha)) +*/ '</select></td>';
 
             html += '</tr>';
         }
@@ -131,8 +136,43 @@ $(document).ready(function () {
    
 });
 
-var obtener_horarios_fecha = function (fecha) {
+function obtener_horarios_especialista(index) {
+    var fecha = $('#txtFecha' + index).val();
+    var especialista = $('#cboEspecialista' + index).val();
+    var html = obtener_horarios_fecha(fecha, especialista);
+    $('#cboHorario' + index).html(html);
+}
+
+var obtener_especialistas = function () {
+    var html = '';
+
+    $.ajax({
+        url: "/RegistroCitas/listar_doctores?filtrar_por_sede=1",
+        type: "GET",
+        async: false,
+        beforeSend: function () {
+            html = '<option value="-1">Seleccionar especialista</option>';
+        },
+        success: function (data) {
+            if (data.length > 0) {
+                data.sort((a, b) => a.nombre.localeCompare(b.nombre));
+                for (item of data) {
+                    html += '<option value="' + item.id + '">' + item.nombre + '</option>';
+                }
+            }
+        },
+        error: function (response) {
+            html = '<option value="-1">Seleccionar especialista</option>';
+        }
+    });
+    return html;
+}
+
+var obtener_horarios_fecha = function (fecha, idEspecialista = null) {
     var doctor = $('#cboDoctor').val();
+    if (idEspecialista != null) {
+        doctor = idEspecialista
+    }
     var html = '';
 
     $.ajax({
@@ -477,6 +517,7 @@ function copiarOpciones() {
 
 
 function ver_cita(e) {
+    loadPatients();
     var id_cita = $(e).attr('data-id-cita');
     var id_especialista = $(e).attr('data-id-especialista');
     var id_paciente = $(e).attr('data-id-paciente');
@@ -732,8 +773,10 @@ function cerrar_modal_fechas_adicionales() {
 function validarHorarioFecha(i) {
     //fechaAd
     var idFecha = 'txtFecha' + i;
+    var idEspecialista = 'cboEspecialista' + i;
     var fechaRecargar = $('#' + idFecha).val();
-    var html = '<select class="form-control horarioAd active-select-modulo" id="cboHorario' + i + '">' + obtener_horarios_fecha(fechaRecargar) + '</select>';
+    var especialistaRecargar = $('#' + idEspecialista).val();
+    var html = '<select class="form-control horarioAd active-select-modulo" id="cboHorario' + i + '">' + obtener_horarios_fecha(fechaRecargar, especialistaRecargar) + '</select>';
     $('#tdHorario' + i).html(html);
 }
 
@@ -745,11 +788,12 @@ function validar_modal_fechas_adicionales() {
         for (var i = 0; i <= sesiones; i++) {
             if (error == '') {
                 var fecha = $('#txtFecha' + i).val();
+                var especialista = $('#cboEspecialista' + i).val();
                 var hora = $('#cboHorario' + i).val();
-                if (hora == '-1' || hora == 'REFRIGERIO') {
+                if (hora == '-1' || hora == 'RESERVADO' || hora == 'REFRIGERIO' || especialista == '-1') {
                     error = 'ERROR';
                 } else {
-                    adicionales.push({ fecha: fecha, hora: hora });
+                    adicionales.push({ fecha: fecha, especialista: especialista, hora: hora });
                 }
             }
         }
@@ -765,7 +809,7 @@ function validar_modal_fechas_adicionales() {
         Swal.fire({
             icon: "warning",
             title: "Oops...",
-            text: "Seleccione horarios válidos para las citas.",
+            text: "Seleccione especialistas y horarios válidos para las citas.",
         });
     }
     
@@ -1444,7 +1488,7 @@ function guardar_cita() {
     var id_sede = $('#cboSedeChange_').val();
     var tipo_cita = $('#cboTipoCita').val();
 
-    if (doctor == '-1') {
+    if (doctor == '-1' && sesiones == 0) {
         Swal.fire({
             icon: "warning",
             title: "Oops...",

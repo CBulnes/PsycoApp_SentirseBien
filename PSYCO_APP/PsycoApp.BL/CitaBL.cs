@@ -28,6 +28,7 @@ namespace PsycoApp.BL
                     if (oCita.fechas_adicionales.Count > 0)
                     {
                         oCita.hora_cita = oCita.fechas_adicionales[0].hora;
+                        oCita.id_doctor_asignado = Convert.ToInt32(oCita.fechas_adicionales[0].especialista);
                         oCita.fecha_cita = oCita.fechas_adicionales[0].fecha;
                     }
 
@@ -46,6 +47,7 @@ namespace PsycoApp.BL
                             if (orden > 1)
                             {
                                 oCita.fecha_cita = adicional.fecha;
+                                oCita.id_doctor_asignado = Convert.ToInt32(adicional.especialista);
                                 oCita.hora_cita = adicional.hora;
                                 var res2 = citaDA.validar_cita(oCita, "SI", orden, main_path, random_str);
                                 if (!res2.estado)
@@ -64,6 +66,7 @@ namespace PsycoApp.BL
                     if (oCita.fechas_adicionales != null && oCita.fechas_adicionales.Count > 0)
                     {
                         oCita.hora_cita = oCita.fechas_adicionales[0].hora;
+                        oCita.id_doctor_asignado = Convert.ToInt32(oCita.fechas_adicionales[0].especialista);
                         oCita.fecha_cita = oCita.fechas_adicionales[0].fecha;
                     }
 
@@ -77,6 +80,7 @@ namespace PsycoApp.BL
                             if (orden > 1)
                             {
                                 oCita.fecha_cita = adicional.fecha;
+                                oCita.id_doctor_asignado = Convert.ToInt32(adicional.especialista);
                                 oCita.hora_cita = adicional.hora;
                                 var res2 = citaDA.registrar_cita(oCita, "SI", orden, main_path, random_str);
                             }

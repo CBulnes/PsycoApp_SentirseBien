@@ -41,6 +41,7 @@ namespace PsycoApp.entities
     public class Subcita
     {
         public string fecha { get; set; }
+        public string especialista { get; set; }
         public string hora { get; set; }
     }
 }
