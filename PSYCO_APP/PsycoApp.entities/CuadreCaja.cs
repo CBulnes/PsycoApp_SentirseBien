@@ -18,4 +18,11 @@ namespace PsycoApp.entities
         public string estado_orden { get; set; } = "";
         public string sede { get; set; } = "";
     }
+    public class ListaEfectivoDiario
+    {
+        public string fecha { get; set; } = "";
+        public string importe { get; set; } = "";
+        public string comentario { get; set; } = "";
+        public string usuario { get; set; } = "";
+    }
 }

@@ -20,6 +20,30 @@
         background-color: #f2f4f8 !important;
         color: #FFF !important;
     }
+    .btn {
+        padding: 7px 12px;
+        font-size: 14px;
+        cursor: pointer;
+        display: inline-block;
+        font-weight: 400;
+        text-align: center;
+        white-space: nowrap;
+        vertical-align: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+        border: 1px solid transparent;
+        padding: .5rem .75rem;
+        font-size: 1rem;
+        line-height: 1.25;
+        border-radius: .25rem;
+        transition: all .15s ease-in-out;
+        width: 100%;
+        color: #111217;
+        background-color: #FFFFFF !important;
+        border: 1px solid #111217;
+    }
 </style>
     <input type="hidden" id="hiddenIdSede" value="@(Model?.DynamicData?.id_sede)" />
 
@@ -30,18 +54,18 @@
         </div>
 
         <div class="row">
-            <div class="col-3">
+            <div class="col-2">
                 <label class="active-titular-modulo">Fecha:</label>
                 <input id="txtFecha" class="input100 col-12" type="date" oninput="buscarPago(1); verResumenUsuario(false)" style="background-color: #d8d9db; color: #000000; border: 1px solid rgba(0, 0, 0, .15); line-height: 1.25; vertical-align: middle;border-radius: .25rem; display: inline-block; max-width: 100%; height: calc(2.25rem + 2px); filter: invert(1);" />
             </div>
-            <div class="col-3">
+            <div class="col-2">
                 <label class="active-titular-modulo">Buscar por:</label>
                 <select class="input100 custom-select col-12 active-select-modulo" id="cboBuscarPor" style="padding: 0 25px 0 25px;" onchange="buscarPago(1); verResumenUsuario(false)">
                     <option value="1">Fecha exacta</option>
                     <option value="2">Año y mes</option>
                 </select>
             </div>
-            <div class="col-3">
+            <div class="col-2">
                 <label class="active-titular-modulo">Centro:</label>
                 <select class="input100 custom-select col-12 active-select-modulo" id="cboSede" style="padding: 0 25px 0 25px;" onchange="buscarPago(1); verResumenUsuario(false)">
                     <option value="-1">Todos</option>
@@ -49,11 +73,19 @@
                     <option value="2">Transforma</option>
                 </select>
             </div>
-            <div class="col-3">
+            <div class="col-2">
                 <label class="active-titular-modulo">Usuario:</label>
                 <select class="input100 custom-select col-12 active-select-modulo" id="cboUsuario" style="padding: 0 25px 0 25px;" onchange="buscarPago(1); verResumenUsuario(false)">
                     <option value="-1">Todos</option>
                 </select>
+            </div>
+            <div class="col-2">
+                <div class="form-group">
+                    <label class="active-titular-modulo">&nbsp;</label>
+                    <button type="button" class="btn btn-doc second_color" onclick="modal_efectivo_diario()">
+                        Efectivo&nbsp;diario
+                    </button>
+                </div>
             </div>
         </div>
 
@@ -111,6 +143,29 @@
                                 </tr>
                             </thead>
                             <tbody id="bdResumen2">
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="sb-pa-container-resume-report-item-table">
+                        <table class="table table-hover yourTableClass active-table-modulo caja">
+                            <thead>
+                                <tr class="bg-success">
+                                    <th class="text-center" style="width: 80px; color: #FFFFFF;">#</th>
+                                    <th class="text-center" style="color: #FFFFFF;">
+                                        Fecha
+                                    </th>
+                                    <th class="text-center" style="color: #FFFFFF;">
+                                        Importe
+                                    </th>
+                                    <th class="text-center" style="color: #FFFFFF;">
+                                        Comentario
+                                    </th>
+                                    <th class="text-center" style="color: #FFFFFF;">
+                                        Usuario
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody id="bdResumen3">
                             </tbody>
                         </table>
                     </div>
@@ -208,6 +263,47 @@
             <tbody id="bdResumen">
             </tbody>
         </table>
+    </div>
+</div>
+
+<div id="mdl_efectivo_diario" class="modal" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="true">
+    <div class="modal-dialog modal-md" role="document" style="height: 90%; display: grid; place-items: center;">
+        <div class="modal-content sb-reg-citas-popup-container">
+            <div class="modal-header sb-reg-citas-popup-title">
+                <h5 class="modal-title">Efectivo diario</h5>
+            </div>
+            <div class="modal-body sb-reg-citas-popup-body">
+
+                <div class="sb-reg-citas-popup-tab-panel">
+
+                    <div class="sb-reg-citas-popup-tab-panel-block">
+                        <div class="sb-reg-citas-popup-tab-panel-block-item">
+                            <span class="label-form">Fecha</span>
+                            <input id="txtFecha_" class="form-control" type="date" autocomplete="off" />
+                        </div>
+                    </div>
+
+                    <div class="sb-reg-citas-popup-tab-panel-block">
+                        <div class="sb-reg-citas-popup-tab-panel-block-item">
+                            <span class="label-form">Total efectivo</span>
+                            <input class="form-control" type="text" id="txtEfectivo_" autocomplete="off" onfocusout="setDecimalValue()" />
+                        </div>
+                    </div>
+
+                    <div class="sb-reg-citas-popup-tab-panel-block">
+                        <div class="sb-reg-citas-popup-tab-panel-block-item">
+                            <span class="label-form">Observación</span>
+                            <input class="form-control" type="text" id="txtComentario_" autocomplete="off" maxlength="50" />
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary sb-reg-citas-popup-button-volver" onclick="cerrar_modal_efectivo_diario()">Volver</button>
+                <button type="button" class="btn btn-primary main_color sb-reg-citas-popup-button" onclick="guardar_efectivo_diario()">Aceptar</button>
+            </div>
+        </div>
     </div>
 </div>
 

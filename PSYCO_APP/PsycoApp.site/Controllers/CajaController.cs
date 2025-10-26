@@ -17,6 +17,7 @@ namespace PsycoApp.site.Controllers
     {
         private readonly string apiUrl = Helper.GetUrlApi() + "/api/caja"; // URL base de la API
         private string url_registrar_pago = Helper.GetUrlApi() + "/api/caja/registrar_pago";
+        private string url_registrar_efectivo = Helper.GetUrlApi() + "/api/caja/registrar_efectivo";
         private string url_listar_pagos_pendientes = Helper.GetUrlApi() + "/api/caja/listar_pagos_pendientes";
         private string url_listar_resumen_caja = Helper.GetUrlApi() + "/api/caja/listar_resumen_caja";
 
@@ -200,6 +201,28 @@ namespace PsycoApp.site.Controllers
             return res_;
         }
 
+        [HttpPost]
+        public async Task<RespuestaUsuario> RegistrarEfectivoDiario(EfectivoDiario model)
+        {
+            string res = "";
+            model.usuario = Convert.ToString(HttpContext.Session.GetString("login"));
+
+            RespuestaUsuario res_ = new RespuestaUsuario();
+            try
+            {
+                url = url_registrar_efectivo;
+                obj = (dynamic)model;
+                res = ApiCaller.consume_endpoint_method(url, obj, "POST");
+                res_ = JsonConvert.DeserializeObject<RespuestaUsuario>(res);
+            }
+            catch (Exception)
+            {
+                res_.estado = false;
+                res_.descripcion = "Ocurrió un error al registrar el efectivo.";
+            }
+            return res_;
+        }
+
         [HttpGet]
         public async Task<List<PagosPendientes>> ListarPagosPendientes(int idPaciente)
         {
@@ -210,6 +233,26 @@ namespace PsycoApp.site.Controllers
                 url = url_listar_pagos_pendientes + "/" + idPaciente;
                 res = ApiCaller.consume_endpoint_method(url, null, "GET");
                 lista = JsonConvert.DeserializeObject<List<PagosPendientes>>(res);
+            }
+            catch (Exception)
+            {
+                lista.Clear();
+            }
+            return lista;
+        }
+
+        [HttpGet]
+        public async Task<List<entities.ListaEfectivoDiario>> ListarEfectivoDiario()
+        {
+            List<entities.ListaEfectivoDiario> lista = new List<entities.ListaEfectivoDiario>();
+            string res = "";
+            string usuario = Convert.ToString(HttpContext.Session.GetString("login"));
+            usuario = string.IsNullOrEmpty(usuario) ? "-" : usuario;
+            try
+            {
+                url = Endpoints.apiUrl + "/api" + Endpoints.Caja.url_listar_efectivo_diario + "/" + usuario;
+                res = ApiCaller.consume_endpoint_method(url, null, "GET");
+                lista = JsonConvert.DeserializeObject<List<entities.ListaEfectivoDiario>>(res);
             }
             catch (Exception)
             {

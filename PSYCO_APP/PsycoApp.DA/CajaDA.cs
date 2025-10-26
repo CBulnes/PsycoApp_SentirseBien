@@ -49,6 +49,38 @@ namespace PsycoApp.DA
             return res_;
         }
 
+        public RespuestaUsuario registrar_efectivo(EfectivoDiario oPago, string main_path, string random_str)
+        {
+            RespuestaUsuario res_ = new RespuestaUsuario();
+            try
+            {
+                cn.Open();
+                SqlCommand cmd = new SqlCommand(Procedures.sp_registrar_efectivo, cn);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Add("@fecha", SqlDbType.VarChar).Value = oPago.fecha;
+                cmd.Parameters.Add("@importe", SqlDbType.Decimal).Value = oPago.importe;
+                cmd.Parameters.Add("@usuario", SqlDbType.VarChar).Value = oPago.usuario;
+                cmd.Parameters.Add("@comentario", SqlDbType.VarChar).Value = oPago.comentario;
+
+                SqlDataAdapter da = new SqlDataAdapter(cmd);
+                DataTable dt = new DataTable();
+                da.Fill(dt);
+
+                foreach (DataRow row in dt.Rows)
+                {
+                    res_.descripcion = Convert.ToString(row["rpta"]);
+                }
+                res_.estado = res_.descripcion == "OK" ? true : false;
+            }
+            catch (Exception e)
+            {
+                res_.estado = false;
+                res_.descripcion = "Ocurrió un error al registrar el efectivo.";
+            }
+            cn.Close();
+            return res_;
+        }
+
         public List<PagosPendientes> listar_pagos_pendientes(int id_paciente)
         {
             List<PagosPendientes> lista = new List<PagosPendientes>();
@@ -190,6 +222,38 @@ namespace PsycoApp.DA
                     item.importe = Convert.ToString(row["importe"]);
                     item.forma_pago = Convert.ToString(row["forma_pago"]);
                     item.detalle_transferencia = Convert.ToString(row["detalle_transferencia"]);
+                    lista.Add(item);
+                }
+            }
+            catch (Exception e)
+            {
+                lista.Clear();
+            }
+            cn.Close();
+            return lista;
+        }
+
+        public List<ListaEfectivoDiario> listar_efectivo_diario(string usuario)
+        {
+            List<ListaEfectivoDiario> lista = new List<ListaEfectivoDiario>();
+            try
+            {
+                cn.Open();
+                SqlCommand cmd = new SqlCommand(Procedures.listar_efectivo_diario, cn);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Add("@usuario", SqlDbType.VarChar).Value = usuario;
+
+                SqlDataAdapter da = new SqlDataAdapter(cmd);
+                DataTable dt = new DataTable();
+                da.Fill(dt);
+
+                foreach (DataRow row in dt.Rows)
+                {
+                    ListaEfectivoDiario item = new ListaEfectivoDiario();
+                    item.fecha = Convert.ToString(row["fecha"]);
+                    item.importe = Convert.ToString(row["importe"]);
+                    item.comentario = Convert.ToString(row["comentario"]);
+                    item.usuario = Convert.ToString(row["usuario"]);
                     lista.Add(item);
                 }
             }

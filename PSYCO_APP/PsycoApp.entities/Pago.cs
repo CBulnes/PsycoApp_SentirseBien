@@ -13,6 +13,13 @@ namespace PsycoApp.entities
         public string comentario { get; set; } = "";
         public decimal importe { get; set; } = 0;
     }
+    public class EfectivoDiario
+    {
+        public string fecha { get; set; } = "";
+        public decimal importe { get; set; } = 0;
+        public string comentario { get; set; } = "";
+        public string usuario { get; set; } = "";
+    }
 
     public class PagosPendientes
     {

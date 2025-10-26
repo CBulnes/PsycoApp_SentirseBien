@@ -30,6 +30,21 @@ namespace PsycoApp.BL
             return res_;
         }
 
+        public RespuestaUsuario registrar_efectivo(EfectivoDiario oPago, string main_path, string random_str)
+        {
+            RespuestaUsuario res_ = new RespuestaUsuario();
+            try
+            {
+                res_ = cajaDA.registrar_efectivo(oPago, main_path, random_str);
+            }
+            catch (Exception)
+            {
+                res_.estado = false;
+                res_.descripcion = "Ocurrió un error al registrar el efectivo.";
+            }
+            return res_;
+        }
+
         public List<PagosPendientes> listar_pagos_pendientes(int id_paciente)
         {
             List<PagosPendientes> lista = new List<PagosPendientes>();
@@ -78,6 +93,20 @@ namespace PsycoApp.BL
             try
             {
                 lista = cajaDA.resumen_caja_x_forma_pago(usuario, fecha, buscar_por, sede, id_usuario);
+            }
+            catch (Exception)
+            {
+                lista.Clear();
+            }
+            return lista;
+        }
+
+        public List<ListaEfectivoDiario> listar_efectivo_diario(string usuario)
+        {
+            List<ListaEfectivoDiario> lista = new List<ListaEfectivoDiario>();
+            try
+            {
+                lista = cajaDA.listar_efectivo_diario(usuario);
             }
             catch (Exception)
             {
