@@ -19,11 +19,13 @@ namespace PsycoApp.entities
         public string dni_paciente { get; set; } = "";
         public string paciente { get; set; } = "";
         public string tipo { get; set; } = "";
+        public string servicio { get; set; } = "";
         public string telefono { get; set; } = "";
         public string moneda { get; set; } = "";
         public decimal monto_pactado { get; set; } = 0;
         public decimal monto_pagado { get; set; } = 0;
         public decimal monto_pendiente { get; set; } = 0;
+        public string monto_pendiente_ { get; set; } = "";
         public int id_servicio { get; set; } = 0;
         public string nombre_servicio { get; set; } = "";
         public string tipo_cita { get; set; } = "";

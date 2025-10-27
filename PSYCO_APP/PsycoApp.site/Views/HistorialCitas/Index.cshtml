@@ -85,17 +85,23 @@
                         Paciente
                     </th>
                     <th class="text-center">
+                        Servicio
+                    </th>
+                    <th class="text-center">
                         Fecha
                     </th>
                     <th class="text-center">
                         Hora
                     </th>
                     <th class="text-center">
+                        Monto pendiente
+                    </th>
+                    <th class="text-center">
                         Estado
                     </th>
-                    @* <th class="text-center">
+                    <th class="text-center">
                     Acción
-                    </th> *@
+                    </th>
                 </tr>
             </thead>
             <tbody id="bdCitas">
@@ -301,9 +307,136 @@
     </div>
 </div>
 
+<!--MODAL OTROS PAGOS PENDIENTES-->
+<div id="mdl_otros_pagos_pendientes" class="modal" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="true">
+    <div class="modal-dialog modal-lg" role="document" style="height: 90%; display: grid; place-items: center; max-width: fit-content;">
+        <div class="modal-content sb-reg-citas-popup-container" style=" width: fit-content;">
+            <div class="modal-header sb-reg-citas-popup-title">
+                <h5 class="modal-title">Pagos pendientes</h5>
+            </div>
+            <div class="modal-body sb-reg-citas-popup-body">
+
+                <div class="sb-reg-citas-popup-tab-panel">
+                    <table class="table table-responsive" style="display: inline-table;">
+                        <thead id="headPagosPendientes">
+                            <tr>
+                                <th>Servicio</th>
+                                <th>Fecha&nbsp;cita</th>
+                                <th>Estado</th>
+                                <th>Usuario&nbsp;registra</th>
+                                <th>Fecha&nbsp;registra</th>
+                                <th>Monto&nbsp;pactado</th>
+                                <th>Monto&nbsp;pagado</th>
+                                <th>Monto&nbsp;pendiente</th>
+                                <th>Acción</th>
+                            </tr>
+                        </thead>
+                        <tbody id="bodyPagosPendientes"></tbody>
+                    </table>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary sb-reg-citas-popup-button-volver" onclick="cerrar_modal_pagos_pendientes()">Volver</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--MODAL PAGO-->
+<div id="mdl_pago" class="modal" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="true">
+    <div class="modal-dialog modal-md" role="document" style="height: 90%; display: grid; place-items: center;">
+        <div class="modal-content sb-reg-citas-popup-container">
+            <div class="modal-header sb-reg-citas-popup-title">
+                <h5 class="modal-title">Registrar pago</h5>
+            </div>
+            <div class="modal-body sb-reg-citas-popup-body">
+
+                <div class="sb-reg-citas-popup-tab-panel">
+                    <div class="sb-reg-citas-popup-tab-panel-block" style="display: none;">
+                        <input class="form-control" type="text" id="txtIdCita" />
+                    </div>
+
+                    <div class="sb-reg-citas-popup-tab-panel-block">
+                        <div class="sb-reg-citas-popup-tab-panel-block-item">
+                            <span class="label-form">Fecha de pago</span>
+                            <input id="txtFechaPago" class="form-control" type="text" autocomplete="off" disabled="disabled" />
+                        </div>
+                    </div>
+
+                    <div class="sb-reg-citas-popup-tab-panel-block">
+                        <div class="sb-reg-citas-popup-tab-panel-block-item">
+                            <span class="label-form">Paciente</span>
+                            <input class="form-control" type="text" id="txtPaciente" autocomplete="off" disabled="disabled" />
+                        </div>
+                    </div>
+
+                    <div class="sb-reg-citas-popup-tab-panel-block">
+                        <div class="sb-reg-citas-popup-tab-panel-block-item">
+                            <span class="label-form">Forma de pago</span>
+                            <select class="form-control" id="cboFormaPago" onchange="validarSiEsTransferencia()">
+                                <option value="-1">Seleccionar</option>
+                                <option value="1">Transferencia</option>
+                                <option value="2">Depósito</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="sb-reg-citas-popup-tab-panel-block" id="divDetalleTransferencia">
+                        <div class="sb-reg-citas-popup-tab-panel-block-item">
+                            <span class="label-form">Detalle de transferencia</span>
+                            <select class="form-control" id="cboDetalleTransferencia">
+                                <option value="-1">Seleccionar</option>
+                                <option value="1">BCP - Ahorros S/.</option>
+                                <option value="2">BBVA - Ahorros S/.</option>
+                                <option value="3">Interbank - Ahorros S/.</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="sb-reg-citas-popup-tab-panel-block">
+                        <div class="sb-reg-citas-popup-tab-panel-block-item">
+                            <span class="label-form">Observación</span>
+                            <input class="form-control" type="text" id="txtComentario" autocomplete="off" maxlength="50" />
+                        </div>
+                    </div>
+
+                    <div class="sb-reg-citas-popup-tab-panel-block">
+                        <div class="sb-reg-citas-popup-tab-panel-block-item">
+                            <span class="label-form">Importe de pago (S/.)</span>
+                            <input class="form-control" type="text" id="txtMonto1" autocomplete="off" onkeyup="validarDiferenciaPago()" onfocusout="setDecimalValue()" />
+                        </div>
+                    </div>
+
+                    <div class="sb-reg-citas-popup-tab-panel-block">
+                        <div class="sb-reg-citas-popup-tab-panel-block-item">
+                            <span class="label-form">Monto pendiente (S/.)</span>
+                            <input class="form-control" type="text" id="txtMonto2" autocomplete="off" disabled="disabled" />
+                        </div>
+                    </div>
+
+                    <div class="sb-reg-citas-popup-tab-panel-block">
+                        <div class="sb-reg-citas-popup-tab-panel-block-item">
+                            <span class="label-form">Diferencia (S/.)</span>
+                            <input class="form-control" type="text" id="txtMonto3" autocomplete="off" disabled="disabled" />
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary sb-reg-citas-popup-button-volver" onclick="cerrar_modal_pago()">Volver</button>
+                <button type="button" class="btn btn-primary main_color sb-reg-citas-popup-button" onclick="guardar_pago()">Aceptar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 @section Scripts{
     <script src="~/basic/moments.js?f=@dHoy.ToString("yyyyMMddhhmmss")"></script>
     <script src="~/basic/datetimepicker.js?f=@dHoy.ToString("yyyyMMddhhmmss")"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/3.2.6/jquery.inputmask.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-maskmoney/3.0.2/jquery.maskMoney.min.js"></script>
     <script src="~/basic/historial_citas.js?f=@dHoy.ToString("yyyyMMddhhmmss")"></script>
     <script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
 }

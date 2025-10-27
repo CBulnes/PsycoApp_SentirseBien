@@ -429,6 +429,9 @@ namespace PsycoApp.DA
                     cita.id_usuario = Convert.ToInt32(row["id_usuario"]);
                     cita.usuario = Convert.ToString(row["usuario"]);
                     cita.tipo = Convert.ToString(row["tipo"]);
+                    cita.servicio = Convert.ToString(row["servicio"]);
+                    cita.monto_pendiente_ = Convert.ToString(row["monto_pendiente"]);
+                    cita.id_paciente = Convert.ToInt32(row["id_paciente"]);
                     lista.Add(cita);
                 }
             }
