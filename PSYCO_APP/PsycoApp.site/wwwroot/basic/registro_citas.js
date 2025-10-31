@@ -15,6 +15,7 @@ const pageSize = 10; // Tamaño de la página fijo
 let searchTerm = '';
 let debounceTimer;
 let pago_gratis_;
+let _id_paquete_ = 0;
 
 $('#cboPaciente').on('change', function () {
     var idPaciente = $(this).val();
@@ -103,6 +104,7 @@ $(document).ready(function () {
     select.value = idSede;
 
     console.log('prueba3');
+    //fechas adicionales nuevo
     $('#cboServicio').on('change', function () {
         $('.fechasAdicionales').addClass('hide-element');
         sesiones = $(this).find(':selected').attr('data-sesiones');
@@ -123,7 +125,7 @@ $(document).ready(function () {
         for (var i = 0; i < sesiones; i++) {
             var fecha = addDays(parseDate(fecha_yyyyMMdd(fechaInicial)), i*7);
             html += '<tr>';
-            html += '<td><input class="form-control fechaAd active-input-modulo" type="date" id="txtFecha' + i + '" autocomplete="off" max="2050-12-31" min="2022-08-01" value="' + formatDateISO(fecha) + '" onkeydown="return false" ' + disabled + ' oninput="validarHorarioFecha(' + i + ')" /></td>';
+            html += '<td><input class="form-control fechaAd active-input-modulo" type="date" data-id-cita="0" id="txtFecha' + i + '" autocomplete="off" max="2050-12-31" min="2022-08-01" value="' + formatDateISO(fecha) + '" onkeydown="return false" ' + disabled + ' oninput="validarHorarioFecha(' + i + ')" /></td>';
 
             html += '<td id="tdEspecialista' + i + '"><select class="form-control especialistaAd active-select-modulo" id="cboEspecialista' + i + '" onchange="obtener_horarios_especialista(' + i + ')">' + obtener_especialistas() + '</select></td>';
 
@@ -185,7 +187,7 @@ var obtener_horarios_fecha = function (fecha, idEspecialista = null) {
         success: function (data) {
             if (data.length > 0) {
                 for (item of data) {
-                    html += '<option value="' + (item.estado == 'DISPONIBLE' ? item.hora_cita : item.estado) + '">' + (item.estado == 'DISPONIBLE' ? item.hora_cita : item.estado) + '</option>';
+                    html += '<option data-original="' + item.hora_cita + '" value="' + (item.estado == 'DISPONIBLE' ? item.hora_cita : item.estado) + '">' + (item.estado == 'DISPONIBLE' ? item.hora_cita : item.estado) + '</option>';
                 }
             }
         },
@@ -351,7 +353,83 @@ function formatDateISO(date) {
 };
 
 function verFechasAdicionales() {
-    $('#mdl_adicionales_').modal('show');
+    //validar y obtener fechas por el id_paquete
+    var citasPaquete = [];
+    var cbosEspecialistas = [];
+    var cbosHorarios = [];
+    var html = '';
+    var disabled = '';
+
+    if (_id_paquete_ > 0) {
+        $.ajax({
+            url: '/RegistroCitas/ObtenerCitasPorPaquete?idPaquete=' + _id_paquete_,
+            type: "GET",
+            data: {},
+            beforeSend: function () {
+                $('.preloader').removeAttr('style');
+                $('.preloader').removeClass('hide-element');
+            },
+            success: function (data) {
+                citasPaquete = data;
+
+                console.log('citasPaquete', citasPaquete);
+                sesiones = citasPaquete.length;
+
+                for (var i = 0; i < citasPaquete.length; i++) {
+                    var fecha = citasPaquete[i].fecha_cita;
+                    var disabled = (citasPaquete[i].id_cita > 0 && citasPaquete[i].estado != 'CITADO') ? 'disabled="disabled"' : '';
+                    var deshabilitar = (citasPaquete[i].id_cita > 0 && citasPaquete[i].estado != 'CITADO') ? true : false;
+
+                    html += '<tr>';
+                    html += '<td><input class="form-control fechaAd active-input-modulo" type="date" data-id-cita="' + citasPaquete[i].id_cita + '" id="txtFecha' + i + '" autocomplete="off" max="2050-12-31" min="2022-08-01" value="' + (fecha) + '" onkeydown="return false" ' + disabled + ' oninput="validarHorarioFecha(' + i + ')" /></td>';
+                    html += '<td id="tdEspecialista' + i + '"><select class="form-control especialistaAd active-select-modulo" style="background-color: #18202d !important;" id="cboEspecialista' + i + '" onchange="obtener_horarios_especialista(' + i + ')">' + obtener_especialistas() + '</select></td>';
+                    html += '<td id="tdHorario' + i + '"><select class="form-control horarioAd active-select-modulo" style="background-color: #18202d !important;" id="cboHorario' + i + '">' + '<option value="-1">Seleccionar horario</option>' + /*obtener_horarios_fecha(formatDateISO(fecha)) +*/ '</select></td>';
+                    html += '</tr>';
+
+                    cbosEspecialistas.push({ idCombo: 'cboEspecialista' + i, valor: citasPaquete[i].id_doctor_asignado, deshabilitar });
+                    cbosHorarios.push({ idCombo: 'cboHorario' + i, valor: citasPaquete[i].hora_cita, deshabilitar });
+                }
+            },
+            error: function (response) {
+                Swal.fire({
+                    icon: "Error",
+                    title: "Oops...",
+                    text: "Ocurrió un error al obtener las citas.",
+                });
+                citasPaquete = [];
+            },
+            complete: function () {
+                $('.preloader').addClass('hide-element');                
+                $('#bdFechas').html(html);
+
+                for (var item of cbosEspecialistas) {
+                    $('#' + item.idCombo).val(item.valor).change();
+                    if (item.deshabilitar)
+                        $('#' + item.idCombo).attr('disabled', true);
+                }
+                setTimeout(() => {
+                    for (var item of cbosHorarios) {
+                        const $opcion = $('#' + item.idCombo + ' option[data-original="' + item.valor + '"]');
+
+                        if ($opcion.length) {
+                            const original = $opcion.data('original');
+                            $opcion
+                                .val(original)      // actualiza el value
+                                .text(original)     // actualiza el texto visible
+                                .prop('selected', true); // selecciona
+                        }
+
+                        if (item.deshabilitar)
+                            $('#' + item.idCombo).attr('disabled', true);
+                    }
+                }, 500);
+
+                $('#mdl_adicionales_').modal('show');
+            }
+        });
+    } else {
+        $('#mdl_adicionales_').modal('show');
+    }
 }
 
 function recargar_citas() {
@@ -517,6 +595,64 @@ function copiarOpciones() {
 
 
 function ver_cita(e) {
+    $('#btnActualizarFechasAdicionales').hide();
+
+    var id_paquete = $(e).attr('data-id-paquete');
+    if (id_paquete > 0) {
+        Swal.fire({
+            //title: '¿Qué deseas hacer?',
+            html: `<br/>
+        <p>Esta cita forma parte de un <b>paquete</b>.</p>
+        <p>Puedes ver las <span style="color:#0d6efd;">fechas adicionales</span> o continuar con la cita normal.</p>
+      `,
+            //icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: '<i class="fa fa-calendar"></i> Ver fechas adicionales',
+            cancelButtonText: '<i class="fa fa-stethoscope"></i> Mostrar cita',
+            confirmButtonColor: '#198754', // verde
+            cancelButtonColor: '#6c757d',  // gris
+            background: '#f8f9fa', // color de fondo
+            backdrop: 'rgba(0,0,0,0.4)', // oscurecer fondo
+            allowOutsideClick: false,
+        }).then((result) => {
+            if (result.isConfirmed) {
+                _id_paquete_ = id_paquete;
+                verFechasAdicionales();
+            } else {
+                // flujo normal (tu código original)
+                loadPatients();
+                var id_cita = $(e).attr('data-id-cita');
+                var id_especialista = $(e).attr('data-id-especialista');
+                var id_paciente = $(e).attr('data-id-paciente');
+                var hora_Cita = $(e).attr('data-hora-cita');
+                var estado = $(e).attr('data-estado');
+                var fecha_cita = $(e).attr('data-fecha-cita');
+                var telefono = $(e).attr('data-telefono');
+                var moneda = $(e).attr('data-moneda');
+                var monto_pactado = $(e).attr('data-monto-pactado');
+                var monto_pagado = $(e).attr('data-monto-pagado');
+                var monto_pendiente = $(e).attr('data-monto-pendiente');
+                var id_servicio = $(e).attr('data-id-servicio');
+                var id_sede = $(e).attr('data-id-sede');
+                var feedback = $(e).attr('data-feedback');
+                var comentario = $(e).attr('data-comentario');
+                var pago_gratis = $(e).attr('data-pago-gratis');
+                var dni_paciente = $(e).attr('data-dni-paciente');
+                var paciente = $(e).attr('data-paciente');
+
+                if (id_especialista == -1) {
+                    if ($('#hiddenDoctor').val() != null && $('#hiddenDoctor').val() != '') {
+                        id_especialista = $('#hiddenDoctor').val();
+                    }
+                }
+
+                cargar_datos_cita(id_cita, id_especialista, id_paciente, fecha_cita, hora_Cita, estado, telefono, moneda, formatDecimal(monto_pactado), formatDecimal(monto_pagado), formatDecimal(monto_pendiente), id_servicio, id_sede, feedback, comentario, pago_gratis, dni_paciente, paciente, id_paquete);
+            }
+        });
+
+        return; // detenemos aquí hasta que el usuario elija
+    }
+
     loadPatients();
     var id_cita = $(e).attr('data-id-cita');
     var id_especialista = $(e).attr('data-id-especialista');
@@ -536,13 +672,14 @@ function ver_cita(e) {
     var pago_gratis = $(e).attr('data-pago-gratis');
     var dni_paciente = $(e).attr('data-dni-paciente');
     var paciente = $(e).attr('data-paciente');
+
     if (id_especialista == -1) {
         if ($('#hiddenDoctor').val() != null && $('#hiddenDoctor').val() != '') {
             id_especialista = $('#hiddenDoctor').val();
         }
     }
-    
-    cargar_datos_cita(id_cita, id_especialista, id_paciente, fecha_cita, hora_Cita, estado, telefono, moneda, formatDecimal(monto_pactado), formatDecimal(monto_pagado), formatDecimal(monto_pendiente), id_servicio, id_sede, feedback, comentario, pago_gratis, dni_paciente, paciente);
+        
+    cargar_datos_cita(id_cita, id_especialista, id_paciente, fecha_cita, hora_Cita, estado, telefono, moneda, formatDecimal(monto_pactado), formatDecimal(monto_pagado), formatDecimal(monto_pendiente), id_servicio, id_sede, feedback, comentario, pago_gratis, dni_paciente, paciente,id_paquete);
 }
 
 function formatDecimal(num) {
@@ -788,12 +925,13 @@ function validar_modal_fechas_adicionales() {
         for (var i = 0; i <= sesiones; i++) {
             if (error == '') {
                 var fecha = $('#txtFecha' + i).val();
+                var id_cita = $('#txtFecha' + i).data('id-cita');
                 var especialista = $('#cboEspecialista' + i).val();
                 var hora = $('#cboHorario' + i).val();
                 if (hora == '-1' || hora == 'RESERVADO' || hora == 'REFRIGERIO' || especialista == '-1') {
                     error = 'ERROR';
                 } else {
-                    adicionales.push({ fecha: fecha, especialista: especialista, hora: hora });
+                    adicionales.push({ id_cita: id_cita, fecha: fecha, especialista: especialista, hora: hora, usuario: '' });
                 }
             }
         }
@@ -812,7 +950,59 @@ function validar_modal_fechas_adicionales() {
             text: "Seleccione especialistas y horarios válidos para las citas.",
         });
     }
-    
+
+    if (_id_paquete_ > 0) {
+        $('#btnActualizarFechasAdicionales').show();
+    }
+}
+
+function actualizar_fechas_adicionales() {
+    adicionales = adicionales.filter(x => x.id_cita !== undefined);
+    debugger;
+    $.ajax({
+        url: "/RegistroCitas/ActualizarCitasPaquete",
+        type: "POST",
+        data: { citas: adicionales },
+        success: function (data) {
+            if (data.estado) {
+                Swal.fire({
+                    icon: "success",
+                    text: "Citas guardadas exitosamente.",
+                });
+
+                //$("#load_data").hide();
+                //recargarInstruccion();
+
+                $('#btnActualizarFechasAdicionales').hide();
+                $('#mdl_adicionales_').modal('hide');
+
+                if (tipoVista == 'MENSUAL') {
+                    $('.calendar-container').html('<div id="my-calendar"></div>');
+                }
+                cargar_citas();
+                adicionales = [];
+            } else {
+                Swal.fire({
+                    icon: "Error",
+                    title: "Oops...",
+                    html: data.descripcion.replace(/\r?\n/g, "<br>")
+                });
+                $('#btnActualizarFechasAdicionales').hide();
+                //$("#load_data").hide();
+            }
+        },
+        error: function (response) {
+            Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: "Ocurrió un error al guardar las citas.",
+            });
+            $('#btnActualizarFechasAdicionales').hide();
+            //$("#load_data").hide();
+        },
+        complete: function () {
+        }
+    });
 }
 
 function guardar_pago() {
@@ -964,7 +1154,8 @@ function cerrar_modal_pago2() {
     }, 250);
 }
 
-function cargar_datos_cita(id_cita, id_doctor, id_paciente, fecha, hora, estado, telefono, moneda, monto_pactado, monto_pagado, monto_pendiente, id_servicio, id_sede, feedback, comentario, pago_gratis, dni_paciente, paciente) {
+function cargar_datos_cita(id_cita, id_doctor, id_paciente, fecha, hora, estado, telefono, moneda, monto_pactado, monto_pagado, monto_pendiente, id_servicio, id_sede, feedback, comentario, pago_gratis, dni_paciente, paciente, id_paquete) {
+    _id_paquete_ = 0;
     $('#btnResumen').trigger('click');
     $('#ulTabs').hide();
     $('.fechasAdicionales').addClass('hide-element');
@@ -1042,6 +1233,17 @@ function cargar_datos_cita(id_cita, id_doctor, id_paciente, fecha, hora, estado,
         }
 
         $('#cboPaciente').attr('disabled', true);
+
+        //here
+        //$('.fechasAdicionales').addClass('hide-element');
+        //$('#divHorarios').removeClass('hide-element');
+        //$('#divEspecialista').removeClass('hide-element');
+        //if (id_paquete > 0) {
+        //    $('#divHorarios').addClass('hide-element');
+        //    $('#divEspecialista').addClass('hide-element');
+        //    $('.fechasAdicionales').removeClass('hide-element');
+        //    _id_paquete_ = id_paquete;
+        //}
     }
 
     estado_ = estado;
@@ -2185,7 +2387,7 @@ function agregarHoraLibre(fecha, hora, libres) {
             } else {
                 html = '<div class="div_horario" style="background-color: #5c9d9d; color: #FFFFFF; padding: 5px; font-size: 12px; border-radius: 5px; cursor: pointer;"';
                 if (parseDate(fecha) >= parseDate(fecha_actual())) {
-                    html += ' data-id-cita="0" data-id-especialista="-1" data-id-paciente="-1" data-fecha-cita="' + fecha + '" data-pago-gratis="0" data-hora-cita="" data-estado="-" data-telefono="--" data-moneda="S/." data-monto-pactado="0.00" data-monto-pagado="0.00" data-monto-pendiente="0.00" data-id-servicio="-1" data-id-sede="-1" data-dni-paciente="" data-paciente="" onclick="ver_cita(this)" ';
+                    html += ' data-id-cita="0" data-id-especialista="-1" data-id-paciente="-1" data-fecha-cita="' + fecha + '" data-pago-gratis="0" data-hora-cita="" data-estado="-" data-telefono="--" data-moneda="S/." data-monto-pactado="0.00" data-monto-pagado="0.00" data-monto-pendiente="0.00" data-id-servicio="-1" data-id-sede="-1" data-dni-paciente="" data-paciente="" data-id-paquete="0" onclick="ver_cita(this)" ';
                 }
                 html +='>' + libre[0].tipo + ' <br> ' + libre[0].hora_cita + '</div> ';
             }

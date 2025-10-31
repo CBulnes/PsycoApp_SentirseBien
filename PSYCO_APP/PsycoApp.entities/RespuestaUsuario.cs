@@ -9,6 +9,6 @@ namespace PsycoApp.entities
         public bool estado { get; set; } = false;
         public string descripcion { get; set; } = "";
         public Usuario data { get; set; } = null;
-        //public dynamic data { get; set; } = null;
+        public int? id_paquete { get; set; }
     }
 }

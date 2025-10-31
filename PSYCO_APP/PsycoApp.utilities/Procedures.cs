@@ -55,6 +55,7 @@ namespace PsycoApp.utilities
         public const string sp_registrar_cuestionario = "SP_REGISTRAR_CUESTIONARIO";
         public const string sp_listar_disponibilidad_doctor = "SP_LISTAR_DISPONIBILIDAD_DOCTOR";
         public const string sp_listar_citas_usuario = "SP_LISTAR_CITAS_USUARIO";
+        public const string sp_listar_citas_paquete = "SP_LISTAR_CITAS_PAQUETE";
         public const string sp_listar_citas_doctor = "SP_LISTAR_CITAS_DOCTOR";
         public const string sp_listar_dias_semana_mes = "SP_LISTAR_DIAS_X_SEMANA_MES";
         public const string sp_listar_horario_psicologo = "SP_LISTAR_HORARIO_PSICOLOGO";

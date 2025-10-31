@@ -51,6 +51,22 @@ namespace PsycoApp.api.Controllers
             return res_;
         }
 
+        [HttpPost("actualizar_citas_paquete")]
+        public RespuestaUsuario ActualizarCitasPaquete([FromBody] List<Subcita> lista)
+        {
+            RespuestaUsuario res_ = new RespuestaUsuario();
+            try
+            {
+                res_ = citaBL.actualizar_citas_paquete(lista);
+            }
+            catch (Exception)
+            {
+                res_.descripcion = "Ocurrió un error al actualizar las citas";
+                res_.estado = false;
+            }
+            return res_;
+        }
+
         [HttpPost("confirmar_cita")]
         public RespuestaUsuario PostConfirmar([FromBody] Cita oCita)
         {
@@ -178,6 +194,21 @@ namespace PsycoApp.api.Controllers
             try
             {
                 lista = citaBL.citas_usuario(id_usuario, id_paciente, id_doctor, id_sede, main_path, random_str);
+            }
+            catch (Exception)
+            {
+                lista.Clear();
+            }
+            return lista;
+        }
+
+        [HttpGet("citas_por_paquete/{id_paquete}")]
+        public List<Cita> citas_por_paquete(int id_paquete)
+        {
+            List<Cita> lista = new List<Cita>();
+            try
+            {
+                lista = citaBL.citas_por_paquete(id_paquete);
             }
             catch (Exception)
             {

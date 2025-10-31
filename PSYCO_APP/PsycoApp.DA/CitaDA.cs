@@ -56,7 +56,39 @@ namespace PsycoApp.DA
             return res_;
         }
 
-        public RespuestaUsuario registrar_cita(Cita oCita, string adicional, int orden, string main_path, string random_str)
+        public RespuestaUsuario validar_cita_adicional(Cita oCita)
+        {
+            RespuestaUsuario res_ = new RespuestaUsuario();
+            try
+            {
+                cn.Open();
+                SqlCommand cmd = new SqlCommand("SP_VALIDAR_CITA_ADICIONAL", cn);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Add("@id_cita", SqlDbType.Int).Value = oCita.id_cita;
+                cmd.Parameters.Add("@fecha_cita", SqlDbType.VarChar).Value = oCita.fecha_cita;
+                cmd.Parameters.Add("@hora_cita", SqlDbType.VarChar).Value = oCita.hora_cita;
+                cmd.Parameters.Add("@id_doctor", SqlDbType.Int).Value = oCita.id_doctor_asignado;
+
+                SqlDataAdapter da = new SqlDataAdapter(cmd);
+                DataTable dt = new DataTable();
+                da.Fill(dt);
+
+                foreach (DataRow row in dt.Rows)
+                {
+                    res_.descripcion = Convert.ToString(row["rpta"]);
+                }
+                res_.estado = res_.descripcion == "OK" ? true : false;
+            }
+            catch (Exception e)
+            {
+                res_.estado = false;
+                res_.descripcion = "Ocurrió un error al registrar la cita.";
+            }
+            cn.Close();
+            return res_;
+        }
+
+        public RespuestaUsuario registrar_cita(Cita oCita, string adicional, int orden, int? id_paquete)
         {
             RespuestaUsuario res_ = new RespuestaUsuario();
             try
@@ -64,6 +96,7 @@ namespace PsycoApp.DA
                 cn.Open();
                 SqlCommand cmd = new SqlCommand(Procedures.sp_registrar_cita, cn);
                 cmd.CommandType = CommandType.StoredProcedure;
+
                 cmd.Parameters.Add("@id_cita", SqlDbType.Int).Value = oCita.id_cita;
                 cmd.Parameters.Add("@id_paciente", SqlDbType.Int).Value = oCita.id_paciente;
                 cmd.Parameters.Add("@fecha_cita", SqlDbType.VarChar).Value = oCita.fecha_cita;
@@ -79,6 +112,53 @@ namespace PsycoApp.DA
                 cmd.Parameters.Add("@comentario", SqlDbType.VarChar).Value = oCita.comentario;
                 cmd.Parameters.Add("@orden", SqlDbType.Int).Value = orden;
 
+                SqlParameter paramIdPaquete = new SqlParameter("@id_paquete", SqlDbType.Int);
+                paramIdPaquete.Direction = ParameterDirection.InputOutput;
+                paramIdPaquete.Value = id_paquete;
+                cmd.Parameters.Add(paramIdPaquete);
+
+                SqlDataAdapter da = new SqlDataAdapter(cmd);
+                DataTable dt = new DataTable();
+                da.Fill(dt);
+
+                foreach (DataRow row in dt.Rows)
+                {
+                    res_.descripcion = Convert.ToString(row["rpta"]);
+                }
+                res_.estado = res_.descripcion == "OK" ? true : false;
+
+                if (paramIdPaquete.Value != DBNull.Value)
+                {
+                    res_.id_paquete = Convert.ToInt32(paramIdPaquete.Value);
+                }
+            }
+            catch (Exception e)
+            {
+                res_.estado = false;
+                res_.descripcion = "Ocurrió un error al registrar la cita.";
+            }
+            finally
+            {
+                cn.Close();
+            }
+            return res_;
+        }
+
+        public RespuestaUsuario actualizar_cita_adicional(Cita oCita)
+        {
+            RespuestaUsuario res_ = new RespuestaUsuario();
+            try
+            {
+                cn.Open();
+                SqlCommand cmd = new SqlCommand("SP_ACTUALIZAR_CITA_ADICIONAL", cn);
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                cmd.Parameters.Add("@id_cita", SqlDbType.Int).Value = oCita.id_cita;
+                cmd.Parameters.Add("@fecha_cita", SqlDbType.VarChar).Value = oCita.fecha_cita;
+                cmd.Parameters.Add("@hora_cita", SqlDbType.VarChar).Value = oCita.hora_cita;
+                cmd.Parameters.Add("@id_doctor", SqlDbType.Int).Value = oCita.id_doctor_asignado;
+                cmd.Parameters.Add("@usuario", SqlDbType.VarChar).Value = oCita.usuario;
+
                 SqlDataAdapter da = new SqlDataAdapter(cmd);
                 DataTable dt = new DataTable();
                 da.Fill(dt);
@@ -91,13 +171,16 @@ namespace PsycoApp.DA
             }
             catch (Exception e)
             {
-                //LOG.registrarLog("(Excepcion " + random_str + ")[ERROR]->[CitaDA.cs / registrar_cita <> " + e.Message.ToString(), "ERROR", main_path);
                 res_.estado = false;
                 res_.descripcion = "Ocurrió un error al registrar la cita.";
             }
-            cn.Close();
+            finally
+            {
+                cn.Close();
+            }
             return res_;
         }
+
 
         public RespuestaUsuario confirmar_cita(Cita oCita, string main_path, string random_str)
         {
@@ -329,6 +412,62 @@ namespace PsycoApp.DA
                 {
                     Cita cita = new Cita();
                     cita.id_cita = Convert.ToInt32(row["id_cita"]);
+                    cita.id_paquete = Convert.ToInt32(row["id_paquete"]);
+                    cita.id_estado_cita = Convert.ToInt32(row["id_estado_cita"]);
+                    cita.estado = Convert.ToString(row["estado"]);
+                    cita.fecha_cita = Convert.ToString(row["fecha_cita"]);
+                    cita.hora_cita = Convert.ToString(row["hora_cita"]);
+                    cita.id_doctor_asignado = Convert.ToInt32(row["id_doctor_asignado"]);
+                    cita.doctor_asignado = Convert.ToString(row["doctor_asignado"]);
+                    cita.id_paciente = Convert.ToInt32(row["id_paciente"]);
+                    cita.dni_paciente = Convert.ToString(row["dni_paciente"]);
+                    cita.paciente = Convert.ToString(row["paciente"]);
+                    cita.tipo = Convert.ToString(row["tipo"]);
+                    cita.telefono = Convert.ToString(row["telefono"]);
+                    cita.moneda = Convert.ToString(row["moneda"]);
+                    cita.monto_pactado = Convert.ToDecimal(row["monto_pactado"]);
+                    cita.monto_pagado = Convert.ToDecimal(row["monto_pagado"]);
+                    cita.monto_pendiente = Convert.ToDecimal(row["monto_pendiente"]);
+                    cita.id_servicio = Convert.ToInt32(row["id_servicio"]);
+                    cita.nombre_servicio = Convert.ToString(row["nombre_servicio"]);
+                    cita.id_sede = Convert.ToInt32(row["id_sede"]);
+                    cita.tipo_cita = Convert.ToString(row["tipo_cita"]);
+                    cita.esEvaluacion = Convert.ToBoolean(row["esEvaluacion"]);
+                    cita.siglas = Convert.ToString(row["siglas"]);
+                    cita.feedback = Convert.ToBoolean(row["feedback"]);
+                    cita.comentario = Convert.ToString(row["comentario"]);
+                    cita.pago_gratis = Convert.ToBoolean(row["pago_gratis"]);
+                    lista.Add(cita);
+                }
+            }
+            catch (Exception e)
+            {
+                //LOG.registrarLog("(Excepcion " + random_str + ")[ERROR]->[CitaDA.cs / disponibilidad_doctor <> " + e.Message.ToString(), "ERROR", main_path);
+                lista.Clear();
+            }
+            cn.Close();
+            return lista;
+        }
+
+        public List<Cita> citas_por_paquete(int id_paquete)
+        {
+            List<Cita> lista = new List<Cita>();
+            try
+            {
+                cn.Open();
+                SqlCommand cmd = new SqlCommand(Procedures.sp_listar_citas_paquete, cn);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Add("@id_paquete", SqlDbType.Int).Value = id_paquete;
+
+                SqlDataAdapter da = new SqlDataAdapter(cmd);
+                DataTable dt = new DataTable();
+                da.Fill(dt);
+
+                foreach (DataRow row in dt.Rows)
+                {
+                    Cita cita = new Cita();
+                    cita.id_cita = Convert.ToInt32(row["id_cita"]);
+                    cita.id_paquete = Convert.ToInt32(row["id_paquete"]);
                     cita.id_estado_cita = Convert.ToInt32(row["id_estado_cita"]);
                     cita.estado = Convert.ToString(row["estado"]);
                     cita.fecha_cita = Convert.ToString(row["fecha_cita"]);

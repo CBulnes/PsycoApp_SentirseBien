@@ -7,6 +7,7 @@ namespace PsycoApp.entities
     public class Cita
     {
         public int id_cita { get; set; } = 0;
+        public int id_paquete { get; set; } = 0;
         public int id_usuario { get; set; } = 0;
         public string usuario { get; set; } = "";
         public int id_estado_cita { get; set; } = 0;
@@ -42,8 +43,10 @@ namespace PsycoApp.entities
 
     public class Subcita
     {
+        public int? id_cita { get; set; }
         public string fecha { get; set; }
         public string especialista { get; set; }
         public string hora { get; set; }
+        public string? usuario { get; set; }
     }
 }

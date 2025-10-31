@@ -23,14 +23,11 @@ namespace PsycoApp.BL
             string error = "";
             try
             {
-                if (oCita.fechas_adicionales != null)
+                if (oCita.fechas_adicionales != null && oCita.fechas_adicionales.Count > 0)
                 {
-                    if (oCita.fechas_adicionales.Count > 0)
-                    {
-                        oCita.hora_cita = oCita.fechas_adicionales[0].hora;
-                        oCita.id_doctor_asignado = Convert.ToInt32(oCita.fechas_adicionales[0].especialista);
-                        oCita.fecha_cita = oCita.fechas_adicionales[0].fecha;
-                    }
+                    oCita.hora_cita = oCita.fechas_adicionales[0].hora;
+                    oCita.id_doctor_asignado = Convert.ToInt32(oCita.fechas_adicionales[0].especialista);
+                    oCita.fecha_cita = oCita.fechas_adicionales[0].fecha;
 
                     res_ = citaDA.validar_cita(oCita, "NO", (oCita.fechas_adicionales != null && oCita.fechas_adicionales.Count > 0 ? 1 : 0), main_path, random_str);
                     if (!res_.estado)
@@ -70,8 +67,8 @@ namespace PsycoApp.BL
                         oCita.fecha_cita = oCita.fechas_adicionales[0].fecha;
                     }
 
-                    res_ = citaDA.registrar_cita(oCita, "NO", (oCita.fechas_adicionales != null && oCita.fechas_adicionales.Count > 0 ? 1 : 0), main_path, random_str);
-                    //Cuando no hay fechas adicionales estaba arrojando error
+                    int ordenP = (oCita.fechas_adicionales != null && oCita.fechas_adicionales.Count > 0 ? 1 : 0);
+                    res_ = citaDA.registrar_cita(oCita, "NO", ordenP, 0);
                     if (oCita.fechas_adicionales != null && oCita.fechas_adicionales.Count > 0)
                     {
                         int orden = 1;
@@ -82,7 +79,7 @@ namespace PsycoApp.BL
                                 oCita.fecha_cita = adicional.fecha;
                                 oCita.id_doctor_asignado = Convert.ToInt32(adicional.especialista);
                                 oCita.hora_cita = adicional.hora;
-                                var res2 = citaDA.registrar_cita(oCita, "SI", orden, main_path, random_str);
+                                var res2 = citaDA.registrar_cita(oCita, "SI", orden, res_.id_paquete);
                             }
                             orden++;
                         }
@@ -94,6 +91,63 @@ namespace PsycoApp.BL
                     foreach (var item in errores)
                     {
                         res_.descripcion += item + "\n";
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                res_.estado = false;
+                res_.descripcion = "Ocurrió un error al registrar la cita.";
+            }
+            return res_;
+        }
+
+        public RespuestaUsuario actualizar_citas_paquete(List<Subcita> fechas_adicionales)
+        {
+            RespuestaUsuario res_ = new RespuestaUsuario();
+            List<string> errores = new List<string>();
+            string error = "";
+            try
+            {
+                if (fechas_adicionales != null && fechas_adicionales.Count > 0)
+                {
+                    foreach (var adicional in fechas_adicionales)
+                    {
+                        Cita oCita = new Cita();
+                        oCita.id_cita = Convert.ToInt32(adicional.id_cita);
+                        oCita.hora_cita = adicional.hora;
+                        oCita.fecha_cita = adicional.fecha;
+                        oCita.id_doctor_asignado = Convert.ToInt32(adicional.especialista);
+                        oCita.usuario = adicional.usuario;
+
+                        var res2 = citaDA.validar_cita_adicional(oCita);
+                        if (!res2.estado)
+                        {
+                            error = res2.descripcion.Replace(".", ":") + " " + oCita.fecha_cita + " " + oCita.hora_cita;
+                            errores.Add(error);
+                        }
+                    }
+                }
+
+                if (errores.Count == 0)
+                {
+                    foreach (var adicional in fechas_adicionales)
+                    {
+                        Cita oCita = new Cita();
+                        oCita.id_cita = Convert.ToInt32(adicional.id_cita);
+                        oCita.hora_cita = adicional.hora;
+                        oCita.fecha_cita = adicional.fecha;
+                        oCita.id_doctor_asignado = Convert.ToInt32(adicional.especialista);
+                        oCita.usuario = adicional.usuario;
+                        var res2 = citaDA.actualizar_cita_adicional(oCita);
+                    }
+                } else
+                {
+                    res_.estado = false;
+                    res_.descripcion = "";
+                    foreach (var item in errores)
+                    {
+                        res_.descripcion += item + "\r\n";
                     }
                 }
             }
@@ -215,6 +269,20 @@ namespace PsycoApp.BL
             try
             {
                 lista = citaDA.citas_usuario(id_usuario, id_paciente, id_doctor, id_sede, main_path, random_str);
+            }
+            catch (Exception)
+            {
+                lista.Clear();
+            }
+            return lista;
+        }
+
+        public List<Cita> citas_por_paquete(int id_paquete)
+        {
+            List<Cita> lista = new List<Cita>();
+            try
+            {
+                lista = citaDA.citas_por_paquete(id_paquete);
             }
             catch (Exception)
             {

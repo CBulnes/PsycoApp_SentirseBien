@@ -23,6 +23,7 @@ namespace PsycoApp.site.Controllers
         
         private string url_lista_pacientes = Helper.GetUrlApi() + "/api/paciente/listar_pacientes_combo";
         private string url_registrar_cita = Helper.GetUrlApi() + "/api/cita/registrar_cita";
+        private string url_actualizar_citas_paquete = Helper.GetUrlApi() + "/api/cita/actualizar_citas_paquete";
         private string url_confirmar_cita = Helper.GetUrlApi() + "/api/cita/confirmar_cita";
         private string url_atender_cita = Helper.GetUrlApi() + "/api/cita/atender_cita";
         private string url_cancelar_cita = Helper.GetUrlApi() + "/api/cita/cancelar_cita";
@@ -31,6 +32,7 @@ namespace PsycoApp.site.Controllers
         private string url_disponibilidad_doctor = Helper.GetUrlApi() + "/api/cita/disponibilidad_doctor";
         private string url_horarios_doctor = Helper.GetUrlApi() + "/api/cita/horarios_doctor";
         private string url_citas_usuario = Helper.GetUrlApi() + "/api/cita/citas_usuario";
+        private string url_citas_x_paquete = Helper.GetUrlApi() + "/api/cita/citas_por_paquete";
         private string url_historial = Helper.GetUrlApi() + "/api/cita/historial";
         private string url_productos_combo = Helper.GetUrlApi() + "/api/producto/listar_productos_combo";
         private string url_combo_sedes_x_usuario = Helper.GetUrlApi() + "/api/psicologo/listar_sedes_x_usuario_combo";
@@ -259,6 +261,28 @@ namespace PsycoApp.site.Controllers
         }
 
         [HttpPost]
+        public async Task<RespuestaUsuario> ActualizarCitasPaquete(List<Subcita> citas)
+        {
+            string res = "";
+            citas.ForEach(x => x.usuario = Convert.ToString(HttpContext.Session.GetString("login")));
+
+            RespuestaUsuario res_ = new RespuestaUsuario();
+            try
+            {
+                url = url_actualizar_citas_paquete;
+                obj = (dynamic)citas;
+                res = ApiCaller.consume_endpoint_method(url, obj, "POST");
+                res_ = JsonConvert.DeserializeObject<RespuestaUsuario>(res);
+            }
+            catch (Exception)
+            {
+                res_.estado = false;
+                res_.descripcion = "Ocurrió un error al actualizar las citas.";
+            }
+            return res_;
+        }
+
+        [HttpPost]
         public async Task<RespuestaUsuario> ConfirmarCita(Cita model)
         {
             string res = "";
@@ -415,6 +439,24 @@ namespace PsycoApp.site.Controllers
                 url = url_citas_usuario + "/" + id_usuario + "/" + idPaciente + "/" + idDoctor + "/" + idSede;
                 res = ApiCaller.consume_endpoint_method(url, null, "GET");
                 lista = JsonConvert.DeserializeObject<List<Cita>>(res).Where(x => x.id_sede == id_sede).ToList();
+            }
+            catch (Exception)
+            {
+                lista.Clear();
+            }
+            return lista;
+        }
+
+        [HttpGet]
+        public async Task<List<Cita>> ObtenerCitasPorPaquete(int idPaquete)
+        {
+            List<Cita> lista = new List<Cita>();
+            string res = "";
+            try
+            {
+                url = url_citas_x_paquete + "/" + idPaquete;
+                res = ApiCaller.consume_endpoint_method(url, null, "GET");
+                lista = JsonConvert.DeserializeObject<List<Cita>>(res).ToList();
             }
             catch (Exception)
             {
