@@ -211,6 +211,32 @@
     </div>
 </div>
 
+<div id="mdl_informe" class="modal" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="true">
+    <div class="modal-dialog modal-lg" role="document" style="height: 90%; display: grid; place-items: center; width: 100%;">
+        <div class="modal-content" style="width: 100%;">
+            <div class="modal-header sb-reg-citas-popup-title">
+                <h5 class="modal-title">Añadir entrega de informe</h5>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                        <div class="form-group">
+                            <span class="label-form">Seleccione el informe que se adicionará al paquete</span><br />
+                            <select class="form-control" id="cboInformeAdicional">
+                                <option value="2">Entrega informe 30 minutos</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="cerrar_form_informe()">Volver</button>
+                <button type="button" class="btn btn-primary main_color" onclick="agregarInformeAdicional()">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div id="mdl_historial" class="modal" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="true">
     <div class="modal-dialog modal-lg" role="document" style="height: 90%; display: grid; place-items: center; width: 100%;">
         <div class="modal-content" style="width: 100%;">

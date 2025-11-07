@@ -16,6 +16,23 @@ namespace PsycoApp.BL
         CitaDA citaDA = new CitaDA();
         HistorialDA historialDA = new HistorialDA();
 
+        public RespuestaUsuario registrar_informe(Cita oCita)
+        {
+            RespuestaUsuario res_ = new RespuestaUsuario();
+            List<string> errores = new List<string>();
+            string error = "";
+            try
+            {
+                res_ = citaDA.registrar_informe(oCita);
+            }
+            catch (Exception)
+            {
+                res_.estado = false;
+                res_.descripcion = "Ocurrió un error al registrar el informe.";
+            }
+            return res_;
+        }
+
         public RespuestaUsuario registrar_cita(Cita oCita, string main_path, string random_str)
         {
             RespuestaUsuario res_ = new RespuestaUsuario();
@@ -113,18 +130,21 @@ namespace PsycoApp.BL
                 {
                     foreach (var adicional in fechas_adicionales)
                     {
-                        Cita oCita = new Cita();
-                        oCita.id_cita = Convert.ToInt32(adicional.id_cita);
-                        oCita.hora_cita = adicional.hora;
-                        oCita.fecha_cita = adicional.fecha;
-                        oCita.id_doctor_asignado = Convert.ToInt32(adicional.especialista);
-                        oCita.usuario = adicional.usuario;
-
-                        var res2 = citaDA.validar_cita_adicional(oCita);
-                        if (!res2.estado)
+                        if (adicional.id_estado_cita == 1)
                         {
-                            error = res2.descripcion.Replace(".", ":") + " " + oCita.fecha_cita + " " + oCita.hora_cita;
-                            errores.Add(error);
+                            Cita oCita = new Cita();
+                            oCita.id_cita = Convert.ToInt32(adicional.id_cita);
+                            oCita.hora_cita = adicional.hora;
+                            oCita.fecha_cita = adicional.fecha;
+                            oCita.id_doctor_asignado = Convert.ToInt32(adicional.especialista);
+                            oCita.usuario = adicional.usuario;
+
+                            var res2 = citaDA.validar_cita_adicional(oCita);
+                            if (!res2.estado)
+                            {
+                                error = res2.descripcion.Replace(".", ":") + " " + oCita.fecha_cita + " " + oCita.hora_cita;
+                                errores.Add(error);
+                            }
                         }
                     }
                 }
@@ -133,13 +153,16 @@ namespace PsycoApp.BL
                 {
                     foreach (var adicional in fechas_adicionales)
                     {
-                        Cita oCita = new Cita();
-                        oCita.id_cita = Convert.ToInt32(adicional.id_cita);
-                        oCita.hora_cita = adicional.hora;
-                        oCita.fecha_cita = adicional.fecha;
-                        oCita.id_doctor_asignado = Convert.ToInt32(adicional.especialista);
-                        oCita.usuario = adicional.usuario;
-                        var res2 = citaDA.actualizar_cita_adicional(oCita);
+                        if (adicional.id_estado_cita == 1)
+                        {
+                            Cita oCita = new Cita();
+                            oCita.id_cita = Convert.ToInt32(adicional.id_cita);
+                            oCita.hora_cita = adicional.hora;
+                            oCita.fecha_cita = adicional.fecha;
+                            oCita.id_doctor_asignado = Convert.ToInt32(adicional.especialista);
+                            oCita.usuario = adicional.usuario;
+                            var res2 = citaDA.actualizar_cita_adicional(oCita);
+                        }
                     }
                 } else
                 {

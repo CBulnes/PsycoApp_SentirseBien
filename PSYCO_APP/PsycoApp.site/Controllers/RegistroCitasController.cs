@@ -22,6 +22,7 @@ namespace PsycoApp.site.Controllers
         private string url_lista_psicologos_dinamico = Helper.GetUrlApi() + "/api/paciente/listar_pacientes_combo_dinamico";
         
         private string url_lista_pacientes = Helper.GetUrlApi() + "/api/paciente/listar_pacientes_combo";
+        private string url_registrar_informe_adicional = Helper.GetUrlApi() + "/api/cita/informe_adicional";
         private string url_registrar_cita = Helper.GetUrlApi() + "/api/cita/registrar_cita";
         private string url_actualizar_citas_paquete = Helper.GetUrlApi() + "/api/cita/actualizar_citas_paquete";
         private string url_confirmar_cita = Helper.GetUrlApi() + "/api/cita/confirmar_cita";
@@ -235,6 +236,29 @@ namespace PsycoApp.site.Controllers
 
             return (listaPacientes); // Retorna los pacientes como JSON
         }
+
+        [HttpPost]
+        public async Task<RespuestaUsuario> AgregarInforme(Cita model)
+        {
+            string res = "";
+            model.usuario = Convert.ToString(HttpContext.Session.GetString("login"));
+
+            RespuestaUsuario res_ = new RespuestaUsuario();
+            try
+            {
+                url = url_registrar_informe_adicional;
+                obj = (dynamic)model;
+                res = ApiCaller.consume_endpoint_method(url, obj, "POST");
+                res_ = JsonConvert.DeserializeObject<RespuestaUsuario>(res);
+            }
+            catch (Exception)
+            {
+                res_.estado = false;
+                res_.descripcion = "Ocurrió un error al registrar la cita.";
+            }
+            return res_;
+        }
+
         [HttpPost]
         //[AllowAnonymous]
         //[ResponseCache(NoStore = true, Duration = 0)]

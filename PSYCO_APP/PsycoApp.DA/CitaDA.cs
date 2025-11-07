@@ -88,6 +88,41 @@ namespace PsycoApp.DA
             return res_;
         }
 
+        public RespuestaUsuario registrar_informe(Cita oCita)
+        {
+            RespuestaUsuario res_ = new RespuestaUsuario();
+            try
+            {
+                cn.Open();
+                SqlCommand cmd = new SqlCommand("SP_INSERTAR_INFORME_ADICIONAL", cn);
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                cmd.Parameters.Add("@id_cita", SqlDbType.Int).Value = oCita.id_cita;
+                cmd.Parameters.Add("@id_paquete", SqlDbType.Int).Value = oCita.id_paquete;
+                cmd.Parameters.Add("@usuario", SqlDbType.VarChar).Value = oCita.usuario;
+
+                SqlDataAdapter da = new SqlDataAdapter(cmd);
+                DataTable dt = new DataTable();
+                da.Fill(dt);
+
+                foreach (DataRow row in dt.Rows)
+                {
+                    res_.descripcion = Convert.ToString(row["rpta"]);
+                }
+                res_.estado = res_.descripcion == "OK" ? true : false;
+            }
+            catch (Exception e)
+            {
+                res_.estado = false;
+                res_.descripcion = "Ocurrió un error al registrar el informe.";
+            }
+            finally
+            {
+                cn.Close();
+            }
+            return res_;
+        }
+
         public RespuestaUsuario registrar_cita(Cita oCita, string adicional, int orden, int? id_paquete)
         {
             RespuestaUsuario res_ = new RespuestaUsuario();
@@ -561,6 +596,8 @@ namespace PsycoApp.DA
                 {
                     Cita cita = new Cita();
                     cita.id_cita = Convert.ToInt32(row["id_cita"]);
+                    cita.id_paquete = Convert.ToInt32(row["id_paquete"]);
+                    cita.informe_adicional = Convert.ToString(row["informe_adicional"]);
                     cita.id_estado_cita = Convert.ToInt32(row["id_estado_cita"]);
                     cita.estado = Convert.ToString(row["estado"]);
                     cita.fecha_cita = Convert.ToString(row["fecha_cita"]);

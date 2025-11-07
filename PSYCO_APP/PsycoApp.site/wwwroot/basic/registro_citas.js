@@ -381,7 +381,7 @@ function verFechasAdicionales() {
                     var deshabilitar = (citasPaquete[i].id_cita > 0 && citasPaquete[i].estado != 'CITADO') ? true : false;
 
                     html += '<tr>';
-                    html += '<td><input class="form-control fechaAd active-input-modulo" type="date" data-id-cita="' + citasPaquete[i].id_cita + '" id="txtFecha' + i + '" autocomplete="off" max="2050-12-31" min="2022-08-01" value="' + (fecha) + '" onkeydown="return false" ' + disabled + ' oninput="validarHorarioFecha(' + i + ')" /></td>';
+                    html += '<td><input class="form-control fechaAd active-input-modulo" type="date" data-id-estado="' + citasPaquete[i].id_estado_cita + '" data-id-cita="' + citasPaquete[i].id_cita + '" id="txtFecha' + i + '" autocomplete="off" max="2050-12-31" min="2022-08-01" value="' + (fecha) + '" onkeydown="return false" ' + disabled + ' oninput="validarHorarioFecha(' + i + ')" /></td>';
                     html += '<td id="tdEspecialista' + i + '"><select class="form-control especialistaAd active-select-modulo" style="background-color: #18202d !important;" id="cboEspecialista' + i + '" onchange="obtener_horarios_especialista(' + i + ')">' + obtener_especialistas() + '</select></td>';
                     html += '<td id="tdHorario' + i + '"><select class="form-control horarioAd active-select-modulo" style="background-color: #18202d !important;" id="cboHorario' + i + '">' + '<option value="-1">Seleccionar horario</option>' + /*obtener_horarios_fecha(formatDateISO(fecha)) +*/ '</select></td>';
                     html += '</tr>';
@@ -926,12 +926,13 @@ function validar_modal_fechas_adicionales() {
             if (error == '') {
                 var fecha = $('#txtFecha' + i).val();
                 var id_cita = $('#txtFecha' + i).data('id-cita');
+                var id_estado = $('#txtFecha' + i).data('id-estado');
                 var especialista = $('#cboEspecialista' + i).val();
                 var hora = $('#cboHorario' + i).val();
                 if (hora == '-1' || hora == 'RESERVADO' || hora == 'REFRIGERIO' || especialista == '-1') {
                     error = 'ERROR';
                 } else {
-                    adicionales.push({ id_cita: id_cita, fecha: fecha, especialista: especialista, hora: hora, usuario: '' });
+                    adicionales.push({ id_cita: id_cita, fecha: fecha, especialista: especialista, hora: hora, usuario: '', id_estado_cita: id_estado });
                 }
             }
         }
@@ -958,7 +959,17 @@ function validar_modal_fechas_adicionales() {
 
 function actualizar_fechas_adicionales() {
     adicionales = adicionales.filter(x => x.id_cita !== undefined);
-    debugger;
+
+    var adicionales_validar = adicionales.filter(x => x.id_estado_cita > 1);
+    if (adicionales_validar.length == 0) {
+        Swal.fire({
+            icon: "Error",
+            title: "Oops...",
+            html: "No hay citas disponibles a reprogramar"
+        });
+        return;
+    }
+
     $.ajax({
         url: "/RegistroCitas/ActualizarCitasPaquete",
         type: "POST",

@@ -51,6 +51,22 @@ namespace PsycoApp.api.Controllers
             return res_;
         }
 
+        [HttpPost("informe_adicional")]
+        public RespuestaUsuario RegistrarInforme([FromBody] Cita oCita)
+        {
+            RespuestaUsuario res_ = new RespuestaUsuario();
+            try
+            {
+                res_ = citaBL.registrar_informe(oCita);
+            }
+            catch (Exception)
+            {
+                res_.descripcion = "Ocurrió un error al registrar el informe";
+                res_.estado = false;
+            }
+            return res_;
+        }
+
         [HttpPost("actualizar_citas_paquete")]
         public RespuestaUsuario ActualizarCitasPaquete([FromBody] List<Subcita> lista)
         {

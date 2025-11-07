@@ -63,6 +63,7 @@ function cargar_historial() {
         },
         success: function (data) {
             lista_citas = data;
+            console.log(lista_citas);
         },
         error: function (response) {
             alertSecondary("Mensaje", "Ocurrió un error al obtener su historial de citas.");
@@ -79,7 +80,7 @@ function cargar_historial() {
                     html += '<td class="text-center text-tbl">' + item.hora_cita + '</td>';
                     html += '<td class="text-center text-tbl">' + item.monto_pendiente_ + '</td>';
                     html += '<td class="text-center text-tbl">' + accion_estado(item.estado) + '</td>';
-                    html += '<td class="text-center text-tbl">' + accion_cita(item.usuario, item.monto_pendiente_, item.id_paciente, item.id_cita) + '</td>';
+                    html += '<td class="text-center text-tbl">' + accion_cita(item.usuario, item.monto_pendiente_, item.id_paciente, item.id_cita, item.id_paquete, item.informe_adicional) + '</td>';
                     html += '</tr>';
                     i++;
                 }
@@ -102,12 +103,17 @@ function accion_estado(estado) {
     return html_estado;
 }
 
-function accion_cita(paciente, monto_pendiente, id_paciente, id_cita) {
+function accion_cita(paciente, monto_pendiente, id_paciente, id_cita, id_paquete, informe_adicional) {
     var pendiente = monto_pendiente.replace('S/.', '');
     var html_accion = '';
-    html_accion += '<span class="input-group-text" id="basic-addon2" style="height: 100%; display: inline-block;">';
+    html_accion += '<span class="input-group-text" style="height: 100%; display: inline-block;">';
     html_accion += `<a href="#" title="Verificar pagos" onclick="form_pago('${paciente}','${pendiente}',${id_paciente},${id_cita}); return false;" style="cursor: pointer;">💳</a>`;
     html_accion += '</span>';
+    if (id_paquete > 0) {
+        html_accion += '<span class="input-group-text" style="height: 100%; display: inline-block;">';
+        html_accion += `<a href="#" title="Entrega de informe" onclick="form_informe(${id_paquete},'${informe_adicional}'); return false;" style="cursor: pointer;">📋</a>`;
+        html_accion += '</span>';
+    }
     return html_accion;
 }
 function GetFechaActual() {
@@ -115,6 +121,71 @@ function GetFechaActual() {
     if (month.length < 2) month = '0' + month;
     if (day.length < 2) day = '0' + day;
     return [year, month, day].join('-');
+}
+
+var idPaquete_ = 0;
+function form_informe(id_paquete, informe_adicional) {
+    if (informe_adicional == 'SI') {
+        Swal.fire({
+            icon: "Error",
+            title: "Oops...",
+            text: "El paquete ya tiene una entrega de informe asociada.",
+        });
+        return;
+    }
+    idPaquete_ = id_paquete;
+    $('#mdl_informe').modal('show');
+}
+
+function agregarInformeAdicional() {
+    var idInforme = $('#cboInformeAdicional').val();
+    if (idInforme == '-1') {
+        Swal.fire({
+            icon: "Error",
+            title: "Oops...",
+            text: "Seleccione el informe que se asociará al paquete.",
+        });
+        return;
+    }
+
+    var obj = {
+        id_cita: idInforme,
+        id_paquete: idPaquete_
+    };
+
+    $.ajax({
+        url: "/RegistroCitas/AgregarInforme",
+        type: "POST",
+        data: obj,
+        success: function (data) {
+            if (data.estado) {
+                Swal.fire({
+                    icon: "success",
+                    text: "Registrado exitosamente.",
+                });
+
+                cerrar_form_informe();
+                cargar_historial();
+            } else {
+                Swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    text: data.descripcion,
+                });
+            }
+        },
+        error: function (response) {
+            Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: "Ocurrió un error."
+            });
+        }
+    });
+}
+
+function cerrar_form_informe() {
+    $('#mdl_informe').modal('hide');
 }
 
 var nombrePaciente_ = '';
