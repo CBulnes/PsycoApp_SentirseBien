@@ -149,7 +149,7 @@ namespace PsycoApp.DA
 
                 SqlParameter paramIdPaquete = new SqlParameter("@id_paquete", SqlDbType.Int);
                 paramIdPaquete.Direction = ParameterDirection.InputOutput;
-                paramIdPaquete.Value = id_paquete;
+                paramIdPaquete.Value = oCita.id_paquete ?? id_paquete;
                 cmd.Parameters.Add(paramIdPaquete);
 
                 SqlDataAdapter da = new SqlDataAdapter(cmd);
@@ -160,8 +160,9 @@ namespace PsycoApp.DA
                 {
                     res_.descripcion = Convert.ToString(row["rpta"]);
                 }
-                res_.estado = res_.descripcion == "OK" ? true : false;
+                res_.estado = res_.descripcion == "OK";
 
+                // Recuperar valor de salida
                 if (paramIdPaquete.Value != DBNull.Value)
                 {
                     res_.id_paquete = Convert.ToInt32(paramIdPaquete.Value);
@@ -178,6 +179,7 @@ namespace PsycoApp.DA
             }
             return res_;
         }
+
 
         public RespuestaUsuario actualizar_cita_adicional(Cita oCita)
         {

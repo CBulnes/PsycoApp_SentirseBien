@@ -7,7 +7,7 @@ namespace PsycoApp.entities
     public class Cita
     {
         public int id_cita { get; set; } = 0;
-        public int id_paquete { get; set; } = 0;
+        public int? id_paquete { get; set; } = 0;
         public string informe_adicional { get; set; } = "";
         public int id_usuario { get; set; } = 0;
         public string usuario { get; set; } = "";

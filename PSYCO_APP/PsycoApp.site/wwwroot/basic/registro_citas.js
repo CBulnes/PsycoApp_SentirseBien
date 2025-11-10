@@ -605,58 +605,120 @@ function ver_cita(e) {
     var id_paquete = $(e).attr('data-id-paquete');
     if (id_paquete > 0) {
         Swal.fire({
-            //title: '¿Qué deseas hacer?',
             html: `<br/>
-        <p>Esta cita forma parte de un <b>paquete</b>.</p>
-        <p>Puedes ver las <span style="color:#0d6efd;">fechas adicionales</span> o continuar con la cita normal.</p>
-      `,
-            //icon: 'question',
-            showCancelButton: true,
-            confirmButtonText: '<i class="fa fa-calendar"></i> Ver fechas adicionales',
-            cancelButtonText: '<i class="fa fa-stethoscope"></i> Mostrar cita',
-            confirmButtonColor: '#198754', // verde
-            cancelButtonColor: '#6c757d',  // gris
-            background: '#f8f9fa', // color de fondo
-            backdrop: 'rgba(0,0,0,0.4)', // oscurecer fondo
+                    <p>Esta cita forma parte de un <b>paquete</b>.</p>
+                    <p>Puedes:</p>
+                    <div style="display:flex; flex-direction:column; gap:10px; margin-top:10px;">
+                        <button id="btnFechas" class="swal2-confirm swal2-styled" style="background-color:#198754">
+                        <i class="fa fa-calendar"></i> Ver fechas adicionales
+                        </button>
+                        <button id="btnCita" class="swal2-cancel swal2-styled" style="background-color:#6c757d">
+                        <i class="fa fa-stethoscope"></i> Mostrar cita
+                        </button>
+                        <button id="btnNuevaCita" class="swal2-deny swal2-styled" style="background-color:#0d6efd">
+                        <i class="fa fa-edit"></i> Agregar cita
+                        </button>
+                    </div>`,
+            showConfirmButton: false,
+            showCancelButton: false,
             allowOutsideClick: false,
-        }).then((result) => {
-            if (result.isConfirmed) {
-                _id_paquete_ = id_paquete;
-                var servicio = $(e).attr('data-servicio');
-                verFechasAdicionales(servicio);
-            } else {
-                // flujo normal (tu código original)
-                loadPatients();
-                var id_cita = $(e).attr('data-id-cita');
-                var id_especialista = $(e).attr('data-id-especialista');
-                var id_paciente = $(e).attr('data-id-paciente');
-                var hora_Cita = $(e).attr('data-hora-cita');
-                var estado = $(e).attr('data-estado');
-                var fecha_cita = $(e).attr('data-fecha-cita');
-                var telefono = $(e).attr('data-telefono');
-                var moneda = $(e).attr('data-moneda');
-                var monto_pactado = $(e).attr('data-monto-pactado');
-                var monto_pagado = $(e).attr('data-monto-pagado');
-                var monto_pendiente = $(e).attr('data-monto-pendiente');
-                var id_servicio = $(e).attr('data-id-servicio');
-                var id_sede = $(e).attr('data-id-sede');
-                var feedback = $(e).attr('data-feedback');
-                var comentario = $(e).attr('data-comentario');
-                var pago_gratis = $(e).attr('data-pago-gratis');
-                var dni_paciente = $(e).attr('data-dni-paciente');
-                var paciente = $(e).attr('data-paciente');
+            background: '#f8f9fa',
+            backdrop: 'rgba(0,0,0,0.4)',
+        }).then(() => { /* No se usa aquí */ });
 
-                if (id_especialista == -1) {
-                    if ($('#hiddenDoctor').val() != null && $('#hiddenDoctor').val() != '') {
-                        id_especialista = $('#hiddenDoctor').val();
-                    }
-                }
-
-                cargar_datos_cita(id_cita, id_especialista, id_paciente, fecha_cita, hora_Cita, estado, telefono, moneda, formatDecimal(monto_pactado), formatDecimal(monto_pagado), formatDecimal(monto_pendiente), id_servicio, id_sede, feedback, comentario, pago_gratis, dni_paciente, paciente, id_paquete);
-            }
+        // Detectar los clics manualmente
+        $(document).on('click', '#btnFechas', function () {
+            _id_paquete_ = id_paquete;
+            verFechasAdicionales($(e).attr('data-servicio'));
+            Swal.close();
         });
 
-        return; // detenemos aquí hasta que el usuario elija
+        $(document).on('click', '#btnCita', function () {
+            loadPatients();
+            var id_cita = $(e).attr('data-id-cita');
+            var id_especialista = $(e).attr('data-id-especialista');
+            var id_paciente = $(e).attr('data-id-paciente');
+            var hora_Cita = $(e).attr('data-hora-cita');
+            var estado = $(e).attr('data-estado');
+            var fecha_cita = $(e).attr('data-fecha-cita');
+            var telefono = $(e).attr('data-telefono');
+            var moneda = $(e).attr('data-moneda');
+            var monto_pactado = $(e).attr('data-monto-pactado');
+            var monto_pagado = $(e).attr('data-monto-pagado');
+            var monto_pendiente = $(e).attr('data-monto-pendiente');
+            var id_servicio = $(e).attr('data-id-servicio');
+            var id_sede = $(e).attr('data-id-sede');
+            var feedback = $(e).attr('data-feedback');
+            var comentario = $(e).attr('data-comentario');
+            var pago_gratis = $(e).attr('data-pago-gratis');
+            var dni_paciente = $(e).attr('data-dni-paciente');
+            var paciente = $(e).attr('data-paciente');
+
+            if (id_especialista == -1) {
+                if ($('#hiddenDoctor').val() != null && $('#hiddenDoctor').val() != '') {
+                    id_especialista = $('#hiddenDoctor').val();
+                }
+            }
+
+            cargar_datos_cita(id_cita, id_especialista, id_paciente, fecha_cita, hora_Cita, estado, telefono, moneda, formatDecimal(monto_pactado), formatDecimal(monto_pagado), formatDecimal(monto_pendiente), id_servicio, id_sede, feedback, comentario, pago_gratis, dni_paciente, paciente, id_paquete);
+            Swal.close();
+        });
+
+        $(document).on('click', '#btnNuevaCita', function () {
+            Swal.close();
+            form_cita_adicional(id_paquete, $(e).attr('data-id-paciente'), $(e).attr('data-paciente'), $(e).attr('data-dni-paciente') , $(e).attr('data-telefono'));
+        });
+
+      //  Swal.fire({
+      //      html: `<br/>
+      //  <p>Esta cita forma parte de un <b>paquete</b>.</p>
+      //  <p>Puedes ver las <span style="color:#0d6efd;">fechas adicionales</span> o continuar con la cita normal.</p>
+      //`,
+      //      showCancelButton: true,
+      //      confirmButtonText: '<i class="fa fa-calendar"></i> Ver fechas adicionales',
+      //      cancelButtonText: '<i class="fa fa-stethoscope"></i> Mostrar cita',
+      //      confirmButtonColor: '#198754', // verde
+      //      cancelButtonColor: '#6c757d',  // gris
+      //      background: '#f8f9fa', // color de fondo
+      //      backdrop: 'rgba(0,0,0,0.4)', // oscurecer fondo
+      //      allowOutsideClick: false,
+      //  }).then((result) => {
+      //      if (result.isConfirmed) {
+      //          _id_paquete_ = id_paquete;
+      //          var servicio = $(e).attr('data-servicio');
+      //          verFechasAdicionales(servicio);
+      //      } else {
+      //          loadPatients();
+      //          var id_cita = $(e).attr('data-id-cita');
+      //          var id_especialista = $(e).attr('data-id-especialista');
+      //          var id_paciente = $(e).attr('data-id-paciente');
+      //          var hora_Cita = $(e).attr('data-hora-cita');
+      //          var estado = $(e).attr('data-estado');
+      //          var fecha_cita = $(e).attr('data-fecha-cita');
+      //          var telefono = $(e).attr('data-telefono');
+      //          var moneda = $(e).attr('data-moneda');
+      //          var monto_pactado = $(e).attr('data-monto-pactado');
+      //          var monto_pagado = $(e).attr('data-monto-pagado');
+      //          var monto_pendiente = $(e).attr('data-monto-pendiente');
+      //          var id_servicio = $(e).attr('data-id-servicio');
+      //          var id_sede = $(e).attr('data-id-sede');
+      //          var feedback = $(e).attr('data-feedback');
+      //          var comentario = $(e).attr('data-comentario');
+      //          var pago_gratis = $(e).attr('data-pago-gratis');
+      //          var dni_paciente = $(e).attr('data-dni-paciente');
+      //          var paciente = $(e).attr('data-paciente');
+
+      //          if (id_especialista == -1) {
+      //              if ($('#hiddenDoctor').val() != null && $('#hiddenDoctor').val() != '') {
+      //                  id_especialista = $('#hiddenDoctor').val();
+      //              }
+      //          }
+
+      //          cargar_datos_cita(id_cita, id_especialista, id_paciente, fecha_cita, hora_Cita, estado, telefono, moneda, formatDecimal(monto_pactado), formatDecimal(monto_pagado), formatDecimal(monto_pendiente), id_servicio, id_sede, feedback, comentario, pago_gratis, dni_paciente, paciente, id_paquete);
+      //      }
+      //  });
+
+        return;
     }
 
     loadPatients();
@@ -1267,6 +1329,10 @@ function cargar_datos_cita(id_cita, id_doctor, id_paciente, fecha, hora, estado,
     estado_ = estado;
     id_cita_ = id_cita;
     id_paciente_ = id_paciente;
+
+    $('#cboServicio option').each(function () {
+        $(this).show();
+    });
 
     verificar_si_es_psicologo();
     verificar_disponibilidad();

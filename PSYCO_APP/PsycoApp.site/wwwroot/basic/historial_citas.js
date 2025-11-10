@@ -80,7 +80,7 @@ function cargar_historial() {
                     html += '<td class="text-center text-tbl">' + item.hora_cita + '</td>';
                     html += '<td class="text-center text-tbl">' + item.monto_pendiente_ + '</td>';
                     html += '<td class="text-center text-tbl">' + accion_estado(item.estado) + '</td>';
-                    html += '<td class="text-center text-tbl">' + accion_cita(item.usuario, item.monto_pendiente_, item.id_paciente, item.id_cita, item.id_paquete, item.informe_adicional) + '</td>';
+                    html += '<td class="text-center text-tbl">' + accion_cita(item.usuario, item.monto_pendiente_, item.id_paciente, item.id_cita, item.id_paquete, item.informe_adicional, item.dni_paciente, item.telefono) + '</td>';
                     html += '</tr>';
                     i++;
                 }
@@ -103,7 +103,7 @@ function accion_estado(estado) {
     return html_estado;
 }
 
-function accion_cita(paciente, monto_pendiente, id_paciente, id_cita, id_paquete, informe_adicional) {
+function accion_cita(paciente, monto_pendiente, id_paciente, id_cita, id_paquete, informe_adicional, dni, telefono) {
     var pendiente = monto_pendiente.replace('S/.', '');
     var html_accion = '';
     html_accion += '<span class="input-group-text" style="height: 100%; display: inline-block;">';
@@ -112,6 +112,10 @@ function accion_cita(paciente, monto_pendiente, id_paciente, id_cita, id_paquete
     if (id_paquete > 0) {
         html_accion += '<span class="input-group-text" style="height: 100%; display: inline-block;">';
         html_accion += `<a href="#" title="Entrega de informe" onclick="form_informe(${id_paquete},'${informe_adicional}'); return false;" style="cursor: pointer;">📋</a>`;
+        html_accion += '</span>';
+
+        html_accion += '<span class="input-group-text" style="height: 100%; display: inline-block;">';
+        html_accion += `<a href="#" title="Cita adicional" onclick="form_cita_adicional(${id_paquete},${id_paciente},'${paciente}','${dni}','${telefono}'); return false;" style="cursor: pointer;">📅</a>`;
         html_accion += '</span>';
     }
     return html_accion;

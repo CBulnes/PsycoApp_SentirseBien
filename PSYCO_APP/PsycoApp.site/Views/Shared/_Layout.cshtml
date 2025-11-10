@@ -1328,5 +1328,362 @@
     }
     @RenderSection("scripts", required: false)
 
+    <script>
+        var id_paquete__ = 0;
+        function fecha_actual() {
+            var today = new Date();
+            var dd = String(today.getDate()).padStart(2, '0');
+            var mm = String(today.getMonth() + 1).padStart(2, '0');
+            var yyyy = today.getFullYear();
+            return yyyy + '-' + mm + '-' + dd;
+        }
+
+        $(document).ready(function(){
+            $('#txtFecha_').change(function() {
+                $('#txtFecha_').attr('data-fecha', $(this).val());
+                verificar_disponibilidad_();
+            });
+        })
+
+        function toggleComment(show) {
+            const commentSection = document.getElementById('comment-section');
+            commentSection.style.display = show ? 'block' : 'none';
+        }
+
+        function form_cita_adicional(id_paquete, id_paciente, paciente, dni_paciente, telefono) {
+            var fecha = fecha_actual();
+            var hora = '';
+            var id_doctor = '-1';
+            var id_servicio = '-1';
+            var estado = '-';
+            var moneda = 'S/.';
+            var pago_gratis = '0';
+            var feedback = true;
+            var comentario = '';
+            var id_cita = 0;
+            id_paquete__ = id_paquete;
+
+            $('#mdl_cita_').modal('show');
+
+            $('#txtFecha_').attr('data-fecha', fecha).val(fecha);
+            $('#txtHora_').val(hora).attr('data-hora', hora);
+            $('#cboDoctor_').val(id_doctor).attr('data-id-doctor', id_doctor);
+            $('#cboPaciente_').html('<option value="' + id_paciente + '">' + paciente + '</option>');
+            $('#cboPaciente_').val(id_paciente).attr('data-id-paciente', id_paciente);
+            $('#txtTelefono_').val(telefono).attr('data-telefono', telefono);
+            $('#txtDniPaciente_').val(dni_paciente).attr('data-dni-paciente', dni_paciente);
+
+            estado_ = estado;
+            id_cita_ = id_cita;
+            id_paciente_ = id_paciente;
+
+            $('#cboDoctor_').html($('#cboDoctor').html());
+
+            $('#cboSedeChange__').html($('#cboSedeChange_').html());
+            var idSede = document.getElementById("hiddenIdSede").value;
+            var select = document.getElementById("cboSedeChange__");
+            select.value = idSede;
+
+            verificar_si_es_psicologo_();
+            verificar_disponibilidad_();
+        }
+
+        function verificar_si_es_psicologo_() {
+            if (id_tipousuario == 4) {
+                $('#cboDoctorFiltro_, #cboDoctor_').attr('disabled', true);
+                $('#cboDoctorFiltro_, #cboDoctor_').val(id_psicologo);
+                $('#divTelefono_').hide();
+            }
+        }
+
+        function verificar_disponibilidad_() {
+            disponibilidad_doctor_();
+
+            var id_doc = $('#cboDoctor_').val();
+            var id_doc_ant = $('#cboDoctor_').attr('data-id-doctor');
+
+            if ((id_doc != id_doc_ant && $('#divReprogramar').is(':visible')) || id_cita_ == 0) {
+                $('#txtHora_').val('').attr('data-hora', '');
+            }
+        }
+
+        function disponibilidad_doctor_() {
+            var fecha = $('#txtFecha_').attr('data-fecha');
+            var doctor = $('#cboDoctor_').val();
+            var html = '';
+
+            $.ajax({
+                url: "/RegistroCitas/DisponibilidadDoctor?id_doctor=" + doctor + "&fecha=" + fecha,
+                type: "GET",
+                data: null,
+                beforeSend: function () {
+                    if (doctor == '-1') {
+                        $('#divDisponibilidad_').html('<tr><td colspan="2" class="text-center">Seleccione un especialista</td></tr>');
+                    }
+                },
+                success: function (data) {
+                    var i = 0;
+                    if (data.length > 0) {
+                        for (item of data) {
+                            var clase = item.estado == 'DISPONIBLE' ? 'item_disponible item_clase' + i.toString() : 'item_reservado';
+                            var hora = item.estado == 'DISPONIBLE' ? item.hora_cita : '';
+                            var accion = ' onclick="seleccionar_hora_disponible_(this)" data-hora="' + hora + '"';
+                            html += '<tr data-option="item_clase' + i.toString() + '" class="' + clase + '"' + accion + '><td class="text-center">' + item.hora_cita + '</td><td class="text-center">' + item.estado + '</td></tr>';
+                            i++;
+                        }
+                    }
+                },
+                error: function (response) {
+                    $('#divDisponibilidad_').html('<tr><td colspan="2" class="text-center">Seleccione un especialista</td></tr>');
+                },
+                complete: function () {
+                    if (doctor != '-1') {
+                        $('#divDisponibilidad_').html(html);
+                    }
+                    $('#mdl_cita_').modal('show');
+                    // deshabilitar_campos();
+                }
+            });
+        }
+
+        function seleccionar_hora_disponible_(e) {
+            var hora = $(e).attr('data-hora');
+            var option = $(e).attr('data-option');
+
+            $('.item_disponible').removeClass('item_separado');
+            $('.' + option).addClass('item_separado');
+
+            if (hora == '') {
+                Swal.fire({
+                    icon: "Error",
+                    title: "Oops...",
+                    text: "Ya hay una cita registrada en el horario seleccionado.",
+                });
+                $('#txtHora_').val('');
+                return;
+            } else {
+                hora = hora.replace(' am', ' AM');
+                hora = hora.replace(' pm', ' PM');
+                $('#txtHora_').val(hora);
+            }
+        }
+
+        function cerrar_modal_cita_() {
+            $('#mdl_cita_').modal('hide');
+        }
+
+        function guardar_cita_()
+        {
+            var fecha = $('#txtFecha_').attr('data-fecha');
+            var hora = $('#txtHora_').val();
+            var doctor = $('#cboDoctor_').val();
+            var paciente = $('#cboPaciente_').val();
+            var id_servicio = 0;
+            var id_sede = $('#cboSedeChange__').val();
+            var tipo_cita = $('#cboTipoCita_').val();
+
+            if (doctor == '-1') {
+                Swal.fire({
+                    icon: "warning",
+                    title: "Oops...",
+                    text: "Seleccione el especialista.",
+                });
+                return;
+            }
+
+            if (hora == '') {
+                Swal.fire({
+                    icon: "warning",
+                    title: "Oops...",
+                    text: "Seleccione la hora para el registro de la cita.",
+                });
+                return;
+            }
+
+            if (id_sede == '-1') {
+                Swal.fire({
+                    icon: "warning",
+                    title: "Oops...",
+                    text: "Seleccione el centro.",
+                });
+                return;
+            }
+
+            // Obtener el feedback
+            var feedback = true;
+            var comentario = '';
+
+            var data_ = {
+                id_cita: id_cita_,
+                id_usuario: 0,
+                estado_cita: 0,
+                fecha_cita: fecha,
+                hora_cita: hora,
+                id_doctor_asignado: doctor,
+                id_paciente: paciente,
+                monto_pactado: '0,00',
+                id_servicio: id_servicio,
+                id_sede: id_sede,
+                tipo_cita: tipo_cita,
+                id_paquete: id_paquete__
+            };
+
+            $.ajax({
+                url: "/RegistroCitas/RegistrarCita",
+                type: "POST",
+                data: data_,
+                success: function (data) {
+                    if (data.estado) {
+                        Swal.fire({
+                            icon: "success",
+                            text: "Cita guardada exitosamente.",
+                        });
+
+                        $('#txtHora_').val('');
+                        $('#cboDoctor_, #cboPaciente_').val('-1');
+                        $('#cboTipoCita_').val('P');
+                        $('#mdl_cita_').modal('hide');
+
+                        var tipoVista = TipoVista();
+                        if (tipoVista == 'MENSUAL') {
+                            $('.calendar-container').html('<div id="my-calendar"></div>');
+                        }
+                        cargar_citas();
+                        adicionales = [];
+                    } else {
+                        Swal.fire({
+                            icon: "Error",
+                            title: "Oops...",
+                            text: data.descripcion,
+                        });
+                    }
+                },
+                error: function (response) {
+                    Swal.fire({
+                        icon: "error",
+                        title: "Oops...",
+                        text: "Ocurrió un error al guardar la cita.",
+                    });
+                },
+                complete: function () {
+                }
+            });
+        }
+    </script>
+
+    <div id="mdl_cita_" class="modal" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="true">
+        <div class="modal-dialog modal-lg" role="document" style="height: 90%; display: grid; place-items: center;">
+            <div class="modal-content sb-reg-citas-popup-container">
+                <div class="modal-header sb-reg-citas-popup-title">
+                    <h5 class="modal-title">Cita adicional</h5>
+                </div>
+                <div class="modal-body sb-reg-citas-popup-body">
+
+                    <div class="tab-content">
+                        <!--resumen-->
+                        <div id="resumen" class="tab-pane fade show active">
+
+                            <div class="sb-reg-citas-popup-tab-panel">
+                                <div class="sb-reg-citas-popup-tab-panel-block" style="display: inline-flex;">
+                                    <div class="sb-reg-citas-popup-tab-panel-block-item" style="width: 50%; display: inline-flex">
+                                        <span class="label-form">Fecha cita</span>
+                                        <input id="txtFecha_" class="form-control" type="date" autocomplete="off" />
+                                    </div>
+                                </div>
+
+                                <div class="sb-reg-citas-popup-tab-panel-block">
+                                    <div class="sb-reg-citas-popup-tab-panel-block-item">
+                                        <span class="label-form">Especialista</span>
+                                        <div class="input-group">
+                                            <select class="form-control" id="cboDoctor_" onchange="verificar_disponibilidad_()">
+                                                <option value="-1" data-sedes="-1">Seleccionar</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="sb-reg-citas-popup-tab-panel-block" style="display: none !important;">
+                                    <div class="sb-reg-citas-popup-tab-panel-block-item">
+                                        <span class="label-form">Hora</span>
+                                        <div class="input-group date" id="dtpicker1">
+                                            <input type="text" class="form-control form-hora" id="txtHora_" onkeydown="return false;" onchange="validateHhMm(this);" onpaste="validateHhMm(this);" maxlength="8" placeholder="Seleccionar hora" autocomplete="off" />
+                                            <span class="input-group-append input-group-addon">
+                                                <span style="margin: 0 auto; display: flex; " class="input-group-text mdi mdi-clock">
+                                                </span>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="sb-reg-citas-popup-tab-panel-block">
+                                    <div class="sb-reg-citas-popup-tab-panel-block-item">
+                                        <span class="label-form">Paciente</span>
+                                        <select class="form-control" id="cboPaciente_">
+                                            <option value="-1">Seleccionar</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="sb-reg-citas-popup-tab-panel-block" style="display: inline-flex;" id="divTelefono_">
+                                    <div class="sb-reg-citas-popup-tab-panel-block-item" style="width: 50%; display: inline-flex">
+                                        <span class="label-form">Teléfono</span>
+                                        <input class="form-control" type="text" id="txtTelefono_" autocomplete="off" disabled="disabled" />
+                                    </div>
+
+                                    <div class="sb-reg-citas-popup-tab-panel-block-item" style="width: 50%; display: inline-flex">
+                                        <span class="label-form">Documento</span>
+                                        <input class="form-control" type="text" id="txtDniPaciente_" autocomplete="off" disabled="disabled" />
+                                    </div>
+                                </div>
+
+                                <div class="sb-reg-citas-popup-tab-panel-block">
+                                    <div class="sb-reg-citas-popup-tab-panel-block-item">
+                                        <span class="label-form">Centro</span>
+                                        <div class="input-group">
+                                            <select class="form-control" id="cboSedeChange__" disabled="disabled">
+                                                <option value="-1">Seleccionar</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="sb-reg-citas-popup-tab-panel-block">
+                                    <div class="sb-reg-citas-popup-tab-panel-block-item">
+                                        <span class="label-form">Tipo de cita</span>
+                                        <div class="input-group">
+                                            <select class="form-control" id="cboTipoCita_">
+                                                <option value="P">Presencial</option>
+                                                <option value="V">Virtual</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="sb-reg-citas-popup-tab-panel-block">
+                                    <div class="sb-reg-citas-popup-tab-panel-block-item">
+                                        <table class="table table-responsive" style="display: inline-table;">
+                                            <thead>
+                                                <tr>
+                                                    <th class="text-center">Hora</th>
+                                                    <th class="text-center">Estado</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="divDisponibilidad_"></tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer sb-reg-citas-popup-btn">
+                    <button type="button" class="btn btn-secondary sb-reg-citas-popup-button-volver" onclick="cerrar_modal_cita_()">Volver</button>
+                    <button type="button" class="btn btn-primary main_color divConfirmar sb-reg-citas-popup-button" onclick="guardar_cita_()">Guardar</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
