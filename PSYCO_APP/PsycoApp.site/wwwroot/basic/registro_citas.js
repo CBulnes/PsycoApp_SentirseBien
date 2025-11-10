@@ -380,11 +380,19 @@ function verFechasAdicionales(servicio = null) {
                     var fecha = citasPaquete[i].fecha_cita;
                     var disabled = (citasPaquete[i].id_cita > 0 && citasPaquete[i].estado != 'CITADO') ? 'disabled="disabled"' : '';
                     var deshabilitar = (citasPaquete[i].id_cita > 0 && citasPaquete[i].estado != 'CITADO') ? true : false;
-
+                    //servicio
                     html += '<tr>';
                     html += '<td><input class="form-control fechaAd active-input-modulo" type="date" data-id-estado="' + citasPaquete[i].id_estado_cita + '" data-id-cita="' + citasPaquete[i].id_cita + '" id="txtFecha' + i + '" autocomplete="off" max="2050-12-31" min="2022-08-01" value="' + (fecha) + '" onkeydown="return false" ' + disabled + ' oninput="validarHorarioFecha(' + i + ')" /></td>';
                     html += '<td id="tdEspecialista' + i + '"><select class="form-control especialistaAd active-select-modulo" style="background-color: #18202d !important;" id="cboEspecialista' + i + '" onchange="obtener_horarios_especialista(' + i + ')">' + obtener_especialistas() + '</select></td>';
                     html += '<td id="tdHorario' + i + '"><select class="form-control horarioAd active-select-modulo" style="background-color: #18202d !important;" id="cboHorario' + i + '">' + '<option value="-1">Seleccionar horario</option>' + /*obtener_horarios_fecha(formatDateISO(fecha)) +*/ '</select></td>';
+                    html += '<td id="tdHorario' + i + '">' +
+                        '<label class="form-control horarioAd active-select-modulo" ' +
+                        'style="background-color: #18202d !important;top: 10px !important;" ' +
+                        'id="lblServicio' + i + '">' +
+                        citasPaquete[i].nombre_servicio +
+                        '</label>' +
+                        '</td>';
+
                     html += '</tr>';
 
                     cbosEspecialistas.push({ idCombo: 'cboEspecialista' + i, valor: citasPaquete[i].id_doctor_asignado, deshabilitar });
