@@ -88,6 +88,7 @@ namespace PsycoApp.BL
                     res_ = citaDA.registrar_cita(oCita, "NO", ordenP, 0);
                     if (oCita.fechas_adicionales != null && oCita.fechas_adicionales.Count > 0)
                     {
+                        var res2 = citaDA.validar_cita_adicional(oCita);
                         int orden = 1;
                         foreach (var adicional in oCita.fechas_adicionales)
                         {
@@ -96,10 +97,11 @@ namespace PsycoApp.BL
                                 oCita.fecha_cita = adicional.fecha;
                                 oCita.id_doctor_asignado = Convert.ToInt32(adicional.especialista);
                                 oCita.hora_cita = adicional.hora;
-                                var res2 = citaDA.registrar_cita(oCita, "SI", orden, res_.id_paquete);
+                                res2 = citaDA.registrar_cita(oCita, "SI", orden, res_.id_paquete);
                             }
                             orden++;
                         }
+                        res_ = res2;
                     }
                 } else
                 {
@@ -151,6 +153,7 @@ namespace PsycoApp.BL
 
                 if (errores.Count == 0)
                 {
+                    var res2 = new RespuestaUsuario() { estado = false, descripcion = "" };
                     foreach (var adicional in fechas_adicionales)
                     {
                         if (adicional.id_estado_cita == 1)
@@ -161,9 +164,10 @@ namespace PsycoApp.BL
                             oCita.fecha_cita = adicional.fecha;
                             oCita.id_doctor_asignado = Convert.ToInt32(adicional.especialista);
                             oCita.usuario = adicional.usuario;
-                            var res2 = citaDA.actualizar_cita_adicional(oCita);
+                            res2 = citaDA.actualizar_cita_adicional(oCita);
                         }
                     }
+                    res_ = res2;
                 } else
                 {
                     res_.estado = false;
