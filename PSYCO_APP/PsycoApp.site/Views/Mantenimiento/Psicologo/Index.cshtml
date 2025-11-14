@@ -508,6 +508,7 @@
             sedes.push({ id: '-1', valor: 'Todos' });
             sedes.push({ id: '1', valor: 'Sentirse bien' });
             sedes.push({ id: '2', valor: 'Transforma' });
+            sedes.push({ id: '3', valor: 'Miralofres' });
             sedes.push({ id: '-2', valor: 'Ambas' });
         } else {
             // caso contrario ve solo lo de su sede asignada
@@ -515,6 +516,7 @@
         }
 
         function cargarCombo(array, idCombo) {
+
             var html = '';
             for (var item of array) {
                 html += '<option value="' + item.id + '">' + item.valor + '</option>';

@@ -3,7 +3,25 @@
 @using PsycoApp.utilities;
 @{
     var dHoy = DateTime.Now;
-    var centro_nombre = Context.Session.GetInt32("id_sede") == 1 ? "Sentirse bien" : "Transforma";
+    int? idSede = Context.Session.GetInt32("id_sede");
+    string centro_nombre = "";
+
+    switch (idSede)
+    {
+        case 1:
+            centro_nombre = "Sentirse bien";
+            break;
+        case 2:
+            centro_nombre = "Transforma";
+            break;
+        case 3:
+            centro_nombre = "Miraflores";
+            break;
+        default:
+            centro_nombre = "Desconocido";
+            break;
+    }
+
     var logo = (Context.Session.GetInt32("id_sede") == 1 ? "sentirse_bien" : "transforma") + ".jpg";
 }
 
