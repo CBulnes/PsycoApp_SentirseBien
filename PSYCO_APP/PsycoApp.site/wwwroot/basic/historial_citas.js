@@ -79,12 +79,13 @@ function cargar_historial() {
                     html += '<td class="text-center text-tbl">' + item.hora_cita + '</td>';
                     html += '<td class="text-center text-tbl">' + item.monto_pendiente_ + '</td>';
                     html += '<td class="text-center text-tbl">' + accion_estado(item.estado) + '</td>';
+                    html += '<td class="text-center text-tbl">' + (item.esEvaluacion ? 'SI' : 'NO') + '</td>';
                     html += '<td class="text-center text-tbl">' + accion_cita(item.esEvaluacion, item.usuario, item.monto_pendiente_, item.id_paciente, item.id_cita, item.id_paquete, item.informe_adicional, item.dni_paciente, item.telefono) + '</td>';
                     html += '</tr>';
                     i++;
                 }
             } else {
-                html = '<tr><td colspan="8" class="text-center">No se encontraron resultados</td></tr>';
+                html = '<tr><td colspan="9" class="text-center">No se encontraron resultados</td></tr>';
             }
             $('#bdCitas').html(html);
         }
