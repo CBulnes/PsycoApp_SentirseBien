@@ -149,7 +149,7 @@ namespace PsycoApp.DA
 
                 SqlParameter paramIdPaquete = new SqlParameter("@id_paquete", SqlDbType.Int);
                 paramIdPaquete.Direction = ParameterDirection.InputOutput;
-                paramIdPaquete.Value = oCita.id_paquete ?? id_paquete;
+                paramIdPaquete.Value = (oCita.id_paquete == null || oCita.id_paquete == 0) ? id_paquete : oCita.id_paquete;
                 cmd.Parameters.Add(paramIdPaquete);
 
                 SqlDataAdapter da = new SqlDataAdapter(cmd);

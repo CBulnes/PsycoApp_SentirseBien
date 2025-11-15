@@ -608,12 +608,12 @@ function copiarOpciones() {
 
 
 function ver_cita(e) {
+    var esEvaluacion = $(e).data('evaluacion');
+    var id_paquete = $(e).attr('data-id-paquete');
+
     $('#btnActualizarFechasAdicionales').hide();
 
-    var id_paquete = $(e).attr('data-id-paquete');
-    if (id_paquete > 0) {
-        Swal.fire({
-            html: `<br/>
+    var htmlOpciones = `<br/>
                     <p>Esta cita forma parte de un <b>paquete</b>.</p>
                     <p>Puedes:</p>
                     <div style="display:flex; flex-direction:column; gap:10px; margin-top:10px;">
@@ -623,10 +623,14 @@ function ver_cita(e) {
                         <button id="btnCita" class="swal2-cancel swal2-styled" style="background-color:#6c757d">
                         <i class="fa fa-stethoscope"></i> Mostrar cita
                         </button>
-                        <button id="btnNuevaCita" class="swal2-deny swal2-styled" style="background-color:#0d6efd">
-                        <i class="fa fa-edit"></i> Agregar cita
-                        </button>
-                    </div>`,
+                        {{btnNuevaCita}}
+                    </div>`;
+
+    htmlOpciones = htmlOpciones.replace('{{btnNuevaCita}}', (esEvaluacion ? '<button id="btnNuevaCita" class="swal2-deny swal2-styled" style="background-color:#0d6efd"><i class="fa fa-edit"></i> Agregar cita</button>' : ''));
+
+    if (id_paquete > 0) {
+        Swal.fire({
+            html: htmlOpciones,
             showConfirmButton: false,
             showCancelButton: false,
             allowOutsideClick: false,
@@ -2480,7 +2484,7 @@ function agregarHoraLibre(fecha, hora, libres) {
             } else {
                 html = '<div class="div_horario" style="background-color: #5c9d9d; color: #FFFFFF; padding: 5px; font-size: 12px; border-radius: 5px; cursor: pointer;"';
                 if (parseDate(fecha) >= parseDate(fecha_actual())) {
-                    html += ' data-id-cita="0" data-id-especialista="-1" data-servicio="" data-id-paciente="-1" data-fecha-cita="' + fecha + '" data-pago-gratis="0" data-hora-cita="" data-estado="-" data-telefono="--" data-moneda="S/." data-monto-pactado="0.00" data-monto-pagado="0.00" data-monto-pendiente="0.00" data-id-servicio="-1" data-id-sede="-1" data-dni-paciente="" data-paciente="" data-id-paquete="0" onclick="ver_cita(this)" ';
+                    html += ' data-id-cita="0" data-id-especialista="-1" data-servicio="" data-evaluacion="false" data-id-paciente="-1" data-fecha-cita="' + fecha + '" data-pago-gratis="0" data-hora-cita="" data-estado="-" data-telefono="--" data-moneda="S/." data-monto-pactado="0.00" data-monto-pagado="0.00" data-monto-pendiente="0.00" data-id-servicio="-1" data-id-sede="-1" data-dni-paciente="" data-paciente="" data-id-paquete="0" onclick="ver_cita(this)" ';
                 }
                 html +='>' + libre[0].tipo + ' <br> ' + libre[0].hora_cita + '</div> ';
             }
