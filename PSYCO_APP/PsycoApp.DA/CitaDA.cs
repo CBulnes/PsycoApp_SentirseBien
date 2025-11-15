@@ -611,6 +611,7 @@ namespace PsycoApp.DA
                     cita.servicio = Convert.ToString(row["servicio"]);
                     cita.monto_pendiente_ = Convert.ToString(row["monto_pendiente"]);
                     cita.id_paciente = Convert.ToInt32(row["id_paciente"]);
+                    cita.esEvaluacion = Convert.ToBoolean(row["esEvaluacion"]);
                     lista.Add(cita);
                 }
             }

@@ -63,7 +63,6 @@ function cargar_historial() {
         },
         success: function (data) {
             lista_citas = data;
-            console.log(lista_citas);
         },
         error: function (response) {
             alertSecondary("Mensaje", "Ocurrió un error al obtener su historial de citas.");
@@ -80,7 +79,7 @@ function cargar_historial() {
                     html += '<td class="text-center text-tbl">' + item.hora_cita + '</td>';
                     html += '<td class="text-center text-tbl">' + item.monto_pendiente_ + '</td>';
                     html += '<td class="text-center text-tbl">' + accion_estado(item.estado) + '</td>';
-                    html += '<td class="text-center text-tbl">' + accion_cita(item.usuario, item.monto_pendiente_, item.id_paciente, item.id_cita, item.id_paquete, item.informe_adicional, item.dni_paciente, item.telefono) + '</td>';
+                    html += '<td class="text-center text-tbl">' + accion_cita(item.esEvaluacion, item.usuario, item.monto_pendiente_, item.id_paciente, item.id_cita, item.id_paquete, item.informe_adicional, item.dni_paciente, item.telefono) + '</td>';
                     html += '</tr>';
                     i++;
                 }
@@ -103,13 +102,14 @@ function accion_estado(estado) {
     return html_estado;
 }
 
-function accion_cita(paciente, monto_pendiente, id_paciente, id_cita, id_paquete, informe_adicional, dni, telefono) {
+function accion_cita(esEvaluacion, paciente, monto_pendiente, id_paciente, id_cita, id_paquete, informe_adicional, dni, telefono) {
     var pendiente = monto_pendiente.replace('S/.', '');
     var html_accion = '';
     html_accion += '<span class="input-group-text" style="height: 100%; display: inline-block;">';
     html_accion += `<a href="#" title="Verificar pagos" onclick="form_pago('${paciente}','${pendiente}',${id_paciente},${id_cita}); return false;" style="cursor: pointer;">💳</a>`;
     html_accion += '</span>';
-    if (id_paquete > 0) {
+    console.log('esEvaluacion', esEvaluacion);
+    if (esEvaluacion) {
         html_accion += '<span class="input-group-text" style="height: 100%; display: inline-block;">';
         html_accion += `<a href="#" title="Entrega de informe" onclick="form_informe(${id_paquete},'${informe_adicional}'); return false;" style="cursor: pointer;">📋</a>`;
         html_accion += '</span>';
