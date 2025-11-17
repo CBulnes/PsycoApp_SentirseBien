@@ -9,13 +9,14 @@ using PsycoApp.utilities;
 using Newtonsoft.Json;
 using Microsoft.AspNetCore.Http;
 using System.Net.Http;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace PsycoApp.site.Controllers
 {
     public class RegistroCitasController : Controller
     {
         private readonly string apiUrl = Helper.GetUrlApi() + "/api/paciente"; // URL base de la API
-
+        private readonly IMemoryCache _cache;
         private string url_centros_atencion = Helper.GetUrlApi() + "/api/centroatencion/listar_centros";
         private string url_lista_psicologos = Helper.GetUrlApi() + "/api/psicologo/listar_psicologos_combo";
         private string url_lista_usuarios_caja = Helper.GetUrlApi() + "/api/psicologo/listar_usuarios_caja_combo";
@@ -44,7 +45,10 @@ namespace PsycoApp.site.Controllers
         dynamic obj = new System.Dynamic.ExpandoObject();
 
         RespuestaCentroAtencion oRespuesta = new RespuestaCentroAtencion();
-
+        public RegistroCitasController(IMemoryCache cache)
+        {
+            _cache = cache;
+        }
         public async Task<IActionResult> Index()
         {
             if (!string.IsNullOrEmpty(HttpContext.Session.GetString("nombres") as string))
@@ -212,14 +216,26 @@ namespace PsycoApp.site.Controllers
         }
 
         [HttpGet]
-        public ActionResult<List<entities.Paciente>> listar_pacientes_dinamico(int page = 1, string filtro = "", int pageSize = 10)
+        public async Task<List<entities.Paciente>> listar_pacientes_dinamico(int page = 1, string filtro = "", int pageSize = 10)
         {
             var id_sede = HttpContext.Session.GetInt32("id_sede");
-            List <entities.Paciente> listaPacientes = new List<entities.Paciente>();
+
+            List<entities.Paciente> listaPacientes = new List<entities.Paciente>();
+            string cacheKey = $"pacientes_{page}_{pageSize}_{filtro}_{id_sede}";
+
+            // 🔥 Si existe en cache → retornar directamente
+            if (_cache.TryGetValue(cacheKey, out List<entities.Paciente> pacientesGuardados))
+            {
+                return pacientesGuardados;
+            }
             try
             {
-                string apiUrl = url_lista_psicologos_dinamico + $"?page={page}&pageSize={pageSize}&search={filtro}&sede={id_sede}";
-                var res =  ApiCaller.consume_endpoint_method(apiUrl, null, "GET");
+                string apiUrl =
+                    url_lista_psicologos_dinamico +
+                    $"?page={page}&pageSize={pageSize}&search={filtro}&sede={id_sede}";
+
+                // 🔥 AQUÍ estaba tu error → faltaba el await
+                string res = await ApiCaller.consume_endpoint_method_async(apiUrl, null, "GET");
 
                 listaPacientes = JsonConvert.DeserializeObject<List<entities.Paciente>>(res);
 
@@ -227,15 +243,18 @@ namespace PsycoApp.site.Controllers
                 {
                     obj.Nombre = obj.Nombre.Trim().ToUpper();
                 }
+                // 🧠 Guardar en memoria por 1 minuto (puedes cambiarlo)
+                _cache.Set(cacheKey, listaPacientes, TimeSpan.FromMinutes(1));
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-                listaPacientes.Clear(); // Limpiar en caso de error
+                listaPacientes.Clear();
             }
 
-            return (listaPacientes); // Retorna los pacientes como JSON
+            return listaPacientes;
         }
+
 
         [HttpPost]
         public async Task<RespuestaUsuario> AgregarInforme(Cita model)
@@ -417,37 +436,47 @@ namespace PsycoApp.site.Controllers
         public async Task<List<Cita>> DisponibilidadDoctor(int id_doctor, string fecha)
         {
             List<Cita> lista = new List<Cita>();
-            string res = "";
+
             try
             {
-                url = url_disponibilidad_doctor + "/" + id_doctor + "/" + fecha;
-                res = ApiCaller.consume_endpoint_method(url, null, "GET");
+                string url = $"{url_disponibilidad_doctor}/{id_doctor}/{fecha}";
+
+                // 🔥 Debe ser await OBLIGATORIO
+                string res = await ApiCaller.consume_endpoint_method_async(url, null, "GET");
+
                 lista = JsonConvert.DeserializeObject<List<Cita>>(res);
             }
-            catch (Exception)
+            catch
             {
                 lista.Clear();
             }
+
             return lista;
         }
+
 
         [HttpGet]
         public async Task<List<Cita>> ListarHorariosDoctor(string inicio, string fin, int id_doctor)
         {
             List<Cita> lista = new List<Cita>();
-            string res = "";
+
             try
             {
-                url = url_horarios_doctor + "/" + inicio + "/" + fin + "/" + id_doctor;
-                res = ApiCaller.consume_endpoint_method(url, null, "GET");
+                string url = $"{url_horarios_doctor}/{inicio}/{fin}/{id_doctor}";
+
+                // 🔥 Debe ser await
+                string res = await ApiCaller.consume_endpoint_method_async(url, null, "GET");
+
                 lista = JsonConvert.DeserializeObject<List<Cita>>(res);
             }
-            catch (Exception)
+            catch
             {
                 lista.Clear();
             }
+
             return lista;
         }
+
 
         [HttpGet]
         //[AllowAnonymous]

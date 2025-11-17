@@ -1,7 +1,10 @@
 ﻿using Newtonsoft.Json;
+using System;
 using System.IO;
 using System.Net;
+using System.Net.Http;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace PsycoApp.utilities
 {
@@ -60,6 +63,61 @@ namespace PsycoApp.utilities
             }
         }
 
+        public static async Task<string> consume_endpoint_method_async(string url, object obj, string method)
+        {
+            using (HttpClientHandler handler = new HttpClientHandler())
+            {
+                // Permitir certificados no válidos como tu versión original
+                handler.ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => true;
+
+                using (HttpClient client = new HttpClient(handler))
+                {
+                    client.DefaultRequestHeaders.Accept.Clear();
+                    client.DefaultRequestHeaders.Accept.Add(
+                        new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json")
+                    );
+
+                    HttpResponseMessage response;
+
+                    if (method == "GET")
+                    {
+                        response = await client.GetAsync(url);
+                    }
+                    else
+                    {
+                        string json = JsonConvert.SerializeObject(obj);
+                        var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+                        switch (method)
+                        {
+                            case "POST":
+                                response = await client.PostAsync(url, content);
+                                break;
+
+                            case "PUT":
+                                response = await client.PutAsync(url, content);
+                                break;
+
+                            case "DELETE":
+                                response = await client.DeleteAsync(url);
+                                break;
+
+                            default:
+                                throw new Exception($"Método HTTP no soportado: {method}");
+                        }
+                    }
+
+                    response.EnsureSuccessStatusCode();
+                    string result = await response.Content.ReadAsStringAsync();
+
+                    // Mantener tu misma lógica de convertir "OK"
+                    if (result == "\"OK\"")
+                        return "OK";
+
+                    return result;
+                }
+            }
+        }
 
     }
 }

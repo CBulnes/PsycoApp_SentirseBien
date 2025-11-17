@@ -34,7 +34,7 @@ namespace PsycoApp.api
             services.AddApplicationInsightsTelemetry(Configuration["APPLICATIONINSIGHTS_CONNECTION_STRING"]);
             
             services.AddControllers();
-
+            services.AddMemoryCache();
             string semilla = "PsycoApp2024";
             byte[] semillarByte = Encoding.UTF8.GetBytes(semilla);
             SymmetricSecurityKey key = new SymmetricSecurityKey(semillarByte);

@@ -185,14 +185,14 @@ namespace PsycoApp.api.Controllers
         }
 
         [HttpGet("disponibilidad_doctor/{id_doctor}/{fecha}")]
-        public List<Cita> disponibilidad_doctor(int id_doctor, string fecha)
+        public async Task<List<Cita>> disponibilidad_doctor(int id_doctor, string fecha)
         {
             List<Cita> lista = new List<Cita>();
             random_str = ru.RandomString(8) + "|" + ru.CurrentDate();
 
             try
             {
-                lista = citaBL.disponibilidad_doctor(id_doctor, fecha, main_path, random_str);
+                lista = await citaBL.disponibilidad_doctor(id_doctor, fecha, main_path, random_str);
             }
             catch (Exception)
             {
@@ -234,7 +234,7 @@ namespace PsycoApp.api.Controllers
         }
 
         [HttpGet("historial/{id_cita}/{id_paciente}")]
-        public Historial historial(int id_cita, int id_paciente)
+        public async Task<Historial> historial(int id_cita, int id_paciente)
         {
             Historial historial = new Historial();
             historial.historial1 = new List<HistorialCita>();
@@ -242,8 +242,8 @@ namespace PsycoApp.api.Controllers
 
             try
             {
-                historial.historial1 = citaBL.historial_cita(id_cita);
-                historial.historial2 = citaBL.historial_paciente(id_paciente);
+                historial.historial1 = await citaBL.historial_cita(id_cita);
+                historial.historial2 = await citaBL.historial_paciente(id_paciente);
             }
             catch (Exception)
             {

@@ -608,6 +608,8 @@ function copiarOpciones() {
 
 
 function ver_cita(e) {
+    console.log(e);
+    console.log("citas");
     var esEvaluacion = $(e).data('evaluacion');
     var id_paquete = $(e).attr('data-id-paquete');
 
@@ -644,7 +646,8 @@ function ver_cita(e) {
             verFechasAdicionales($(e).attr('data-servicio'));
             Swal.close();
         });
-
+        // Eliminar handlers previos para evitar duplicados
+        $(document).off('click', '#btnCita');
         $(document).on('click', '#btnCita', function () {
             loadPatients();
             var id_cita = $(e).attr('data-id-cita');

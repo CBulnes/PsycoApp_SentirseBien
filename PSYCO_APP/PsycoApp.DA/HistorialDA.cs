@@ -114,71 +114,88 @@ namespace PsycoApp.DA
             return lista;
         }
 
-        public List<HistorialCita> listar_historial_cita(int id_cita)
+        public async Task<List<HistorialCita>> listar_historial_cita(int id_cita)
         {
             List<HistorialCita> lista = new List<HistorialCita>();
+
             try
             {
-                cn.Open();
-                SqlCommand cmd = new SqlCommand(Procedures.sp_listar_historial_cita, cn);
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.Add("@id_cita", SqlDbType.Int).Value = id_cita;
+                await cn.OpenAsync();
 
-                SqlDataAdapter da = new SqlDataAdapter(cmd);
-                DataTable dt = new DataTable();
-                da.Fill(dt);
-
-                foreach (DataRow row in dt.Rows)
+                using (SqlCommand cmd = new SqlCommand(Procedures.sp_listar_historial_cita, cn))
                 {
-                    HistorialCita historial = new HistorialCita();
-                    historial.evento = Convert.ToString(row["evento"]);
-                    historial.usuario = Convert.ToString(row["usuario"]);
-                    historial.fecha = Convert.ToString(row["fecha"]);
-                    lista.Add(historial);
-                }
-            }
-            catch (Exception e)
-            {
-                lista.Clear();
-            }
-            cn.Close();
-            return lista;
-        }
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.Add("@id_cita", SqlDbType.Int).Value = id_cita;
 
-        public List<HistorialPaciente> listar_historial_paciente(int id_paciente)
-        {
-            List<HistorialPaciente> lista = new List<HistorialPaciente>();
-            try
-            {
-                cn.Open();
-                SqlCommand cmd = new SqlCommand(Procedures.sp_listar_historial_paciente, cn);
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.Add("@id_paciente", SqlDbType.Int).Value = id_paciente;
-
-                using (SqlDataReader reader = cmd.ExecuteReader())
-                {
-                    while (reader.Read())
+                    using (SqlDataReader reader = await cmd.ExecuteReaderAsync())
                     {
-                        HistorialPaciente historial = new HistorialPaciente
+                        while (await reader.ReadAsync())
                         {
-                            doctor = reader["doctor"].ToString(),
-                            fecha_registro = reader["fecha_registro"].ToString()
-                        };
-                        lista.Add(historial);
+                            HistorialCita historial = new HistorialCita
+                            {
+                                evento = reader["evento"].ToString(),
+                                usuario = reader["usuario"].ToString(),
+                                fecha = reader["fecha"].ToString()
+                            };
+
+                            lista.Add(historial);
+                        }
                     }
                 }
             }
-            catch (Exception e)
+            catch
             {
-                // Aquí puedes manejar mejor el error si es necesario
                 lista.Clear();
             }
             finally
             {
-                cn.Close();
+                await cn.CloseAsync();
             }
+
             return lista;
         }
+
+
+        public async Task<List<HistorialPaciente>> listar_historial_paciente(int id_paciente)
+        {
+            List<HistorialPaciente> lista = new List<HistorialPaciente>();
+
+            try
+            {
+                await cn.OpenAsync();
+
+                using (SqlCommand cmd = new SqlCommand(Procedures.sp_listar_historial_paciente, cn))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.Add("@id_paciente", SqlDbType.Int).Value = id_paciente;
+
+                    using (SqlDataReader reader = await cmd.ExecuteReaderAsync())
+                    {
+                        while (await reader.ReadAsync())
+                        {
+                            HistorialPaciente historial = new HistorialPaciente
+                            {
+                                doctor = reader["doctor"].ToString(),
+                                fecha_registro = reader["fecha_registro"].ToString()
+                            };
+
+                            lista.Add(historial);
+                        }
+                    }
+                }
+            }
+            catch
+            {
+                lista.Clear();
+            }
+            finally
+            {
+                await cn.CloseAsync();
+            }
+
+            return lista;
+        }
+
 
     }
 }

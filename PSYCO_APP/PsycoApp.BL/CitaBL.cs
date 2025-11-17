@@ -276,12 +276,12 @@ namespace PsycoApp.BL
             return res_;
         }
 
-        public List<Cita> disponibilidad_doctor(int id_doctor, string fecha, string main_path, string random_str)
+        public async  Task<List<Cita>> disponibilidad_doctor(int id_doctor, string fecha, string main_path, string random_str)
         {
             List<Cita> lista = new List<Cita>();
             try
             {
-                lista = citaDA.disponibilidad_doctor(id_doctor, fecha, main_path, random_str);
+                lista = await citaDA.disponibilidad_doctor_async(id_doctor, fecha, main_path, random_str);
             }
             catch (Exception)
             {
@@ -318,12 +318,12 @@ namespace PsycoApp.BL
             return lista;
         }
 
-        public List<HistorialCita> historial_cita(int id_cita)
+        public async Task<List<HistorialCita>> historial_cita(int id_cita)
         {
             List<HistorialCita> lista = new List<HistorialCita>();
             try
             {
-                lista = historialDA.listar_historial_cita(id_cita);
+                lista = await historialDA.listar_historial_cita(id_cita);
             }
             catch (Exception)
             {
@@ -332,12 +332,12 @@ namespace PsycoApp.BL
             return lista;
         }
 
-        public List<HistorialPaciente> historial_paciente(int id_paciente)
+        public async Task<List<HistorialPaciente>> historial_paciente(int id_paciente)
         {
             List<HistorialPaciente> lista = new List<HistorialPaciente>();
             try
             {
-                lista = historialDA.listar_historial_paciente(id_paciente);
+                lista = await historialDA.listar_historial_paciente(id_paciente);
             }
             catch (Exception)
             {

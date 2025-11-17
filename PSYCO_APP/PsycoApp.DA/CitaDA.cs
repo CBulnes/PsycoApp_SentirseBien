@@ -396,37 +396,55 @@ namespace PsycoApp.DA
             return res_;
         }
 
-        public List<Cita> disponibilidad_doctor(int id_doctor, string fecha, string main_path, string random_str)
+        public async Task<List<Cita>> disponibilidad_doctor_async(
+     int id_doctor,
+     string fecha,
+     string main_path,
+     string random_str)
         {
             List<Cita> lista = new List<Cita>();
+
             try
             {
-                cn.Open();
-                SqlCommand cmd = new SqlCommand(Procedures.sp_listar_disponibilidad_doctor, cn);
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.Add("@id_doctor", SqlDbType.Int).Value = id_doctor;
-                cmd.Parameters.Add("@fecha", SqlDbType.VarChar).Value = fecha;
+                await cn.OpenAsync();
 
-                SqlDataAdapter da = new SqlDataAdapter(cmd);
-                DataTable dt = new DataTable();
-                da.Fill(dt);
-
-                foreach (DataRow row in dt.Rows)
+                using (SqlCommand cmd = new SqlCommand(Procedures.sp_listar_disponibilidad_doctor, cn))
                 {
-                    Cita cita = new Cita();
-                    cita.estado = Convert.ToString(row["estado"]);
-                    cita.hora_cita = Convert.ToString(row["hora_cita"]);
-                    lista.Add(cita);
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.Add("@id_doctor", SqlDbType.Int).Value = id_doctor;
+                    cmd.Parameters.Add("@fecha", SqlDbType.VarChar).Value = fecha;
+
+                    // El SqlDataReader async es mucho más rápido que SqlDataAdapter
+                    using (SqlDataReader reader = await cmd.ExecuteReaderAsync())
+                    {
+                        while (await reader.ReadAsync())
+                        {
+                            Cita cita = new Cita
+                            {
+                                estado = reader["estado"].ToString()
+                            };
+
+                            // Conversión eficiente
+                            TimeSpan hora = reader.GetTimeSpan(reader.GetOrdinal("hora_cita"));
+                            cita.hora_cita = DateTime.Today.Add(hora).ToString("hh:mm tt");
+
+                            lista.Add(cita);
+                        }
+                    }
                 }
             }
-            catch (Exception e)
+            catch
             {
-                //LOG.registrarLog("(Excepcion " + random_str + ")[ERROR]->[CitaDA.cs / disponibilidad_doctor <> " + e.Message.ToString(), "ERROR", main_path);
                 lista.Clear();
             }
-            cn.Close();
+            finally
+            {
+                await cn.CloseAsync();
+            }
+
             return lista;
         }
+
 
         public List<Cita> citas_usuario(int id_usuario, int id_paciente, int id_doctor, int id_sede, string main_path, string random_str)
         {
