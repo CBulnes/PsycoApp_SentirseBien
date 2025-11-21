@@ -426,7 +426,8 @@ namespace PsycoApp.DA
 
                             // Conversión eficiente
                             TimeSpan hora = reader.GetTimeSpan(reader.GetOrdinal("hora_cita"));
-                            cita.hora_cita = DateTime.Today.Add(hora).ToString("hh:mm tt");
+                            cita.hora_cita_mostrar = DateTime.Today.Add(hora).ToString("hh:mm tt");
+                            cita.hora_cita = hora.ToString(@"hh\:mm\:ss\.fffffff");
 
                             lista.Add(cita);
                         }

@@ -501,15 +501,30 @@
         }
 
         var idSedePrincipal = $('#hdnIdSede').val().toString();
-        var sedePrincipal = (idSedePrincipal == '1' ? 'Sentirse bien' : 'Transforma');
+     
+         var sedePrincipal =
+        idSedePrincipal === '1' ? 'Sentirse bien' :
+        idSedePrincipal === '2' ? 'Transforma' :
+        idSedePrincipal === '3' ? 'Miraflores' :
+        '';
 
         if (tipoUsuario == 'ADMIN') //si es ADMIN ve todo
         {
-            sedes.push({ id: '-1', valor: 'Todos' });
+            sedes.push({ id: idSedePrincipal, valor: sedePrincipal });
+            sedes.push({ id: '-2', valor: 'Todos' });
             sedes.push({ id: '1', valor: 'Sentirse bien' });
             sedes.push({ id: '2', valor: 'Transforma' });
-            sedes.push({ id: '3', valor: 'Miralofres' });
-            sedes.push({ id: '-2', valor: 'Ambas' });
+            sedes.push({ id: '3', valor: 'Miraflores' });
+
+                    // Eliminar duplicados por id
+        const seen = new Set();
+        sedes = sedes.filter(s => {
+            if (seen.has(s.id)) {
+                return false; // ya existe, lo descartamos
+            }
+            seen.add(s.id);
+            return true; // primera vez que aparece, lo mantenemos
+        });
         } else {
             // caso contrario ve solo lo de su sede asignada
             sedes.push({ id: idSedePrincipal, valor: sedePrincipal });

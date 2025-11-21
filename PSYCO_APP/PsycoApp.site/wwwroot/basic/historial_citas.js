@@ -687,7 +687,7 @@ function disponibilidad_doctor() {
     var fecha = $('#txtFecha').attr('data-fecha');
     var doctor = $('#cboDoctor').val();
     var html = '';
-
+    console.log(12);
     $.ajax({
         url: "/RegistroCitas/DisponibilidadDoctor?id_doctor=" + doctor + "&fecha=" + fecha,
         type: "GET",
@@ -704,7 +704,7 @@ function disponibilidad_doctor() {
                     var clase = item.estado == 'DISPONIBLE' ? 'item_disponible' : 'item_reservado';
                     var hora = item.estado == 'DISPONIBLE' ? item.hora_cita : '';
                     var accion = ' onclick="seleccionar_hora_disponible(this)" data-hora="' + hora + '"';
-                    html += '<tr class="' + clase + '"' + accion + '><td class="text-center">' + item.hora_cita + '</td><td class="text-center">' + item.estado + '</td></tr>';
+                    html += '<tr class="' + clase + '"' + accion + '><td class="text-center">' + item.hora_cita_mostrar + '</td><td class="text-center">' + item.estado + '</td></tr>';
                 }
             }
         },
@@ -731,7 +731,7 @@ function disponibilidad_reasignar_doctor() {
     var fecha = $('#txtFechaReasignar').val();
     var doctor = $('#cboDoctor').val();
     var html = '';
-
+    console.log(12);
     $.ajax({
         url: "/RegistroCitas/DisponibilidadDoctor?id_doctor=" + doctor + "&fecha=" + fecha,
         type: "GET",
@@ -747,7 +747,7 @@ function disponibilidad_reasignar_doctor() {
                     var clase = item.estado == 'DISPONIBLE' ? 'item_disponible' : 'item_reservado';
                     var hora = item.estado == 'DISPONIBLE' ? item.hora_cita : '';
                     var accion = ' onclick="seleccionar_hora_disponible(this)" data-hora="' + hora + '"';
-                    html += '<tr class="' + clase + '"' + accion + '><td class="text-center">' + item.hora_cita + '</td><td class="text-center">' + item.estado + '</td></tr>';
+                    html += '<tr class="' + clase + '"' + accion + '><td class="text-center">' + item.hora_cita_mostrar + '</td><td class="text-center">' + item.estado + '</td></tr>';
                 }
             }
         },

@@ -1429,7 +1429,7 @@
             var fecha = $('#txtFecha_').attr('data-fecha');
             var doctor = $('#cboDoctor_').val();
             var html = '';
-
+             console.log(12);
             $.ajax({
                 url: "/RegistroCitas/DisponibilidadDoctor?id_doctor=" + doctor + "&fecha=" + fecha,
                 type: "GET",
@@ -1440,13 +1440,16 @@
                     }
                 },
                 success: function (data) {
+                    console.log('hora');
                     var i = 0;
                     if (data.length > 0) {
                         for (item of data) {
+                            console.log(item);
                             var clase = item.estado == 'DISPONIBLE' ? 'item_disponible item_clase' + i.toString() : 'item_reservado';
                             var hora = item.estado == 'DISPONIBLE' ? item.hora_cita : '';
+                                                console.log('hora');
                             var accion = ' onclick="seleccionar_hora_disponible_(this)" data-hora="' + hora + '"';
-                            html += '<tr data-option="item_clase' + i.toString() + '" class="' + clase + '"' + accion + '><td class="text-center">' + item.hora_cita + '</td><td class="text-center">' + item.estado + '</td></tr>';
+                            html += '<tr data-option="item_clase' + i.toString() + '" class="' + clase + '"' + accion + '><td class="text-center">' + item.hora_cita_mostrar + '</td><td class="text-center">' + item.estado + '</td></tr>';
                             i++;
                         }
                     }

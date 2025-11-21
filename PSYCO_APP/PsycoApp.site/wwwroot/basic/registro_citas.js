@@ -88,7 +88,7 @@ document.addEventListener('DOMContentLoaded', function () {
 $(document).ready(function () {
 
     $('#cboDoctorFiltro').change(function () {
-        console.log('prueba32');
+     
         var doctorSeleccionado = parseInt($(this).val(), 10);  // O usa parseFloat si el valor es decimal
 
         // Asignar ese valor numérico al cboDoctor
@@ -261,6 +261,7 @@ function searchPatients(filtro) {
             choicesT.setChoices([
                 { value: "-1", label: "Buscando...", disabled: true },
             ]);
+          
         },
         success: function (res) {
             if (res && res.length > 0) {
@@ -268,7 +269,11 @@ function searchPatients(filtro) {
                     value: item.id,
                     label: item.nombre
                 }));
-
+                var html = '';
+                for (var item of res) {
+                    html += '<option value="' + item.id + '">' + item.nombre + '</option>';
+                }
+                $('#cboPaciente').html(html);
                 // Actualizar combo con resultados de búsqueda
                 choicesT.setChoices(pacientes, "value", "label", true);
             } else {
@@ -649,7 +654,7 @@ function ver_cita(e) {
         // Eliminar handlers previos para evitar duplicados
         $(document).off('click', '#btnCita');
         $(document).on('click', '#btnCita', function () {
-            loadPatients();
+           /* loadPatients();*/
             var id_cita = $(e).attr('data-id-cita');
             var id_especialista = $(e).attr('data-id-especialista');
             var id_paciente = $(e).attr('data-id-paciente');
@@ -736,7 +741,7 @@ function ver_cita(e) {
         return;
     }
 
-    loadPatients();
+/*    loadPatients();*/
     var id_cita = $(e).attr('data-id-cita');
     var id_especialista = $(e).attr('data-id-especialista');
     var id_paciente = $(e).attr('data-id-paciente');
@@ -1661,6 +1666,7 @@ function cargar_lista_doctores() {
         },
         success: function (data) {
             for (var item of data) {
+                
                 html += '<option value="' + item.id + '" data-sedes="' + item.sedes + '">' + item.nombre + '</option>';
             }
         },
@@ -2160,7 +2166,7 @@ function disponibilidad_doctor() {
                     var clase = item.estado == 'DISPONIBLE' ? 'item_disponible item_clase' + i.toString() : 'item_reservado';
                     var hora = item.estado == 'DISPONIBLE' ? item.hora_cita : '';
                     var accion = ' onclick="seleccionar_hora_disponible(this)" data-hora="' + hora + '"';
-                    html += '<tr data-option="item_clase' + i.toString() + '" class="' + clase + '"' + accion + '><td class="text-center">' + item.hora_cita + '</td><td class="text-center">' + item.estado + '</td></tr>';
+                    html += '<tr data-option="item_clase' + i.toString() + '" class="' + clase + '"' + accion + '><td class="text-center">' + item.hora_cita_mostrar + '</td><td class="text-center">' + item.estado + '</td></tr>';
                     i++;
                 }
             }
@@ -2205,7 +2211,7 @@ function disponibilidad_reasignar_doctor() {
                     var clase = item.estado == 'DISPONIBLE' ? 'item_disponible item_clase' + i.toString() : 'item_reservado';
                     var hora = item.estado == 'DISPONIBLE' ? item.hora_cita : '';
                     var accion = ' onclick="seleccionar_hora_disponible(this)" data-hora="' + hora + '"';
-                    html += '<tr data-option="item_clase' + i.toString() + '" class="' + clase + '"' + accion + '><td class="text-center">' + item.hora_cita + '</td><td class="text-center">' + item.estado + '</td></tr>';
+                    html += '<tr data-option="item_clase' + i.toString() + '" class="' + clase + '"' + accion + '><td class="text-center">' + item.hora_cita_mostrar + '</td><td class="text-center">' + item.estado + '</td></tr>';
                 }
             }
         },

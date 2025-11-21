@@ -14,6 +14,7 @@ namespace PsycoApp.entities
         public int id_estado_cita { get; set; } = 0;
         public string estado { get; set; } = "";
         public string fecha_cita { get; set; } = "";
+        public string hora_cita_mostrar { get; set; } = "";
         public string hora_cita { get; set; } = "";
         public int id_doctor_asignado { get; set; } = 0;
         public string doctor_asignado { get; set; } = "";

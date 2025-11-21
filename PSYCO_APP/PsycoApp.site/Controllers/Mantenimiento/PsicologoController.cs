@@ -120,10 +120,12 @@ namespace PsycoApp.site.Controllers.Mantenimiento
             } else if (sede == 2) //Surco
             {
                 psicologos = psicologos.Where(x => x.IdSedePrincipal == 2 || x.IdSedeSecundaria == 2).ToList();
-            } else if (sede == -2) //Ambas
-            {
-                psicologos = psicologos.Where(x => (x.IdSedePrincipal == 1 || x.IdSedeSecundaria == 1) && (x.IdSedePrincipal == 2 || x.IdSedeSecundaria == 2)).ToList();
             }
+            else if (sede == 3) //Miraflores
+            {
+                psicologos = psicologos.Where(x => x.IdSedePrincipal == 3 || x.IdSedeSecundaria == 3).ToList();
+            }
+            
             return Json(psicologos);
         }
 

@@ -89,40 +89,53 @@ namespace PsycoApp.DA
 
         public List<Psicologo> BuscarPsicologo(string nombre)
         {
-            var psicologos = new List<Psicologo>();
-
-            using (var command = new SqlCommand(Procedures.buscar_psicologo, _connection))
+            try
             {
-                command.CommandType = CommandType.StoredProcedure;
-                command.Parameters.AddWithValue("@Nombre", nombre);
+                var psicologos = new List<Psicologo>();
 
-                _connection.Open();
-                using (var reader = command.ExecuteReader())
+                using (var command = new SqlCommand(Procedures.buscar_psicologo, _connection))
                 {
-                    while (reader.Read())
-                    {
-                        var psicologo = new Psicologo
-                        {
-                            Id = (int)reader["Id"],
-                            Nombre = (string)reader["Nombre"],
-                            Apellido = (string)reader["Apellido"],
-                            FechaNacimiento = (DateTime)reader["FechaNacimiento"],
-                            DocumentoTipo = (string)reader["DocumentoTipo"],
-                            DocumentoNumero = (string)reader["DocumentoNumero"],
-                            Telefono = (string)reader["Telefono"],
-                            Refrigerio = (string)reader["Refrigerio"],
-                            Especialidad = (int)reader["Especialidad"],
-                            Direccion = (string)reader["Direccion"],
-                            Distrito = (string)reader["Distrito"],
-                            Estado = (string)reader["Estado"]
-                        };
-                        psicologos.Add(psicologo);
-                    }
-                }
-                _connection.Close();
-            }
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.AddWithValue("@Nombre", nombre);
 
-            return psicologos;
+                    _connection.Open();
+                    using (var reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            var psicologo = new Psicologo
+                            {
+                                Id = (int)reader["Id"],
+                                Nombre = (string)reader["Nombre"],
+                                Apellido = (string)reader["Apellido"],
+                                FechaNacimiento = (DateTime)reader["FechaNacimiento"],
+                                DocumentoTipo = (string)reader["DocumentoTipo"],
+                                DocumentoNumero = (string)reader["DocumentoNumero"],
+                                Telefono = (string)reader["Telefono"],
+                                Refrigerio = (string)reader["Refrigerio"],
+                                Especialidad = (int)reader["Especialidad"],
+                                Direccion = (string)reader["Direccion"],
+                                Distrito = (string)reader["Distrito"],
+                                Estado = (string)reader["Estado"],
+                                IdSedePrincipal = (int)reader["IdSedePrincipal"],
+                                IdSedeSecundaria = (int)reader["IdSedeSecundaria1"],
+                                IdSedeSecundaria2 = (int)reader["IdSedeSecundaria2"],
+                                Sedes = (string)reader["Sedes"]
+                            };
+                            psicologos.Add(psicologo);
+                        }
+                    }
+                    _connection.Close();
+                }
+
+                return psicologos;
+            }
+            catch (Exception e)
+            {
+                var message = e.Message.ToString();
+                throw;
+            }
+           
         }
 
         public List<Psicologo> ListarPsicologos(int pagina, int tamanoPagina)
