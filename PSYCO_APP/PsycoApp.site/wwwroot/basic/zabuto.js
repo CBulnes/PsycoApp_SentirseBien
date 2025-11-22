@@ -844,7 +844,7 @@ function contenido_cita(dia, mes, año, hora, btnNuevaCita = false, btnCita = fa
         date = new Date(mes_ + '/' + dia_ + '/' + año_); //mm/dd/yyyy
         dia_nombre = date.toLocaleDateString('es-ES', { weekday: 'long' });
 
-        if (dia_nombre == 'sábado' || dia_nombre == 'domingo') {
+        if (dia_nombre == 'domingo') {
             html = '-';
         } else {
             html = '';
@@ -858,7 +858,7 @@ function contenido_cita(dia, mes, año, hora, btnNuevaCita = false, btnCita = fa
             date = new Date(mes_ + '/' + dia_ + '/' + año_); //mm/dd/yyyy
             dia_nombre = date.toLocaleDateString('es-ES', { weekday: 'long' });
 
-            if (dia_nombre == 'sábado' || dia_nombre == 'domingo') {
+            if (dia_nombre == 'domingo') {
                 html = '-';
             } else {
                 if (item.tipo == 'CITA') {
