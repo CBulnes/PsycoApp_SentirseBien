@@ -18,6 +18,7 @@ namespace PsycoApp.entities
         public string FinLabores { get; set; }
         public int? IdSedePrincipal { get; set; } = 0;
         public int? IdSedeSecundaria { get; set; } = 0;
+        public int? IdSedeTerciaria { get; set; } = 0;
         public int? IdSedeSecundaria2 { get; set; } = 0;
         public int Especialidad { get; set; }
         public string Direccion { get; set; }

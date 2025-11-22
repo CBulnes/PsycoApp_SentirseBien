@@ -214,54 +214,62 @@
                         <select class="form-control active-select-modulo" id="cboSedeSecundaria" name="SedeSecundaria"></select>
                     </div>
                 </div>
-            </div>
-
-            <div class="row">
-                <div class="col-4" id="divHorario1">
+                <div class="col-6">
                     <div class="sb-frm-psi-agregar-block-item">
-                        <span class="label-form active-texto-modulo">Inicio labores</span>
-                        <select class="form-control active-select-modulo" id="cboHorario1" name="cboHorario1" required></select>
-                    </div>
-                </div>
-                <div class="col-4" id="divHorario2">
-                    <div class="sb-frm-psi-agregar-block-item">
-                        <span class="label-form active-texto-modulo">Fin labores</span>
-                        <select class="form-control active-select-modulo" id="cboHorario2" name="cboHorario2" required></select>
-                    </div>
-                </div>
-                <div class="col-4" id="divRefrigerio">
-                    <div class="sb-frm-psi-agregar-block-item">
-                        <span class="label-form active-texto-modulo">Refrigerio</span>
-                        <select class="form-control active-select-modulo" id="cboRefrigerio" name="Refrigerio" required></select>
+                        <span class="label-form active-texto-modulo">Centro opcional</span>
+                        <select class="form-control active-select-modulo" id="cboSedeTerciaria" name="SedeTerciaria"></select>
                     </div>
                 </div>
             </div>
 
-            <div class="row" id="divDescHorario">
-                <div class="col-12">
-                    <div class="sb-frm-psi-agregar-block-item">
-                        <span class="label-form active-texto-modulo" style="font-style: italic; font-size: 12px;">(*) El horario seleccionado será registrado automáticamente para el mes actual.</span>
+            <div style="display: none;">
+                <div class="row">
+                    <div class="col-4" id="divHorario1">
+                        <div class="sb-frm-psi-agregar-block-item">
+                            <span class="label-form active-texto-modulo">Inicio labores</span>
+                            <select class="form-control active-select-modulo" id="cboHorario1" name="cboHorario1" required></select>
+                        </div>
+                    </div>
+                    <div class="col-4" id="divHorario2">
+                        <div class="sb-frm-psi-agregar-block-item">
+                            <span class="label-form active-texto-modulo">Fin labores</span>
+                            <select class="form-control active-select-modulo" id="cboHorario2" name="cboHorario2" required></select>
+                        </div>
+                    </div>
+                    <div class="col-4" id="divRefrigerio">
+                        <div class="sb-frm-psi-agregar-block-item">
+                            <span class="label-form active-texto-modulo">Refrigerio</span>
+                            <select class="form-control active-select-modulo" id="cboRefrigerio" name="Refrigerio" required></select>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <div class="sb-frm-psi-agregar-block">
-                <div class="sb-frm-psi-agregar-block-item">
-                    <span class="label-form active-texto-modulo">Estudios</span>
-                    <div class="row">
-                        <div class="col-12 sb-frm-psi-agregar-popuptable">
-                            <table class="table active-table-modulo">
-                                <thead>
-                                    <tr>
-                                        <th class="text-center" style="width: 80px;">N°</th>
-                                        <th class="text-center">Grado de instrucción</th>
-                                        <th class="text-center">Institución</th>
-                                        <th class="text-center">Carrera/especialidad</th>
-                                        <th class="text-center">Acción</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="bdEstudios"></tbody>
-                            </table>
+                <div class="row" id="divDescHorario">
+                    <div class="col-12">
+                        <div class="sb-frm-psi-agregar-block-item">
+                            <span class="label-form active-texto-modulo" style="font-style: italic; font-size: 12px;">(*) El horario seleccionado será registrado automáticamente para el mes actual.</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="sb-frm-psi-agregar-block">
+                    <div class="sb-frm-psi-agregar-block-item">
+                        <span class="label-form active-texto-modulo">Estudios</span>
+                        <div class="row">
+                            <div class="col-12 sb-frm-psi-agregar-popuptable">
+                                <table class="table active-table-modulo">
+                                    <thead>
+                                        <tr>
+                                            <th class="text-center" style="width: 80px;">N°</th>
+                                            <th class="text-center">Grado de instrucción</th>
+                                            <th class="text-center">Institución</th>
+                                            <th class="text-center">Carrera/especialidad</th>
+                                            <th class="text-center">Acción</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="bdEstudios"></tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -570,7 +578,7 @@
                     html = '<option value="-1">Seleccionar</option>';
                 },
                 complete: function(){
-                    $('#cboSedePrincipal, #cboSedeSecundaria').html(html);
+                    $('#cboSedePrincipal, #cboSedeSecundaria, #cboSedeTerciaria').html(html);
                 }
             });
         }
@@ -650,6 +658,7 @@
                 $('#cboHorario2').val(psicologo.finLabores);
                 $('#cboSedePrincipal').val(psicologo.idSedePrincipal);
                 $('#cboSedeSecundaria').val(psicologo.idSedeSecundaria);
+                $('#cboSedeTerciaria').val(psicologo.idSedeTerciaria);
 
                 listarEstudios(psicologo.estudios, psicologo.id);
                 global_estudios = psicologo.estudios;
@@ -1109,7 +1118,7 @@
                         icon: "success",
                         text: response.message,
                     });
-                    buscarPsicologo(); // Actualiza la lista después de eliminar
+                    buscarPsicologo();
                 });
             }
         }
@@ -1152,34 +1161,38 @@
                 Especialidad: parseInt($('#cboEspecialidad').val()),
                 Direccion: $('#txtDireccion').val(),
                 Distrito: $('#cboDistrito').val(),
+                IdSedePrincipal: parseInt($('#cboSedePrincipal').val()),
+                IdSedeSecundaria: parseInt($('#cboSedeSecundaria').val()),
+                IdSedeTerciaria: parseInt($('#cboSedeTerciaria').val()),
+
                 Refrigerio: $('#cboRefrigerio').val(),
                 InicioLabores: $('#cboHorario1').val(),
-                FinLabores: $('#cboHorario2').val(),
-                IdSedePrincipal: parseInt($('#cboSedePrincipal').val()),
-                IdSedeSecundaria: parseInt($('#cboSedeSecundaria').val())
+                FinLabores: $('#cboHorario2').val()
             };
-            psicologo.estudios = obtenerEstudiosGuardar(psicologo.Id);
+            psicologo.estudios = []; //obtenerEstudiosGuardar(psicologo.Id); --> se omite el registro de estudios
             let dataToSend = {
                 psicologo: psicologo // Enviar dentro de un objeto "psicologo"
             };
 
-            if (psicologo.IdSedeSecundaria != -1 && psicologo.IdSedePrincipal == psicologo.IdSedeSecundaria) {
+            if (psicologo.IdSedeSecundaria != -1 &&
+                psicologo.IdSedePrincipal == psicologo.IdSedeSecundaria &&
+                psicologo.IdSedeSecundaria != psicologo.IdSedeTerciaria) {
                 Swal.fire({
                     icon: "error",
                     title: "Oops...",
-                    text: "El centro principal y el opcional no pueden ser los mismos.",
+                    text: "El centro principal y no puede coincidir con alguna de las sedes opcionales.",
                 });
                 return;
             }
 
-            if (parseInt(psicologo.InicioLabores.slice(0, 2)) >= parseInt(psicologo.FinLabores.slice(0, 2))){
-                Swal.fire({
-                    icon: "error",
-                    title: "Oops...",
-                    text: "El inicio de labores debe ser menor al fin.",
-                });
-                return;
-            }
+            // if (parseInt(psicologo.InicioLabores.slice(0, 2)) >= parseInt(psicologo.FinLabores.slice(0, 2))){
+            //     Swal.fire({
+            //         icon: "error",
+            //         title: "Oops...",
+            //         text: "El inicio de labores debe ser menor al fin.",
+            //     });
+            //     return;
+            // }
 
             let url = psicologo.Id ? '/Mantenimiento/Psicologo/Editar' : '/Mantenimiento/Psicologo/Agregar';
             $.ajax({

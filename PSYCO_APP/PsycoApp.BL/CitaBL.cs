@@ -304,12 +304,12 @@ namespace PsycoApp.BL
             return lista;
         }
 
-        public List<Cita> citas_por_paquete(int id_paquete)
+        public async Task<List<Cita>> citas_por_paquete(int id_paquete)
         {
             List<Cita> lista = new List<Cita>();
             try
             {
-                lista = citaDA.citas_por_paquete(id_paquete);
+                lista = await citaDA.citas_por_paquete(id_paquete);
             }
             catch (Exception)
             {

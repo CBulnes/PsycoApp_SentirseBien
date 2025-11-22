@@ -50,7 +50,8 @@ namespace PsycoApp.DA
                             InicioLabores = (string)reader["InicioLabores"],
                             FinLabores = (string)reader["FinLabores"],
                             IdSedePrincipal = (int)reader["IdSedePrincipal"],
-                            IdSedeSecundaria = (int)reader["IdSedeSecundaria"]
+                            IdSedeSecundaria = (int)reader["IdSedeSecundaria"],
+                            IdSedeTerciaria = (int)reader["IdSedeTerciaria"]
                         };
                     }
                 }
@@ -196,6 +197,7 @@ namespace PsycoApp.DA
                 command.Parameters.AddWithValue("@FinLabores", psicologo.FinLabores);
                 command.Parameters.AddWithValue("@IdSedePrincipal", psicologo.IdSedePrincipal);
                 command.Parameters.AddWithValue("@IdSedeSecundaria", psicologo.IdSedeSecundaria);
+                command.Parameters.AddWithValue("@IdSedeTerciaria", psicologo.IdSedeTerciaria);
                 command.Parameters.AddWithValue("@Especialidad", psicologo.Especialidad);
                 command.Parameters.AddWithValue("@Direccion", psicologo.Direccion);
                 command.Parameters.AddWithValue("@Distrito", psicologo.Distrito);
@@ -227,6 +229,7 @@ namespace PsycoApp.DA
                 command.Parameters.AddWithValue("@FinLabores", psicologo.FinLabores);
                 command.Parameters.AddWithValue("@IdSedePrincipal", psicologo.IdSedePrincipal);
                 command.Parameters.AddWithValue("@IdSedeSecundaria", psicologo.IdSedeSecundaria);
+                command.Parameters.AddWithValue("@IdSedeTerciaria", psicologo.IdSedeTerciaria);
                 command.Parameters.AddWithValue("@Especialidad", psicologo.Especialidad);
                 command.Parameters.AddWithValue("@Direccion", psicologo.Direccion);
                 command.Parameters.AddWithValue("@Distrito", psicologo.Distrito);

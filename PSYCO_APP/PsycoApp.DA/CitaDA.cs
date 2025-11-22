@@ -507,58 +507,64 @@ namespace PsycoApp.DA
             return lista;
         }
 
-        public List<Cita> citas_por_paquete(int id_paquete)
+        public async Task<List<Cita>> citas_por_paquete(int id_paquete)
         {
             List<Cita> lista = new List<Cita>();
             try
             {
-                cn.Open();
+                await cn.OpenAsync();
+
                 SqlCommand cmd = new SqlCommand(Procedures.sp_listar_citas_paquete, cn);
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.Add("@id_paquete", SqlDbType.Int).Value = id_paquete;
 
-                SqlDataAdapter da = new SqlDataAdapter(cmd);
-                DataTable dt = new DataTable();
-                da.Fill(dt);
-
-                foreach (DataRow row in dt.Rows)
+                using (SqlDataReader reader = await cmd.ExecuteReaderAsync())
                 {
-                    Cita cita = new Cita();
-                    cita.id_cita = Convert.ToInt32(row["id_cita"]);
-                    cita.id_paquete = Convert.ToInt32(row["id_paquete"]);
-                    cita.id_estado_cita = Convert.ToInt32(row["id_estado_cita"]);
-                    cita.estado = Convert.ToString(row["estado"]);
-                    cita.fecha_cita = Convert.ToString(row["fecha_cita"]);
-                    cita.hora_cita = Convert.ToString(row["hora_cita"]);
-                    cita.id_doctor_asignado = Convert.ToInt32(row["id_doctor_asignado"]);
-                    cita.doctor_asignado = Convert.ToString(row["doctor_asignado"]);
-                    cita.id_paciente = Convert.ToInt32(row["id_paciente"]);
-                    cita.dni_paciente = Convert.ToString(row["dni_paciente"]);
-                    cita.paciente = Convert.ToString(row["paciente"]);
-                    cita.tipo = Convert.ToString(row["tipo"]);
-                    cita.telefono = Convert.ToString(row["telefono"]);
-                    cita.moneda = Convert.ToString(row["moneda"]);
-                    cita.monto_pactado = Convert.ToDecimal(row["monto_pactado"]);
-                    cita.monto_pagado = Convert.ToDecimal(row["monto_pagado"]);
-                    cita.monto_pendiente = Convert.ToDecimal(row["monto_pendiente"]);
-                    cita.id_servicio = Convert.ToInt32(row["id_servicio"]);
-                    cita.nombre_servicio = Convert.ToString(row["nombre_servicio"]);
-                    cita.id_sede = Convert.ToInt32(row["id_sede"]);
-                    cita.tipo_cita = Convert.ToString(row["tipo_cita"]);
-                    cita.esEvaluacion = Convert.ToBoolean(row["esEvaluacion"]);
-                    cita.siglas = Convert.ToString(row["siglas"]);
-                    cita.feedback = Convert.ToBoolean(row["feedback"]);
-                    cita.comentario = Convert.ToString(row["comentario"]);
-                    cita.pago_gratis = Convert.ToBoolean(row["pago_gratis"]);
-                    lista.Add(cita);
+                    while (await reader.ReadAsync())
+                    {
+                        Cita cita = new Cita();
+                        cita.id_cita = Convert.ToInt32(reader["id_cita"]);
+                        cita.id_paquete = Convert.ToInt32(reader["id_paquete"]);
+                        cita.id_estado_cita = Convert.ToInt32(reader["id_estado_cita"]);
+                        cita.estado = Convert.ToString(reader["estado"]);
+                        cita.fecha_cita = Convert.ToString(reader["fecha_cita"]);
+                        cita.id_doctor_asignado = Convert.ToInt32(reader["id_doctor_asignado"]);
+                        cita.doctor_asignado = Convert.ToString(reader["doctor_asignado"]);
+                        cita.id_paciente = Convert.ToInt32(reader["id_paciente"]);
+                        cita.dni_paciente = Convert.ToString(reader["dni_paciente"]);
+                        cita.paciente = Convert.ToString(reader["paciente"]);
+                        cita.tipo = Convert.ToString(reader["tipo"]);
+                        cita.telefono = Convert.ToString(reader["telefono"]);
+                        cita.moneda = Convert.ToString(reader["moneda"]);
+                        cita.monto_pactado = Convert.ToDecimal(reader["monto_pactado"]);
+                        cita.monto_pagado = Convert.ToDecimal(reader["monto_pagado"]);
+                        cita.monto_pendiente = Convert.ToDecimal(reader["monto_pendiente"]);
+                        cita.id_servicio = Convert.ToInt32(reader["id_servicio"]);
+                        cita.nombre_servicio = Convert.ToString(reader["nombre_servicio"]);
+                        cita.id_sede = Convert.ToInt32(reader["id_sede"]);
+                        cita.tipo_cita = Convert.ToString(reader["tipo_cita"]);
+                        cita.esEvaluacion = Convert.ToBoolean(reader["esEvaluacion"]);
+                        cita.siglas = Convert.ToString(reader["siglas"]);
+                        cita.feedback = Convert.ToBoolean(reader["feedback"]);
+                        cita.comentario = Convert.ToString(reader["comentario"]);
+                        cita.pago_gratis = Convert.ToBoolean(reader["pago_gratis"]);
+
+                        TimeSpan hora = reader.GetTimeSpan(reader.GetOrdinal("hora_cita"));
+                        cita.hora_cita_mostrar = DateTime.Today.Add(hora).ToString("hh:mm tt");
+                        cita.hora_cita = hora.ToString(@"hh\:mm\:ss\.fffffff");
+                        //cita.hora_cita = Convert.ToString(row["hora_cita"]);
+                        lista.Add(cita);
+                    }
                 }
             }
-            catch (Exception e)
+            catch
             {
-                //LOG.registrarLog("(Excepcion " + random_str + ")[ERROR]->[CitaDA.cs / disponibilidad_doctor <> " + e.Message.ToString(), "ERROR", main_path);
                 lista.Clear();
             }
-            cn.Close();
+            finally
+            {
+                await cn.CloseAsync();
+            }
             return lista;
         }
 

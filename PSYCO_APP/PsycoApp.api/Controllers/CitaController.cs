@@ -219,12 +219,12 @@ namespace PsycoApp.api.Controllers
         }
 
         [HttpGet("citas_por_paquete/{id_paquete}")]
-        public List<Cita> citas_por_paquete(int id_paquete)
+        public async Task<List<Cita>> citas_por_paquete(int id_paquete)
         {
             List<Cita> lista = new List<Cita>();
             try
             {
-                lista = citaBL.citas_por_paquete(id_paquete);
+                lista = await citaBL.citas_por_paquete(id_paquete);
             }
             catch (Exception)
             {

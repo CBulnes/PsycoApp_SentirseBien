@@ -357,6 +357,7 @@
     #pacientesModal {
         display: block;
         width: 800px;
+        /*width: 70%;*/
         height: auto;
         max-height: 90vh;
         background-color: #FFF;

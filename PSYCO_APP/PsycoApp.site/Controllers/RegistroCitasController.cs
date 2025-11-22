@@ -216,7 +216,7 @@ namespace PsycoApp.site.Controllers
         }
 
         [HttpGet]
-        public async Task<List<entities.Paciente>> listar_pacientes_dinamico(int page = 1, string filtro = "", int pageSize = 10)
+        public async Task<List<entities.Paciente>> listar_pacientes_dinamico(int page = 1, string filtro = "", int pageSize = 10, bool IdBusqueda = false)
         {
             var id_sede = HttpContext.Session.GetInt32("id_sede");
 
@@ -232,7 +232,7 @@ namespace PsycoApp.site.Controllers
             {
                 string apiUrl =
                     url_lista_psicologos_dinamico +
-                    $"?page={page}&pageSize={pageSize}&search={filtro}&sede={id_sede}";
+                    $"?page={page}&pageSize={pageSize}&search={(IdBusqueda ? filtro : "*" + filtro + "*")}&sede={id_sede}";
 
                 // 🔥 AQUÍ estaba tu error → faltaba el await
                 string res = await ApiCaller.consume_endpoint_method_async(apiUrl, null, "GET");

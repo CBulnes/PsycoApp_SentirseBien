@@ -204,7 +204,7 @@ function searchPatientsModal(filtro) {
     // Llamada AJAX para búsqueda dinámica
     console.log('1');
     $.ajax({
-        url: `/RegistroCitas/listar_pacientes_dinamico?filtro=${filtro}&page=1&pageSize=10`,
+        url: `/RegistroCitas/listar_pacientes_dinamico?filtro=${filtro}&page=1&pageSize=10&IdBusqueda=true`,
         type: "GET",
         beforeSend: function () {
            
@@ -253,7 +253,7 @@ function searchPatients(filtro) {
     console.log('2');
     // Llamada AJAX para búsqueda dinámica
     $.ajax({
-        url: `/RegistroCitas/listar_pacientes_dinamico?filtro=${filtro}&page=1&pageSize=10`,
+        url: `/RegistroCitas/listar_pacientes_dinamico?filtro=${filtro}&page=1&pageSize=10&IdBusqueda=false`,
         type: "GET",
         beforeSend: function () {
             // Limpiar opciones actuales antes de mostrar resultados de búsqueda
@@ -300,7 +300,7 @@ function loadPatients(filtro = "", page) {
     console.log('3');
     var html = '';
     $.ajax({
-        url: `/RegistroCitas/listar_pacientes_dinamico?filtro=${filtro}&page=${page}&pageSize=10`,
+        url: `/RegistroCitas/listar_pacientes_dinamico?filtro=${filtro}&page=${page}&pageSize=10&IdBusqueda=false`,
         type: "GET",
         data: {},
         async: false,
@@ -401,7 +401,7 @@ function verFechasAdicionales(servicio = null) {
                     html += '</tr>';
 
                     cbosEspecialistas.push({ idCombo: 'cboEspecialista' + i, valor: citasPaquete[i].id_doctor_asignado, deshabilitar });
-                    cbosHorarios.push({ idCombo: 'cboHorario' + i, valor: citasPaquete[i].hora_cita, deshabilitar });
+                    cbosHorarios.push({ idCombo: 'cboHorario' + i, valor: citasPaquete[i].hora_cita_mostrar, deshabilitar });
                 }
             },
             error: function (response) {
@@ -427,6 +427,7 @@ function verFechasAdicionales(servicio = null) {
                 }
                 setTimeout(() => {
                     for (var item of cbosHorarios) {
+                        debugger;
                         const $opcion = $('#' + item.idCombo + ' option[data-original="' + item.valor + '"]');
 
                         if ($opcion.length) {
@@ -646,7 +647,7 @@ function ver_cita(e) {
         }).then(() => { /* No se usa aquí */ });
 
         // Detectar los clics manualmente
-        $(document).on('click', '#btnFechas', function () {
+        $(document).one('click', '#btnFechas', function () {
             _id_paquete_ = id_paquete;
             verFechasAdicionales($(e).attr('data-servicio'));
             Swal.close();
