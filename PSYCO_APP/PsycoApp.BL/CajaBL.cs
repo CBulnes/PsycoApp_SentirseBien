@@ -115,5 +115,16 @@ namespace PsycoApp.BL
             return lista;
         }
 
+        #region caja_nuevo
+        public async Task<RespuestaUsuario> aperturar_caja(CajaNuevo request)
+        {
+            return await cajaDA.aperturar_caja(request);
+        }
+        public async Task<RespuestaUsuario> cerrar_caja(CajaNuevo request)
+        {
+            return await cajaDA.cerrar_caja(request);
+        }
+        #endregion
+
     }
 }

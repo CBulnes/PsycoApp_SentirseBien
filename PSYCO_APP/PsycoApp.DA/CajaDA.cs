@@ -265,5 +265,76 @@ namespace PsycoApp.DA
             return lista;
         }
 
+        #region caja_nuevo
+        public async Task<RespuestaUsuario> aperturar_caja(CajaNuevo request)
+        {
+            RespuestaUsuario res_ = new RespuestaUsuario();
+            try
+            {
+                await cn.OpenAsync();
+
+                using (SqlCommand cmd = new SqlCommand("dbo.SP_APERTURAR_CAJA", cn))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.Add("@UsuarioApertura", SqlDbType.VarChar).Value = request.usuario;
+                    cmd.Parameters.Add("@Observaciones", SqlDbType.VarChar).Value = request.observaciones;
+
+                    using (SqlDataReader reader = await cmd.ExecuteReaderAsync())
+                    {
+                        if (await reader.ReadAsync())
+                        {
+                            res_.descripcion = reader["rpta"].ToString();
+                        }
+                    }
+                }
+                res_.estado = res_.descripcion == "OK";
+            }
+            catch (Exception)
+            {
+                res_.estado = false;
+                res_.descripcion = "Ocurrió un error al aperturar la caja.";
+            }
+            finally
+            {
+                await cn.CloseAsync();
+            }
+            return res_;
+        }
+
+        public async Task<RespuestaUsuario> cerrar_caja(CajaNuevo request)
+        {
+            RespuestaUsuario res_ = new RespuestaUsuario();
+            try
+            {
+                await cn.OpenAsync();
+
+                using (SqlCommand cmd = new SqlCommand("dbo.SP_CERRAR_CAJA", cn))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.Add("@UsuarioCierre", SqlDbType.VarChar).Value = request.usuario;
+                    cmd.Parameters.Add("@Observaciones", SqlDbType.VarChar).Value = request.observaciones;
+
+                    using (SqlDataReader reader = await cmd.ExecuteReaderAsync())
+                    {
+                        if (await reader.ReadAsync())
+                        {
+                            res_.descripcion = reader["rpta"].ToString();
+                        }
+                    }
+                }
+                res_.estado = res_.descripcion == "OK";
+            }
+            catch (Exception)
+            {
+                res_.estado = false;
+                res_.descripcion = "Ocurrió un error al cerrar la caja.";
+            }
+            finally
+            {
+                await cn.CloseAsync();
+            }
+            return res_;
+        }
+        #endregion
     }
 }

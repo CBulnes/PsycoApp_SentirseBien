@@ -149,5 +149,18 @@ namespace PsycoApp.api.Controllers
             return lista;
         }
 
+        #region caja_nuevo
+        [HttpPost("aperturar_caja")]
+        public async Task<RespuestaUsuario> aperturar_caja([FromBody] CajaNuevo request)
+        {
+            return await cajaBL.aperturar_caja(request);
+        }
+        [HttpPost("cerrar_caja")]
+        public async Task<RespuestaUsuario> cerrar_caja([FromBody] CajaNuevo request)
+        {
+            return await cajaBL.cerrar_caja(request);
+        }
+        #endregion
+
     }
 }
