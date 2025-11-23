@@ -660,7 +660,7 @@ function ver_cita(e) {
             var id_paciente = $(e).attr('data-id-paciente');
             var hora_Cita = $(e).attr('data-hora-cita');
             var estado = $(e).attr('data-estado');
-            var fecha_cita = $(e).attr('data-fecha-cita');
+            var fecha_cita = $(e).attr('data-fecha-cita') == '' ? GetFechaActual() : $(e).attr('data-fecha-cita');
             var telefono = $(e).attr('data-telefono');
             var moneda = $(e).attr('data-moneda');
             var monto_pactado = $(e).attr('data-monto-pactado');
@@ -747,7 +747,7 @@ function ver_cita(e) {
     var id_paciente = $(e).attr('data-id-paciente');
     var hora_Cita = $(e).attr('data-hora-cita');
     var estado = $(e).attr('data-estado');
-    var fecha_cita = $(e).attr('data-fecha-cita');
+    var fecha_cita = $(e).attr('data-fecha-cita') == '' ? GetFechaActual() : $(e).attr('data-fecha-cita');
     var telefono = $(e).attr('data-telefono');
     var moneda = $(e).attr('data-moneda');
     var monto_pactado = $(e).attr('data-monto-pactado');
@@ -1260,7 +1260,7 @@ function cargar_datos_cita(id_cita, id_doctor, id_paciente, fecha, hora, estado,
     $('#ulTabs').hide();
     $('.fechasAdicionales').addClass('hide-element');
 
-    $('#txtFecha').attr('data-fecha', fecha).val(fecha_formato_ddmmyyyy(fecha));
+    $('#txtFecha').attr('data-fecha', fecha).val(fecha);
     $('#txtHora').val(hora).attr('data-hora', hora);
     $('#cboDoctor').val(id_doctor).attr('data-id-doctor', id_doctor);
     if (id_paciente > 0)
@@ -1783,6 +1783,12 @@ function actualizar_servicio() {
         }
     });
 }
+
+$('.dateCrearCita').on('change', function () {
+    var fechaSeleccionada = $(this).val();
+    $('.dateCrearCita').attr('data-fecha', fechaSeleccionada);
+    verificar_disponibilidad();
+});
 
 function guardar_cita() {
     var fecha = $('#txtFecha').attr('data-fecha');

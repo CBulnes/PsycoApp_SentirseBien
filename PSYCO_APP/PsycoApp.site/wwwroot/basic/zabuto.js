@@ -893,13 +893,13 @@ function contenido_cita(dia, mes, año, hora, btnNuevaCita = false, btnCita = fa
 
     if (btnCita) {
         if (html != '-') {
-            if (parseDate(fecha) >= parseDate(fecha_actual())) {
-                if (btnNuevaCita) {
-                    html = '<button data-id-cita="0" data-id-especialista="-1" data-evaluacion="false" data-servicio="" data-id-paciente="-1" data-fecha-cita="' + fecha + '" data-pago-gratis="0" data-hora-cita="" data-estado="-" data-telefono="--" data-moneda="S/." data-monto-pactado="0.00" data-monto-pagado="0.00" data-monto-pendiente="0.00" data-id-servicio="-1" data-id-sede="-1" data-dni-paciente="--" data-paciente="" data-id-paquete="0" onclick="ver_cita(this)" class="btn btn-primary main_color btn_nueva_cita">+</button>';
-                } else {
-                    html += '<button data-id-cita="0" data-id-especialista="-1" data-evaluacion="false" data-servicio="" data-id-paciente="-1" data-fecha-cita="' + fecha + '" data-pago-gratis="0" data-hora-cita="" data-estado="-" data-telefono="--" data-moneda="S/." data-monto-pactado="0.00" data-monto-pagado="0.00" data-monto-pendiente="0.00" data-id-servicio="-1" data-id-sede="-1" data-dni-paciente="--" data-paciente="" data-id-paquete="0" onclick="ver_cita(this)" class="btn btn-primary main_color btn_nueva_cita">+</button>';
-                }
-            }
+            //if (parseDate(fecha) >= parseDate(fecha_actual())) {
+            //    if (btnNuevaCita) {
+            //        html = '<button data-id-cita="0" data-id-especialista="-1" data-evaluacion="false" data-servicio="" data-id-paciente="-1" data-fecha-cita="' + fecha + '" data-pago-gratis="0" data-hora-cita="" data-estado="-" data-telefono="--" data-moneda="S/." data-monto-pactado="0.00" data-monto-pagado="0.00" data-monto-pendiente="0.00" data-id-servicio="-1" data-id-sede="-1" data-dni-paciente="--" data-paciente="" data-id-paquete="0" onclick="ver_cita(this)" class="btn btn-primary main_color btn_nueva_cita">+</button>';
+            //    } else {
+            //        html += '<button data-id-cita="0" data-id-especialista="-1" data-evaluacion="false" data-servicio="" data-id-paciente="-1" data-fecha-cita="' + fecha + '" data-pago-gratis="0" data-hora-cita="" data-estado="-" data-telefono="--" data-moneda="S/." data-monto-pactado="0.00" data-monto-pagado="0.00" data-monto-pendiente="0.00" data-id-servicio="-1" data-id-sede="-1" data-dni-paciente="--" data-paciente="" data-id-paquete="0" onclick="ver_cita(this)" class="btn btn-primary main_color btn_nueva_cita">+</button>';
+            //    }
+            //}
         }
     }
     return html;

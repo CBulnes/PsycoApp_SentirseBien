@@ -140,7 +140,7 @@
   
     </div>
 
-    <div class="row sb-reg-citas-list-filtro">
+    <div class="row sb-reg-citas-list-filtro_">
         <div class="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4 active-buscador-bloque-modulo">
             <span class="label-form active-texto-modulo">Paciente</span>
             <select class="form-control active-select-modulo" id="cboPacienteFiltro" onchange="recargar_citas()" data-placeholder="Elija Paciente">
@@ -164,7 +164,17 @@
                 <option value="2">Surco</option> *@
             </select>
         </div>
-        <a onclick="$('#pacientesModal').modal('show');" class="btn modal-trigger sb-reg-citas-button active-botonera-modulo"><p>Acceso a Pacientes</p></a>
+
+        <div class="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
+            <span class="label-form active-texto-modulo">&nbsp;</span>
+            <a onclick="$('#pacientesModal').modal('show');" class="btn modal-trigger sb-reg-citas-button active-botonera-modulo" style="margin-left: 0px; text-align: center; display: block;">Acceso a pacientes</a>
+        </div>
+
+        <div class="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
+            <span class="label-form active-texto-modulo">&nbsp;</span>
+            <a data-id-cita="0" data-id-especialista="-1" data-evaluacion="false" data-servicio="" data-id-paciente="-1" data-fecha-cita="" data-pago-gratis="0" data-hora-cita="" data-estado="-" data-telefono="--" data-moneda="S/." data-monto-pactado="0.00" data-monto-pagado="0.00" data-monto-pendiente="0.00" data-id-servicio="-1" data-id-sede="-1" data-dni-paciente="--" data-paciente="" data-id-paquete="0" onclick="ver_cita(this)" class="btn modal-trigger sb-reg-citas-button active-botonera-modulo btn_nueva_cita" style="margin-left: 0px; text-align: center; display: block;">Nueva cita</a>
+        </div>
+        
     </div>
 
     <div class="sb-reg-citas-table-calendar table-responsive calendar-container my-calendar">
@@ -274,7 +284,7 @@
                             <div class="sb-reg-citas-popup-tab-panel-block" style="display: inline-flex;">
                                 <div class="sb-reg-citas-popup-tab-panel-block-item" style="width: 50%; display: inline-flex">
                                     <span class="label-form">Fecha cita</span>
-                                    <input id="txtFecha" class="form-control" type="text" autocomplete="off" disabled="disabled" />
+                                    <input id="txtFecha" class="dateCrearCita form-control" type="date" autocomplete="off"/>
                                 </div>
                                 <div class="sb-reg-citas-popup-tab-panel-block-item fechasAdicionales hide-element" style="width: 50%; display: inline-flex" onclick="verFechasAdicionales()">
                                     <span class="label-form">&nbsp;</span>
