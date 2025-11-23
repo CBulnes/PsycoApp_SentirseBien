@@ -82,7 +82,8 @@
 }
 
 .sb-reg-citas-popup-container {
-    width: 800px;
+    /*width: 800px;*/
+    width: 80%;
     height: auto;
     max-height: 90vh;
     background-color: #FFF;
