@@ -10,6 +10,7 @@ using Newtonsoft.Json;
 using Microsoft.AspNetCore.Http;
 using System.Net.Http;
 using Microsoft.Extensions.Caching.Memory;
+using System.Drawing.Printing;
 
 namespace PsycoApp.site.Controllers
 {
@@ -53,10 +54,16 @@ namespace PsycoApp.site.Controllers
         {
             if (!string.IsNullOrEmpty(HttpContext.Session.GetString("nombres") as string))
             {
-                string urlPaciente = string.IsNullOrEmpty("") ?
-                 $"{apiUrl}/listar/{1}/{10}" :
-                 $"{apiUrl}/buscar?nombre={""}&pageNumber={1}&pageSize={10}";
+                //string urlPaciente = string.IsNullOrEmpty("") ?
+                // $"{apiUrl}/listar/{1}/{10}" :
+                // $"{apiUrl}/buscar?nombre={""}&pageNumber={1}&pageSize={10}";
 
+                var id_sedes = HttpContext.Session.GetInt32("id_sede");
+                // Construir la URL para la API dependiendo de si hay un término de búsqueda
+                string urlPaciente = string.IsNullOrEmpty("") ?
+                   //$"{apiUrl}/listar/{pageNumber}/{pageSize}" :
+                   $"{apiUrl}/listarSede/{1}/{10}/{id_sedes}" :
+                    $"{apiUrl}/buscar?nombre={""}&pageNumber={1}&pageSize={10}&sede={id_sedes}";
                 dynamic obj = new System.Dynamic.ExpandoObject();
                 string path = $"{this.Request.Scheme}://{this.Request.Host}{this.Request.PathBase}";
                 obj.path = path;
@@ -199,6 +206,7 @@ namespace PsycoApp.site.Controllers
         [HttpGet]
         public ActionResult<List<entities.Paciente>> listar_pacientes()
         {
+            var id_sede = HttpContext.Session.GetInt32("id_sede");
             List<entities.Paciente> lista = new List<entities.Paciente>();
             string res = "";
             try

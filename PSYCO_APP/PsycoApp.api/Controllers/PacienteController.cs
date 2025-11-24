@@ -28,6 +28,20 @@ namespace PsycoApp.api.Controllers
             }
         }
 
+        [HttpGet("listarSede/{pagina}/{tamanoPagina}/{sede}")]
+        public ActionResult<List<Paciente>> ListarSede(int pagina = 1, int tamanoPagina = 100,int sede=0)
+        {
+            try
+            {
+                var pacientes = _pacienteBL.ListarPacientesSede(pagina, tamanoPagina, sede);
+                return Ok(pacientes);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
         [HttpPost("agregar")]
         public ActionResult Agregar([FromBody] Paciente paciente)
         {
@@ -43,13 +57,13 @@ namespace PsycoApp.api.Controllers
         }
 
         [HttpGet("buscar")]
-        public ActionResult Buscar([FromQuery] string nombre, int pageNumber = 1, int pageSize = 10)
+        public ActionResult Buscar([FromQuery] string nombre, int pageNumber = 1, int pageSize = 10, int sede=0)
         {
             if (string.IsNullOrEmpty(nombre))
                 nombre = "";
             try
             {
-                var pacientes = _pacienteBL.BuscarPaciente(nombre, pageNumber, pageSize);
+                var pacientes = _pacienteBL.BuscarPaciente(nombre, pageNumber, pageSize, sede);
                 return Ok(pacientes);
             }
             catch (Exception ex)

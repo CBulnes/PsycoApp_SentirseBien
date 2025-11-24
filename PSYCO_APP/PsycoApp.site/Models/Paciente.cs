@@ -15,5 +15,6 @@ namespace PsycoApp.site.Models
         public string Sexo { get; set; }
         public string Estado { get; set; }
         public Int32? id_tipousuario { get; set; }
+        public Int32? id_sede { get; set; }
     }
 }

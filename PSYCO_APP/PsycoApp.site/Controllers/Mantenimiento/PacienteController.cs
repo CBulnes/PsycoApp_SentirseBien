@@ -23,10 +23,12 @@ namespace PsycoApp.site.Controllers.Mantenimiento
         {
             if (!string.IsNullOrEmpty(HttpContext.Session.GetString("nombres") as string))
             {
+                var id_sedes = HttpContext.Session.GetInt32("id_sede");
                 // Construir la URL para la API dependiendo de si hay un término de búsqueda
                 string url = string.IsNullOrEmpty(search) ?
-                    $"{apiUrl}/listar/{pageNumber}/{pageSize}" :
-                    $"{apiUrl}/buscar?nombre={search}&pageNumber={pageNumber}&pageSize={pageSize}";
+                    //$"{apiUrl}/listar/{pageNumber}/{pageSize}" :
+                    $"{apiUrl}/listarSede/{pageNumber}/{pageSize}/{id_sedes}" :
+                    $"{apiUrl}/buscar?nombre={search}&pageNumber={pageNumber}&pageSize={pageSize}&sede={id_sedes}";
 
                 var pacientes = await GetFromApiAsync<List<PsycoApp.entities.Paciente>>(url);
                 var pacientesViewModel = pacientes.Select(p => new PsycoApp.site.Models.Paciente
@@ -83,7 +85,8 @@ namespace PsycoApp.site.Controllers.Mantenimiento
         [HttpPost]
         public async Task<IActionResult> Buscar(string nombre, int pageNumber = 1, int pageSize = 10)
         {
-            string url = $"{apiUrl}/buscar?nombre={nombre}&pageNumber={pageNumber}&pageSize={pageSize}";
+            var id_sedes = HttpContext.Session.GetInt32("id_sede");
+            string url = $"{apiUrl}/buscar?nombre={nombre}&pageNumber={pageNumber}&pageSize={pageSize}&sede={id_sedes}";
             var pacientes = await GetFromApiAsync<List<entities.Paciente>>(url);
 
             dynamic obj = new System.Dynamic.ExpandoObject();
@@ -132,7 +135,8 @@ namespace PsycoApp.site.Controllers.Mantenimiento
         [HttpPost]
         public async Task<IActionResult> BuscarPacienteCita(string nombre, int pageNumber = 1, int pageSize = 10)
         {
-            string url = $"{apiUrl}/buscar?nombre={nombre}&pageNumber={pageNumber}&pageSize={pageSize}";
+            var id_sedes = HttpContext.Session.GetInt32("id_sede");
+            string url = $"{apiUrl}/buscar?nombre={nombre}&pageNumber={pageNumber}&pageSize={pageSize}&sede={id_sedes}";
             var pacientes = await GetFromApiAsync<List<entities.Paciente>>(url);
 
             dynamic obj = new System.Dynamic.ExpandoObject();
@@ -181,6 +185,7 @@ namespace PsycoApp.site.Controllers.Mantenimiento
         {
             if (ModelState.IsValid)
             {
+                paciente.id_sede = HttpContext.Session.GetInt32("id_sede");
                 string url = $"{apiUrl}/agregar";
                 var response = await PostToApiAsync(url, paciente);
                 if (response.IsSuccessStatusCode)
@@ -309,9 +314,12 @@ namespace PsycoApp.site.Controllers.Mantenimiento
             try
             {
                 // Construir la URL para llamar a la API según el término de búsqueda
-                string url = string.IsNullOrEmpty(search)
-                    ? $"{apiUrl}/listar/{pageNumber}/{pageSize}"
-                    : $"{apiUrl}/buscar?nombre={search}&pageNumber={pageNumber}&pageSize={pageSize}";
+                var id_sedes = HttpContext.Session.GetInt32("id_sede");
+                // Construir la URL para la API dependiendo de si hay un término de búsqueda
+                string url = string.IsNullOrEmpty(search) ?
+                    //$"{apiUrl}/listar/{pageNumber}/{pageSize}" :
+                    $"{apiUrl}/listarSede/{pageNumber}/{pageSize}/{id_sedes}" :
+                    $"{apiUrl}/buscar?nombre={search}&pageNumber={pageNumber}&pageSize={pageSize}&sede={id_sedes}";
 
                 // Obtener la lista de pacientes desde la API
                 var pacientes = await GetFromApiAsync<List<PsycoApp.entities.Paciente>>(url);

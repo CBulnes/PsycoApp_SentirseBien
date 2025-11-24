@@ -20,15 +20,20 @@ namespace PsycoApp.BL
             return _pacienteDA.ListarPacientes(pagina, tamanoPagina);
         }
 
+        public List<Paciente> ListarPacientesSede(int pagina, int tamanoPagina, int sede)
+        {
+            return _pacienteDA.ListarPacientesSede(pagina, tamanoPagina,sede);
+        }
+
 
 
         public void AgregarPaciente(Paciente paciente)
         {
             _pacienteDA.AgregarPaciente(paciente);
         }
-        public List<Paciente> BuscarPaciente(string nombre, int pageNumber = 1, int pageSize = 10)
+        public List<Paciente> BuscarPaciente(string nombre, int pageNumber = 1, int pageSize = 10,int sede = 0)
         {
-           return _pacienteDA.BuscarPaciente(nombre,pageNumber,pageSize);
+           return _pacienteDA.BuscarPaciente(nombre,pageNumber,pageSize,sede);
         }
         
         public Paciente BuscarPacienteId(int id)
