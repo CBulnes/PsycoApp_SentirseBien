@@ -187,7 +187,7 @@ var obtener_horarios_fecha = function (fecha, idEspecialista = null) {
         success: function (data) {
             if (data.length > 0) {
                 for (item of data) {
-                    html += '<option data-original="' + item.hora_cita + '" value="' + (item.estado == 'DISPONIBLE' ? item.hora_cita : item.estado) + '">' + (item.estado == 'DISPONIBLE' ? item.hora_cita : item.estado) + '</option>';
+                    html += '<option data-original="' + item.hora_cita + '" value="' + (item.estado == 'DISPONIBLE' ? item.hora_cita : item.estado) + '">' + (item.estado == 'DISPONIBLE' ? formatearHoraMostrar(item.hora_cita) : item.estado) + '</option>';
                 }
             }
         },
@@ -338,6 +338,9 @@ function seleccionarPaciente(id) {
         choicesT.setChoiceByValue(id);
         /*recargar_citas_dinamico(String(id));*/
         recargar_citas();
+        setTimeout(() => {
+            $('#cboPacienteFiltro').parent().parent().find('.choices__list--dropdown').find('.choices__list').find('.is-selected').attr('data-value', id);
+        }, 500);
     }, 300); // 300ms de debounce
 
     //var pac = $("#cboPacienteFiltro option[value='" + id + "']").text();
@@ -356,6 +359,14 @@ function formatDateISO(date) {
     const formattedDate = isoString.split("T")[0];
     return formattedDate;
 };
+
+function formatearHoraMostrar(hora) {
+    if (hora == 'RESERVADO' || hora == 'REFRIGERIO') {
+        return hora;
+    } else {
+        return hora.substring(0, 5);
+    }
+}
 
 function verFechasAdicionales(servicio = null) {
     //validar y obtener fechas por el id_paquete
@@ -401,7 +412,7 @@ function verFechasAdicionales(servicio = null) {
                     html += '</tr>';
 
                     cbosEspecialistas.push({ idCombo: 'cboEspecialista' + i, valor: citasPaquete[i].id_doctor_asignado, deshabilitar });
-                    cbosHorarios.push({ idCombo: 'cboHorario' + i, valor: citasPaquete[i].hora_cita_mostrar, deshabilitar });
+                    cbosHorarios.push({ idCombo: 'cboHorario' + i, valor: (citasPaquete[i].hora_cita_mostrar), deshabilitar });
                 }
             },
             error: function (response) {
@@ -2172,7 +2183,7 @@ function disponibilidad_doctor() {
                     var clase = item.estado == 'DISPONIBLE' ? 'item_disponible item_clase' + i.toString() : 'item_reservado';
                     var hora = item.estado == 'DISPONIBLE' ? item.hora_cita : '';
                     var accion = ' onclick="seleccionar_hora_disponible(this)" data-hora="' + hora + '"';
-                    html += '<tr data-option="item_clase' + i.toString() + '" class="' + clase + '"' + accion + '><td class="text-center">' + item.hora_cita_mostrar + '</td><td class="text-center">' + item.estado + '</td></tr>';
+                    html += '<tr data-option="item_clase' + i.toString() + '" class="' + clase + '"' + accion + '><td class="text-center">' + (item.hora_cita_mostrar) + '</td><td class="text-center">' + item.estado + '</td></tr>';
                     i++;
                 }
             }
@@ -2217,7 +2228,7 @@ function disponibilidad_reasignar_doctor() {
                     var clase = item.estado == 'DISPONIBLE' ? 'item_disponible item_clase' + i.toString() : 'item_reservado';
                     var hora = item.estado == 'DISPONIBLE' ? item.hora_cita : '';
                     var accion = ' onclick="seleccionar_hora_disponible(this)" data-hora="' + hora + '"';
-                    html += '<tr data-option="item_clase' + i.toString() + '" class="' + clase + '"' + accion + '><td class="text-center">' + item.hora_cita_mostrar + '</td><td class="text-center">' + item.estado + '</td></tr>';
+                    html += '<tr data-option="item_clase' + i.toString() + '" class="' + clase + '"' + accion + '><td class="text-center">' + (item.hora_cita_mostrar) + '</td><td class="text-center">' + item.estado + '</td></tr>';
                 }
             }
         },
