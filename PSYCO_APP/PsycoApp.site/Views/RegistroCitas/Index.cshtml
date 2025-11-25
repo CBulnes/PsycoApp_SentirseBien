@@ -760,7 +760,11 @@
             // sedes.push({ id: '-2', valor: 'Ambas' });
         } else {
             // caso contrario ve solo lo de su sede asignada
-            sedes.push({ id: idSedePrincipal, valor: sedePrincipal });
+            
+            // sedes.push({ id: idSedePrincipal, valor: sedePrincipal });
+            sedes.push({ id: '1', valor: 'Sentirse bien' });
+            sedes.push({ id: '2', valor: 'Transforma' });
+            sedes.push({ id: '3', valor: 'Miraflores' });
         }
         cargarCombo(sedes, 'cboSedeFiltro');
         cargarCombo(sedes, 'cboSedeChange_');

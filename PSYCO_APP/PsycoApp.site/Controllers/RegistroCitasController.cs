@@ -489,7 +489,7 @@ namespace PsycoApp.site.Controllers
             string res = "";
             try
             {
-                url = url_citas_usuario + "/" + id_usuario + "/" + idPaciente + "/" + idDoctor + "/" + idSede;
+                url = url_citas_usuario + "/" + id_usuario + "/" + idPaciente + "/" + idDoctor + "/" + id_sede;
                 res = ApiCaller.consume_endpoint_method(url, null, "GET");
                 lista = JsonConvert.DeserializeObject<List<Cita>>(res).Where(x => x.id_sede == id_sede).ToList();
             }
