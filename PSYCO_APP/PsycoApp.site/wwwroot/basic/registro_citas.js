@@ -1310,6 +1310,7 @@ function cargar_datos_cita(id_cita, id_doctor, id_paciente, fecha, hora, estado,
     $('#divEspecialista').removeClass('hide-element');
 
     if (id_cita == 0) {
+        $('#txtFecha').removAttr('disabled');
         $('#txtFechaReasignar').val('');
         $('#divHorarios, .divConfirmar').show();
         $('#divReprogramar, #btnConfirmar, #divAtender, #divEstado, #btnCancelar, #divPagoPendiente').hide();
