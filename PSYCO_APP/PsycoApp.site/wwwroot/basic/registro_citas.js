@@ -1324,6 +1324,7 @@ function cargar_datos_cita(id_cita, id_doctor, id_paciente, fecha, hora, estado,
 
         $('#cboPaciente').removeAttr('disabled');
     } else {
+        $('#txtFecha').attr('disabled', true);
         $('#ulTabs').show();
         $('#txtFechaReasignar').val(fecha);
         $('#divEstado').show();
@@ -2223,6 +2224,7 @@ function disponibilidad_reasignar_doctor() {
             }
         },
         success: function (data) {
+            var i = 0;
             if (data.length > 0) {
                 for (item of data) {
                     var clase = item.estado == 'DISPONIBLE' ? 'item_disponible item_clase' + i.toString() : 'item_reservado';
