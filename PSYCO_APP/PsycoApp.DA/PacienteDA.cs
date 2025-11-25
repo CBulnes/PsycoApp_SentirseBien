@@ -53,7 +53,7 @@ namespace PsycoApp.DA
             return paciente;
         }
 
-        public List<Paciente> BuscarPaciente(string nombre, int pageNumber = 1, int pageSize = 10)
+        public List<Paciente> BuscarPaciente(string nombre, int pageNumber = 1, int pageSize = 10,int sede= 0)
         {
             var pacientes = new List<Paciente>();
 
@@ -63,7 +63,7 @@ namespace PsycoApp.DA
                 command.Parameters.AddWithValue("@Nombre", nombre);
                 command.Parameters.AddWithValue("@NumeroPagina", pageNumber);
                 command.Parameters.AddWithValue("@TamanoPagina", pageSize);
-
+                command.Parameters.AddWithValue("@IdSede", sede);
                 _connection.Open();
                 using (var reader = command.ExecuteReader())
                 {
@@ -130,6 +130,46 @@ namespace PsycoApp.DA
 
             return pacientes;
         }
+        public List<Paciente> ListarPacientesSede(int pagina, int tamanoPagina,int sede)
+        {
+            var pacientes = new List<Paciente>();
+
+            using (var command = new SqlCommand("sp_listar_pacientes_paginado_sede", _connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+
+                // Añadir parámetros para la paginación
+                command.Parameters.AddWithValue("@Pagina", pagina);
+                command.Parameters.AddWithValue("@TamanoPagina", tamanoPagina);
+                command.Parameters.AddWithValue("@IdSede", sede);
+                _connection.Open();
+
+                using (var reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        pacientes.Add(new Paciente
+                        {
+                            Id = reader.GetInt32(0),
+                            Nombre = reader.GetString(1),
+                            Apellido = reader.GetString(2),
+                            FechaNacimiento = reader.GetDateTime(3),
+                            DocumentoTipo = reader.GetString(4),
+                            DocumentoNumero = reader.GetString(5),
+                            Telefono = reader.GetString(6),
+                            EstadoCivil = reader.GetString(7),
+                            Sexo = reader.GetString(8),
+                            Estado = reader.GetString(9)
+                        });
+                    }
+                }
+
+                _connection.Close();
+            }
+
+            return pacientes;
+        }
+        
         public void AgregarPaciente(Paciente paciente)
         {
             using (var command = new SqlCommand("sp_agregar_paciente", _connection))
@@ -145,6 +185,7 @@ namespace PsycoApp.DA
                 command.Parameters.AddWithValue("@EstadoCivil", paciente.EstadoCivil);
                 command.Parameters.AddWithValue("@Sexo", paciente.Sexo);
                 command.Parameters.AddWithValue("@Estado", paciente.Estado == null ? "1" : paciente.Estado);
+                command.Parameters.AddWithValue("@IdSede", paciente.id_sede);
 
                 _connection.Open();
                 command.ExecuteNonQuery();

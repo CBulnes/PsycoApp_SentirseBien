@@ -104,13 +104,13 @@
             </div>
 
             <div class="sb-frm-agregar-block">
-                <div class="sb-frm-agregar-block-item">
+                <div class="sb-frm-agregar-block-item" style="display:none !important">
                     <span class="label-form active-texto-modulo">Estado civil</span>
                     <select class="form-control active-select-modulo" id="cboEstadoCivil" name="EstadoCivil" required></select>
                 </div>
             </div>
             <div class="sb-frm-agregar-block">
-                <div class="sb-frm-agregar-block-item">
+                <div class="sb-frm-agregar-block-item" style="display:none !important">
                     <span class="label-form active-texto-modulo">Sexo</span>
                     <select class="form-control active-select-modulo" id="cboSexo" name="Sexo" required></select>
                 </div>
@@ -313,6 +313,27 @@
                 }
             });
         }
+                document.getElementById("txtFecha").addEventListener("paste", function(e) {
+            e.preventDefault();
+
+            let texto = (e.clipboardData || window.clipboardData).getData('text');
+
+            // Detecta DD/MM/YYYY o DD-MM-YYYY
+            let m = texto.match(/^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})$/);
+
+            if (m) {
+                let d = m[1].padStart(2, "0");
+                let mo = m[2].padStart(2, "0");
+                let y = m[3];
+                this.value = `${y}-${mo}-${d}`;
+                return;
+            }
+
+            // Si ya viene en YYYY-MM-DD, sí pega
+            if (/^\d{4}-\d{2}-\d{2}$/.test(texto)) {
+                this.value = texto;
+            }
+        });
 
         function cancelarFormulario() {
             $('#containerFormulario').hide();
