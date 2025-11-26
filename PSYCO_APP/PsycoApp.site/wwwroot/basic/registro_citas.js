@@ -412,7 +412,7 @@ function verFechasAdicionales(servicio = null) {
                     html += '</tr>';
 
                     cbosEspecialistas.push({ idCombo: 'cboEspecialista' + i, valor: citasPaquete[i].id_doctor_asignado, deshabilitar });
-                    cbosHorarios.push({ idCombo: 'cboHorario' + i, valor: (citasPaquete[i].hora_cita_mostrar), deshabilitar });
+                    cbosHorarios.push({ idCombo: 'cboHorario' + i, valor: (citasPaquete[i].hora_cita), deshabilitar });
                 }
             },
             error: function (response) {
@@ -444,7 +444,7 @@ function verFechasAdicionales(servicio = null) {
                             const original = $opcion.data('original');
                             $opcion
                                 .val(original)      // actualiza el value
-                                .text(original)     // actualiza el texto visible
+                                .text(formatearHoraMostrar(original))     // actualiza el texto visible
                                 .prop('selected', true); // selecciona
                         }
 
