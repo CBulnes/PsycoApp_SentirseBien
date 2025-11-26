@@ -8,102 +8,102 @@
 
 <style>
     .item_separado {
-        background-color: #43b33c;
+    background-color: #43b33c;
     }
     .select2-container .select2-dropdown {
-        position: absolute !important;
-        visibility: visible !important;
-        display: block !important;
-        z-index: 9999 !important; /* Asegura que esté sobre otros elementos */
+    position: absolute !important;
+    visibility: visible !important;
+    display: block !important;
+    z-index: 9999 !important; /* Asegura que esté sobre otros elementos */
     }
 
     .select2-container--open .select2-dropdown--below {
-        top: 100% !important; /* Asegura que se posicione debajo del input */
-        left: 0 !important;
-        width: 100% !important;
+    top: 100% !important; /* Asegura que se posicione debajo del input */
+    left: 0 !important;
+    width: 100% !important;
     }
 
     input[type="text"]:disabled, select[disabled] {
-        background: #FFFFFF !important;
+    background: #FFFFFF !important;
     }
 
     .nav-link {
-        width: 50%;
-        padding: 0px !important;
+    width: 50%;
+    padding: 0px !important;
     }
 
-        .nav-link > a {
-            width: 100%;
-            display: block;
-            text-align: center;
-            padding: .5rem 1rem;
-            border-radius: 10px 10px 0px 0px;
-        }
+    .nav-link > a {
+    width: 100%;
+    display: block;
+    text-align: center;
+    padding: .5rem 1rem;
+    border-radius: 10px 10px 0px 0px;
+    }
 
-            .nav-link > a.active {
-                background-color: #1656a0;
-                color: #ffffff;
-            }
+    .nav-link > a.active {
+    background-color: #1656a0;
+    color: #ffffff;
+    }
 
     .tab-pane.active {
-        background-color: #ffffff;
+    background-color: #ffffff;
     }
 
     .day_click_event {
-        cursor: default !important;
+    cursor: default !important;
     }
 
     .header-semanal {
-        color: #868686 !important;
-        font-size: 11px;
-        text-align: center;
+    color: #868686 !important;
+    font-size: 11px;
+    text-align: center;
     }
 
     .diaVacaciones{
-        background-color: #feffb6;
+    background-color: #feffb6;
     }
 
     .calendar-dow > td {
-        border: 2px solid #8d8d8d;
-        color: #333333 !important;
+    border: 2px solid #8d8d8d;
+    color: #333333 !important;
     }
 
     .dia_inhabilitado {
-        background-color: #cfcfcf !important;
+    background-color: #cfcfcf !important;
     }
 
     .active-table-modulo tr:nth-of-type(odd) {
-        background-color: #ededed !important;
+    background-color: #ededed !important;
     }
 
     .active-table-modulo tr:nth-of-type(even) {
-        background-color: #ededed !important;
+    background-color: #ededed !important;
     }
 
     .active-table-modulo .calendar-dow-header th {
-        color: #282828 !important;
+    color: #282828 !important;
     }
 
     .active-table-modulo .calendar-month-header th div span {
-        color: #282828 !important;
+    color: #282828 !important;
     }
 
     #bdTblSemanal tr td {
-        font-size: 12px;
-        border: 2px solid #8d8d8d;
+    font-size: 12px;
+    border: 2px solid #8d8d8d;
     }
 
     #hdTblSemanal tr th {
-        font-size: 12px;
-        padding-top: 10px;
+    font-size: 12px;
+    padding-top: 10px;
     }
 
     .calendar-dow > td {
-        border: 2px solid #919191 !important;
+    border: 2px solid #919191 !important;
     }
 
     #nombreServicio, .new-font{
-        font-size: 18px !important;
+    font-size: 18px !important;
     }
 </style>
 
@@ -135,9 +135,9 @@
             <p class="active-texto-modulo">Evaluación</p>
         </div>
         <div class="sb-reg-citas-color-informe">
-        <p>Informe realizar</p>
+            <p>Informe realizar</p>
         </div>
-  
+
     </div>
 
     <div class="row sb-reg-citas-list-filtro_">
@@ -174,14 +174,14 @@
             <span class="label-form active-texto-modulo">&nbsp;</span>
             <a data-id-cita="0" data-id-especialista="-1" data-evaluacion="false" data-servicio="" data-id-paciente="-1" data-fecha-cita="" data-pago-gratis="0" data-hora-cita="" data-estado="-" data-telefono="--" data-moneda="S/." data-monto-pactado="0.00" data-monto-pagado="0.00" data-monto-pendiente="0.00" data-id-servicio="-1" data-id-sede="-1" data-dni-paciente="--" data-paciente="" data-id-paquete="0" onclick="ver_cita(this)" class="btn modal-trigger sb-reg-citas-button active-botonera-modulo btn_nueva_cita" style="margin-left: 0px; text-align: center; display: block;">Nueva cita</a>
         </div>
-        
+
     </div>
 
     <div class="sb-reg-citas-table-calendar table-responsive calendar-container my-calendar">
         <div id="my-calendar" class=""></div>
     </div>
 
-   @*  <div class="sb-reg-citas-table-calendar my-calendar2 hide-element">
+    @*  <div class="sb-reg-citas-table-calendar my-calendar2 hide-element">
         <div class="sb-reg-citas-table-calendar-month">
             <div class="calendar-month-navigation trigger_mes_anterior" style="cursor: pointer;">
                 <span class="sb-reg-citas-arrow-left">&lt;</span>
@@ -306,7 +306,7 @@
                                         <select class="form-control" id="cboDoctor" onchange="verificar_disponibilidad()">
                                             <option value="-1" data-sedes="-1">Seleccionar</option>
                                         </select>
-                                     </div>
+                                    </div>
                                 </div>
                             </div>
 
@@ -484,10 +484,15 @@
             </div>
             <div class="modal-footer sb-reg-citas-popup-btn">
                 <button type="button" class="btn btn-secondary sb-reg-citas-popup-button-volver" onclick="cerrar_modal_cita()">Volver</button>
+            @if (@dynamicData.id_tipousuario != 4)
+            {
+                 
                 <button type="button" class="btn btn-primary main_color divConfirmar sb-reg-citas-popup-button" onclick="guardar_cita()" id="btnGuardarCita">Guardar</button>
                 <button type="button" class="btn btn-primary main_color divConfirmar sb-reg-citas-popup-button" onclick="confirmar_cita()" id="btnConfirmar">Confirmar</button>
                 <button type="button" class="btn btn-primary main_color sb-reg-citas-popup-button" onclick="atender_cita()" id="divAtender">Atender</button>
                 <button type="button" class="btn btn-primary main_color sb-reg-citas-popup-button" style="background-color: #eb5151 !important;" onclick="cancelar_cita()" id="btnCancelar">Eliminar</button>
+             
+            }
             </div>
         </div>
     </div>
