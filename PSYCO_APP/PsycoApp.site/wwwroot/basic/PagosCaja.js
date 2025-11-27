@@ -7,7 +7,18 @@ var idCita = 0;
 var estado = "";
 var fecha = "";
 
+$(document).ready(function () {
+    console.log("Documento listo");
 
+    cargar_lista_doctores();
+
+    const element = document.querySelector('#cboDoctor');
+    const choices = new Choices(element, {
+        placeholder: true,
+        searchPlaceholderValue: "Buscar...",
+        itemSelectText: "Todos",
+    });
+});
 
 document.addEventListener('DOMContentLoaded', function () {
     const element = document.querySelector('#cboDoctor');

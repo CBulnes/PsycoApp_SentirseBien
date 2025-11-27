@@ -88,6 +88,15 @@
                     </button>
                 </div>
             </div>
+            @* Pagos *@
+            <div class="col-2">
+                <div class="form-group">
+                    <label class="active-titular-modulo">&nbsp;</label>
+                    <button type="button" class="btn btn-doc second_color" onclick="$('#pagosModal').modal('show');">
+                        Registro de&nbsp;pagos
+                    </button>
+                </div>
+            </div>
         </div>
 
         <!-- Contenedor de la tabla -->
@@ -175,6 +184,7 @@
         </div>
     </div>
 </div>
+<!-- Referencia la vista parcial de pacientes dentro del modal -->
 
 <div class="row" style="background-color: #FFF; display: none;">
     <div class="card-body">
@@ -307,6 +317,8 @@
         </div>
     </div>
 </div>
+
+@Html.Partial("/Views/HistorialCitas/_PagosModal.cshtml")
 
 <script>
     function cargarCombo(array, idCombo) {
