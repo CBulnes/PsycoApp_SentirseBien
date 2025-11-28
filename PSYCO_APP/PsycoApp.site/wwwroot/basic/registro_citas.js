@@ -1404,7 +1404,7 @@ function mostrar_historial(id_cita, id_paciente) {
                     html += '</div>';
                     html += '<div class="sb-reg-citas-popup-tab-historial-block-item-2">';
                     html += '<button type="button" class="evento_' + item.evento.toLowerCase().replace(' ', '_') + '">' + item.evento + '</button>';
-                    html += '<div class="sb-reg-citas-historial-user" ><p>Usuario: </p><span>' + item.usuario + '</span></div>';
+                    html += '<div class="sb-reg-citas-historial-user" ><span>' + item.usuario + '</span></div>';
                     html += '</div></div>';
                 }
 

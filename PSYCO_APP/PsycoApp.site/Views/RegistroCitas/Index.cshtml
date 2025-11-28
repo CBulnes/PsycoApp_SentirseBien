@@ -7,6 +7,16 @@
 }
 
 <style>
+    .modal-xxl {
+        max-width: 95% !important;
+        width: 90% !important;
+        height: 90% !important;
+        margin: auto;
+    }
+
+        .modal-xxl .modal-content {
+            height: 100% !important;
+        }
     .item_separado {
     background-color: #43b33c;
     }
@@ -264,7 +274,7 @@
 
 <!--MODAL CITA-->
 <div id="mdl_cita" class="modal" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="true">
-    <div class="modal-dialog modal-lg" role="document" style="height: 90%; display: grid; place-items: center;">
+    <div class="modal-dialog modal-xxl" role="document" style="height: 90%; display: grid; place-items: center;">
         <div class="modal-content sb-reg-citas-popup-container">
             <div class="modal-header sb-reg-citas-popup-title">
                 <h5 class="modal-title">Datos de cita</h5>
@@ -279,192 +289,205 @@
                 <div class="tab-content">
                     <!--resumen-->
                     <div id="resumen" class="tab-pane fade show active">
-
-                        <div class="sb-reg-citas-popup-tab-panel">
-                            <div class="sb-reg-citas-popup-tab-panel-block" style="display: inline-flex;">
-                                <div class="sb-reg-citas-popup-tab-panel-block-item" style="width: 50%; display: inline-flex">
-                                    <span class="label-form">Fecha cita</span>
-                                    <input id="txtFecha" class="dateCrearCita form-control" type="date" autocomplete="off" style="background-color: #ffffff;" />
-                                </div>
-                                <div class="sb-reg-citas-popup-tab-panel-block-item fechasAdicionales hide-element" style="width: 50%; display: inline-flex" onclick="verFechasAdicionales()">
-                                    <span class="label-form">&nbsp;</span>
-                                    <button type="button" class="btn btn-primary main_color">Fechas adicionales</button>
-                                </div>
-                            </div>
-
-                            <div class="sb-reg-citas-popup-tab-panel-block" id="divReprogramar">
-                                <div class="sb-reg-citas-popup-tab-panel-block-item">
-                                    <span class="label-form">Fecha reprogramación</span>
-                                    <input class="form-control" type="date" id="txtFechaReasignar" autocomplete="off" max="2050-12-31" min="2022-08-01" onkeydown="return false" />
-                                </div>
-                            </div>
-
-                            <div class="sb-reg-citas-popup-tab-panel-block" id="divEspecialista">
-                                <div class="sb-reg-citas-popup-tab-panel-block-item">
-                                    <span class="label-form">Especialista</span>
-                                    <div class="input-group">
-                                        <select class="form-control" id="cboDoctor" onchange="verificar_disponibilidad()">
-                                            <option value="-1" data-sedes="-1">Seleccionar</option>
-                                        </select>
+                        <div class="row">
+                            <div class="sb-reg-citas-popup-tab-panel col-md-8">
+                                <div class="sb-reg-citas-popup-tab-panel-block" style="display: inline-flex;">
+                                    <div class="sb-reg-citas-popup-tab-panel-block-item" style="width: 50%; display: inline-flex">
+                                        <span class="label-form">Fecha cita</span>
+                                        <input id="txtFecha" class="dateCrearCita form-control" type="date" autocomplete="off" style="background-color: #ffffff;" />
+                                    </div>
+                                    <div class="sb-reg-citas-popup-tab-panel-block-item fechasAdicionales hide-element" style="width: 50%; display: inline-flex" onclick="verFechasAdicionales()">
+                                        <span class="label-form">&nbsp;</span>
+                                        <button type="button" class="btn btn-primary main_color">Fechas adicionales</button>
                                     </div>
                                 </div>
-                            </div>
 
-                            <div class="sb-reg-citas-popup-tab-panel-block" style="display: none !important;">
-                                <div class="sb-reg-citas-popup-tab-panel-block-item">
-                                    <span class="label-form">Hora</span>
-                                    <div class="input-group date" id="dtpicker1">
-                                        <input type="text" class="form-control form-hora" id="txtHora" onkeydown="return false;" onchange="validateHhMm(this);" onpaste="validateHhMm(this);" maxlength="8" placeholder="Seleccionar hora" autocomplete="off" />
-                                        <span class="input-group-append input-group-addon">
-                                            <span style="margin: 0 auto; display: flex; " class="input-group-text mdi mdi-clock">
-                                            </span>
-                                        </span>
+                                <div class="sb-reg-citas-popup-tab-panel-block" id="divReprogramar">
+                                    <div class="sb-reg-citas-popup-tab-panel-block-item">
+                                        <span class="label-form">Fecha reprogramación</span>
+                                        <input class="form-control" type="date" id="txtFechaReasignar" autocomplete="off" max="2050-12-31" min="2022-08-01" onkeydown="return false" />
                                     </div>
                                 </div>
-                            </div>
 
-                            <div class="sb-reg-citas-popup-tab-panel-block">
-                                <div class="sb-reg-citas-popup-tab-panel-block-item">
-                                    <span class="label-form">Paciente</span>
-                                    <select class="form-control" id="cboPaciente">
-                                        <option value="-1">Seleccionar</option>
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div class="sb-reg-citas-popup-tab-panel-block" style="display: inline-flex;" id="divTelefono">
-                                <div class="sb-reg-citas-popup-tab-panel-block-item" style="width: 50%; display: inline-flex">
-                                    <span class="label-form">Teléfono</span>
-                                    <input class="form-control" type="text" id="txtTelefono" autocomplete="off" disabled="disabled" />
+                                <div class="sb-reg-citas-popup-tab-panel-block" id="divEspecialista">
+                                    <div class="sb-reg-citas-popup-tab-panel-block-item">
+                                        <span class="label-form">Especialista</span>
+                                        <div class="input-group">
+                                            <select class="form-control" id="cboDoctor" onchange="verificar_disponibilidad()">
+                                                <option value="-1" data-sedes="-1">Seleccionar</option>
+                                            </select>
+                                        </div>
+                                    </div>
                                 </div>
 
-                                <div class="sb-reg-citas-popup-tab-panel-block-item" style="width: 50%; display: inline-flex">
-                                    <span class="label-form">Documento</span>
-                                    <input class="form-control" type="text" id="txtDniPaciente" autocomplete="off" disabled="disabled" />
-                                </div>
-                            </div>
-
-                            <div class="sb-reg-citas-popup-tab-panel-block">
-                                <div class="sb-reg-citas-popup-tab-panel-block-item">
-                                    <span class="label-form">Servicio&nbsp;
-                                        <img id="ImgActualizarServicio" src="../images/free.png" style="height: 15px; width: auto; cursor: pointer; margin: 0px 0px 0px 5px; border-radius: 10px;" title="Actualizar servicio" onclick="modalActualizarServicio()" />
-                                    </span>
-                                    <div class="input-group">
-                                        <select class="form-control" id="cboServicio">
-                                            <option value="-1" data-sesiones="0">Seleccionar</option>
-                                            @foreach (var prod in productos)
-                                            {
-                                                <option value="@prod.Id" data-sesiones="@prod.NumSesiones">@prod.Alias</option>
-                                            }
-                                        </select>
-                                        <div class="input-group-append" id="divPagoPendiente" style="width: 70px;">
-                                            <span class="input-group-text" id="basic-addon2" style="height: 100%; display: inline-block;">
-                                                <img id="PagoPendiente" src="../images/warning.jpg" style="height: 15px; width: auto; cursor: pointer; margin: 10px 6px 10px 6px;" title="Verificar pagos" onclick="form_pago()" />
-                                            </span>
-                                            <span class="input-group-text" id="basic-addon3" style="height: 100%; display: inline-block;">
-                                                <img id="PagosHistorial" src="../images/lupa.png" style="height: 19px; width: auto; cursor: pointer; margin: 10px 6px 10px 6px;" title="Ver pagos" onclick="modal_historial_pago(true)" />
+                                <div class="sb-reg-citas-popup-tab-panel-block" style="display: none !important;">
+                                    <div class="sb-reg-citas-popup-tab-panel-block-item">
+                                        <span class="label-form">Hora</span>
+                                        <div class="input-group date" id="dtpicker1">
+                                            <input type="text" class="form-control form-hora" id="txtHora" onkeydown="return false;" onchange="validateHhMm(this);" onpaste="validateHhMm(this);" maxlength="8" placeholder="Seleccionar hora" autocomplete="off" />
+                                            <span class="input-group-append input-group-addon">
+                                                <span style="margin: 0 auto; display: flex; " class="input-group-text mdi mdi-clock">
+                                                </span>
                                             </span>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
 
-                            <div class="sb-reg-citas-popup-tab-panel-block">
-                                <div class="sb-reg-citas-popup-tab-panel-block-item">
-                                    <span class="label-form">Centro</span>
-                                    <div class="input-group">
-                                        <select class="form-control" id="cboSedeChange_" disabled="disabled">
+                                <div class="sb-reg-citas-popup-tab-panel-block">
+                                    <div class="sb-reg-citas-popup-tab-panel-block-item">
+                                        <span class="label-form">Paciente</span>
+                                        <select class="form-control" id="cboPaciente">
                                             <option value="-1">Seleccionar</option>
-                                            @* <option value="1">Sentirse bien</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="sb-reg-citas-popup-tab-panel-block" style="display: inline-flex;" id="divTelefono">
+                                    <div class="sb-reg-citas-popup-tab-panel-block-item" style="width: 50%; display: inline-flex">
+                                        <span class="label-form">Teléfono</span>
+                                        <input class="form-control" type="text" id="txtTelefono" autocomplete="off" disabled="disabled" />
+                                    </div>
+
+                                    <div class="sb-reg-citas-popup-tab-panel-block-item" style="width: 50%; display: none">
+                                        <span class="label-form">Documento</span>
+                                        <input class="form-control" type="text" id="txtDniPaciente" autocomplete="off" disabled="disabled" />
+                                    </div>
+                                </div>
+
+                                <div class="sb-reg-citas-popup-tab-panel-block">
+                                    <div class="sb-reg-citas-popup-tab-panel-block-item">
+                                        <span class="label-form">
+                                            Servicio&nbsp;
+                                            <img id="ImgActualizarServicio" src="../images/free.png" style="height: 15px; width: auto; cursor: pointer; margin: 0px 0px 0px 5px; border-radius: 10px;" title="Actualizar servicio" onclick="modalActualizarServicio()" />
+                                        </span>
+                                        <div class="input-group">
+                                            <select class="form-control" id="cboServicio">
+                                                <option value="-1" data-sesiones="0">Seleccionar</option>
+                                                @foreach (var prod in productos)
+                                                {
+                                                    <option value="@prod.Id" data-sesiones="@prod.NumSesiones">@prod.Alias</option>
+                                                }
+                                            </select>
+                                            <div class="input-group-append" id="divPagoPendiente" style="width: 70px;">
+                                                <span class="input-group-text" id="basic-addon2" style="height: 100%; display: inline-block;">
+                                                    <img id="PagoPendiente" src="../images/warning.jpg" style="height: 15px; width: auto; cursor: pointer; margin: 10px 6px 10px 6px;" title="Verificar pagos" onclick="form_pago()" />
+                                                </span>
+                                                <span class="input-group-text" id="basic-addon3" style="height: 100%; display: inline-block;">
+                                                    <img id="PagosHistorial" src="../images/lupa.png" style="height: 19px; width: auto; cursor: pointer; margin: 10px 6px 10px 6px;" title="Ver pagos" onclick="modal_historial_pago(true)" />
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="sb-reg-citas-popup-tab-panel-block" style="display:none">
+                                    <div class="sb-reg-citas-popup-tab-panel-block-item">
+                                        <span class="label-form">Centro</span>
+                                        <div class="input-group">
+                                            <select class="form-control" id="cboSedeChange_" disabled="disabled">
+                                                <option value="-1">Seleccionar</option>
+                                                @* <option value="1">Sentirse bien</option>
                                             <option value="2">Transforma</option> *@
-                                        </select>
+                                            </select>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
 
-                            <div class="sb-reg-citas-popup-tab-panel-block">
-                                <div class="sb-reg-citas-popup-tab-panel-block-item">
-                                    <span class="label-form">Tipo de cita</span>
-                                    <div class="input-group">
-                                        <select class="form-control" id="cboTipoCita">
-                                            <option value="P">Presencial</option>
-                                            <option value="V">Virtual</option>
-                                        </select>
+                                <div class="sb-reg-citas-popup-tab-panel-block" style="display:none">
+                                    <div class="sb-reg-citas-popup-tab-panel-block-item">
+                                        <span class="label-form">Tipo de cita</span>
+                                        <div class="input-group">
+                                            <select class="form-control" id="cboTipoCita">
+                                                <option value="P">Presencial</option>
+                                                <option value="V">Virtual</option>
+                                            </select>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
 
-                            <div class="customer-feedback">
-                                <label for="feedback">Estado del Cliente:</label>
-                                <div class="feedback-icons">
-                                    <input type="radio" id="happy" name="feedback" value="happy" onclick="toggleComment(false)" checked>
-                                    <label for="happy" class="icon-happy">😊</label>
+                                <div class="customer-feedback" style="display:none">
+                                    <label for="feedback">Estado del Cliente:</label>
+                                    <div class="feedback-icons">
+                                        <input type="radio" id="happy" name="feedback" value="happy" onclick="toggleComment(false)" checked>
+                                        <label for="happy" class="icon-happy">😊</label>
 
-                                    <input type="radio" id="sad" name="feedback" value="sad" onclick="toggleComment(true)">
-                                    <label for="sad" class="icon-sad">😢</label>
+                                        <input type="radio" id="sad" name="feedback" value="sad" onclick="toggleComment(true)">
+                                        <label for="sad" class="icon-sad">😢</label>
+                                    </div>
+
+                                    <div id="comment-section" style="display: block;">
+                                        <label for="comment">Comentario adicional:</label>
+                                        <textarea id="comment" name="comment" placeholder="Describe el problema aquí..."></textarea>
+                                    </div>
                                 </div>
 
-                                <div id="comment-section" style="display: block;">
-                                    <label for="comment">Comentario adicional:</label>
-                                    <textarea id="comment" name="comment" placeholder="Describe el problema aquí..."></textarea>
+                                <div class="sb-reg-citas-popup-tab-panel-block divMonto">
+                                    <div class="sb-reg-citas-popup-tab-panel-block-item">
+                                        <span class="label-form" id="spnPactado">Monto pactado</span>
+                                        <input class="form-control" type="text" id="txtMontoPactado" autocomplete="off" disabled="disabled" />
+                                    </div>
                                 </div>
+
+                                <div class="sb-reg-citas-popup-tab-panel-block divMonto">
+                                    <div class="sb-reg-citas-popup-tab-panel-block-item">
+                                        <span class="label-form" id="spnPagado">Monto pagado</span>
+                                        <input class="form-control" type="text" id="txtMontoPagado" autocomplete="off" disabled="disabled" />
+                                    </div>
+                                </div>
+
+                                <div class="sb-reg-citas-popup-tab-panel-block divMonto">
+                                    <div class="sb-reg-citas-popup-tab-panel-block-item">
+                                        <span class="label-form" id="spnPendiente">Monto pendiente</span>
+                                        <input class="form-control" type="text" id="txtMontoPendiente" autocomplete="off" disabled="disabled" />
+                                    </div>
+                                </div>
+
+                                <div class="sb-reg-citas-popup-tab-panel-block" id="divEstado">
+                                    <div class="sb-reg-citas-popup-tab-panel-block-item">
+                                        <span class="label-form">Estado</span>
+                                        <button type="button" id="btnEstado"></button>
+                                    </div>
+                                </div>
+
+                                
+                                <div class="sb-reg-citas-popup-tab-panel-block" id="divPagoGratis">
+                                    <div class="sb-reg-citas-popup-tab-panel-block-item">
+                                        <button id="btnPagoGratis" type="button" onclick="registrarPagoGratis()" class="btn btn-primary">Registrar pago gratuito</button>
+                                    </div>
+                                </div>
+
                             </div>
 
-                            <div class="sb-reg-citas-popup-tab-panel-block divMonto">
-                                <div class="sb-reg-citas-popup-tab-panel-block-item">
-                                    <span class="label-form" id="spnPactado">Monto pactado</span>
-                                    <input class="form-control" type="text" id="txtMontoPactado" autocomplete="off" disabled="disabled" />
-                                </div>
+
+
+                            <div class="col-md-4">
+                                <div class="sb-reg-citas-popup-tab-historial" id="divHistorial"></div>
+                                <br />
+                              
                             </div>
 
-                            <div class="sb-reg-citas-popup-tab-panel-block divMonto">
-                                <div class="sb-reg-citas-popup-tab-panel-block-item">
-                                    <span class="label-form" id="spnPagado">Monto pagado</span>
-                                    <input class="form-control" type="text" id="txtMontoPagado" autocomplete="off" disabled="disabled" />
-                                </div>
-                            </div>
-
-                            <div class="sb-reg-citas-popup-tab-panel-block divMonto">
-                                <div class="sb-reg-citas-popup-tab-panel-block-item">
-                                    <span class="label-form" id="spnPendiente">Monto pendiente</span>
-                                    <input class="form-control" type="text" id="txtMontoPendiente" autocomplete="off" disabled="disabled" />
-                                </div>
-                            </div>
-
-                            <div class="sb-reg-citas-popup-tab-panel-block" id="divEstado">
-                                <div class="sb-reg-citas-popup-tab-panel-block-item">
-                                    <span class="label-form">Estado</span>
-                                    <button type="button" id="btnEstado"></button>
-                                </div>
-                            </div>
-
-                            <div class="sb-reg-citas-popup-tab-panel-block" id="divHorarios">
-                                <div class="sb-reg-citas-popup-tab-panel-block-item">
-                                    <table class="table table-responsive" style="display: inline-table;">
-                                        <thead>
-                                            <tr>
-                                                <th class="text-center">Hora</th>
-                                                <th class="text-center">Estado</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody id="divDisponibilidad"></tbody>
-                                    </table>
-                                </div>
-                            </div>
-
-                            <div class="sb-reg-citas-popup-tab-panel-block" id="divPagoGratis">
-                                <div class="sb-reg-citas-popup-tab-panel-block-item">
-                                    <button id="btnPagoGratis" type="button" onclick="registrarPagoGratis()" class="btn btn-primary">Registrar pago gratuito</button>
-                                </div>
-                            </div>
 
                         </div>
+                        <div class="sb-reg-citas-popup-tab-panel-block" id="divHorarios">
+                            <div class="sb-reg-citas-popup-tab-panel-block-item">
+                                <table class="table table-responsive" style="display: inline-table;">
+                                    <thead>
+                                        <tr>
+                                            <th class="text-center">Hora</th>
+                                            <th class="text-center">Estado</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="divDisponibilidad"></tbody>
+                                </table>
+                            </div>
+                        </div>
 
+
+                      
+                    
                     </div>
                     <!--historial-->
                     <div id="historial" class="tab-pane fade">
-                        <div class="sb-reg-citas-popup-tab-historial" id="divHistorial"></div>
-                        <br />
                         <div class="sb-reg-citas-popup-tab-historial">
                             <table class="table">
                                 <thead>
