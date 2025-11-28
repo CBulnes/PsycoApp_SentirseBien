@@ -1,4 +1,4 @@
-﻿var path = ruta;
+﻿//var path = ruta;
 
 var lista_citas = [];
 var lista_historial = [];
@@ -100,7 +100,7 @@ function cargar_historial() {
                     i++;
                 }
             } else {
-                html = '<tr><td colspan="9" class="text-center">No se encontraron resultados</td></tr>';
+                html = '<tr><td colspan="11" class="text-center">No se encontraron resultados</td></tr>';
             }
             $('#bdCitas').html(html);
         }

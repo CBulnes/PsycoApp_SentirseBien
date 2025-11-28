@@ -15,24 +15,28 @@
         padding: 20px;
     }
 
-
-
     .modal {
         top: 5% !important;
         max-height: 90% !important;
     }
 
-
+    .btn-busqueda {
+        color: #111217 !important;
+        background-color: #FFFFFF !important;
+        border: 1px solid #111217 !important;
+        width: 100% !important;
+        text-align: center !important;
+        display: block !important;
+    }
 </style>
 <link rel="stylesheet" href="~/src/css/sb-historial-citas.css" />
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css" />
 
 <div id="pagosModal" class="modal" style="display:none;">
 
-    <div class="modal-content active-fondo-oscuro">
+    <div class="modal-content active-fondo-oscuro" style="width: 80%; max-width: 80%;">
 
         <div class="sb-his-citas-container active-fondo-oscuro">
-
             <div class="sb-his-citas-title">
                 <p class="active-titular-modulo">Historial de citas</p>
             </div>
@@ -53,7 +57,7 @@
                 </div>
 
                 <div class="sb-his-citas-item">
-                    <div class="form-group row">
+                    <div class="form-group">
                         <span class="label-form active-texto-modulo">Especialista</span>
                         <select class="form-control active-select-modulo cbo-search" id="cboDoctor" data-placeholder="Seleccionar especialista">
                             <option value="-1">Todos</option>
@@ -62,33 +66,26 @@
                 </div>
 
                 <div class="sb-his-citas-item">
-                    <div class="form-group" style="display:flex; align-items:flex-end; gap:8px;">
-
-                        <div style="flex:1;">
-                            <span class="label-form active-texto-modulo">Paciente</span>
-                            <select class="form-control cbo-search active-select-modulo" id="cboPaciente"></select>
-                        </div>
-
-
+                    <div class="form-group">
+                        <span class="label-form active-texto-modulo">Paciente</span>
+                        <select class="form-control cbo-search active-select-modulo" id="cboPaciente"></select>
                     </div>
+                </div>
 
-                </div>
                 <div class="sb-his-citas-item">
-                <!-- Botón de búsqueda -->
-                <button id="btnBuscarPaciente"
-                        class="btn btn-primary"
-                        style="height:38px; display:flex; align-items:center; justify-content:center; top:12px">
-                    <i class="fa fa-search">Buscar Pacientes </i>
-                </button>
+                    <div class="form-group sb-his-citas-item-button">
+                        <button type="button" class="btn btn-doc active-button-modulo btn-busqueda">
+                            Buscar pacientes
+                        </button>
+                    </div>
                 </div>
-                </div>
+            </div>
             <div class="sb-his-citas-list">
                 <div class="sb-his-citas-item">
                     <div class="form-group">
                         <span class="label-form active-texto-modulo">Forma de Pago</span>
                         <select class="form-control cbo-search active-select-modulo" id="cboVerSinReserva">
                             <option value="-1">Seleccionar</option>
-                
                         </select>
                     </div>
                 </div>
@@ -97,9 +94,6 @@
                     <div class="form-group">
                         <span class="label-form active-texto-modulo">Importe de Pago</span>
                         <input class="form-control cbo-search active-select-modulo" id="inpPago">
-                           
-
-               
                     </div>
                 </div>
 
@@ -107,421 +101,415 @@
                     <div class="form-group">
                         <span class="label-form active-texto-modulo active-fondo-oscuro">Buscar por monto</span>
                         <input class="form-control cbo-search active-select-modulo" id="inpPago">
-
-
-
                     </div>
                 </div>
 
                 <div class="sb-his-citas-item">
-
                     <div class="form-group sb-his-citas-item-button">
-                        <button type="button" class="btn btn-doc active-button-modulo" onclick="cargar_historial()">
-                            <i class="fa fa-search"></i>&nbsp;Buscar
+                        <button type="button" class="btn btn-doc active-button-modulo btn-busqueda" onclick="cargar_historial()">
+                            Buscar
                         </button>
                     </div>
                 </div>
             </div>
-            </div>
+        </div>
 
-            <div class="sb-his-citas-table-calendar">
-                <table class="table table-striped active-table-modulo">
-                    <thead>
-                        <tr>
-                            <th class="text-center" style="width: 80px;">#</th>
-                            <th class="text-center">
-                                Paciente
-                            </th>
-                            <th class="text-center">
-                                Servicio
-                            </th>
-                            <th class="text-center">
-                                Fecha
-                            </th>
-                            <th class="text-center">
-                                Hora
-                            </th>
-                            <th class="text-center">
-                                Monto pendiente
-                            </th>
+        <div class="sb-his-citas-table-calendar">
+            <table class="table table-striped active-table-modulo">
+                <thead>
+                    <tr>
+                        <th class="text-center" style="width: 80px;">#</th>
+                        <th class="text-center">
+                            Paciente
+                        </th>
+                        <th class="text-center">
+                            Servicio
+                        </th>
+                        <th class="text-center">
+                            Fecha
+                        </th>
+                        <th class="text-center">
+                            Hora
+                        </th>
+                        <th class="text-center">
+                            Monto pendiente
+                        </th>
                         <th class="text-center">
                             Monto Pagado
                         </th>
-                            <th class="text-center">
-                                Estado - Pagado O Pendiente
-                            </th>
-                            <th class="text-center">
-                                Es&nbsp;evaluación
-                            </th>
-                            <th class="text-center">
-                                Acción
-                            </th>
+                        <th class="text-center">
+                            Estado - Pagado O Pendiente
+                        </th>
+                        <th class="text-center">
+                            Es&nbsp;evaluación
+                        </th>
+                        <th class="text-center">
+                            Acción
+                        </th>
                         <th class="text-center">
                             Seleccionar Pago
                         </th>
-                        </tr>
-                    </thead>
-                    <tbody id="bdCitas">
-                    </tbody>
-                </table>
-            </div>
+                    </tr>
+                </thead>
+                <tbody id="bdCitas">
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
 
+<div class="bd-example" style="display:none;">
+    <div class="row">
 
+        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+            <b style="color: #004A92; font-size: 20px;">Historial de citas</b>
         </div>
 
+        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">&nbsp;</div>
 
-        <div class="bd-example" style="display:none;">
-            <div class="row">
+        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
 
-                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                    <b style="color: #004A92; font-size: 20px;">Historial de citas</b>
-                </div>
-
+            <div class="row" style="background-color: #FFFFFF;">
                 <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">&nbsp;</div>
 
                 <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
-
-                    <div class="row" style="background-color: #FFFFFF;">
-                        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">&nbsp;</div>
-
-                        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                            @*style="padding-left: 0px; padding-right: 0px;">*@
-                            <div class="row">
-                                <div class="col-6 col-sm-6 col-md-3 col-lg-3 col-xl-3">
-                                    <div class="form-group">
-                                        <span class="label-form">Fecha</span><br />
-                                        <input id="txtFecha" class="form-control" type="date" max="2050-12-31" />
-                                    </div>
-                                </div>
-                                <div class="col-6 col-sm-6 col-md-3 col-lg-3 col-xl-3">
-                                    <div class="form-group">
-                                        <span class="label-form">Estado</span><br />
-                                        <select class="form-control cbo-search" id="cboEstado">
-                                            <option value="-1">Seleccionar</option>
-                                            <option value="1">Citado</option>
-                                            <option value="2">Confirmado</option>
-                                            <option value="3">En proceso</option>
-                                            <option value="4">Atendido</option>
-                                            <option value="5">Cancelado </option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-6 col-sm-6 col-md-3 col-lg-3 col-xl-3">
-                                    <div class="form-group">
-                                        <span class="label-form">Ver registros</span><br />
-                                        <select class="form-control cbo-search" id="cboVerSinReserva">
-                                            <option value="2">Todos</option>
-                                            <option value="1">Sin reserva en 15 días</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-6 col-sm-6 col-md-3 col-lg-3 col-xl-3">
-                                    <div class="form-group">
-                                        <span class="label-form">&nbsp;</span><br />
-                                        <button type="button" class="btn btn-doc second_color" style="color: #FFF; font-size: 12px; width: 100%;" onclick="cargar_historial()">
-                                            <i class="fa fa-search"></i>&nbsp;Buscar
-                                        </button>
-                                    </div>
-                                </div>
+                    @*style="padding-left: 0px; padding-right: 0px;">*@
+                    <div class="row">
+                        <div class="col-6 col-sm-6 col-md-3 col-lg-3 col-xl-3">
+                            <div class="form-group">
+                                <span class="label-form">Fecha</span><br />
+                                <input id="txtFecha" class="form-control" type="date" max="2050-12-31" />
                             </div>
                         </div>
-
+                        <div class="col-6 col-sm-6 col-md-3 col-lg-3 col-xl-3">
+                            <div class="form-group">
+                                <span class="label-form">Estado</span><br />
+                                <select class="form-control cbo-search" id="cboEstado">
+                                    <option value="-1">Seleccionar</option>
+                                    <option value="1">Citado</option>
+                                    <option value="2">Confirmado</option>
+                                    <option value="3">En proceso</option>
+                                    <option value="4">Atendido</option>
+                                    <option value="5">Cancelado </option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-6 col-sm-6 col-md-3 col-lg-3 col-xl-3">
+                            <div class="form-group">
+                                <span class="label-form">Ver registros</span><br />
+                                <select class="form-control cbo-search" id="cboVerSinReserva">
+                                    <option value="2">Todos</option>
+                                    <option value="1">Sin reserva en 15 días</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-6 col-sm-6 col-md-3 col-lg-3 col-xl-3">
+                            <div class="form-group">
+                                <span class="label-form">&nbsp;</span><br />
+                                <button type="button" class="btn btn-doc second_color" style="color: #FFF; font-size: 12px; width: 100%;" onclick="cargar_historial()">
+                                    <i class="fa fa-search"></i>&nbsp;Buscar
+                                </button>
+                            </div>
+                        </div>
                     </div>
+                </div>
 
-                    <div class="row">
-                        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">&nbsp;</div>
-                    </div>
+            </div>
 
-                    <!-- contenido -->
-                    <div class="row" style="background-color: #FFFFFF;">
-                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12" style="padding-left: 0px; padding-right: 0px; width: 100%!important;">
+            <div class="row">
+                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">&nbsp;</div>
+            </div>
 
-                            <table class="table">
-                                <thead>
-                                    <tr>
-                                        <th class="text-center" style="width: 80px;">#</th>
-                                        <th class="text-center">
-                                            Paciente
-                                        </th>
-                                        <th class="text-center">
-                                            Fecha
-                                        </th>
-                                        <th class="text-center">
-                                            Hora
-                                        </th>
-                                        <th class="text-center">
-                                            Estado
-                                        </th>
-                                        @* <th class="text-center">
+            <!-- contenido -->
+            <div class="row" style="background-color: #FFFFFF;">
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12" style="padding-left: 0px; padding-right: 0px; width: 100%!important;">
+
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th class="text-center" style="width: 80px;">#</th>
+                                <th class="text-center">
+                                    Paciente
+                                </th>
+                                <th class="text-center">
+                                    Fecha
+                                </th>
+                                <th class="text-center">
+                                    Hora
+                                </th>
+                                <th class="text-center">
+                                    Estado
+                                </th>
+                                @* <th class="text-center">
                                     Acción
                                 </th> *@
-                                    </tr>
-                                </thead>
-                                <tbody id="bdCitas">
-                                </tbody>
-                            </table>
+                            </tr>
+                        </thead>
+                        <tbody id="bdCitas">
+                        </tbody>
+                    </table>
 
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-
-        <div id="mdl_informe" class="modal" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="true">
-            <div class="modal-dialog modal-lg" role="document" style="height: 90%; display: grid; place-items: center; width: 100%;">
-                <div class="modal-content" style="width: 100%;">
-                    <div class="modal-header sb-reg-citas-popup-title">
-                        <h5 class="modal-title">Añadir entrega de informe</h5>
-                    </div>
-                    <div class="modal-body">
-                        <div class="row">
-                            <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                <div class="form-group">
-                                    <span class="label-form">Seleccione el informe que se adicionará al paquete</span><br />
-                                    <select class="form-control" id="cboInformeAdicional">
-                                        <option value="2">Entrega informe 30 minutos</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" onclick="cerrar_form_informe()">Volver</button>
-                        <button type="button" class="btn btn-primary main_color" onclick="agregarInformeAdicional()">Guardar</button>
-                    </div>
                 </div>
             </div>
         </div>
-
-        <div id="mdl_historial" class="modal" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="true">
-            <div class="modal-dialog modal-lg" role="document" style="height: 90%; display: grid; place-items: center; width: 100%;">
-                <div class="modal-content" style="width: 100%;">
-                    <div class="modal-header second_color">
-                        <h5 class="modal-title" style="color: #FFFFFF;">Historial del paciente</h5>
-                        <button onclick="cerrar_modal_historial()" type="button" class="close" aria-label="Close" style="outline: none; cursor: pointer; color: #FFFFFF;">
-                            <span>&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="row">
-                            <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                <div class="row">
-
-                                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                        <table class="table">
-                                            <thead>
-                                                <tr>
-                                                    <th class="text-center" style="width: 80px;">#</th>
-                                                    <th class="text-center">
-                                                        Nota
-                                                    </th>
-                                                    <th class="text-center">
-                                                        Recomendaciones
-                                                    </th>
-                                                    <th class="text-center">
-                                                        Medicinas
-                                                    </th>
-                                                    <th class="text-center">
-                                                        Doctor
-                                                    </th>
-                                                    <th class="text-center">
-                                                        Fecha
-                                                    </th>
-                                                    <th class="text-center">
-                                                        Hora
-                                                    </th>
-                                                </tr>
-                                            </thead>
-                                            <tbody id="bdHistorial">
-                                            </tbody>
-                                        </table>
-                                    </div>
-
-                                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12" id="divDatos">
-                                        <div class="row">
-                                            <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6">
-                                                <div class="form-group">
-                                                    <span class="label-form">Nota</span><br />
-                                                    <textarea class="form-control" id="txtNota" placeholder="Ingresar nota" maxlength="500"
-                                                              style="resize: none; height: auto !important;" rows="3"></textarea>
-                                                </div>
-                                            </div>
-                                            <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6">
-                                                <div class="form-group">
-                                                    <span class="label-form">Recomendación</span><br />
-                                                    <textarea class="form-control" id="txtRecomendacion" placeholder="Ingresar recomendaciones" maxlength="500"
-                                                              style="resize: none; height: auto !important;" rows="3"></textarea>
-                                                </div>
-                                            </div>
-                                            <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6">
-                                                <div class="form-group">
-                                                    <span class="label-form">Medicinas</span><br />
-                                                    <textarea class="form-control" id="txtMedicina" placeholder="Ingresar medicinas" maxlength="500"
-                                                              style="resize: none; height: auto !important;" rows="3"></textarea>
-                                                </div>
-                                            </div>
-                                            <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6">
-                                                <div class="form-group">
-                                                    <span class="label-form">Test asignados</span><br />
-
-                                                    <span id="spnSinCuestionarios" class="label-form">Sin cuestionarios registrados<br /></span>
-                                                    <a id="spnCuestionario01" href="~/articulos/Resultado_cuestionario01.pdf" download class="label-form">Cuestionario #1<br /></a>
-                                                    <a id="spnCuestionario02" href="~/articulos/Resultado_cuestionario02.pdf" download class="label-form">Cuestionario #2<br /></a>
-                                                    <a id="spnCuestionario03" href="~/articulos/Resultado_cuestionario03.pdf" download class="label-form">Cuestionario #3<br /></a>
-                                                    <a id="spnCuestionario04" href="~/articulos/Resultado_cuestionario04.pdf" download class="label-form">Cuestionario #4<br /></a>
-                                                    @*<button type="button" class="btn btn-doc main_color" style="color: #FFF; font-size: 12px; width: 100%;">
-                                                <i class="fa fa-search"></i>&nbsp;Test asignados
-                                            </button>*@
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" onclick="cerrar_modal_historial()">Volver</button>
-                        <button type="button" class="btn btn-primary main_color" onclick="guardar_cita()" id="btnGuardarCita">Guardar</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!--MODAL OTROS PAGOS PENDIENTES-->
-        <div id="mdl_otros_pagos_pendientes" class="modal" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="true">
-            <div class="modal-dialog modal-lg" role="document" style="height: 90%; display: grid; place-items: center; max-width: fit-content;">
-                <div class="modal-content sb-reg-citas-popup-container" style=" width: fit-content;">
-                    <div class="modal-header sb-reg-citas-popup-title">
-                        <h5 class="modal-title">Pagos pendientes</h5>
-                    </div>
-                    <div class="modal-body sb-reg-citas-popup-body">
-
-                        <div class="sb-reg-citas-popup-tab-panel">
-                            <table class="table table-responsive" style="display: inline-table;">
-                                <thead id="headPagosPendientes">
-                                    <tr>
-                                        <th>Servicio</th>
-                                        <th>Fecha&nbsp;cita</th>
-                                        <th>Estado</th>
-                                        <th>Usuario&nbsp;registra</th>
-                                        <th>Fecha&nbsp;registra</th>
-                                        <th>Monto&nbsp;pactado</th>
-                                        <th>Monto&nbsp;pagado</th>
-                                        <th>Monto&nbsp;pendiente</th>
-                                        <th>Acción</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="bodyPagosPendientes"></tbody>
-                            </table>
-                        </div>
-
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary sb-reg-citas-popup-button-volver" onclick="cerrar_modal_pagos_pendientes()">Volver</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!--MODAL PAGO-->
-        <div id="mdl_pago" class="modal" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="true">
-            <div class="modal-dialog modal-md" role="document" style="height: 90%; display: grid; place-items: center;">
-                <div class="modal-content sb-reg-citas-popup-container">
-                    <div class="modal-header sb-reg-citas-popup-title">
-                        <h5 class="modal-title">Registrar pago</h5>
-                    </div>
-                    <div class="modal-body sb-reg-citas-popup-body">
-
-                        <div class="sb-reg-citas-popup-tab-panel">
-                            <div class="sb-reg-citas-popup-tab-panel-block" style="display: none;">
-                                <input class="form-control" type="text" id="txtIdCita" />
-                            </div>
-
-                            <div class="sb-reg-citas-popup-tab-panel-block">
-                                <div class="sb-reg-citas-popup-tab-panel-block-item">
-                                    <span class="label-form">Fecha de pago</span>
-                                    <input id="txtFechaPago" class="form-control" type="text" autocomplete="off" disabled="disabled" />
-                                </div>
-                            </div>
-
-                            <div class="sb-reg-citas-popup-tab-panel-block">
-                                <div class="sb-reg-citas-popup-tab-panel-block-item">
-                                    <span class="label-form">Paciente</span>
-                                    <input class="form-control" type="text" id="txtPaciente" autocomplete="off" disabled="disabled" />
-                                </div>
-                            </div>
-
-                            <div class="sb-reg-citas-popup-tab-panel-block">
-                                <div class="sb-reg-citas-popup-tab-panel-block-item">
-                                    <span class="label-form">Forma de pago</span>
-                                    <select class="form-control" id="cboFormaPago" onchange="validarSiEsTransferencia()">
-                                        <option value="-1">Seleccionar</option>
-                                        <option value="1">Transferencia</option>
-                                        <option value="2">Depósito</option>
-                                        <option value="3">Pago gratis</option>
-                                        <option value="4">Efectivo</option>
-                                        <option value="5">Tarjeta</option>
-                                        <option value="6">Yape</option>
-                                        <option value="7">Plin</option>
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div class="sb-reg-citas-popup-tab-panel-block" id="divDetalleTransferencia">
-                                <div class="sb-reg-citas-popup-tab-panel-block-item">
-                                    <span class="label-form">Detalle de transferencia</span>
-                                    <select class="form-control" id="cboDetalleTransferencia">
-                                        <option value="-1">Seleccionar</option>
-                                        <option value="1">BCP - Ahorros S/.</option>
-                                        <option value="2">BBVA - Ahorros S/.</option>
-                                        <option value="3">Interbank - Ahorros S/.</option>
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div class="sb-reg-citas-popup-tab-panel-block">
-                                <div class="sb-reg-citas-popup-tab-panel-block-item">
-                                    <span class="label-form">Observación</span>
-                                    <input class="form-control" type="text" id="txtComentario" autocomplete="off" maxlength="50" />
-                                </div>
-                            </div>
-
-                            <div class="sb-reg-citas-popup-tab-panel-block">
-                                <div class="sb-reg-citas-popup-tab-panel-block-item">
-                                    <span class="label-form">Importe de pago (S/.)</span>
-                                    <input class="form-control" type="text" id="txtMonto1" autocomplete="off" onkeyup="validarDiferenciaPago()" onfocusout="setDecimalValue()" />
-                                </div>
-                            </div>
-
-                            <div class="sb-reg-citas-popup-tab-panel-block">
-                                <div class="sb-reg-citas-popup-tab-panel-block-item">
-                                    <span class="label-form">Monto pendiente (S/.)</span>
-                                    <input class="form-control" type="text" id="txtMonto2" autocomplete="off" disabled="disabled" />
-                                </div>
-                            </div>
-
-                            <div class="sb-reg-citas-popup-tab-panel-block">
-                                <div class="sb-reg-citas-popup-tab-panel-block-item">
-                                    <span class="label-form">Diferencia (S/.)</span>
-                                    <input class="form-control" type="text" id="txtMonto3" autocomplete="off" disabled="disabled" />
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary sb-reg-citas-popup-button-volver" onclick="cerrar_modal_pago()">Volver</button>
-                        <button type="button" class="btn btn-primary main_color sb-reg-citas-popup-button" onclick="guardar_pago()">Aceptar</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
 
     </div>
+</div>
+
+<div id="mdl_informe" class="modal" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="true">
+    <div class="modal-dialog modal-lg" role="document" style="height: 90%; display: grid; place-items: center; width: 100%;">
+        <div class="modal-content" style="width: 100%;">
+            <div class="modal-header sb-reg-citas-popup-title">
+                <h5 class="modal-title">Añadir entrega de informe</h5>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                        <div class="form-group">
+                            <span class="label-form">Seleccione el informe que se adicionará al paquete</span><br />
+                            <select class="form-control" id="cboInformeAdicional">
+                                <option value="2">Entrega informe 30 minutos</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="cerrar_form_informe()">Volver</button>
+                <button type="button" class="btn btn-primary main_color" onclick="agregarInformeAdicional()">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="mdl_historial" class="modal" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="true">
+    <div class="modal-dialog modal-lg" role="document" style="height: 90%; display: grid; place-items: center; width: 100%;">
+        <div class="modal-content" style="width: 100%;">
+            <div class="modal-header second_color">
+                <h5 class="modal-title" style="color: #FFFFFF;">Historial del paciente</h5>
+                <button onclick="cerrar_modal_historial()" type="button" class="close" aria-label="Close" style="outline: none; cursor: pointer; color: #FFFFFF;">
+                    <span>&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                        <div class="row">
+
+                            <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th class="text-center" style="width: 80px;">#</th>
+                                            <th class="text-center">
+                                                Nota
+                                            </th>
+                                            <th class="text-center">
+                                                Recomendaciones
+                                            </th>
+                                            <th class="text-center">
+                                                Medicinas
+                                            </th>
+                                            <th class="text-center">
+                                                Doctor
+                                            </th>
+                                            <th class="text-center">
+                                                Fecha
+                                            </th>
+                                            <th class="text-center">
+                                                Hora
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="bdHistorial">
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12" id="divDatos">
+                                <div class="row">
+                                    <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6">
+                                        <div class="form-group">
+                                            <span class="label-form">Nota</span><br />
+                                            <textarea class="form-control" id="txtNota" placeholder="Ingresar nota" maxlength="500"
+                                                      style="resize: none; height: auto !important;" rows="3"></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6">
+                                        <div class="form-group">
+                                            <span class="label-form">Recomendación</span><br />
+                                            <textarea class="form-control" id="txtRecomendacion" placeholder="Ingresar recomendaciones" maxlength="500"
+                                                      style="resize: none; height: auto !important;" rows="3"></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6">
+                                        <div class="form-group">
+                                            <span class="label-form">Medicinas</span><br />
+                                            <textarea class="form-control" id="txtMedicina" placeholder="Ingresar medicinas" maxlength="500"
+                                                      style="resize: none; height: auto !important;" rows="3"></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6">
+                                        <div class="form-group">
+                                            <span class="label-form">Test asignados</span><br />
+
+                                            <span id="spnSinCuestionarios" class="label-form">Sin cuestionarios registrados<br /></span>
+                                            <a id="spnCuestionario01" href="~/articulos/Resultado_cuestionario01.pdf" download class="label-form">Cuestionario #1<br /></a>
+                                            <a id="spnCuestionario02" href="~/articulos/Resultado_cuestionario02.pdf" download class="label-form">Cuestionario #2<br /></a>
+                                            <a id="spnCuestionario03" href="~/articulos/Resultado_cuestionario03.pdf" download class="label-form">Cuestionario #3<br /></a>
+                                            <a id="spnCuestionario04" href="~/articulos/Resultado_cuestionario04.pdf" download class="label-form">Cuestionario #4<br /></a>
+                                            @*<button type="button" class="btn btn-doc main_color" style="color: #FFF; font-size: 12px; width: 100%;">
+                                                <i class="fa fa-search"></i>&nbsp;Test asignados
+                                            </button>*@
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="cerrar_modal_historial()">Volver</button>
+                <button type="button" class="btn btn-primary main_color" onclick="guardar_cita()" id="btnGuardarCita">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--MODAL OTROS PAGOS PENDIENTES-->
+<div id="mdl_otros_pagos_pendientes" class="modal" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="true">
+    <div class="modal-dialog modal-lg" role="document" style="height: 90%; display: grid; place-items: center; max-width: fit-content;">
+        <div class="modal-content sb-reg-citas-popup-container" style=" width: fit-content;">
+            <div class="modal-header sb-reg-citas-popup-title">
+                <h5 class="modal-title">Pagos pendientes</h5>
+            </div>
+            <div class="modal-body sb-reg-citas-popup-body">
+
+                <div class="sb-reg-citas-popup-tab-panel">
+                    <table class="table table-responsive" style="display: inline-table;">
+                        <thead id="headPagosPendientes">
+                            <tr>
+                                <th>Servicio</th>
+                                <th>Fecha&nbsp;cita</th>
+                                <th>Estado</th>
+                                <th>Usuario&nbsp;registra</th>
+                                <th>Fecha&nbsp;registra</th>
+                                <th>Monto&nbsp;pactado</th>
+                                <th>Monto&nbsp;pagado</th>
+                                <th>Monto&nbsp;pendiente</th>
+                                <th>Acción</th>
+                            </tr>
+                        </thead>
+                        <tbody id="bodyPagosPendientes"></tbody>
+                    </table>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary sb-reg-citas-popup-button-volver" onclick="cerrar_modal_pagos_pendientes()">Volver</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--MODAL PAGO-->
+<div id="mdl_pago" class="modal" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="true">
+    <div class="modal-dialog modal-md" role="document" style="height: 90%; display: grid; place-items: center;">
+        <div class="modal-content sb-reg-citas-popup-container">
+            <div class="modal-header sb-reg-citas-popup-title">
+                <h5 class="modal-title">Registrar pago</h5>
+            </div>
+            <div class="modal-body sb-reg-citas-popup-body">
+
+                <div class="sb-reg-citas-popup-tab-panel">
+                    <div class="sb-reg-citas-popup-tab-panel-block" style="display: none;">
+                        <input class="form-control" type="text" id="txtIdCita" />
+                    </div>
+
+                    <div class="sb-reg-citas-popup-tab-panel-block">
+                        <div class="sb-reg-citas-popup-tab-panel-block-item">
+                            <span class="label-form">Fecha de pago</span>
+                            <input id="txtFechaPago" class="form-control" type="text" autocomplete="off" disabled="disabled" />
+                        </div>
+                    </div>
+
+                    <div class="sb-reg-citas-popup-tab-panel-block">
+                        <div class="sb-reg-citas-popup-tab-panel-block-item">
+                            <span class="label-form">Paciente</span>
+                            <input class="form-control" type="text" id="txtPaciente" autocomplete="off" disabled="disabled" />
+                        </div>
+                    </div>
+
+                    <div class="sb-reg-citas-popup-tab-panel-block">
+                        <div class="sb-reg-citas-popup-tab-panel-block-item">
+                            <span class="label-form">Forma de pago</span>
+                            <select class="form-control" id="cboFormaPago" onchange="validarSiEsTransferencia()">
+                                <option value="-1">Seleccionar</option>
+                                <option value="1">Transferencia</option>
+                                <option value="2">Depósito</option>
+                                <option value="3">Pago gratis</option>
+                                <option value="4">Efectivo</option>
+                                <option value="5">Tarjeta</option>
+                                <option value="6">Yape</option>
+                                <option value="7">Plin</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="sb-reg-citas-popup-tab-panel-block" id="divDetalleTransferencia">
+                        <div class="sb-reg-citas-popup-tab-panel-block-item">
+                            <span class="label-form">Detalle de transferencia</span>
+                            <select class="form-control" id="cboDetalleTransferencia">
+                                <option value="-1">Seleccionar</option>
+                                <option value="1">BCP - Ahorros S/.</option>
+                                <option value="2">BBVA - Ahorros S/.</option>
+                                <option value="3">Interbank - Ahorros S/.</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="sb-reg-citas-popup-tab-panel-block">
+                        <div class="sb-reg-citas-popup-tab-panel-block-item">
+                            <span class="label-form">Observación</span>
+                            <input class="form-control" type="text" id="txtComentario" autocomplete="off" maxlength="50" />
+                        </div>
+                    </div>
+
+                    <div class="sb-reg-citas-popup-tab-panel-block">
+                        <div class="sb-reg-citas-popup-tab-panel-block-item">
+                            <span class="label-form">Importe de pago (S/.)</span>
+                            <input class="form-control" type="text" id="txtMonto1" autocomplete="off" onkeyup="validarDiferenciaPago()" onfocusout="setDecimalValue()" />
+                        </div>
+                    </div>
+
+                    <div class="sb-reg-citas-popup-tab-panel-block">
+                        <div class="sb-reg-citas-popup-tab-panel-block-item">
+                            <span class="label-form">Monto pendiente (S/.)</span>
+                            <input class="form-control" type="text" id="txtMonto2" autocomplete="off" disabled="disabled" />
+                        </div>
+                    </div>
+
+                    <div class="sb-reg-citas-popup-tab-panel-block">
+                        <div class="sb-reg-citas-popup-tab-panel-block-item">
+                            <span class="label-form">Diferencia (S/.)</span>
+                            <input class="form-control" type="text" id="txtMonto3" autocomplete="off" disabled="disabled" />
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary sb-reg-citas-popup-button-volver" onclick="cerrar_modal_pago()">Volver</button>
+                <button type="button" class="btn btn-primary main_color sb-reg-citas-popup-button" onclick="guardar_pago()">Aceptar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+</div>
 
 @*     <div class="modal-footer">
         <a onclick="$('#pagosModal').modal('hide');"
