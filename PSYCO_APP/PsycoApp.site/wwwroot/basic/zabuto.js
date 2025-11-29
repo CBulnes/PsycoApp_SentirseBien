@@ -880,8 +880,8 @@ function contenido_cita(dia, mes, año, hora, btnNuevaCita = false, btnCita = fa
                         html += '(' + item.tipo_cita + ') ';
                     }
 
-                    html += ((servicioGratuito ? item.nombre_servicio.toUpperCase() : item.paciente) + (' ' + item.siglas) + (item.orden_cita == '' ? '' : ' - ' + item.orden_cita)).trim();
-
+                    //html += ((servicioGratuito ? item.nombre_servicio.toUpperCase() : item.paciente) + (' ' + item.siglas) + (item.orden_cita == '' ? '' : ' - ' + item.orden_cita)).trim();
+                    html += ((servicioGratuito ? item.nombre_servicio.toUpperCase() : item.paciente) + (item.orden_cita == '' ? '' : ' - ' + item.orden_cita)).trim();
                     if (item.pago_gratis == 'true' || item.pago_gratis == true || item.pago_gratis || item.siglas == '(_CSC)'|| item.siglas == '(_I30)') {
                         html += '<img src="../images/free.png" style="height: 20px; width: auto; cursor: pointer; margin: 0px 0px 0px 5px; border-radius: 10px;" title="' + (item.siglas == '(EG)' ? 'Evaluación gratuita' : 'Pago gratuito') + '" />';
                     }
