@@ -394,8 +394,8 @@ function verFechasAdicionales(servicio = null) {
 
                 for (var i = 0; i < citasPaquete.length; i++) {
                     var fecha = citasPaquete[i].fecha_cita;
-                    var disabled = (citasPaquete[i].id_cita > 0 && citasPaquete[i].estado != 'CITADO') ? 'disabled="disabled"' : '';
-                    var deshabilitar = (citasPaquete[i].id_cita > 0 && citasPaquete[i].estado != 'CITADO') ? true : false;
+                    var disabled = (citasPaquete[i].id_cita > 0 && citasPaquete[i].estado == 'ATENDIDO') ? 'disabled="disabled"' : '';
+                    var deshabilitar = (citasPaquete[i].id_cita > 0 && citasPaquete[i].estado == 'ATENDIDO') ? true : false;
                     //servicio
                     html += '<tr>';
                     html += '<td><input class="new-font form-control fechaAd active-input-modulo" type="date" data-id-estado="' + citasPaquete[i].id_estado_cita + '" data-id-cita="' + citasPaquete[i].id_cita + '" id="txtFecha' + i + '" autocomplete="off" max="2050-12-31" min="2022-08-01" value="' + (fecha) + '" onkeydown="return false" ' + disabled + ' oninput="validarHorarioFecha(' + i + ')" /></td>';
