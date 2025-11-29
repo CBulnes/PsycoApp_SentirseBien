@@ -16,7 +16,7 @@ let searchTerm = '';
 let debounceTimer;
 let pago_gratis_;
 let _id_paquete_ = 0;
-
+$('#loaderCita').hide();
 $('#cboPaciente').on('change', function () {
     var idPaciente = $(this).val();
 
@@ -1266,6 +1266,9 @@ function cerrar_modal_pago2() {
 }
 
 function cargar_datos_cita(id_cita, id_doctor, id_paciente, fecha, hora, estado, telefono, moneda, monto_pactado, monto_pagado, monto_pendiente, id_servicio, id_sede, feedback, comentario, pago_gratis, dni_paciente, paciente, id_paquete) {
+    $('#loaderCita').show();
+
+    setTimeout(() => {  // Pequeño delay para dar tiempo al navegador a pintar el loader
     _id_paquete_ = 0;
     $('#btnResumen').trigger('click');
     $('#ulTabs').hide();
@@ -1342,7 +1345,7 @@ function cargar_datos_cita(id_cita, id_doctor, id_paciente, fecha, hora, estado,
                 $('#divPagoGratis').show();
             }
         } else if (estado == 'ATENDIDO') {
-            $('#divReprogramar, #divHorarios, .divConfirmar, #divAtender, #btnCancelar, #divPagoPendiente').hide();
+            $('#divReprogramar, #divHorarios, .divConfirmar, #divAtender, #btnCancelar').hide();
         }
 
         $('#cboPaciente').attr('disabled', true);
@@ -1369,7 +1372,10 @@ function cargar_datos_cita(id_cita, id_doctor, id_paciente, fecha, hora, estado,
 
     verificar_si_es_psicologo();
     verificar_disponibilidad();
-    mostrar_historial(id_cita, id_paciente);
+        mostrar_historial(id_cita, id_paciente);
+        $('#loaderCita').hide();
+
+    }, 50); // pequeño delay para que el loader se vea
     //validar_sede_usuario(id_doctor, id_sede);
 }
 
@@ -1470,10 +1476,10 @@ function modal_historial_pago(mostrar) {
 function mostrar_historial_pago(id_cita) {
     var html = '';
     var historial = [];
-
+    var fecha = $('#txtFecha').val();
     if (id_cita > 0) {
         $.ajax({
-            url: "/RegistroCitas/HistorialPago?id_cita=" + id_cita,
+            url: "/RegistroCitas/HistorialPago?id_cita=" + id_cita + "&&fecha="+fecha,
             type: "GET",
             async: false,
             beforeSend: function () {
