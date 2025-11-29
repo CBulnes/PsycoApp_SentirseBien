@@ -156,7 +156,7 @@ namespace PsycoApp.BL
                     var res2 = new RespuestaUsuario() { estado = false, descripcion = "" };
                     foreach (var adicional in fechas_adicionales)
                     {
-                        if (adicional.id_estado_cita == 1)
+                        if (adicional.id_estado_cita != 3)
                         {
                             Cita oCita = new Cita();
                             oCita.id_cita = Convert.ToInt32(adicional.id_cita);

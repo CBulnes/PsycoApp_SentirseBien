@@ -1058,6 +1058,7 @@ function validar_modal_fechas_adicionales() {
 }
 
 function actualizar_fechas_adicionales() {
+    console.log('recarga');
     adicionales = adicionales.filter(x => x.id_cita !== undefined);
 
     var adicionales_validar = adicionales.filter(x => x.id_estado_cita > 1);
@@ -1112,6 +1113,8 @@ function actualizar_fechas_adicionales() {
             //$("#load_data").hide();
         },
         complete: function () {
+            console.log('recarga');
+            recargar_citas();
         }
     });
 }
