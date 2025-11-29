@@ -862,6 +862,7 @@ function contenido_cita(dia, mes, año, hora, btnNuevaCita = false, btnCita = fa
                 html = '-';
             } else {
                 if (item.tipo == 'CITA') {
+                    console.log(item);
                     var INFORMES = ['CSC', 'I30'];
                     var servicioGratuito = false;
 
@@ -871,10 +872,10 @@ function contenido_cita(dia, mes, año, hora, btnNuevaCita = false, btnCita = fa
                         servicioGratuito = true;
                     }
                     clase_estado += item.esEvaluacion == 1 ? ' div_evaluacion' : '';
-
+                    //nombre_servicio
                     //cambiar el HTML si es vista mensual o semanal
                     var tipoVista = TipoVista();
-                    html += '<div id="cita' + item.id_cita + '" class="div_cita ' + clase_estado + '" data-id-cita="' + item.id_cita + '" data-evaluacion="' + item.esEvaluacion + '" data-servicio="' + item.nombre_servicio + '" data-id-especialista="' + item.id_doctor_asignado + '" data-id-paciente="' + item.id_paciente + '" data-fecha-cita="' + item.fecha_cita + '" data-pago-gratis="' + item.pago_gratis + '" data-hora-cita="' + item.hora_cita + '" data-estado="' + item.estado + '" data-telefono="' + item.telefono + '" data-moneda="' + item.moneda + '" data-monto-pactado="' + item.monto_pactado + '" data-monto-pagado="' + item.monto_pagado + '" data-monto-pendiente="' + item.monto_pendiente + '" data-id-servicio="' + item.id_servicio + '" data-id-sede="' + item.id_sede + '" data-feedback="' + item.feedback + '" data-comentario="' + item.comentario + '" data-dni-paciente="' + item.dni_paciente + '" data-paciente="' + item.paciente + '" data-id-paquete="' + item.id_paquete + '" onclick="ver_cita(this)">';
+                    html += '<div id="cita' + item.id_cita + '" title="' + item.nombre_servicio  + '" class="div_cita ' + clase_estado + '" data-id-cita="' + item.id_cita + '" data-evaluacion="' + item.esEvaluacion + '" data-servicio="' + item.nombre_servicio + '" data-id-especialista="' + item.id_doctor_asignado + '" data-id-paciente="' + item.id_paciente + '" data-fecha-cita="' + item.fecha_cita + '" data-pago-gratis="' + item.pago_gratis + '" data-hora-cita="' + item.hora_cita + '" data-estado="' + item.estado + '" data-telefono="' + item.telefono + '" data-moneda="' + item.moneda + '" data-monto-pactado="' + item.monto_pactado + '" data-monto-pagado="' + item.monto_pagado + '" data-monto-pendiente="' + item.monto_pendiente + '" data-id-servicio="' + item.id_servicio + '" data-id-sede="' + item.id_sede + '" data-feedback="' + item.feedback + '" data-comentario="' + item.comentario + '" data-dni-paciente="' + item.dni_paciente + '" data-paciente="' + item.paciente + '" data-id-paquete="' + item.id_paquete + '" onclick="ver_cita(this)">';
                     html += item.hora_cita.replace(' ', '').replace('M', '') + ' ';
                     if (item.tipo_cita == 'V') {
                         html += '(' + item.tipo_cita + ') ';
