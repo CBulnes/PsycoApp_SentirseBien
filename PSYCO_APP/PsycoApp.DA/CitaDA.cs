@@ -549,9 +549,25 @@ namespace PsycoApp.DA
                         cita.comentario = Convert.ToString(reader["comentario"]);
                         cita.pago_gratis = Convert.ToBoolean(reader["pago_gratis"]);
 
-                        TimeSpan hora = reader.GetTimeSpan(reader.GetOrdinal("hora_cita"));
-                        cita.hora_cita_mostrar = DateTime.Today.Add(hora).ToString("hh:mm tt");
-                        cita.hora_cita = hora.ToString(@"hh\:mm\:ss\.fffffff");
+                        //TimeSpan hora = reader.GetTimeSpan(reader.GetOrdinal("hora_cita"));
+                        //cita.hora_cita_mostrar = DateTime.Today.Add(hora).ToString("hh:mm tt");
+                        //cita.hora_cita = hora.ToString(@"hh\:mm\:ss\.fffffff");
+
+                        int idxHora = reader.GetOrdinal("hora_cita");
+
+                        if (!reader.IsDBNull(idxHora))
+                        {
+                            TimeSpan hora = reader.GetTimeSpan(idxHora);
+
+                            cita.hora_cita_mostrar = DateTime.Today.Add(hora).ToString("hh:mm tt");
+                            cita.hora_cita = hora.ToString(@"hh\:mm\:ss\.fffffff");
+                        }
+                        else
+                        {
+                            cita.hora_cita_mostrar = null;
+                            cita.hora_cita = null;
+                        }
+
                         //cita.hora_cita = Convert.ToString(row["hora_cita"]);
                         lista.Add(cita);
                     }
