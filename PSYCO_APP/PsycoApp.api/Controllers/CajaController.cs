@@ -49,6 +49,23 @@ namespace PsycoApp.api.Controllers
             return res_;
         }
 
+        [HttpPost("registrar_descuento")]
+        public RespuestaUsuario RegistrarDescuento([FromBody] Pago oPago)
+        {
+            RespuestaUsuario res_ = new RespuestaUsuario();
+            random_str = ru.RandomString(8) + "|" + ru.CurrentDate();
+            try
+            {
+                res_ = cajaBL.registrar_descuento(oPago, main_path, random_str);
+            }
+            catch (Exception)
+            {
+                res_.descripcion = "Ocurrió un error al registrar el descuento";
+                res_.estado = false;
+            }
+            return res_;
+        }
+
         [HttpPost("registrar_efectivo")]
         public RespuestaUsuario registrar_efectivo([FromBody] EfectivoDiario oPago)
         {

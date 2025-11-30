@@ -30,6 +30,21 @@ namespace PsycoApp.BL
             return res_;
         }
 
+        public RespuestaUsuario registrar_descuento(Pago oPago, string main_path, string random_str)
+        {
+            RespuestaUsuario res_ = new RespuestaUsuario();
+            try
+            {
+                res_ = cajaDA.registrar_descuento(oPago, main_path, random_str);
+            }
+            catch (Exception)
+            {
+                res_.estado = false;
+                res_.descripcion = "Ocurrió un error al registrar el descuento.";
+            }
+            return res_;
+        }
+
         public RespuestaUsuario registrar_efectivo(EfectivoDiario oPago, string main_path, string random_str)
         {
             RespuestaUsuario res_ = new RespuestaUsuario();

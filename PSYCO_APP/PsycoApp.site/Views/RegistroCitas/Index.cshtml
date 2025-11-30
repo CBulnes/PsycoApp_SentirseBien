@@ -407,6 +407,18 @@
                                     </div>
                                 </div>
 
+                                <div class="sb-reg-citas-popup-tab-panel-block" style="display: flex;">
+                                    <div class="sb-reg-citas-popup-tab-panel-block-item" style="width: 50%; display: inline-flex;">
+                                        <span class="label-form">Descuento</span>
+                                        <input class="form-control" type="text" id="txtMontoDescuento" autocomplete="off" onfocusout="setDecimalValue()" />
+                                    </div>
+
+                                    <div class="sb-reg-citas-popup-tab-panel-block-item" style="width: 50%;">
+                                        <span class="label-form">&nbsp;</span>
+                                        <button type="button" class="btn btn-secondary sb-reg-citas-popup-button-volver" style="width: 100%;" onclick="agregar_descuento()">Aplicar</button>
+                                    </div>
+                                </div>
+
                                 <div class="sb-reg-citas-popup-tab-panel-block" style="display:none">
                                     <div class="sb-reg-citas-popup-tab-panel-block-item">
                                         <span class="label-form">Centro</span>
@@ -475,44 +487,41 @@
                                         <button type="button" id="btnEstado"></button>
                                     </div>
                                 </div>
-
                                 
                                 <div class="sb-reg-citas-popup-tab-panel-block" id="divPagoGratis">
                                     <div class="sb-reg-citas-popup-tab-panel-block-item">
                                         <button id="btnPagoGratis" type="button" onclick="registrarPagoGratis()" class="btn btn-primary">Registrar pago gratuito</button>
                                     </div>
                                 </div>
-
                             </div>
-
-
 
                             <div class="col-md-4">
                                 <div class="sb-reg-citas-popup-tab-historial" id="divHistorial"></div>
                                 <br />
-                              
-                            </div>
-
-
-                        </div>
-                        <div class="sb-reg-citas-popup-tab-panel-block" id="divHorarios">
-                            <div class="sb-reg-citas-popup-tab-panel-block-item">
-                                <table class="table table-responsive" style="display: inline-table;">
-                                    <thead>
-                                        <tr>
-                                            <th class="text-center">Hora</th>
-                                            <th class="text-center">Estado</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="divDisponibilidad"></tbody>
-                                </table>
                             </div>
                         </div>
 
+                        <div class="row">
+                            <div class="sb-reg-citas-popup-tab-panel col-md-8">
 
-                      
-                    
+                                <div class="sb-reg-citas-popup-tab-panel-block" id="divHorarios">
+                                    <div class="sb-reg-citas-popup-tab-panel-block-item">
+                                        <table class="table table-responsive" style="display: inline-table;">
+                                            <thead>
+                                                <tr>
+                                                    <th class="text-center">Hora</th>
+                                                    <th class="text-center">Estado</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="divDisponibilidad"></tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
                     </div>
+
                     <!--historial-->
                     <div id="historial" class="tab-pane fade">
                         <div class="sb-reg-citas-popup-tab-historial">

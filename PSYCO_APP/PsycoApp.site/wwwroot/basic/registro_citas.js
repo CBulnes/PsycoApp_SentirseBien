@@ -87,6 +87,8 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 $(document).ready(function () {
 
+    $("#txtMontoDescuento").inputmask({ 'alias': 'numeric', allowMinus: false, digits: 2, max: 999.99 }).val('0.00');
+
     $('#cboDoctorFiltro').change(function () {
      
         var doctorSeleccionado = parseInt($(this).val(), 10);  // O usa parseFloat si el valor es decimal
@@ -624,6 +626,7 @@ function copiarOpciones() {
 
 
 function ver_cita(e) {
+    $("#txtMontoDescuento").val('0.00');
     console.log(e);
     console.log("citas");
     var esEvaluacion = $(e).data('evaluacion');
@@ -858,8 +861,6 @@ function GetFechaActual() {
 }
 
 function form_pago() {
-
-
     $.ajax({
         url: "/Home/ObtenerConfiguracion",
         type: "GET",
@@ -1811,6 +1812,55 @@ $('.dateCrearCita').on('change', function () {
     $('.dateCrearCita').attr('data-fecha', fechaSeleccionada);
     verificar_disponibilidad();
 });
+
+function agregar_descuento() {
+    var importe = $('#txtMontoDescuento').val();
+
+    if (importe == '0.00' || (importe != '' && !isPrecise(importe))) {
+        Swal.fire({
+            icon: "warning",
+            title: "Oops...",
+            text: "Para registrar el descuento debe ingresar un importe válido.",
+        });
+        return;
+    }
+
+    var data_ = {
+        id_cita: id_cita_,
+        importe: importe
+    };
+
+    $.ajax({
+        url: "/Caja/RegistrarDescuento",
+        type: "POST",
+        data: data_,
+        success: function (data) {
+            if (data.estado) {
+                Swal.fire({
+                    icon: "success",
+                    text: "Descuento registrado exitosamente.",
+                });
+
+                $("#txtMontoDescuento").val('0.00');
+            } else {
+                Swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    text: data.descripcion,
+                });
+            }
+        },
+        error: function (response) {
+            Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: "Ocurrió un error al aplicar el descuento.",
+            });
+        },
+        complete: function () {
+        }
+    });
+}
 
 function guardar_cita() {
     var fecha = $('#txtFecha').attr('data-fecha');

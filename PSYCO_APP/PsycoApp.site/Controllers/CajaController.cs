@@ -17,6 +17,7 @@ namespace PsycoApp.site.Controllers
     {
         private readonly string apiUrl = Helper.GetUrlApi() + "/api/caja"; // URL base de la API
         private string url_registrar_pago = Helper.GetUrlApi() + "/api/caja/registrar_pago";
+        private string url_registrar_descuento = Helper.GetUrlApi() + "/api/caja/registrar_descuento";
         private string url_registrar_efectivo = Helper.GetUrlApi() + "/api/caja/registrar_efectivo";
         private string url_listar_pagos_pendientes = Helper.GetUrlApi() + "/api/caja/listar_pagos_pendientes";
         private string url_listar_resumen_caja = Helper.GetUrlApi() + "/api/caja/listar_resumen_caja";
@@ -197,6 +198,28 @@ namespace PsycoApp.site.Controllers
             {
                 res_.estado = false;
                 res_.descripcion = "Ocurrió un error al registrar el pago.";
+            }
+            return res_;
+        }
+
+        [HttpPost]
+        public async Task<RespuestaUsuario> RegistrarDescuento(Pago model)
+        {
+            string res = "";
+            model.usuario = Convert.ToString(HttpContext.Session.GetString("login"));
+
+            RespuestaUsuario res_ = new RespuestaUsuario();
+            try
+            {
+                url = url_registrar_descuento;
+                obj = (dynamic)model;
+                res = ApiCaller.consume_endpoint_method(url, obj, "POST");
+                res_ = JsonConvert.DeserializeObject<RespuestaUsuario>(res);
+            }
+            catch (Exception)
+            {
+                res_.estado = false;
+                res_.descripcion = "Ocurrió un error al registrar el descuento.";
             }
             return res_;
         }
