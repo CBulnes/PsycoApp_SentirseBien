@@ -28,6 +28,20 @@
         text-align: center !important;
         display: block !important;
     }
+
+    .cita-unselected {
+        font-size: 20px;
+        border: 0px solid transparent;
+        background-color: transparent !important;
+    }
+
+    .cita-unselected::before {
+        content: "🔲";
+    }
+
+    .cita-selected::before {
+        content: "✅" !important;
+    }
 </style>
 <link rel="stylesheet" href="~/src/css/sb-historial-citas.css" />
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css" />
@@ -84,8 +98,15 @@
                 <div class="sb-his-citas-item">
                     <div class="form-group">
                         <span class="label-form active-texto-modulo">Forma de Pago</span>
-                        <select class="form-control cbo-search active-select-modulo" id="cboVerSinReserva">
+                        <select class="form-control cbo-search active-select-modulo" id="cboFormaPago">
                             <option value="-1">Seleccionar</option>
+                            <option value="1">Transferencia</option>
+                            <option value="2">Depósito</option>
+                            <option value="3">Pago gratis</option>
+                            <option value="4">Efectivo</option>
+                            <option value="5">Tarjeta</option>
+                            <option value="6">Yape</option>
+                            <option value="7">Plin</option>
                         </select>
                     </div>
                 </div>
@@ -100,7 +121,7 @@
                 <div class="sb-his-citas-item">
                     <div class="form-group">
                         <span class="label-form active-texto-modulo active-fondo-oscuro">Buscar por monto</span>
-                        <input class="form-control cbo-search active-select-modulo" id="inpPago">
+                        <input class="form-control cbo-search active-select-modulo" id="Monto">
                     </div>
                 </div>
 
@@ -108,6 +129,14 @@
                     <div class="form-group sb-his-citas-item-button">
                         <button type="button" class="btn btn-doc active-button-modulo btn-busqueda" onclick="cargar_historial()">
                             Buscar
+                        </button>
+                    </div>
+                </div>
+
+                <div class="sb-his-citas-item">
+                    <div class="form-group sb-his-citas-item-button">
+                        <button type="button" class="btn btn-doc active-button-modulo btn-busqueda" onclick="realizar_pago()">
+                            Pagar
                         </button>
                     </div>
                 </div>
@@ -135,23 +164,20 @@
                             Monto pendiente
                         </th>
                         <th class="text-center">
-                            Monto Pagado
+                            Estado cita
                         </th>
                         <th class="text-center">
                             Estado - Pagado O Pendiente
                         </th>
-                        <th class="text-center">
-                            Es&nbsp;evaluación
-                        </th>
-                        <th class="text-center">
+                        @* <th class="text-center">
                             Acción
-                        </th>
+                        </th> *@
                         <th class="text-center">
                             Seleccionar Pago
                         </th>
                     </tr>
                 </thead>
-                <tbody id="bdCitas">
+                <tbody id="bdCitasHist">
                 </tbody>
             </table>
         </div>
@@ -253,6 +279,47 @@
             </div>
         </div>
 
+    </div>
+</div>
+
+<div id="mdl_pago_masivo" class="modal" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="true">
+    <div class="modal-dialog modal-md" role="document" style="height: 90%; display: grid; place-items: center;">
+        <div class="modal-content sb-reg-citas-popup-container">
+            <div class="modal-header sb-reg-citas-popup-title">
+                <h5 class="modal-title">Registrar pago</h5>
+            </div>
+            <div class="modal-body sb-reg-citas-popup-body">
+
+                <div class="sb-reg-citas-popup-tab-panel">
+
+                    <div class="sb-reg-citas-popup-tab-panel-block">
+                        <div class="sb-reg-citas-popup-tab-panel-block-item">
+                            <span class="label-form">Total efectivo</span>
+                            <input class="form-control" type="text" id="txtTotalPendiente" autocomplete="off" disabled="disabled" onfocusout="setDecimalValue()" />
+                        </div>
+                    </div>
+
+                    <div class="sb-reg-citas-popup-tab-panel-block">
+                        <div class="sb-reg-citas-popup-tab-panel-block-item">
+                            <span class="label-form">Total efectivo</span>
+                            <input class="form-control" type="text" id="txtTotalPagar" autocomplete="off" onfocusout="setDecimalValue()" />
+                        </div>
+                    </div>
+
+                    <div class="sb-reg-citas-popup-tab-panel-block">
+                        <div class="sb-reg-citas-popup-tab-panel-block-item">
+                            <span class="label-form">Observación</span>
+                            <input class="form-control" type="text" id="txtComentario_" autocomplete="off" maxlength="50" />
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary sb-reg-citas-popup-button-volver">Volver</button>
+                <button type="button" class="btn btn-primary main_color sb-reg-citas-popup-button">Aceptar</button>
+            </div>
+        </div>
     </div>
 </div>
 

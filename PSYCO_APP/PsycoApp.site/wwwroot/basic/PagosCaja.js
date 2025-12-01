@@ -1,5 +1,6 @@
 ﻿//var path = ruta;
 
+var citas_seleccionadas = [];
 var lista_citas = [];
 var lista_historial = [];
 var idPaciente = 0;
@@ -60,6 +61,7 @@ function cargar_lista_doctores() {
 cargar_lista_doctores();
 
 function cargar_historial() {
+    citas_seleccionadas = [];
     var html = '';
 
     var inicio = $('#txtInicio').val();
@@ -94,17 +96,58 @@ function cargar_historial() {
                     html += '<td class="text-center text-tbl">' + item.hora_cita + '</td>';
                     html += '<td class="text-center text-tbl">' + item.monto_pendiente_ + '</td>';
                     html += '<td class="text-center text-tbl">' + accion_estado(item.estado) + '</td>';
-                    html += '<td class="text-center text-tbl">' + (item.esEvaluacion ? 'SI' : 'NO') + '</td>';
-                    html += '<td class="text-center text-tbl">' + accion_cita(item.esEvaluacion, item.usuario, item.monto_pendiente_, item.id_paciente, item.id_cita, item.id_paquete, item.informe_adicional, item.dni_paciente, item.telefono) + '</td>';
+                    html += '<td class="text-center text-tbl">' + (item.monto_pendiente_ == 'S/.0.00' ? 'Pagado' : 'Pendiente') + '</td>';
+                    //html += '<td class="text-center text-tbl">' + 'accion' + '</td>';
+                    html += '<td class="text-center text-tbl">' + (item.monto_pendiente_ == 'S/.0.00' ? '' : '<button type="button" class="btn btn-doc cita-unselected btn-cita' + item.id_cita + '" onclick="accion_cita_pago(' + item.id_cita + ')"></button>') + '</td>';
                     html += '</tr>';
                     i++;
                 }
             } else {
-                html = '<tr><td colspan="11" class="text-center">No se encontraron resultados</td></tr>';
+                html = '<tr><td colspan="10" class="text-center">No se encontraron resultados</td></tr>';
             }
-            $('#bdCitas').html(html);
+            $('#bdCitasHist').html(html);
         }
     });
+}
+
+function accion_cita_pago(id_cita) {
+    var clase = 'btn-cita' + id_cita;
+    if ($('.' + clase).hasClass('cita-selected')) {
+        $('.' + clase).removeClass('cita-selected');
+        citas_seleccionadas = citas_seleccionadas.filter(n => n !== id_cita);
+    } else {
+        $('.' + clase).addClass('cita-selected');
+        citas_seleccionadas.push(id_cita);
+    }
+}
+
+function realizar_pago() {
+    const citas_filtradas = lista_citas.filter(cita =>
+        citas_seleccionadas.includes(cita.id_cita)
+    );
+    const total = citas_filtradas.reduce((acum, item) => {
+        const monto = parseFloat(
+            item.monto_pendiente_.replace("S/.", "").trim()
+        );
+        return acum + monto;
+    }, 0);
+
+    const total_formateado = total.toFixed(2);
+
+    if (total_formateado == '0.00') {
+        Swal.fire({
+            icon: "Error",
+            title: "Oops...",
+            text: "Seleccione un pago para continuar.",
+        });
+        return;
+    }
+
+    console.log('citas seleccionadas', citas_seleccionadas);
+    console.log('total pendiente de las citas seleccionadas', total_formateado);
+    $('#txtTotalPendiente').inputmask({ 'alias': 'numeric', allowMinus: false, digits: 2, max: 999.99 }).val(total_formateado);
+    $('#txtTotalPagar').inputmask({ 'alias': 'numeric', allowMinus: false, digits: 2, max: 999.99 }).val('0.00');
+    $('#mdl_pago_masivo').modal('show');
 }
 
 function accion_estado(estado) {

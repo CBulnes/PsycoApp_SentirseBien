@@ -49,6 +49,36 @@ namespace PsycoApp.DA
             return res_;
         }
 
+        public RespuestaUsuario registrar_descuento(Pago oPago, string main_path, string random_str)
+        {
+            RespuestaUsuario res_ = new RespuestaUsuario();
+            try
+            {
+                cn.Open();
+                SqlCommand cmd = new SqlCommand("SP_REGISTRAR_DESCUENTO", cn);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Add("@id_cita", SqlDbType.Int).Value = oPago.id_cita;
+                cmd.Parameters.Add("@importe", SqlDbType.Decimal).Value = oPago.importe;
+
+                SqlDataAdapter da = new SqlDataAdapter(cmd);
+                DataTable dt = new DataTable();
+                da.Fill(dt);
+
+                foreach (DataRow row in dt.Rows)
+                {
+                    res_.descripcion = Convert.ToString(row["rpta"]);
+                }
+                res_.estado = res_.descripcion == "OK" ? true : false;
+            }
+            catch (Exception e)
+            {
+                res_.estado = false;
+                res_.descripcion = "Ocurrió un error al registrar el descuento.";
+            }
+            cn.Close();
+            return res_;
+        }
+
         public RespuestaUsuario registrar_efectivo(EfectivoDiario oPago, string main_path, string random_str)
         {
             RespuestaUsuario res_ = new RespuestaUsuario();
