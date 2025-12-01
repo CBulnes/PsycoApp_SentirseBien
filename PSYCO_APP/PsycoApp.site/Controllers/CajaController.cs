@@ -19,6 +19,8 @@ namespace PsycoApp.site.Controllers
         private string url_registrar_pago = Helper.GetUrlApi() + "/api/caja/registrar_pago";
         private string url_registrar_descuento = Helper.GetUrlApi() + "/api/caja/registrar_descuento";
         private string url_registrar_efectivo = Helper.GetUrlApi() + "/api/caja/registrar_efectivo";
+        private string url_aperturar_caja = Helper.GetUrlApi() + "/api/caja/aperturar_caja";
+        private string url_cerrar_caja = Helper.GetUrlApi() + "/api/caja/cerrar_caja";
         private string url_listar_pagos_pendientes = Helper.GetUrlApi() + "/api/caja/listar_pagos_pendientes";
         private string url_listar_resumen_caja = Helper.GetUrlApi() + "/api/caja/listar_resumen_caja";
 
@@ -242,6 +244,50 @@ namespace PsycoApp.site.Controllers
             {
                 res_.estado = false;
                 res_.descripcion = "Ocurrió un error al registrar el efectivo.";
+            }
+            return res_;
+        }
+
+        [HttpPost]
+        public async Task<RespuestaUsuario> AperturarCaja(CajaNuevo model)
+        {
+            string res = "";
+            model.usuario = Convert.ToString(HttpContext.Session.GetString("login"));
+
+            RespuestaUsuario res_ = new RespuestaUsuario();
+            try
+            {
+                url = url_aperturar_caja;
+                obj = (dynamic)model;
+                res = ApiCaller.consume_endpoint_method(url, obj, "POST");
+                res_ = JsonConvert.DeserializeObject<RespuestaUsuario>(res);
+            }
+            catch (Exception)
+            {
+                res_.estado = false;
+                res_.descripcion = "Ocurrió un error al aperturar la caja.";
+            }
+            return res_;
+        }
+
+        [HttpPost]
+        public async Task<RespuestaUsuario> CerrarCaja(CajaNuevo model)
+        {
+            string res = "";
+            model.usuario = Convert.ToString(HttpContext.Session.GetString("login"));
+
+            RespuestaUsuario res_ = new RespuestaUsuario();
+            try
+            {
+                url = url_cerrar_caja;
+                obj = (dynamic)model;
+                res = ApiCaller.consume_endpoint_method(url, obj, "POST");
+                res_ = JsonConvert.DeserializeObject<RespuestaUsuario>(res);
+            }
+            catch (Exception)
+            {
+                res_.estado = false;
+                res_.descripcion = "Ocurrió un error al cerrar la caja.";
             }
             return res_;
         }

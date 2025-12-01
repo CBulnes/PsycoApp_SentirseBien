@@ -294,6 +294,54 @@ function cerrar_modal_efectivo_diario() {
     $('#mdl_efectivo_diario').modal('hide');
 }
 
+function aperturar_caja() {
+    modificar_caja(1);
+}
+
+function cerrar_caja() {
+    modificar_caja(0);
+}
+
+function modificar_caja(flag) {
+    setTimeout(() => {
+
+        var data_ = {
+            usuario: '-',
+            observaciones: '-'
+        };
+
+        $.ajax({
+            url: flag == 1 ? "/Caja/AperturarCaja" : "/Caja/CerrarCaja",
+            type: "POST",
+            data: data_,
+            success: function (data) {
+                if (data.estado) {
+                    Swal.fire({
+                        icon: "success",
+                        text: "Caja " + (flag == 1 ? "aperturada" : "cerrada") + " correctamente.",
+                    });
+                } else {
+                    Swal.fire({
+                        icon: "error",
+                        title: "Oops...",
+                        text: data.descripcion,
+                    });
+                }
+            },
+            error: function (response) {
+                Swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    text: "Ocurrió un error al " + (flag == 1 ? "aperturar" : "cerrar") + " la caja.",
+                });
+            },
+            complete: function () {
+            }
+        });
+
+    }, 500);
+}
+
 function guardar_efectivo_diario() {
     setTimeout(() => {
         var fecha = $('#txtFecha_').val();
