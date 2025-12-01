@@ -876,13 +876,17 @@ function contenido_cita(dia, mes, año, hora, btnNuevaCita = false, btnCita = fa
                     //cambiar el HTML si es vista mensual o semanal
                     var tipoVista = TipoVista();
                     html += '<div id="cita' + item.id_cita + '" title="' + item.nombre_servicio  + '" class="div_cita ' + clase_estado + '" data-id-cita="' + item.id_cita + '" data-evaluacion="' + item.esEvaluacion + '" data-servicio="' + item.nombre_servicio + '" data-id-especialista="' + item.id_doctor_asignado + '" data-id-paciente="' + item.id_paciente + '" data-fecha-cita="' + item.fecha_cita + '" data-pago-gratis="' + item.pago_gratis + '" data-hora-cita="' + item.hora_cita + '" data-estado="' + item.estado + '" data-telefono="' + item.telefono + '" data-moneda="' + item.moneda + '" data-monto-pactado="' + item.monto_pactado + '" data-monto-pagado="' + item.monto_pagado + '" data-monto-pendiente="' + item.monto_pendiente + '" data-id-servicio="' + item.id_servicio + '" data-id-sede="' + item.id_sede + '" data-feedback="' + item.feedback + '" data-comentario="' + item.comentario + '" data-dni-paciente="' + item.dni_paciente + '" data-paciente="' + item.paciente + '" data-id-paquete="' + item.id_paquete + '" onclick="ver_cita(this)">';
-                    html += item.hora_cita.replace(' ', '').replace('M', '') + ' ';
+
+                    html += formatearHora(item.hora_cita.replace(' ', '').replace('M', '') + ' ')+' ';
                     if (item.tipo_cita == 'V') {
                         html += '(' + item.tipo_cita + ') ';
                     }
-
+                    console.log(item.hora_cita);
+                    console.log(item.hora_cita.replace(' ', '').replace('M', '') + ' ');
+                    console.log(html);
+                    console.log('jj');
                     //html += ((servicioGratuito ? item.nombre_servicio.toUpperCase() : item.paciente) + (' ' + item.siglas) + (item.orden_cita == '' ? '' : ' - ' + item.orden_cita)).trim();
-                    html += ((servicioGratuito ? item.nombre_servicio.toUpperCase() : item.paciente) + (item.orden_cita == '' ? '' : ' - ' + item.orden_cita)).trim();
+                    html += ((item.orden_cita == '' ? '' : '(' + item.orden_cita+')') +(servicioGratuito ? item.nombre_servicio.toUpperCase() : item.paciente)).trim();
                     if (item.pago_gratis == 'true' || item.pago_gratis == true || item.pago_gratis || item.siglas == '(_CSC)'|| item.siglas == '(_I30)') {
                         html += '<img src="../images/free.png" style="height: 20px; width: auto; cursor: pointer; margin: 0px 0px 0px 5px; border-radius: 10px;" title="' + (item.siglas == '(EG)' ? 'Evaluación gratuita' : 'Pago gratuito') + '" />';
                     }
@@ -904,6 +908,29 @@ function contenido_cita(dia, mes, año, hora, btnNuevaCita = false, btnCita = fa
         }
     }
     return html;
+}
+function formatearHora(hora) {
+    if (!hora) return "";
+
+    // Limpieza: remover espacios y M final si llega como "AM" o "PM"
+    hora = hora.replace(' ', '').replace(/M$/i, '');
+
+    // Expresión para capturar hora, minutos y A/P
+    const match = hora.match(/^0?(\d{1,2}):?(\d{2})?(A|P)$/i);
+    if (!match) return hora;
+
+    let [, h, m, sufijo] = match;
+
+    // Quitar cero inicial de la hora
+    h = String(parseInt(h, 10));
+
+    // Si los minutos existen y son "00", los omitimos
+    if (m === "00" || m === undefined) {
+        return `${h}${sufijo.toUpperCase()}`;
+    }
+
+    // Caso normal: mantener minutos
+    return `${h}:${m}${sufijo.toUpperCase()}`;
 }
 
 function validar_feriado(dia, mes, año) {

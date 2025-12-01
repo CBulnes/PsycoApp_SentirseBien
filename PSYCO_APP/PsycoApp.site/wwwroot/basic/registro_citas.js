@@ -644,7 +644,7 @@ function ver_cita(e) {
                         {{btnNuevaCita}}
                     </div>`;
 
-    htmlOpciones = htmlOpciones.replace('{{btnNuevaCita}}', (esEvaluacion ? '<button id="btnNuevaCita" class="swal2-deny swal2-styled" style="background-color:#0d6efd"><i class="fa fa-edit"></i> Agregar cita</button>' : ''));
+    htmlOpciones = htmlOpciones.replace('{{btnNuevaCita}}', (esEvaluacion ? '<button id="btnNuevaCita" class="swal2-deny swal2-styled" style="background-color:#0d6efd"><i class="fa fa-edit"></i> Agregar cita a la Evaluación</button>' : ''));
 
     if (id_paquete > 0) {
         Swal.fire({

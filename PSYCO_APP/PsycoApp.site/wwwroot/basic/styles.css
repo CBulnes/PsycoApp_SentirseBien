@@ -493,6 +493,7 @@ button.main_color {
 
 .div_evaluacion {
     border: 5px solid #880CB2;
+    background-color: #880CB2 !important;
 }
 
 .div_cita.div_evt_en_proceso {
