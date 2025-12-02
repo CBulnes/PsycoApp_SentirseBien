@@ -74,6 +74,21 @@ namespace PsycoApp.BL
             return lista;
         }
 
+        public List<CajasUsuario> listar_cajas(string usuario, DateTime date)
+        {
+            List<CajasUsuario> lista = new List<CajasUsuario>();
+            try
+            {
+                lista = cajaDA.listar_cajas(usuario, date);
+            }
+            catch (Exception)
+            {
+                lista.Clear();
+            }
+            return lista;
+        }
+
+
         public List<CuadreCaja> listar_cuadre_caja(string usuario, int pagina, int tamanoPagina, string fecha, int buscar_por, int sede, int id_usuario, int id_cita = 0)
         {
             List<CuadreCaja> lista = new List<CuadreCaja>();
