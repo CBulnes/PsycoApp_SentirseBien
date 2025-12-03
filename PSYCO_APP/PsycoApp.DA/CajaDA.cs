@@ -148,6 +148,51 @@ namespace PsycoApp.DA
             return lista;
         }
 
+        //listar_cajas
+        public List<CajasUsuario> listar_cajas(string usuario, DateTime date)
+        {
+            List<CajasUsuario> lista = new List<CajasUsuario>();
+            try
+            {
+                cn.Open();
+                SqlCommand cmd = new SqlCommand(Procedures.sp_lista_caja, cn);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Add("@usuarioApertura", SqlDbType.VarChar).Value = usuario;
+                cmd.Parameters.Add("@fecha", SqlDbType.DateTime).Value = date;
+
+                SqlDataAdapter da = new SqlDataAdapter(cmd);
+                DataTable dt = new DataTable();
+                da.Fill(dt);
+
+                foreach (DataRow row in dt.Rows)
+                {
+                    CajasUsuario item = new CajasUsuario();
+                    item.id_caja = row["turno"] != DBNull.Value ? Convert.ToInt32(row["turno"]) : 0;
+                    item.estado = row["Estado"] != DBNull.Value
+                      ? Convert.ToString(row["Estado"])
+                      : string.Empty;
+                    item.nombre_usuario = row["UsuarioApertura"] != DBNull.Value
+                        ? Convert.ToString(row["UsuarioApertura"])
+                        : string.Empty;
+                    item.fecha = Convert.ToDateTime(row["Fecha"]);
+
+                    item.fecha_apertura = row["HoraApertura"] != DBNull.Value
+                        ? Convert.ToDateTime(row["HoraApertura"])
+                        : (DateTime?)null;
+
+                    item.fecha_cierre = row["HoraCierre"] != DBNull.Value
+                        ? Convert.ToDateTime(row["HoraCierre"])
+                        : (DateTime?)null;
+                    lista.Add(item);
+                }
+            }
+            catch (Exception e)
+            {
+                lista.Clear();
+            }
+            cn.Close();
+            return lista;
+        }
         public List<CuadreCaja> listar_cuadre_caja(string usuario, int pagina, int tamanoPagina, string fecha, int buscar_por, int sede, int id_usuario, int id_cita = 0)
         {
             List<CuadreCaja> lista = new List<CuadreCaja>();

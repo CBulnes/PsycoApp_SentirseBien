@@ -113,6 +113,15 @@
                     </button>
                 </div>
             </div>
+            <div class="col-2">
+                <div class="form-group">
+                    <label class="active-titular-modulo">&nbsp;</label>
+                    <button type="button" class="btn btn-doc second_color" onclick="mostrarModalCajas()">
+                     Ver Cajas
+                    </button>
+                </div>
+            </div>
+     
         </div>
 
         <!-- Contenedor de la tabla -->
@@ -292,6 +301,72 @@
         </table>
     </div>
 </div>
+<!-- MODAL -->
+<div id="cajasModal" class="modal" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="true" style="display:none;">
+    <div class="modal-dialog modal-lg" role="document" style="height: 90%; display: grid; place-items: center;">
+        <div class="modal-content sb-reg-citas-popup-container">
+
+            <!-- HEADER -->
+
+            <div class="modal-header sb-reg-citas-popup-title">
+
+                <h5 class="modal-title">Listado de Caja por Usuario</h5>
+                <button type="button" class="close" onclick="$('#cajasModal').hide();" aria-label="Close" style="font-size: 28px; margin-top:-8px;">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <!-- BODY -->
+            <div class="modal-body sb-reg-citas-popup-body">
+
+                <!-- FILTRO -->
+                <div class="sb-reg-citas-popup-tab-panel">
+
+                    <div class="sb-reg-citas-popup-tab-panel-block">
+
+
+                        <div class="sb-reg-citas-popup-tab-panel-block-item">
+                            <span class="label-form">Usuario</span>
+                            <select id="cbUsuarioCaja" class="form-control">
+                                <option value="">-- Seleccione --</option>
+                            </select>
+                        </div>
+                        <div class="sb-reg-citas-popup-tab-panel-block-item">
+                            <span class="label-form">Fecha</span>
+                            <input id="txtFechaCaja" class="form-control" type="date" />
+                        </div>
+
+                        <div class="sb-reg-citas-popup-tab-panel-block-item" style="margin-top:28px;">
+                            <button class="btn btn-primary main_color" type="button" onclick="buscarCajaUsuario()">
+                                <i class="fa fa-search"></i> Buscar
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- TABLA -->
+                <div class="mt-3" id="containerTablaCajas">
+                    @await Html.PartialAsync(
+                                      "~/Views/Caja/_CajasUsuarioTabla.cshtml",
+                                      Enumerable.Empty<PsycoApp.entities.CajasUsuario>()
+                                      )
+                </div>
+
+            </div>
+
+            <!-- FOOTER -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary sb-reg-citas-popup-button-volver"
+                        onclick="$('#cajasModal').hide();">
+                    Cerrar
+                </button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
 
 <div id="mdl_efectivo_diario" class="modal" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="true">
     <div class="modal-dialog modal-md" role="document" style="height: 90%; display: grid; place-items: center;">
@@ -396,4 +471,29 @@
         });
     }
     cargar_lista_usuarios_caja();
+
+        function mostrarModalCajas() {
+        $('#cajasModal').show();
+    }
+
+    function buscarCajaUsuario() {
+
+        const fecha = $('#txtFechaCaja').val();
+
+        if (!fecha) {
+            Swal.fire({ icon: 'warning', text: 'Seleccione una fecha.' });
+            return;
+        }
+
+        $.get('/Caja/ListarCajas', { fecha: fecha })
+            .done(function (data) {
+                $('#containerTablaCajas').html(data);
+            })
+            .fail(function () {
+                Swal.fire({
+                    icon: 'error',
+                    text: 'Error al cargar el listado.'
+                });
+            });
+    }
 </script>

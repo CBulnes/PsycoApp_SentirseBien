@@ -24,7 +24,7 @@ namespace PsycoApp.site.Controllers
         private string url_cerrar_caja = Helper.GetUrlApi() + "/api/caja/cerrar_caja";
         private string url_listar_pagos_pendientes = Helper.GetUrlApi() + "/api/caja/listar_pagos_pendientes";
         private string url_listar_resumen_caja = Helper.GetUrlApi() + "/api/caja/listar_resumen_caja";
-
+        private string url_listar_cajas = Helper.GetUrlApi() + "/api/caja/listar_cajas";
         private string url = "";
         dynamic obj = new System.Dynamic.ExpandoObject();
         private string url_reporte = Helper.GetUrlApi() + "/api/reporte";
@@ -333,6 +333,49 @@ namespace PsycoApp.site.Controllers
             return lista;
         }
 
+        //[HttpGet]
+        //public async Task<List<CajasUsuario>> ListarCajas(DateTime fecha)
+        //{
+        //    List<CajasUsuario> lista = new List<CajasUsuario>();
+        //    string usuario= Convert.ToString(HttpContext.Session.GetString("login"));
+        //    string res = "";
+        //    try
+        //    {
+        //        url = url_listar_cajas +"/"+ usuario + "/" + fecha;
+        //        res = ApiCaller.consume_endpoint_method(url, null, "GET");
+        //        lista = JsonConvert.DeserializeObject<List<CajasUsuario>>(res);
+        //    }
+        //    catch (Exception)
+        //    {
+        //        lista.Clear();
+        //    }
+        //    return lista;
+        //}
+        [HttpGet]
+        public IActionResult ListarCajas(DateTime fecha)
+        {
+            List<CajasUsuario> lista = new List<CajasUsuario>();
+            string usuario = HttpContext.Session.GetString("login");
+
+            try
+            {
+                string url = $"{url_listar_cajas}/{usuario}/{fecha:yyyy-MM-dd}";
+                string res = ApiCaller.consume_endpoint_method(url, null, "GET");
+
+                lista = JsonConvert.DeserializeObject<List<CajasUsuario>>(res);
+            }
+            catch
+            {
+                lista = new List<CajasUsuario>();
+            }
+
+            return PartialView(
+                "~/Views/Caja/_CajasUsuarioTabla.cshtml",
+                lista
+            );
+        }
+
+
         [HttpGet]
         public async Task<List<entities.ListaEfectivoDiario>> ListarEfectivoDiario()
         {
@@ -402,5 +445,8 @@ namespace PsycoApp.site.Controllers
             }
             return lista;
         }
+
+
+
     }
 }

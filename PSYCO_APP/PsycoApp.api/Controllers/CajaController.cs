@@ -196,5 +196,23 @@ namespace PsycoApp.api.Controllers
         }
         #endregion
 
+
+        [HttpGet("listar_cajas/{usuario}/{fecha}")]
+        public List<CajasUsuario> listar_cajas(string usuario, DateTime fecha)
+        {
+            List<CajasUsuario> lista = new List<CajasUsuario>();
+            random_str = ru.RandomString(8) + "|" + ru.CurrentDate();
+
+            try
+            {
+                lista = cajaBL.listar_cajas(usuario, fecha);
+            }
+            catch (Exception)
+            {
+                lista.Clear();
+            }
+            return lista;
+        }
+
     }
 }
