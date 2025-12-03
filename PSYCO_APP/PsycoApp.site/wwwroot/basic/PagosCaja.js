@@ -70,9 +70,10 @@ function cargar_historial() {
     var id_estado = $('#cboEstado').val();
     var ver_sin_reserva = $('#cboVerSinReserva').val();
     var i = 1;
+    var idPaciente = $('#cboPacientesPago').val();
 
     $.ajax({
-        url: '/HistorialCitas/CitasDoctor?inicio=' + (inicio == '' ? '-' : inicio) + '&fin=' + (fin == '' ? '-' : fin) + '&id_doctor=' + id_doctor + '&id_estado=' + id_estado + '&ver_sin_reserva=' + ver_sin_reserva,
+        url: '/HistorialCitas/CitasDoctor?inicio=' + (inicio == '' ? '-' : inicio) + '&fin=' + (fin == '' ? '-' : fin) + '&id_doctor=' + id_doctor + '&id_estado=' + id_estado + '&ver_sin_reserva=' + ver_sin_reserva + '&idPaciente=' + idPaciente,
         type: "GET",
         data: {},
         beforeSend: function () {
@@ -957,4 +958,104 @@ function seleccionar_hora_disponible(e) {
         hora = hora.replace(' pm', ' PM');
         $('#txtHora').val(hora);
     }
+}
+
+let currentPage = 1;
+let searchTerm = '';
+let debounceTimer;
+let choicesT;
+document.addEventListener('DOMContentLoaded', function () {
+    const elementT = document.querySelector('#cboPacientesPago');
+
+    choicesT = new Choices(elementT, {
+        placeholder: true,
+        searchPlaceholderValue: "Buscar...",
+        itemSelectText: "",
+    });
+
+    elementT.addEventListener('search', function (event) {
+        const inputValue = event.detail.value;
+
+        clearTimeout(debounceTimer);
+        if (inputValue.length >= 4) {
+            debounceTimer = setTimeout(() => {
+                searchPatients(inputValue);
+            }, 300);
+        }
+        if (inputValue.length === 0) {
+            loadPatients('', currentPage);
+            return;
+        }
+    });
+
+    loadPatients('', currentPage);
+});
+
+function searchPatients(filtro) {
+    $.ajax({
+        url: `/RegistroCitas/listar_pacientes_dinamico?filtro=${filtro}&page=1&pageSize=10&IdBusqueda=false`,
+        type: "GET",
+        beforeSend: function () {
+            choicesT.clearChoices();
+            choicesT.setChoices([
+                { value: "-1", label: "Buscando...", disabled: true }
+            ]);
+        },
+        success: function (res) {
+
+            if (res && res.length > 0) {
+
+                const pacientes = res.map(item => ({
+                    value: item.id,
+                    label: item.nombre
+                }));
+
+                choicesT.clearChoices();
+                choicesT.setChoices(pacientes, "value", "label", true);
+
+            } else {
+
+                choicesT.clearChoices();
+                choicesT.setChoices([
+                    { value: "-1", label: "No se encontraron pacientes", disabled: true }
+                ]);
+
+            }
+        },
+        error: function () {
+            choicesT.clearChoices();
+            choicesT.setChoices([
+                { value: "-1", label: "Error al buscar pacientes", disabled: true }
+            ]);
+        }
+    });
+}
+
+function loadPatients(filtro = "", page) {
+    $.ajax({
+        url: `/RegistroCitas/listar_pacientes_dinamico?filtro=${filtro}&page=${page}&pageSize=10&IdBusqueda=false`,
+        type: "GET",
+        beforeSend: function () {
+            choicesT.clearChoices();
+            choicesT.setChoices([
+                { value: "-1", label: "Cargando...", disabled: true }
+            ]);
+        },
+        success: function (res) {
+
+            const pacientes = res.map(item => ({
+                value: item.id,
+                label: item.nombre
+            }));
+
+            choicesT.clearChoices();
+            choicesT.setChoices(pacientes, "value", "label", true);
+        },
+        error: function () {
+            choicesT.clearChoices();
+            choicesT.setChoices([
+                { value: "-1", label: "Error al cargar", disabled: true }
+            ]);
+        }
+    });
 }

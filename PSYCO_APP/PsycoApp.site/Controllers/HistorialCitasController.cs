@@ -59,7 +59,7 @@ namespace PsycoApp.site.Controllers
         }
 
         [HttpGet]
-        public async Task<List<Cita>> CitasDoctor(string inicio, string fin, int id_doctor, int id_estado, int ver_sin_reserva)
+        public async Task<List<Cita>> CitasDoctor(string inicio, string fin, int id_doctor, int id_estado, int ver_sin_reserva, int? idPaciente = null)
         {
             string usuario = HttpContext.Session.GetString("login").ToString();
             List<Cita> lista = new List<Cita>();
@@ -70,6 +70,11 @@ namespace PsycoApp.site.Controllers
                 res = ApiCaller.consume_endpoint_method(url, null, "GET");
                 lista = JsonConvert.DeserializeObject<List<Cita>>(res);
                 //lista = lista.Where(x => Convert.ToDecimal(x.monto_pendiente_.Replace("S/.", "")) > 0).ToList();
+
+                if (idPaciente != null)
+                {
+                    lista = lista.Where(x => x.id_paciente == idPaciente).ToList();
+                }
             }
             catch (Exception)
             {
