@@ -98,7 +98,7 @@ function cargar_historial() {
                     html += '<td class="text-center text-tbl">' + accion_estado(item.estado) + '</td>';
                     html += '<td class="text-center text-tbl">' + (item.monto_pendiente_ == 'S/.0.00' ? 'Pagado' : 'Pendiente') + '</td>';
                     //html += '<td class="text-center text-tbl">' + 'accion' + '</td>';
-                    html += '<td class="text-center text-tbl">' + (item.monto_pendiente_ == 'S/.0.00' ? '' : '<button type="button" class="btn btn-doc cita-unselected btn-cita' + item.id_cita + '" onclick="accion_cita_pago(' + item.id_cita + ')"></button>') + '</td>';
+                    html += '<td class="text-center text-tbl">' + (item.monto_pendiente_ == 'S/.0.00' ? '' : '<button type="button" data-pendiente="' + item.monto_pendiente_.replace('S/.', '') + '" class="btn btn-doc cita-unselected btn-cita' + item.id_cita + '" onclick="accion_cita_pago(' + item.id_cita + ')"></button>') + '</td>';
                     html += '</tr>';
                     i++;
                 }
@@ -111,30 +111,20 @@ function cargar_historial() {
 }
 
 function accion_cita_pago(id_cita) {
-    var clase = 'btn-cita' + id_cita;
-    if ($('.' + clase).hasClass('cita-selected')) {
-        $('.' + clase).removeClass('cita-selected');
-        citas_seleccionadas = citas_seleccionadas.filter(n => n !== id_cita);
+    var cita = $('.btn-cita' + id_cita);
+    var pendiente = cita.data('pendiente');
+
+    if (cita.hasClass('cita-selected')) {
+        cita.removeClass('cita-selected');
+        citas_seleccionadas = citas_seleccionadas.filter(item => item.id_cita !== id_cita);
     } else {
-        $('.' + clase).addClass('cita-selected');
-        citas_seleccionadas.push(id_cita);
+        cita.addClass('cita-selected');
+        citas_seleccionadas.push({ id_cita: id_cita, monto_pendiente: pendiente });
     }
 }
 
 function realizar_pago() {
-    const citas_filtradas = lista_citas.filter(cita =>
-        citas_seleccionadas.includes(cita.id_cita)
-    );
-    const total = citas_filtradas.reduce((acum, item) => {
-        const monto = parseFloat(
-            item.monto_pendiente_.replace("S/.", "").trim()
-        );
-        return acum + monto;
-    }, 0);
-
-    const total_formateado = total.toFixed(2);
-
-    if (total_formateado == '0.00') {
+    if (citas_seleccionadas.length == 0) {
         Swal.fire({
             icon: "Error",
             title: "Oops...",
@@ -143,11 +133,133 @@ function realizar_pago() {
         return;
     }
 
-    console.log('citas seleccionadas', citas_seleccionadas);
-    console.log('total pendiente de las citas seleccionadas', total_formateado);
-    $('#txtTotalPendiente').inputmask({ 'alias': 'numeric', allowMinus: false, digits: 2, max: 999.99 }).val(total_formateado);
-    $('#txtTotalPagar').inputmask({ 'alias': 'numeric', allowMinus: false, digits: 2, max: 999.99 }).val('0.00');
+    const tbody = document.getElementById('tbodyCitas');
+    tbody.innerHTML = "";
+
+    citas_seleccionadas.forEach(item => {
+        const tr = document.createElement("tr");
+
+        tr.innerHTML = `<td class="tdMonto" data-id="${item.id_cita}">
+                            <input class="form-control txtPendiente${item.id_cita}" type="text" value="${item.monto_pendiente}"
+                            autocomplete="off" disabled="disabled" />
+                        </td>
+                        <td class="tdMonto">
+                            <input class="form-control txtPagar${item.id_cita}" type="text" value="${item.monto_pendiente}"
+                            autocomplete="off" />
+                        </td>`;
+        tbody.appendChild(tr);
+    });
+    $("[class*='txtPagar']").inputmask({
+        alias: "numeric",
+        allowMinus: false,
+        digits: 2,
+        max: 999.99,
+        rightAlign: false
+    });
+
+    $(document).on("focusout", "[class*='txtPagar']", function () {
+        console.log("focusout ejecutado:", this);
+        setDecimalValue2(this);
+    });
+
+    $('#cboFormaPago_').val('-1').change();
     $('#mdl_pago_masivo').modal('show');
+}
+
+function validarSiEsTransferencia_() {
+    var formaPago = $('#cboFormaPago_').val();
+    if (formaPago == 1) {
+        $('#cboDetalleTransferencia_').val(-1);
+        $('#divDetalleTransferencia_').show();
+    } else {
+        $('#divDetalleTransferencia_').hide();
+    }
+}
+
+function enviarPagos() {
+    var pagosEnviar = [];
+    if (!validarMontos()) {
+        return;
+    }
+
+    $("#tbodyCitas tr").each(function () {
+        const idCita = $(this).find("td").data('id');
+        const inputPagar = $(this).find("input[class*='txtPagar']");
+        let pagar = parseFloat(inputPagar.inputmask("unmaskedvalue")) || 0;
+        pagosEnviar.push({idCita: idCita, totalPagar: pagar });
+    });
+
+    var id_forma_pago = $('#cboFormaPago_').val();
+    var id_detalle_transferencia = $('#cboDetalleTransferencia_').val();
+    var comentario = $('#txtComentario__').val() ? $('#txtComentario__').val().trim() : '';
+
+    if (id_forma_pago == -1) {
+        Swal.fire({icon: "warning", title: "Oops...", text: "Seleccione una forma de pago."});
+        return;
+    }
+
+    if (id_forma_pago == 1 && id_detalle_transferencia == -1) {
+        Swal.fire({icon: "warning", title: "Oops...", text: "Seleccione el detalle de transferencia."});
+        return;
+    }
+
+    var data_ = {
+        pagosEnviar: pagosEnviar,
+        id_forma_pago: id_forma_pago,
+        id_detalle_transferencia: id_detalle_transferencia,
+        comentario: comentario
+    };
+
+    $.ajax({
+        url: "/Caja/RegistrarPagoMasivo",
+        type: "POST",
+        data: data_,
+        success: function (data) {
+            if (data.estado) {
+                Swal.fire({icon: "success", text: "Pago(s) registrado(s) exitosamente."});
+                $('#mdl_pago_masivo').modal('hide');
+                cargar_historial();
+            } else {
+                Swal.fire({icon: "error", title: "Oops...", text: data.descripcion});
+            }
+        },
+        error: function (response) {
+            Swal.fire({icon: "error", title: "Oops...", text: "Ocurrió un error al guardar los pagos."});
+        },
+        complete: function () { }
+    });
+}
+function validarMontos() {
+    let error = false;
+
+    $("#tbodyCitas tr").each(function () {
+        const inputPendiente = $(this).find("input[class*='txtPendiente']");
+        const inputPagar = $(this).find("input[class*='txtPagar']");
+
+        let pendiente = parseFloat(inputPendiente.inputmask("unmaskedvalue")) || 0;
+        let pagar = parseFloat(inputPagar.inputmask("unmaskedvalue")) || 0;
+
+        if (pagar === 0) {
+            Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: "El monto a pagar no puede ser 0.",
+            });
+            error = true;
+            return false;
+        }
+
+        if (pagar > pendiente) {
+            Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: "Los montos a pagar no pueden ser mayores a los montos pendientes.",
+            });
+            error = true;
+            return false;
+        }
+    });
+    return !error;
 }
 
 function accion_estado(estado) {
@@ -391,6 +503,12 @@ function ver_datos_pago_pendiente(e) {
     $('#txtMonto1').val('0.00');    //importe pago
     $('#txtMonto2').val(pendiente); //pendiente
     $('#txtMonto3').val(pendiente); //diferencia
+}
+
+function setDecimalValue2(input) {
+    let valor = $(input).inputmask("unmaskedvalue") || 0;
+    valor = parseFloat(valor);
+    $(input).val(formatDecimal(valor));
 }
 
 function setDecimalValue() {

@@ -15,6 +15,33 @@ namespace PsycoApp.BL
     {
         CajaDA cajaDA = new CajaDA();
 
+        public RespuestaUsuario registrar_pago_masivo(PagoMasivo oPago, string main_path, string random_str)
+        {
+            RespuestaUsuario res_ = new RespuestaUsuario();
+            try
+            {
+                foreach (var item in oPago.pagosEnviar)
+                {
+                    Pago pago = new Pago()
+                    {
+                        id_cita = item.idCita,
+                        importe = item.totalPagar,
+                        id_detalle_transferencia = oPago.id_detalle_transferencia,
+                        id_forma_pago = oPago.id_forma_pago,
+                        comentario = oPago.comentario,
+                        usuario = oPago.usuario
+                    };
+                    res_ = cajaDA.registrar_caja(pago, main_path, random_str);
+                }
+            }
+            catch (Exception)
+            {
+                res_.estado = false;
+                res_.descripcion = "Ocurrió un error al registrar los pagos.";
+            }
+            return res_;
+        }
+
         public RespuestaUsuario registrar_pago(Pago oPago, string main_path, string random_str)
         {
             RespuestaUsuario res_ = new RespuestaUsuario();

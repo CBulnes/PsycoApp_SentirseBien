@@ -42,6 +42,13 @@
     .cita-selected::before {
         content: "✅" !important;
     }
+
+    .tdMonto {
+        margin: 0px 5px 0px -3px;
+        display: table-cell;
+        padding-right: 10px;
+        padding-bottom: 10px;
+    }
 </style>
 <link rel="stylesheet" href="~/src/css/sb-historial-citas.css" />
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css" />
@@ -286,38 +293,65 @@
     <div class="modal-dialog modal-md" role="document" style="height: 90%; display: grid; place-items: center;">
         <div class="modal-content sb-reg-citas-popup-container">
             <div class="modal-header sb-reg-citas-popup-title">
-                <h5 class="modal-title">Registrar pago</h5>
+                <h5 class="modal-title">Registrar pagos seleccionados</h5>
             </div>
             <div class="modal-body sb-reg-citas-popup-body">
 
                 <div class="sb-reg-citas-popup-tab-panel">
-
                     <div class="sb-reg-citas-popup-tab-panel-block">
-                        <div class="sb-reg-citas-popup-tab-panel-block-item">
-                            <span class="label-form">Total efectivo</span>
-                            <input class="form-control" type="text" id="txtTotalPendiente" autocomplete="off" disabled="disabled" onfocusout="setDecimalValue()" />
-                        </div>
+                        <table style="width: 100%;">
+                            <thead>
+                                <tr>
+                                    <th>Monto pendiente</th>
+                                    <th>Monto a pagar</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tbodyCitas">
+                                
+                            </tbody>
+                        </table>
                     </div>
 
                     <div class="sb-reg-citas-popup-tab-panel-block">
                         <div class="sb-reg-citas-popup-tab-panel-block-item">
-                            <span class="label-form">Total efectivo</span>
-                            <input class="form-control" type="text" id="txtTotalPagar" autocomplete="off" onfocusout="setDecimalValue()" />
+                            <span class="label-form">Forma de pago</span>
+                            <select class="form-control" id="cboFormaPago_" onchange="validarSiEsTransferencia_()">
+                                <option value="-1">Seleccionar</option>
+                                <option value="1">Transferencia</option>
+                                <option value="2">Depósito</option>
+                                <option value="3">Pago gratis</option>
+                                <option value="4">Efectivo</option>
+                                <option value="5">Tarjeta</option>
+                                <option value="6">Yape</option>
+                                <option value="7">Plin</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="sb-reg-citas-popup-tab-panel-block" id="divDetalleTransferencia_">
+                        <div class="sb-reg-citas-popup-tab-panel-block-item">
+                            <span class="label-form">Detalle de transferencia</span>
+                            <select class="form-control" id="cboDetalleTransferencia_">
+                                <option value="-1">Seleccionar</option>
+                                <option value="1">BCP - Ahorros S/.</option>
+                                <option value="2">BBVA - Ahorros S/.</option>
+                                <option value="3">Interbank - Ahorros S/.</option>
+                            </select>
                         </div>
                     </div>
 
                     <div class="sb-reg-citas-popup-tab-panel-block">
                         <div class="sb-reg-citas-popup-tab-panel-block-item">
                             <span class="label-form">Observación</span>
-                            <input class="form-control" type="text" id="txtComentario_" autocomplete="off" maxlength="50" />
+                            <input class="form-control" type="text" id="txtComentario__" autocomplete="off" maxlength="50" />
                         </div>
                     </div>
                 </div>
 
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary sb-reg-citas-popup-button-volver">Volver</button>
-                <button type="button" class="btn btn-primary main_color sb-reg-citas-popup-button">Aceptar</button>
+                <button type="button" class="btn btn-secondary sb-reg-citas-popup-button-volver" data-dismiss="modal">Volver</button>
+                <button type="button" class="btn btn-primary main_color sb-reg-citas-popup-button" onclick="enviarPagos()">Aceptar</button>
             </div>
         </div>
     </div>

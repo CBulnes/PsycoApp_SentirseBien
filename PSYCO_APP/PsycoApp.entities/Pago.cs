@@ -13,6 +13,20 @@ namespace PsycoApp.entities
         public string? comentario { get; set; } = "";
         public decimal? importe { get; set; } = 0;
     }
+    public class PagoMasivo
+    {
+        public int? id_forma_pago { get; set; } = 0;
+        public int? id_detalle_transferencia { get; set; } = 0;
+        public string? usuario { get; set; } = "";
+        public string? comentario { get; set; } = "";
+        public List<Pago2>? pagosEnviar { get; set; }
+    }
+    public class Pago2
+    {
+        public int? idCita { get; set; } = 0;
+        public decimal? totalPagar { get; set; } = 0;
+    }
+
     public class EfectivoDiario
     {
         public string fecha { get; set; } = "";

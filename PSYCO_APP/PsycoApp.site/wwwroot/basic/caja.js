@@ -64,7 +64,7 @@ function verResumenUsuario(recargar) {
     $.get('/Caja/ListarResumenCajaPorUsuario?fecha=' + fecha + "&buscar_por=" + buscar_por + "&sede=" + sede + "&id_usuario=" + id_usuario)
         .done(function (data) {
             var total = data.find(x => x.usuario == 'TOTAL');
-            console.log(data);
+
             if (data.length - 1 > 0) {
                 for (var item of data) {
                     if (item.usuario != 'TOTAL') {
