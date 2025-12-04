@@ -303,6 +303,7 @@ namespace PsycoApp.DA
             }
             catch (Exception e)
             {
+                var msg = e.Message.ToString();
                 lista.Clear();
             }
             cn.Close();

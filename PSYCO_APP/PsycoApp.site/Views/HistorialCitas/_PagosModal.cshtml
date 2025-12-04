@@ -89,7 +89,9 @@
                 <div class="sb-his-citas-item">
                     <div class="form-group">
                         <span class="label-form active-texto-modulo">Paciente</span>
-                        <select class="form-control cbo-search active-select-modulo" id="cboPacientesPago"></select>
+                        <select class="form-control cbo-search active-select-modulo" id="cboPacientesPago" data-placeholder="Seleccionar Paciente">
+                            <option value="-1" selected>Todos</option>
+                        </select>
                     </div>
                 </div>
 
@@ -231,8 +233,8 @@
                             <div class="form-group">
                                 <span class="label-form">Ver registros</span><br />
                                 <select class="form-control cbo-search" id="cboVerSinReserva">
-                                    <option value="2">Todos</option>
-                                    <option value="1">Sin reserva en 15 días</option>
+                                    <option value="1">Todos</option>
+                                    <option value="2">Sin reserva en 15 días</option>
                                 </select>
                             </div>
                         </div>
