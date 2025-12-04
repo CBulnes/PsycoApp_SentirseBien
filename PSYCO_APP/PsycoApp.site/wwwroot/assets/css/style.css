@@ -1570,7 +1570,7 @@ Form-control
   min-height: 20px; }
 
 .form-control:disabled, .form-control[readonly] {
-  opacity: 0.7; }
+  /*opacity: 0.7;*/ }
 
 .custom-control-input:focus ~ .custom-control-indicator {
   -webkit-box-shadow: none;

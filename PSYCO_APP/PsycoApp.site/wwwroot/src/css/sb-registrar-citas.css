@@ -149,6 +149,30 @@
     color: #FFF;
 }
 
+/* Desktop */
+@media (min-width: 992px) {
+
+  .sb-reg-citas-popup-tab-panel-block-item {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      gap: .5rem;
+  }
+
+  /* ancho uniforme de labels */
+  .sb-reg-citas-popup-tab-panel-block-item .label-form {
+      display: inline-block;
+      width: 140px; /* puedes ajustar a tu texto */
+      font-weight: 500;
+      color: #333;
+  }
+
+  /* inputs crecen */
+  .sb-reg-citas-popup-tab-panel-block-item input,
+  .sb-reg-citas-popup-tab-panel-block-item select {
+      flex: 1;
+  }
+}
 
 .sb-reg-citas-popup-tab-panel {
     display: flex;
@@ -156,11 +180,11 @@
     gap: 1rem;
 }
 
-.sb-reg-citas-popup-tab-panel-block-item {
+/*.sb-reg-citas-popup-tab-panel-block-item {
     display: flex;
     flex-direction: column;
     gap: .5rem;
-}
+}*/
 
 .sb-reg-citas-popup-button {
     background-color: var(--colorbase2) !important;

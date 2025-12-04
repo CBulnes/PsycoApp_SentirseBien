@@ -335,10 +335,32 @@
                                         <input class="form-control" type="date" id="txtFechaReasignar" autocomplete="off" max="2050-12-31" min="2022-08-01" onkeydown="return false" />
                                     </div>
                                 </div>
+                                <div class="sb-reg-citas-popup-tab-panel-block">
+                                    <div class="sb-reg-citas-popup-tab-panel-block-item">
+                                        <span class="label-form">Paciente</span>
+                                        <select class="form-control" id="cboPaciente">
+                                            <option value="-1">Seleccionar</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="sb-reg-citas-popup-tab-panel-block" style="display: inline-flex;" id="divTelefono">
+                                    <div class="sb-reg-citas-popup-tab-panel-block-item" style="width: 50%; display: inline-flex">
+                                        <span class="label-form">Teléfono</span>
+                                        <input class="form-control" type="text" id="txtTelefono" autocomplete="off" disabled="disabled" />
+                                    </div>
+                                    <div class="sb-reg-citas-popup-tab-panel-block-item" style="width: 50%; display: inline-flex;margin-left:10px">
+                                        <span class="label-form" style="width:50px !important">Edad</span>
+                                        <input class="form-control" type="text" id="txtEdad" autocomplete="off" disabled="disabled" />
+                                    </div>
 
+                                    <div class="sb-reg-citas-popup-tab-panel-block-item" style="width: 50%; display: none">
+                                        <span class="label-form">Documento</span>
+                                        <input class="form-control" type="text" id="txtDniPaciente" autocomplete="off" disabled="disabled" />
+                                    </div>
+                                </div>
                                 <div class="sb-reg-citas-popup-tab-panel-block" id="divEspecialista">
                                     <div class="sb-reg-citas-popup-tab-panel-block-item">
-                                        <span class="label-form">Especialista</span>
+                                        <span class="label-form" style="width: 170px !important;">Profesional</span>
                                         <div class="input-group">
                                             <select class="form-control" id="cboDoctor" onchange="verificar_disponibilidad()">
                                                 <option value="-1" data-sedes="-1">Seleccionar</option>
@@ -360,30 +382,13 @@
                                     </div>
                                 </div>
 
-                                <div class="sb-reg-citas-popup-tab-panel-block">
-                                    <div class="sb-reg-citas-popup-tab-panel-block-item">
-                                        <span class="label-form">Paciente</span>
-                                        <select class="form-control" id="cboPaciente">
-                                            <option value="-1">Seleccionar</option>
-                                        </select>
-                                    </div>
-                                </div>
+                           
 
-                                <div class="sb-reg-citas-popup-tab-panel-block" style="display: inline-flex;" id="divTelefono">
-                                    <div class="sb-reg-citas-popup-tab-panel-block-item" style="width: 50%; display: inline-flex">
-                                        <span class="label-form">Teléfono</span>
-                                        <input class="form-control" type="text" id="txtTelefono" autocomplete="off" disabled="disabled" />
-                                    </div>
-
-                                    <div class="sb-reg-citas-popup-tab-panel-block-item" style="width: 50%; display: none">
-                                        <span class="label-form">Documento</span>
-                                        <input class="form-control" type="text" id="txtDniPaciente" autocomplete="off" disabled="disabled" />
-                                    </div>
-                                </div>
+                             
 
                                 <div class="sb-reg-citas-popup-tab-panel-block">
                                     <div class="sb-reg-citas-popup-tab-panel-block-item">
-                                        <span class="label-form">
+                                        <span class="label-form" style="width: 170px !important;">
                                             Servicio&nbsp;
                                             <img id="ImgActualizarServicio" src="../images/free.png" style="height: 15px; width: auto; cursor: pointer; margin: 0px 0px 0px 5px; border-radius: 10px;" title="Actualizar servicio" onclick="modalActualizarServicio()" />
                                         </span>
@@ -406,18 +411,13 @@
                                         </div>
                                     </div>
                                 </div>
-
-                                <div class="sb-reg-citas-popup-tab-panel-block" style="display: flex;">
-                                    <div class="sb-reg-citas-popup-tab-panel-block-item" style="width: 50%; display: inline-flex;">
-                                        <span class="label-form">Descuento</span>
-                                        <input class="form-control" type="text" id="txtMontoDescuento" autocomplete="off" onfocusout="setDecimalValue()" />
-                                    </div>
-
-                                    <div class="sb-reg-citas-popup-tab-panel-block-item" style="width: 50%;">
-                                        <span class="label-form">&nbsp;</span>
-                                        <button type="button" class="btn btn-secondary sb-reg-citas-popup-button-volver" style="width: 100%;" onclick="agregar_descuento()">Aplicar</button>
+                                <div class="sb-reg-citas-popup-tab-panel-block" id="divEstado">
+                                    <div class="sb-reg-citas-popup-tab-panel-block-item">
+                                        <span class="label-form" style="width: 170px !important;">Estado</span>
+                                        <button type="button" id="btnEstado"></button>
                                     </div>
                                 </div>
+                             
 
                                 <div class="sb-reg-citas-popup-tab-panel-block" style="display:none">
                                     <div class="sb-reg-citas-popup-tab-panel-block-item">
@@ -480,13 +480,18 @@
                                         <input class="form-control" type="text" id="txtMontoPendiente" autocomplete="off" disabled="disabled" />
                                     </div>
                                 </div>
+                                <div class="sb-reg-citas-popup-tab-panel-block" style="display: flex;">
+                                    <div class="sb-reg-citas-popup-tab-panel-block-item" style="width: 50%; display: inline-flex;">
+                                        <span class="label-form">Descuento</span>
+                                        <input class="form-control" type="text" id="txtMontoDescuento" autocomplete="off" onfocusout="setDecimalValue()" />
+                                    </div>
 
-                                <div class="sb-reg-citas-popup-tab-panel-block" id="divEstado">
-                                    <div class="sb-reg-citas-popup-tab-panel-block-item">
-                                        <span class="label-form">Estado</span>
-                                        <button type="button" id="btnEstado"></button>
+                                    <div class="sb-reg-citas-popup-tab-panel-block-item" style="width: 50%;">
+                                        <span class="label-form">&nbsp;</span>
+                                        <button type="button" class="btn btn-secondary sb-reg-citas-popup-button-volver" style="width: 100%;" onclick="agregar_descuento()">Aplicar</button>
                                     </div>
                                 </div>
+                             
                                 
                                 <div class="sb-reg-citas-popup-tab-panel-block" id="divPagoGratis">
                                     <div class="sb-reg-citas-popup-tab-panel-block-item">
@@ -976,7 +981,7 @@
             $('#containerFormulario').hide();
             $(".sb-admninistrator").css('overflow', 'auto');
         }
-        </script>>
+        </script>
 
     <script src="~/basic/zabuto.js?f=@dHoy.ToString("yyyyMMddhhmmss")"></script>
     <script src="~/basic/moments.js?f=@dHoy.ToString("yyyyMMddhhmmss")"></script>

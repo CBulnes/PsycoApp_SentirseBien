@@ -39,6 +39,8 @@ namespace PsycoApp.entities
         public string siglas { get; set; }
         public string orden_cita { get; set; }
         public bool pago_gratis { get; set; } = false;
+
+        public string edad { get; set; } = "";
         public List<HistorialCita> historial { get; set; }
         public List<HistorialPaciente> historial2 { get; set; }
         public List<Subcita> fechas_adicionales { get; set; }

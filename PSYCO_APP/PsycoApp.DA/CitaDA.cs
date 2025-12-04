@@ -495,6 +495,7 @@ namespace PsycoApp.DA
                     cita.comentario = Convert.ToString(row["comentario"]);
                     cita.pago_gratis = Convert.ToBoolean(row["pago_gratis"]);
                     cita.orden_cita = Convert.ToString(row["orden_cita"]);
+                    cita.edad = Convert.ToString(row["edad"]);
                     lista.Add(cita);
                 }
             }
