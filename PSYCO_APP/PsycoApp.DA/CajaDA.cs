@@ -352,6 +352,7 @@ namespace PsycoApp.DA
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
                     cmd.Parameters.Add("@UsuarioApertura", SqlDbType.VarChar).Value = request.usuario;
+                    cmd.Parameters.Add("@IdSede", SqlDbType.VarChar).Value = request.idSede;
                     cmd.Parameters.Add("@Observaciones", SqlDbType.VarChar).Value = request.observaciones;
 
                     using (SqlDataReader reader = await cmd.ExecuteReaderAsync())
@@ -387,6 +388,7 @@ namespace PsycoApp.DA
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
                     cmd.Parameters.Add("@UsuarioCierre", SqlDbType.VarChar).Value = request.usuario;
+                    cmd.Parameters.Add("@IdSede", SqlDbType.VarChar).Value = request.idSede;
                     cmd.Parameters.Add("@Observaciones", SqlDbType.VarChar).Value = request.observaciones;
 
                     using (SqlDataReader reader = await cmd.ExecuteReaderAsync())

@@ -276,6 +276,7 @@ namespace PsycoApp.site.Controllers
         {
             string res = "";
             model.usuario = Convert.ToString(HttpContext.Session.GetString("login"));
+            model.idSede = Convert.ToInt32(HttpContext.Session.GetInt32("id_sede"));
 
             RespuestaUsuario res_ = new RespuestaUsuario();
             try
