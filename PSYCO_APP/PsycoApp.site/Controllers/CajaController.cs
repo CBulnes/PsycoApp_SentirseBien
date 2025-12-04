@@ -48,7 +48,7 @@ namespace PsycoApp.site.Controllers
                 var usuario = Convert.ToString(HttpContext.Session.GetString("login"));
                 usuario = string.IsNullOrEmpty(usuario) ? "-" : usuario;
                 // Construir la URL para la API dependiendo de si hay un término de búsqueda
-                string url = $"{apiUrl}/listar_cuadre_caja/{usuario}/{pageNumber}/{pageSize}/{fecha}/{buscar_por}/{sede}/{id_usuario}/{id_cita}";
+                string url = $"{apiUrl}/listar_cuadre_caja/{usuario}/{pageNumber}/{pageSize}/{fecha}/{buscar_por}/{sede}/{id_usuario}/{id_cita}/0";
 
                 var registros = await GetFromApiAsync<List<PsycoApp.entities.CuadreCaja>>(url);
                 var pacientesViewModel = registros.Select(p => new PsycoApp.site.Models.CuadreCaja
@@ -102,13 +102,13 @@ namespace PsycoApp.site.Controllers
 
         [Route("/Caja/Buscar")]
         [HttpPost]
-        public async Task<IActionResult> Buscar(int pageNumber = 1, int pageSize = 10, string fecha = "", int buscar_por = 1, int sede = -1, int id_usuario = -1, int id_cita = 0)
+        public async Task<IActionResult> Buscar(int pageNumber = 1, int pageSize = 10, string fecha = "", int buscar_por = 1, int sede = -1, int id_usuario = -1, int id_cita = 0, int id_caja = 0)
         {
             if (!string.IsNullOrEmpty(HttpContext.Session.GetString("nombres") as string))
             {
                 var usuario = Convert.ToString(HttpContext.Session.GetString("login"));
                 usuario = string.IsNullOrEmpty(usuario) ? "-" : usuario;
-                string url = $"{apiUrl}/listar_cuadre_caja/{usuario}/{pageNumber}/{pageSize}/{fecha}/{buscar_por}/{sede}/{id_usuario}/{id_cita}";
+                string url = $"{apiUrl}/listar_cuadre_caja/{usuario}/{pageNumber}/{pageSize}/{fecha}/{buscar_por}/{sede}/{id_usuario}/{id_cita}/{id_caja}";
 
                 var registros = await GetFromApiAsync<List<PsycoApp.entities.CuadreCaja>>(url);
 
@@ -353,10 +353,10 @@ namespace PsycoApp.site.Controllers
         //    return lista;
         //}
         [HttpGet]
-        public IActionResult ListarCajas(DateTime fecha)
+        public IActionResult ListarCajas(DateTime fecha, string usuario)
         {
             List<CajasUsuario> lista = new List<CajasUsuario>();
-            string usuario = HttpContext.Session.GetString("login");
+            //string usuario = HttpContext.Session.GetString("login");
 
             try
             {

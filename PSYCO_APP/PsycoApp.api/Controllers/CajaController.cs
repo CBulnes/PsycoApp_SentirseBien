@@ -117,15 +117,15 @@ namespace PsycoApp.api.Controllers
             return lista;
         }
 
-        [HttpGet("listar_cuadre_caja/{usuario}/{pagina}/{tamanoPagina}/{fecha}/{buscar_por}/{sede}/{id_usuario}/{id_cita}")]
-        public List<CuadreCaja> listar_cuadre_caja(string usuario, int pagina = 1, int tamanoPagina = 100, string fecha = "", int buscar_por = 1, int sede = -1, int id_usuario = -1, int id_cita = 0)
+        [HttpGet("listar_cuadre_caja/{usuario}/{pagina}/{tamanoPagina}/{fecha}/{buscar_por}/{sede}/{id_usuario}/{id_cita}/{id_caja}")]
+        public List<CuadreCaja> listar_cuadre_caja(string usuario, int pagina = 1, int tamanoPagina = 100, string fecha = "", int buscar_por = 1, int sede = -1, int id_usuario = -1, int id_cita = 0, int id_caja = 0)
         {
             List<CuadreCaja> lista = new List<CuadreCaja>();
             random_str = ru.RandomString(8) + "|" + ru.CurrentDate();
 
             try
             {
-                lista = cajaBL.listar_cuadre_caja(usuario, pagina, tamanoPagina, fecha, buscar_por, sede, id_usuario, id_cita);
+                lista = cajaBL.listar_cuadre_caja(usuario, pagina, tamanoPagina, fecha, buscar_por, sede, id_usuario, id_cita, id_caja);
             }
             catch (Exception)
             {

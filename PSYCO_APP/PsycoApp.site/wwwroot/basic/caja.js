@@ -8,9 +8,9 @@ $(document).ready(function () {
     $("#txtEfectivo_").inputmask({ 'alias': 'numeric', allowMinus: false, digits: 2, max: 999.99 });
 });
 
-function buscarPago(pageNumber = 1) {
+function buscarPago(pageNumber = 1, idCaja = 0) {
     let pageSize = 10;
-    var fecha = $('#txtFecha').val();
+    var fecha = $('#txtFechaBusqueda').val();
     var buscar_por = parseInt($('#cboBuscarPor').val());
     var sede = $('#cboSede').val();
     var id_usuario = parseInt($('#cboUsuario').val());
@@ -25,7 +25,7 @@ function buscarPago(pageNumber = 1) {
         return;
     }
 
-    $.post('/Caja/Buscar', { pageNumber: pageNumber, pageSize: pageSize, fecha: fecha, buscar_por: buscar_por, sede: sede, id_usuario: id_usuario })
+    $.post('/Caja/Buscar', { pageNumber: pageNumber, pageSize: pageSize, fecha: fecha, buscar_por: buscar_por, sede: sede, id_usuario: id_usuario, id_caja: idCaja })
         .done(function (data) {
             $('#containerTabla').html(data);
             verResumenUsuario(false);
@@ -51,7 +51,7 @@ function verResumenUsuario(recargar) {
     //    $('#cboSede').val(-1);
     //}
 
-    var fecha = $('#txtFecha').val();
+    var fecha = $('#txtFechaBusqueda').val();
     var buscar_por = parseInt($('#cboBuscarPor').val());
     var sede = $('#cboSede').val();
     var id_usuario = parseInt($('#cboUsuario').val());
@@ -443,4 +443,10 @@ function GetFechaActual() {
     if (month.length < 2) month = '0' + month;
     if (day.length < 2) day = '0' + day;
     return [year, month, day].join('-');
+}
+
+function seleccionarCaja(idCaja, nombreUsuario) {
+    var fechaCaja = $('#txtFechaCaja').val();
+    $('#txtFechaBusqueda').val(fechaCaja);
+    buscarPago(pageNumber = 1, idCaja);
 }

@@ -193,7 +193,7 @@ namespace PsycoApp.DA
             cn.Close();
             return lista;
         }
-        public List<CuadreCaja> listar_cuadre_caja(string usuario, int pagina, int tamanoPagina, string fecha, int buscar_por, int sede, int id_usuario, int id_cita = 0)
+        public List<CuadreCaja> listar_cuadre_caja(string usuario, int pagina, int tamanoPagina, string fecha, int buscar_por, int sede, int id_usuario, int id_cita = 0, int id_caja = 0)
         {
             List<CuadreCaja> lista = new List<CuadreCaja>();
             try
@@ -209,6 +209,7 @@ namespace PsycoApp.DA
                 cmd.Parameters.Add("@sede", SqlDbType.Int).Value = sede;
                 cmd.Parameters.Add("@id_usuario", SqlDbType.Int).Value = id_usuario;
                 cmd.Parameters.Add("@id_cita", SqlDbType.Int).Value = id_cita;
+                cmd.Parameters.Add("@id_caja", SqlDbType.Int).Value = id_caja;
 
                 SqlDataAdapter da = new SqlDataAdapter(cmd);
                 DataTable dt = new DataTable();

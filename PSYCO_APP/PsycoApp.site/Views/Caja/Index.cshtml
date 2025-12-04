@@ -56,18 +56,18 @@
         <div class="row">
             <div class="col-2">
                 <label class="active-titular-modulo">Fecha:</label>
-                <input id="txtFecha" class="input100 col-12" type="date" oninput="buscarPago(1); verResumenUsuario(false)" style="background-color: #d8d9db; color: #000000; border: 1px solid rgba(0, 0, 0, .15); line-height: 1.25; vertical-align: middle;border-radius: .25rem; display: inline-block; max-width: 100%; height: calc(2.25rem + 2px); filter: invert(1);" />
+                <input id="txtFechaBusqueda" class="input100 col-12" type="date" style="background-color: #d8d9db; color: #000000; border: 1px solid rgba(0, 0, 0, .15); line-height: 1.25; vertical-align: middle;border-radius: .25rem; display: inline-block; max-width: 100%; height: calc(2.25rem + 2px); filter: invert(1);" />
             </div>
             <div class="col-2">
                 <label class="active-titular-modulo">Buscar por:</label>
-                <select class="input100 custom-select col-12 active-select-modulo" id="cboBuscarPor" style="padding: 0 25px 0 25px;" onchange="buscarPago(1); verResumenUsuario(false)">
+                <select class="input100 custom-select col-12 active-select-modulo" id="cboBuscarPor" style="padding: 0 25px 0 25px;">
                     <option value="1">Fecha exacta</option>
                     <option value="2">Año y mes</option>
                 </select>
             </div>
             <div class="col-2">
                 <label class="active-titular-modulo">Centro:</label>
-                <select class="input100 custom-select col-12 active-select-modulo" id="cboSede" style="padding: 0 25px 0 25px;" onchange="buscarPago(1); verResumenUsuario(false)">
+                <select class="input100 custom-select col-12 active-select-modulo" id="cboSede" style="padding: 0 25px 0 25px;">
                     <option value="-1">Todos</option>
                     <option value="1">Sentirse bien</option>
                     <option value="2">Transforma</option>
@@ -76,10 +76,21 @@
             </div>
             <div class="col-2">
                 <label class="active-titular-modulo">Usuario:</label>
-                <select class="input100 custom-select col-12 active-select-modulo" id="cboUsuario" style="padding: 0 25px 0 25px;" onchange="buscarPago(1); verResumenUsuario(false)">
+                <select class="input100 custom-select col-12 active-select-modulo" id="cboUsuario" style="padding: 0 25px 0 25px;">
                     <option value="-1">Todos</option>
                 </select>
             </div>
+            <div class="col-2">
+                <div class="form-group">
+                    <label class="active-titular-modulo">&nbsp;</label>
+                    <button type="button" class="btn btn-doc second_color" onclick="buscarPago(1, 0); verResumenUsuario(false)">
+                        Buscar
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
             <div class="col-2">
                 <div class="form-group">
                     <label class="active-titular-modulo">&nbsp;</label>
@@ -446,7 +457,7 @@
         return formattedToday;
     }
 
-    $('#txtFecha').val(fechaActualYYYYMMDD());
+    $('#txtFechaBusqueda, #txtFechaCaja').val(fechaActualYYYYMMDD());
 
     function cargar_lista_usuarios_caja() {
         var html = '';
@@ -472,12 +483,13 @@
     }
     cargar_lista_usuarios_caja();
 
-        function mostrarModalCajas() {
+    function mostrarModalCajas() {
+        $('#cbUsuarioCaja').html($('#cboUsuario').html());
         $('#cajasModal').show();
     }
 
     function buscarCajaUsuario() {
-
+        const usuario = $('#cbUsuarioCaja').val();
         const fecha = $('#txtFechaCaja').val();
 
         if (!fecha) {
@@ -485,7 +497,7 @@
             return;
         }
 
-        $.get('/Caja/ListarCajas', { fecha: fecha })
+        $.get('/Caja/ListarCajas', { fecha, usuario })
             .done(function (data) {
                 $('#containerTablaCajas').html(data);
             })

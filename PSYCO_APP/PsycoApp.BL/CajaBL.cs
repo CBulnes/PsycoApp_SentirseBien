@@ -116,12 +116,12 @@ namespace PsycoApp.BL
         }
 
 
-        public List<CuadreCaja> listar_cuadre_caja(string usuario, int pagina, int tamanoPagina, string fecha, int buscar_por, int sede, int id_usuario, int id_cita = 0)
+        public List<CuadreCaja> listar_cuadre_caja(string usuario, int pagina, int tamanoPagina, string fecha, int buscar_por, int sede, int id_usuario, int id_cita = 0, int id_caja = 0)
         {
             List<CuadreCaja> lista = new List<CuadreCaja>();
             try
             {
-                lista = cajaDA.listar_cuadre_caja(usuario, pagina, tamanoPagina, fecha, buscar_por, sede, id_usuario, id_cita);
+                lista = cajaDA.listar_cuadre_caja(usuario, pagina, tamanoPagina, fecha, buscar_por, sede, id_usuario, id_cita, id_caja);
             }
             catch (Exception)
             {
