@@ -163,7 +163,7 @@
   .sb-reg-citas-popup-tab-panel-block-item .label-form {
       display: inline-block;
       width: 140px; /* puedes ajustar a tu texto */
-      font-weight: 500;
+      font-weight: bold;
       color: #333;
   }
 
@@ -171,6 +171,7 @@
   .sb-reg-citas-popup-tab-panel-block-item input,
   .sb-reg-citas-popup-tab-panel-block-item select {
       flex: 1;
+      font-weight:bold;
   }
 }
 

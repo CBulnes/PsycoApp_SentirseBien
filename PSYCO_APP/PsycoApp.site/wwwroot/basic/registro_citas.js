@@ -1311,8 +1311,8 @@ function cargar_datos_cita(id_cita, id_doctor, id_paciente, fecha, hora, estado,
         toggleComment(false); // Ocultar el área de comentarios
     }
     $('#comment').val(comentario);
-    $('.divMonto').show();
-
+    $('.divMonto').hide();
+    $('#dvEdad').hide();
     $('#divPagoGratis').hide();
     $('#ImgActualizarServicio').hide();
 
@@ -1343,15 +1343,20 @@ function cargar_datos_cita(id_cita, id_doctor, id_paciente, fecha, hora, estado,
         if (estado == 'CITADO') {
             $('#divReprogramar, #divHorarios, .divConfirmar, #btnConfirmar, #btnCancelar, #divPagoPendiente').show();
             $('#divAtender').hide();
+            $('.divMonto').show();
+            $('#dvEdad').show();
         } else if (estado == 'CONFIRMADO') {
             $('#divAtender, #btnCancelar, #divPagoPendiente, #ImgActualizarServicio').show();
             $('#divReprogramar, #divHorarios, .divConfirmar').hide();
-            
+            $('.divMonto').show();
+            $('#dvEdad').show();
             if (pago_gratis == 'false' || pago_gratis == false || !pago_gratis) {
                 $('#divPagoGratis').show();
             }
         } else if (estado == 'ATENDIDO') {
             $('#divReprogramar, #divHorarios, .divConfirmar, #divAtender, #btnCancelar').hide();
+            $('.divMonto').show();
+            $('#dvEdad').show();
         }
 
         $('#cboPaciente').attr('disabled', true);
