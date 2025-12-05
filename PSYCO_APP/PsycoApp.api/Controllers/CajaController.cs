@@ -1,15 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Hosting;
+﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using Newtonsoft.Json;
 using PsycoApp.BL;
 using PsycoApp.DA;
 using PsycoApp.entities;
 using PsycoApp.utilities;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace PsycoApp.api.Controllers
 {
@@ -47,6 +48,12 @@ namespace PsycoApp.api.Controllers
                 res_.estado = false;
             }
             return res_;
+        }
+
+        [HttpPost("deshacer_pago")]
+        public async Task<RespuestaUsuario> DeshacerPago([FromBody] Pago request)
+        {
+            return await cajaBL.DeshacerPago(request);
         }
 
         [HttpPost("registrar_pago_masivo")]

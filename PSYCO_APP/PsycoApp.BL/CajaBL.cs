@@ -57,6 +57,11 @@ namespace PsycoApp.BL
             return res_;
         }
 
+        public async Task<RespuestaUsuario> DeshacerPago(Pago request)
+        {
+            return await cajaDA.DeshacerPago(request);
+        }
+
         public RespuestaUsuario registrar_descuento(Pago oPago, string main_path, string random_str)
         {
             RespuestaUsuario res_ = new RespuestaUsuario();

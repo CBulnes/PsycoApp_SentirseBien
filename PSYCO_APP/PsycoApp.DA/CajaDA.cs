@@ -49,6 +49,45 @@ namespace PsycoApp.DA
             return res_;
         }
 
+        public async Task<RespuestaUsuario> DeshacerPago(Pago request)
+        {
+            var res_ = new RespuestaUsuario();
+            try
+            {
+                await cn.OpenAsync();
+
+                using (SqlCommand cmd = new SqlCommand("USP_DESHACER_PAGO", cn))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+
+                    cmd.Parameters.Add("@id_pago", SqlDbType.Int).Value = request.id_pago;
+                    cmd.Parameters.Add("@id_caja", SqlDbType.Int).Value = request.id_caja;
+                    cmd.Parameters.Add("@usuario", SqlDbType.VarChar).Value = request.usuario;
+                    cmd.Parameters.Add("@comentario", SqlDbType.VarChar).Value = request.comentario;
+                    cmd.Parameters.Add("@accion", SqlDbType.VarChar).Value = request.accion;
+
+                    using (var reader = await cmd.ExecuteReaderAsync())
+                    {
+                        if (await reader.ReadAsync())
+                        {
+                            res_.descripcion = reader["rpta"].ToString();
+                        }
+                    }
+                }
+                res_.estado = res_.descripcion == "OK";
+            }
+            catch (Exception ex)
+            {
+                res_.estado = false;
+                res_.descripcion = "Ocurrió un error al " + request.accion.ToLower() + " el pago.";
+            }
+            finally
+            {
+                await cn.CloseAsync();
+            }
+            return res_;
+        }
+
         public RespuestaUsuario registrar_descuento(Pago oPago, string main_path, string random_str)
         {
             RespuestaUsuario res_ = new RespuestaUsuario();
