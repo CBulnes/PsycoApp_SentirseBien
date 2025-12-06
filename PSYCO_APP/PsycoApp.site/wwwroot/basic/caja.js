@@ -450,3 +450,62 @@ function seleccionarCaja(idCaja, nombreUsuario) {
     $('#txtFechaBusqueda').val(fechaCaja);
     buscarPago(pageNumber = 1, idCaja);
 }
+
+function deshacerPago(id_pago, id_caja, accion) {
+    Swal.fire({
+        title: "¿Confirmar acción?",
+        text: "¿Estás seguro de " + (accion === "EXTORNAR" ? "extornar" : "cancelar") + " este pago?",
+        icon: "warning",
+        input: "text",
+        inputLabel: "Comentario (opcional)",
+        inputPlaceholder: "Escribe un comentario...",
+        showCancelButton: true,
+        confirmButtonText: "Sí, continuar",
+        cancelButtonText: "No, cancelar"
+    }).then((result) => {
+
+        if (!result.isConfirmed) {
+            return;
+        }
+
+        var comentario = result.value || "";
+
+        var data = {
+            id_pago: id_pago,
+            id_caja: id_caja,
+            usuario: '-',
+            comentario: comentario,
+            accion: accion
+        };
+
+        $.ajax({
+            url: "/Caja/DeshacerPago",
+            type: "POST",
+            data: data,
+            success: function (data) {
+                if (data.estado) {
+                    Swal.fire({
+                        icon: "success",
+                        text: "Pago " + (accion == "EXTORNAR" ? "extornado" : "cancelado") + " correctamente."
+                    });
+                    buscarPago(1, 0);
+                    verResumenUsuario(false);
+                } else {
+                    Swal.fire({
+                        icon: "error",
+                        title: "Oops...",
+                        text: data.descripcion
+                    });
+                }
+            },
+            error: function (response) {
+                Swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    text: "Ocurrió un error al " + (accion == "EXTORNAR" ? "extornar" : "cancelar") + " el pago."
+                });
+            }
+        });
+    });
+
+}

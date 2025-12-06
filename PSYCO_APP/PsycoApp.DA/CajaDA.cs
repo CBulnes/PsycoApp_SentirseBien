@@ -257,6 +257,8 @@ namespace PsycoApp.DA
                 foreach (DataRow row in dt.Rows)
                 {
                     CuadreCaja item = new CuadreCaja();
+                    item.id_pago = Convert.ToInt32(row["id_pago"]);
+                    item.id_caja = Convert.ToInt32(row["id_caja"]);
                     item.paciente = Convert.ToString(row["paciente"]);
                     item.fecha_transaccion = Convert.ToString(row["fecha_transaccion"]);
                     item.estado_cita = Convert.ToString(row["estado_cita"]);

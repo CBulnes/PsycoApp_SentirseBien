@@ -17,6 +17,7 @@ namespace PsycoApp.site.Controllers
     {
         private readonly string apiUrl = Helper.GetUrlApi() + "/api/caja"; // URL base de la API
         private string url_registrar_pago = Helper.GetUrlApi() + "/api/caja/registrar_pago";
+        private string url_deshacer_pago = Helper.GetUrlApi() + "/api/caja/deshacer_pago";
         private string url_registrar_pago_masivo = Helper.GetUrlApi() + "/api/caja/registrar_pago_masivo";
         private string url_registrar_descuento = Helper.GetUrlApi() + "/api/caja/registrar_descuento";
         private string url_registrar_efectivo = Helper.GetUrlApi() + "/api/caja/registrar_efectivo";
@@ -53,6 +54,8 @@ namespace PsycoApp.site.Controllers
                 var registros = await GetFromApiAsync<List<PsycoApp.entities.CuadreCaja>>(url);
                 var pacientesViewModel = registros.Select(p => new PsycoApp.site.Models.CuadreCaja
                 {
+                    id_pago = p.id_pago,
+                    id_caja = p.id_caja,
                     paciente = p.paciente,
                     sede = p.sede,
                     fecha_transaccion = p.fecha_transaccion,
@@ -132,6 +135,8 @@ namespace PsycoApp.site.Controllers
                 {
                     Model = registros.Select(p => new PsycoApp.site.Models.CuadreCaja
                     {
+                        id_pago = p.id_pago,
+                        id_caja = p.id_caja,
                         paciente = p.paciente,
                         sede = p.sede,
                         fecha_transaccion = p.fecha_transaccion,
@@ -201,6 +206,28 @@ namespace PsycoApp.site.Controllers
             {
                 res_.estado = false;
                 res_.descripcion = "Ocurrió un error al registrar el pago.";
+            }
+            return res_;
+        }
+
+        [HttpPost]
+        public async Task<RespuestaUsuario> DeshacerPago(Pago model)
+        {
+            string res = "";
+            model.usuario = Convert.ToString(HttpContext.Session.GetString("login"));
+
+            RespuestaUsuario res_ = new RespuestaUsuario();
+            try
+            {
+                url = url_deshacer_pago;
+                obj = (dynamic)model;
+                res = ApiCaller.consume_endpoint_method(url, obj, "POST");
+                res_ = JsonConvert.DeserializeObject<RespuestaUsuario>(res);
+            }
+            catch (Exception)
+            {
+                res_.estado = false;
+                res_.descripcion = "Ocurrió un error al " + (model.accion == "EXTORNAR" ? "extornado" : "cancelado") + " el pago.";
             }
             return res_;
         }

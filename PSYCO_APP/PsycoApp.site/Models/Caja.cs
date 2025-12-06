@@ -5,6 +5,8 @@ namespace PsycoApp.site.Models
 {
     public class CuadreCaja
     {
+        public int id_pago { get; set; } = 0;
+        public int id_caja { get; set; } = 0;
         public string paciente { get; set; } = "";
         public string fecha_transaccion { get; set; } = "";
         public string estado_cita { get; set; } = "";

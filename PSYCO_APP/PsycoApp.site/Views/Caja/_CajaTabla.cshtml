@@ -14,6 +14,7 @@
             <th>Importe</th>
             <th>Usuario</th>
             <th>Estado&nbsp;de&nbsp;orden</th>
+            <th>Acciones</th>
         </tr>
     </thead>
     <tbody>
@@ -33,6 +34,37 @@
                     <td>@pago.item.importe</td>
                     <td>@pago.item.usuario</td>
                     <td>@pago.item.estado_orden</td>
+                    @if (pago.item.estado_orden == "PAGADO")
+                    {
+                        <td>
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-sm btn-secondary dropdown-toggle" data-toggle="dropdown">
+                                    Acciones
+                                </button>
+
+                                <ul class="dropdown-menu">
+                                    <li>
+                                        <a class="dropdown-item"
+                                           href="javascript:void(0)"
+                                           onclick="deshacerPago(@pago.item.id_pago, @pago.item.id_caja, 'EXTORNAR')">
+                                            Extornar
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item"
+                                           href="javascript:void(0)"
+                                           onclick="deshacerPago(@pago.item.id_pago, @pago.item.id_caja, 'CANCELAR')">
+                                            Cancelar
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </td>
+                    }
+                    else
+                    {
+                        <td></td>
+                    }
                 </tr>
             }
         }
