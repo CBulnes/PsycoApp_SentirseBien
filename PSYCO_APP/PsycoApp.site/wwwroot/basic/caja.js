@@ -406,11 +406,10 @@ function guardar_efectivo_diario() {
 function listar_efectivo_diario() {
     var html = '';
     var contador = 1;
-
-    $.get('/Caja/ListarEfectivoDiario')
+    var fecha = $('#txtFechaBusqueda').val();
+    $.get('/Caja/ListarEfectivoDiario?fecha='+fecha)
         .done(function (data) {
             if (data.length > 0) {
-
                 for (var item of data) {
                     html += '<tr>';
                     html += '<td class="text-center">' + contador + '</td>';
