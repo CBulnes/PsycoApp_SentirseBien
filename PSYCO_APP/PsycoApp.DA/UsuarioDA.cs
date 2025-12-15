@@ -20,10 +20,11 @@ namespace PsycoApp.DA
             try
             {
                 cn.Open();
-                SqlCommand cmd = new SqlCommand(Procedures.sp_validar_usuario, cn);
+                SqlCommand cmd = new SqlCommand("SP_VALIDAR_USUARIO_V2", cn);
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.Add("@usuario", SqlDbType.VarChar).Value = usuario.email;
                 cmd.Parameters.Add("@password", SqlDbType.VarChar).Value = usuario.password;
+                cmd.Parameters.Add("@id_sede", SqlDbType.VarChar).Value = usuario.id_sede;
 
                 SqlDataAdapter da = new SqlDataAdapter(cmd);
                 DataTable dt = new DataTable();
