@@ -10,6 +10,7 @@ namespace PsycoApp.entities
         public int? id_pago { get; set; }
         public int? id_caja { get; set; }
         public int? id_forma_pago { get; set; } = 0;
+        public int? idSede { get; set; } = 0;
         public int? id_detalle_transferencia { get; set; } = 0;
         public string? usuario { get; set; } = "";
         public string? comentario { get; set; } = "";
@@ -19,6 +20,7 @@ namespace PsycoApp.entities
     public class PagoMasivo
     {
         public int? id_forma_pago { get; set; } = 0;
+        public int? idSede { get; set; } = 0;
         public int? id_detalle_transferencia { get; set; } = 0;
         public string? usuario { get; set; } = "";
         public string? comentario { get; set; } = "";

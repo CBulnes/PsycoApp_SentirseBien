@@ -29,7 +29,8 @@ namespace PsycoApp.BL
                         id_detalle_transferencia = oPago.id_detalle_transferencia,
                         id_forma_pago = oPago.id_forma_pago,
                         comentario = oPago.comentario,
-                        usuario = oPago.usuario
+                        usuario = oPago.usuario,
+                        idSede = oPago.idSede
                     };
                     res_ = cajaDA.registrar_caja(pago, main_path, random_str);
                 }

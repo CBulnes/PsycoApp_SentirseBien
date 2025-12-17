@@ -16,8 +16,8 @@ namespace PsycoApp.site.Controllers
     public class CajaController : Controller
     {
         private readonly string apiUrl = Helper.GetUrlApi() + "/api/caja"; // URL base de la API
-        private string url_registrar_pago = Helper.GetUrlApi() + "/api/caja/registrar_pago";
         private string url_deshacer_pago = Helper.GetUrlApi() + "/api/caja/deshacer_pago";
+        private string url_registrar_pago = Helper.GetUrlApi() + "/api/caja/registrar_pago";
         private string url_registrar_pago_masivo = Helper.GetUrlApi() + "/api/caja/registrar_pago_masivo";
         private string url_registrar_descuento = Helper.GetUrlApi() + "/api/caja/registrar_descuento";
         private string url_registrar_efectivo = Helper.GetUrlApi() + "/api/caja/registrar_efectivo";
@@ -189,28 +189,6 @@ namespace PsycoApp.site.Controllers
         }
 
         [HttpPost]
-        public async Task<RespuestaUsuario> RegistrarPago(Pago model)
-        {
-            string res = "";
-            model.usuario = Convert.ToString(HttpContext.Session.GetString("login"));
-
-            RespuestaUsuario res_ = new RespuestaUsuario();
-            try
-            {
-                url = url_registrar_pago;
-                obj = (dynamic)model;
-                res = ApiCaller.consume_endpoint_method(url, obj, "POST");
-                res_ = JsonConvert.DeserializeObject<RespuestaUsuario>(res);
-            }
-            catch (Exception)
-            {
-                res_.estado = false;
-                res_.descripcion = "Ocurrió un error al registrar el pago.";
-            }
-            return res_;
-        }
-
-        [HttpPost]
         public async Task<RespuestaUsuario> DeshacerPago(Pago model)
         {
             string res = "";
@@ -233,10 +211,34 @@ namespace PsycoApp.site.Controllers
         }
 
         [HttpPost]
+        public async Task<RespuestaUsuario> RegistrarPago(Pago model)
+        {
+            string res = "";
+            model.usuario = Convert.ToString(HttpContext.Session.GetString("login"));
+            model.idSede = Convert.ToInt32(HttpContext.Session.GetInt32("id_sede"));
+
+            RespuestaUsuario res_ = new RespuestaUsuario();
+            try
+            {
+                url = url_registrar_pago;
+                obj = (dynamic)model;
+                res = ApiCaller.consume_endpoint_method(url, obj, "POST");
+                res_ = JsonConvert.DeserializeObject<RespuestaUsuario>(res);
+            }
+            catch (Exception)
+            {
+                res_.estado = false;
+                res_.descripcion = "Ocurrió un error al registrar el pago.";
+            }
+            return res_;
+        }
+
+        [HttpPost]
         public async Task<RespuestaUsuario> RegistrarPagoMasivo(PagoMasivo model)
         {
             string res = "";
             model.usuario = Convert.ToString(HttpContext.Session.GetString("login"));
+            model.idSede = Convert.ToInt32(HttpContext.Session.GetInt32("id_sede"));
 
             RespuestaUsuario res_ = new RespuestaUsuario();
             try

@@ -33,6 +33,12 @@ namespace PsycoApp.api.Controllers
         string res = "";
         string random_str = "";
 
+        [HttpPost("deshacer_pago")]
+        public async Task<RespuestaUsuario> DeshacerPago([FromBody] Pago request)
+        {
+            return await cajaBL.DeshacerPago(request);
+        }
+
         [HttpPost("registrar_pago")]
         public RespuestaUsuario RegistrarPago([FromBody] Pago oPago)
         {
@@ -48,12 +54,6 @@ namespace PsycoApp.api.Controllers
                 res_.estado = false;
             }
             return res_;
-        }
-
-        [HttpPost("deshacer_pago")]
-        public async Task<RespuestaUsuario> DeshacerPago([FromBody] Pago request)
-        {
-            return await cajaBL.DeshacerPago(request);
         }
 
         [HttpPost("registrar_pago_masivo")]

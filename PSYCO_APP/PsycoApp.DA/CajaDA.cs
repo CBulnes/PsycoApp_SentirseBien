@@ -28,6 +28,7 @@ namespace PsycoApp.DA
                 cmd.Parameters.Add("@id_detalle_transferencia", SqlDbType.Int).Value = oPago.id_detalle_transferencia;
                 cmd.Parameters.Add("@importe", SqlDbType.Decimal).Value = oPago.importe;
                 cmd.Parameters.Add("@usuario", SqlDbType.VarChar).Value = oPago.usuario;
+                cmd.Parameters.Add("@id_sede", SqlDbType.VarChar).Value = oPago.idSede;
                 cmd.Parameters.Add("@comentario", SqlDbType.VarChar).Value = oPago.comentario;
 
                 SqlDataAdapter da = new SqlDataAdapter(cmd);
