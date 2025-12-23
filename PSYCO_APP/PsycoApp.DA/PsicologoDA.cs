@@ -291,7 +291,7 @@ namespace PsycoApp.DA
             try
             {
                 cn.Open();
-                SqlCommand cmd = new SqlCommand(Procedures.sp_listar_usuarios_caja_combo, cn);
+                SqlCommand cmd = new SqlCommand("SP_LISTAR_USUARIOS_CAJA_COMBO", cn);
                 cmd.CommandType = CommandType.StoredProcedure;
 
                 SqlDataAdapter da = new SqlDataAdapter(cmd);

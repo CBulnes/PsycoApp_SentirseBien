@@ -462,7 +462,7 @@
     function cargar_lista_usuarios_caja() {
         var html = '';
         $.ajax({
-            url: "/RegistroCitas/listar_usuarios_caja?filtrar_por_sede=0",
+            url: "/RegistroCitas/listar_usuarios_caja?filtrar_por_sede=1",
             type: "GET",
             async: false,
             beforeSend: function () {
