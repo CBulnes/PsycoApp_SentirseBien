@@ -71,7 +71,7 @@ namespace PsycoApp.site.Controllers
                 lista = JsonConvert.DeserializeObject<List<Cita>>(res);
                 //lista = lista.Where(x => Convert.ToDecimal(x.monto_pendiente_.Replace("S/.", "")) > 0).ToList();
 
-                if (idPaciente != -1)
+                if (idPaciente != -1 && idPaciente != null)
                 {
                     lista = lista.Where(x => x.id_paciente == idPaciente).ToList();
                 }

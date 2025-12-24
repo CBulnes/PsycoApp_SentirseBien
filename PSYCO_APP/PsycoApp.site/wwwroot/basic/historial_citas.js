@@ -73,6 +73,7 @@ function cargar_historial() {
             lista_citas = [];
         },
         complete: function () {
+            console.log(lista_citas.length);
             if (lista_citas.length > 0) {
                 for (var item of lista_citas) {
                     html += '<tr>';

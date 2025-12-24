@@ -967,28 +967,30 @@ let choicesT;
 document.addEventListener('DOMContentLoaded', function () {
     const elementT = document.querySelector('#cboPacientesPago');
 
-    choicesT = new Choices(elementT, {
-        placeholder: true,
-        searchPlaceholderValue: "Buscar...",
-        itemSelectText: "",
-    });
+    if (elementT != null) {
+        choicesT = new Choices(elementT, {
+            placeholder: true,
+            searchPlaceholderValue: "Buscar...",
+            itemSelectText: "",
+        });
 
-    elementT.addEventListener('search', function (event) {
-        const inputValue = event.detail.value;
+        elementT.addEventListener('search', function (event) {
+            const inputValue = event.detail.value;
 
-        clearTimeout(debounceTimer);
-        if (inputValue.length >= 4) {
-            debounceTimer = setTimeout(() => {
-                searchPatients(inputValue);
-            }, 300);
-        }
-        if (inputValue.length === 0) {
-            loadPatients('', currentPage);
-            return;
-        }
-    });
+            clearTimeout(debounceTimer);
+            if (inputValue.length >= 4) {
+                debounceTimer = setTimeout(() => {
+                    searchPatients(inputValue);
+                }, 300);
+            }
+            if (inputValue.length === 0) {
+                loadPatients('', currentPage);
+                return;
+            }
+        });
 
-    loadPatients('', currentPage);
+        loadPatients('', currentPage);
+    }
 });
 
 function searchPatients(filtro) {
