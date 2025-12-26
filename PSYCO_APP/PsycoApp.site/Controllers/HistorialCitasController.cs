@@ -67,7 +67,7 @@ namespace PsycoApp.site.Controllers
             string res = "";
             try
             {
-                url = url_citas_doctor + "/" + usuario + "/" + inicio + "/" + fin + "/" + id_estado + "/" + id_doctor +  "/" + ver_sin_reserva+"/"+ sede;
+                url = url_citas_doctor + "/" + usuario + "/" + inicio + "/" + fin + "/" + id_estado + "/" + id_doctor +  "/" + ver_sin_reserva + "/" + sede + "/" + idPaciente;
                 res = ApiCaller.consume_endpoint_method(url, null, "GET");
                 lista = JsonConvert.DeserializeObject<List<Cita>>(res);
                 //lista = lista.Where(x => Convert.ToDecimal(x.monto_pendiente_.Replace("S/.", "")) > 0).ToList();
