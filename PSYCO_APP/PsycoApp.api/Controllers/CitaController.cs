@@ -267,13 +267,13 @@ namespace PsycoApp.api.Controllers
             return lista;
         }
 
-        [HttpGet("citas_doctor/{usuario}/{inicio}/{fin}/{id_estado}/{id_doctor}/{ver_sin_reserva}")]
-        public List<Cita> citas_doctor(string usuario, string inicio, string fin, int id_estado, int id_doctor, int ver_sin_reserva)
+        [HttpGet("citas_doctor/{usuario}/{inicio}/{fin}/{id_estado}/{id_doctor}/{ver_sin_reserva}/{sede}")]
+        public List<Cita> citas_doctor(string usuario, string inicio, string fin, int id_estado, int id_doctor, int ver_sin_reserva,int sede)
         {
             List<Cita> lista = new List<Cita>();
             try
             {
-                lista = citaBL.citas_doctor(usuario, inicio, fin, id_estado, id_doctor, ver_sin_reserva);
+                lista = citaBL.citas_doctor(usuario, inicio, fin, id_estado, id_doctor, ver_sin_reserva,sede);
             }
             catch (Exception)
             {
