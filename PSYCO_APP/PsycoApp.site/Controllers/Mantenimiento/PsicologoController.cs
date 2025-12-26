@@ -92,7 +92,7 @@ namespace PsycoApp.site.Controllers.Mantenimiento
                 ViewBag.PageNumber = pageNumber;
                 ViewBag.PageSize = pageSize;
 
-                if (obj.id_tipousuario == 1) //admin
+                if (obj.id_tipousuario == 1 || obj.id_tipousuario == 3) //admin
                 {
                     return View("~/Views/Mantenimiento/Psicologo/Index.cshtml", viewModelContainer);
                 }

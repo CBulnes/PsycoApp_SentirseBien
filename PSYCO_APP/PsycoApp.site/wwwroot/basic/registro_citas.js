@@ -688,13 +688,14 @@ function ver_cita(e) {
             var dni_paciente = $(e).attr('data-dni-paciente');
             var paciente = $(e).attr('data-paciente');
             var edad = $(e).attr('data-edad');
+            var tipocita = $(e).attr('data-tipocita'); 
             if (id_especialista == -1) {
                 if ($('#hiddenDoctor').val() != null && $('#hiddenDoctor').val() != '') {
                     id_especialista = $('#hiddenDoctor').val();
                 }
             }
 
-            cargar_datos_cita(id_cita, id_especialista, id_paciente, fecha_cita, hora_Cita, estado, telefono, moneda, formatDecimal(monto_pactado), formatDecimal(monto_pagado), formatDecimal(monto_pendiente), id_servicio, id_sede, feedback, comentario, pago_gratis, dni_paciente, paciente, id_paquete, edad);
+            cargar_datos_cita(id_cita, id_especialista, id_paciente, fecha_cita, hora_Cita, estado, telefono, moneda, formatDecimal(monto_pactado), formatDecimal(monto_pagado), formatDecimal(monto_pendiente), id_servicio, id_sede, feedback, comentario, pago_gratis, dni_paciente, paciente, id_paquete, edad, tipocita);
             Swal.close();
         });
 
@@ -775,13 +776,14 @@ function ver_cita(e) {
     var dni_paciente = $(e).attr('data-dni-paciente');
     var paciente = $(e).attr('data-paciente');
     var edad = $(e).attr('data-edad');
+    var tipocita = $(e).attr('data-tipocita'); 
     if (id_especialista == -1) {
         if ($('#hiddenDoctor').val() != null && $('#hiddenDoctor').val() != '') {
             id_especialista = $('#hiddenDoctor').val();
         }
     }
         
-    cargar_datos_cita(id_cita, id_especialista, id_paciente, fecha_cita, hora_Cita, estado, telefono, moneda, formatDecimal(monto_pactado), formatDecimal(monto_pagado), formatDecimal(monto_pendiente), id_servicio, id_sede, feedback, comentario, pago_gratis, dni_paciente, paciente, id_paquete, edad);
+    cargar_datos_cita(id_cita, id_especialista, id_paciente, fecha_cita, hora_Cita, estado, telefono, moneda, formatDecimal(monto_pactado), formatDecimal(monto_pagado), formatDecimal(monto_pendiente), id_servicio, id_sede, feedback, comentario, pago_gratis, dni_paciente, paciente, id_paquete, edad, tipocita);
 }
 
 function formatDecimal(num) {
@@ -1269,7 +1271,7 @@ function cerrar_modal_pago2() {
     }, 250);
 }
 
-function cargar_datos_cita(id_cita, id_doctor, id_paciente, fecha, hora, estado, telefono, moneda, monto_pactado, monto_pagado, monto_pendiente, id_servicio, id_sede, feedback, comentario, pago_gratis, dni_paciente, paciente, id_paquete,edad) {
+function cargar_datos_cita(id_cita, id_doctor, id_paciente, fecha, hora, estado, telefono, moneda, monto_pactado, monto_pagado, monto_pendiente, id_servicio, id_sede, feedback, comentario, pago_gratis, dni_paciente, paciente, id_paquete, edad, tipocita) {
     $('#loaderCita').show();
 
     setTimeout(() => {  // Pequeño delay para dar tiempo al navegador a pintar el loader
@@ -1286,7 +1288,7 @@ function cargar_datos_cita(id_cita, id_doctor, id_paciente, fecha, hora, estado,
     $('#cboPaciente').val(id_paciente).attr('data-id-paciente', id_paciente);
         $('#txtTelefono').val(telefono).attr('data-telefono', telefono);
         $('#txtEdad').val(edad).attr('data-edad', edad);
-        
+        $('#cboTipoCita').val(tipocita).attr('data-tipocita', tipocita);
     $('#txtDniPaciente').val(dni_paciente).attr('data-dni-paciente', dni_paciente);
     $('#txtMontoPactado').val(monto_pactado).attr('data-monto-pactado', monto_pactado);
     $('#txtMontoPagado').val(monto_pagado).attr('data-monto-pagado', monto_pagado);

@@ -446,7 +446,7 @@
                                     </div>
                                 </div>
 
-                                <div class="sb-reg-citas-popup-tab-panel-block" style="display:none">
+                                <div class="sb-reg-citas-popup-tab-panel-block">
                                     <div class="sb-reg-citas-popup-tab-panel-block-item">
                                         <span class="label-form">Tipo de cita</span>
                                         <div class="input-group">
@@ -561,16 +561,17 @@
                 </div>
             </div>
             <div class="modal-footer sb-reg-citas-popup-btn">
-                <button type="button" class="btn btn-secondary sb-reg-citas-popup-button-volver" onclick="cerrar_modal_cita()">Volver</button>
+       
             @if (@dynamicData.id_tipousuario != 4)
             {
-                 
+                    <button type="button" class="btn btn-primary main_color sb-reg-citas-popup-button" style="background-color: #eb5151 !important;" onclick="cancelar_cita()" id="btnCancelar">Eliminar</button>
                 <button type="button" class="btn btn-primary main_color divConfirmar sb-reg-citas-popup-button" onclick="guardar_cita()" id="btnGuardarCita">Guardar</button>
                 <button type="button" class="btn btn-primary main_color divConfirmar sb-reg-citas-popup-button" onclick="confirmar_cita()" id="btnConfirmar">Confirmar</button>
                 <button type="button" class="btn btn-primary main_color sb-reg-citas-popup-button" onclick="atender_cita()" id="divAtender">Atender</button>
-                <button type="button" class="btn btn-primary main_color sb-reg-citas-popup-button" style="background-color: #eb5151 !important;" onclick="cancelar_cita()" id="btnCancelar">Eliminar</button>
+        
              
             }
+                <button type="button" class="btn btn-secondary sb-reg-citas-popup-button-volver" onclick="cerrar_modal_cita()">Volver</button>
             </div>
         </div>
     </div>
