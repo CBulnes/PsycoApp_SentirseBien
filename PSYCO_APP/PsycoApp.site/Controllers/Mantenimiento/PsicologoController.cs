@@ -23,7 +23,7 @@ namespace PsycoApp.site.Controllers.Mantenimiento
         private string url_guardar_vacaciones_psicologo = Helper.GetUrlApi() + "/api/psicologo/guardar_vacaciones_psicologo";
 
         [Route("Mantenimiento/Psicologo")]
-        public async Task<IActionResult> Index(int pageNumber = 1, int pageSize = 10)
+        public async Task<IActionResult> Index(int pageNumber = 1, int pageSize = 100)
         {
             if (!string.IsNullOrEmpty(HttpContext.Session.GetString("nombres") as string))
             {
@@ -82,7 +82,42 @@ namespace PsycoApp.site.Controllers.Mantenimiento
                 obj.vista = "PSICOLOGO";
 
                 obj.ubigeos = ubigeosViewModel;
-
+                if (obj.id_sede == 1) //La molina
+                {
+                    psicologos = psicologos.Where(x => x.IdSedePrincipal == 1 || x.IdSedeSecundaria == 1).ToList();
+                }
+                else if (obj.id_sede == 2) //Surco
+                {
+                    psicologos = psicologos.Where(x => x.IdSedePrincipal == 2 || x.IdSedeSecundaria == 2).ToList();
+                }
+                else if (obj.id_sede == 3) //Miraflores
+                {
+                    psicologos = psicologos.Where(x => x.IdSedePrincipal == 3 || x.IdSedeSecundaria == 3).ToList();
+                }
+                psicologosViewModel = psicologos.Select(p => new PsycoApp.site.Models.Psicologo
+                {
+                    Id = p.Id,
+                    Nombre = p.Nombre,
+                    Apellido = p.Apellido,
+                    DocumentoNumero = p.DocumentoNumero,
+                    Estado = p.Estado,
+                    DocumentoTipo = p.DocumentoTipo,
+                    Especialidad = p.Especialidad,
+                    FechaNacimiento = p.FechaNacimiento,
+                    Direccion = p.Direccion,
+                    Distrito = p.Distrito,
+                    Telefono = p.Telefono,
+                    Refrigerio = p.Refrigerio,
+                    Sedes = p.Sedes
+                    //Estudios = p.Estudios.Select(q => new PsycoApp.site.Models.Estudio
+                    //{
+                    //    Id = q.Id,
+                    //    IdPsicologo = q.IdPsicologo,
+                    //    GradoAcademico = q.GradoAcademico,
+                    //    Institucion = q.Institucion,
+                    //    Carrera = q.Carrera
+                    //}).ToList()
+                }).ToList();
                 var viewModelContainer = new ViewModelContainer<IEnumerable<PsycoApp.site.Models.Psicologo>>
                 {
                     Model = psicologosViewModel,

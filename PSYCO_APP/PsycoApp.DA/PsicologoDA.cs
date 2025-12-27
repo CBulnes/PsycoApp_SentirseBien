@@ -141,42 +141,60 @@ namespace PsycoApp.DA
 
         public List<Psicologo> ListarPsicologos(int pagina, int tamanoPagina)
         {
-            var psicologos = new List<Psicologo>();
-
-            using (var command = new SqlCommand(Procedures.listar_psicologos_paginado, _connection))
+            try
             {
-                command.CommandType = CommandType.StoredProcedure;
-                command.Parameters.AddWithValue("@Pagina", pagina);
-                command.Parameters.AddWithValue("@TamanoPagina", tamanoPagina);
+                var psicologos = new List<Psicologo>();
 
-                _connection.Open();
-
-                using (var reader = command.ExecuteReader())
+                using (var command = new SqlCommand(Procedures.listar_psicologos_paginado, _connection))
                 {
-                    while (reader.Read())
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.AddWithValue("@Pagina", pagina);
+                    command.Parameters.AddWithValue("@TamanoPagina", tamanoPagina);
+
+                    _connection.Open();
+
+                    using (var reader = command.ExecuteReader())
                     {
-                        psicologos.Add(new Psicologo
+                        while (reader.Read())
                         {
-                            Id = reader.GetInt32(0),
-                            Nombre = reader.GetString(1),
-                            Apellido = reader.GetString(2),
-                            FechaNacimiento = reader.GetDateTime(3),
-                            DocumentoTipo = reader.GetString(4),
-                            DocumentoNumero = reader.GetString(5),
-                            Telefono = reader.GetString(6),
-                            Refrigerio = reader.GetString(7),
-                            Especialidad = reader.GetInt32(8),
-                            Direccion = reader.GetString(9),
-                            Distrito = reader.GetString(10),
-                            Estado = reader.GetString(11)
-                        });
+                            psicologos.Add(new Psicologo
+                            {
+                                Id = (int)reader["Id"],
+                                Nombre = (string)reader["Nombre"],
+                                Apellido = (string)reader["Apellido"],
+                                FechaNacimiento = (DateTime)reader["FechaNacimiento"],
+                                DocumentoTipo = (string)reader["DocumentoTipo"],
+                                DocumentoNumero = (string)reader["DocumentoNumero"],
+                                Telefono = (string)reader["Telefono"],
+                                Refrigerio = (string)reader["Refrigerio"],
+                                Especialidad = (int)reader["Especialidad"],
+                                Direccion = (string)reader["Direccion"],
+                                Distrito = (string)reader["Distrito"],
+                                Estado = (string)reader["Estado"],
+                                IdSedePrincipal = (int)reader["IdSedePrincipal"],
+                                IdSedeSecundaria = (int)reader["IdSedeSecundaria1"],
+                                IdSedeSecundaria2 = (int)reader["IdSedeSecundaria2"],
+                                Sedes = (string)reader["Sedes"]
+                            });
+                        }
                     }
+
+                    _connection.Close();
                 }
 
+                return psicologos;
+            }
+            catch (Exception ex)
+            {
+                var msg = ex.Message.ToString();
+                var stack = ex.StackTrace.ToString();
+
+            }
+            finally
+            {
                 _connection.Close();
             }
-
-            return psicologos;
+            return new List<Psicologo>();
         }
 
         public void AgregarPsicologo(Psicologo psicologo)
