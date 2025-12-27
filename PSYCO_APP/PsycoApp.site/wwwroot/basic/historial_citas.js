@@ -7,8 +7,6 @@ var idCita = 0;
 var estado = "";
 var fecha = "";
 
-
-
 document.addEventListener('DOMContentLoaded', function () {
     const element = document.querySelector('#cboDoctor');
     const choices = new Choices(element, {
@@ -16,7 +14,104 @@ document.addEventListener('DOMContentLoaded', function () {
         searchPlaceholderValue: "Buscar...",
         itemSelectText: "Todos",
     });
+
+    //paciente
+    const elementT2 = document.querySelector('#cboPacientesHistorial');
+
+    if (elementT2 != null) {
+        choicesT = new Choices(elementT2, {
+            placeholder: true,
+            searchPlaceholderValue: "Buscar...",
+            itemSelectText: "",
+        });
+
+        elementT2.addEventListener('search', function (event) {
+            const inputValue = event.detail.value;
+
+            clearTimeout(debounceTimer);
+            if (inputValue.length >= 4) {
+                debounceTimer = setTimeout(() => {
+                    searchPatients(inputValue);
+                }, 300);
+            }
+            if (inputValue.length === 0) {
+                loadPatients('', currentPage);
+                return;
+            }
+        });
+
+        loadPatients('', currentPage);
+    }
 });
+
+function searchPatients(filtro) {
+    $.ajax({
+        url: `/RegistroCitas/listar_pacientes_dinamico?filtro=${filtro}&page=1&pageSize=10&IdBusqueda=false`,
+        type: "GET",
+        beforeSend: function () {
+            choicesT.clearChoices();
+            choicesT.setChoices([
+                { value: "-1", label: "Buscando...", disabled: true }
+            ]);
+        },
+        success: function (res) {
+
+            if (res && res.length > 0) {
+
+                const pacientes = res.map(item => ({
+                    value: item.id,
+                    label: item.nombre
+                }));
+
+                choicesT.clearChoices();
+                choicesT.setChoices(pacientes, "value", "label", true);
+
+            } else {
+
+                choicesT.clearChoices();
+                choicesT.setChoices([
+                    { value: "-1", label: "No se encontraron pacientes", disabled: true }
+                ]);
+
+            }
+        },
+        error: function () {
+            choicesT.clearChoices();
+            choicesT.setChoices([
+                { value: "-1", label: "Error al buscar pacientes", disabled: true }
+            ]);
+        }
+    });
+}
+
+function loadPatients(filtro = "", page) {
+    $.ajax({
+        url: `/RegistroCitas/listar_pacientes_dinamico?filtro=${filtro}&page=${page}&pageSize=10&IdBusqueda=false`,
+        type: "GET",
+        beforeSend: function () {
+            choicesT.clearChoices();
+            choicesT.setChoices([
+                { value: "-1", label: "Cargando...", disabled: true }
+            ]);
+        },
+        success: function (res) {
+
+            const pacientes = res.map(item => ({
+                value: item.id,
+                label: item.nombre
+            }));
+
+            choicesT.clearChoices();
+            choicesT.setChoices(pacientes, "value", "label", true);
+        },
+        error: function () {
+            choicesT.clearChoices();
+            choicesT.setChoices([
+                { value: "-1", label: "Error al cargar", disabled: true }
+            ]);
+        }
+    });
+}
 
 function cargar_lista_doctores() {
     console.log(1);
@@ -57,9 +152,10 @@ function cargar_historial() {
     var id_estado = $('#cboEstado').val();
     var ver_sin_reserva = $('#cboVerSinReserva').val();
     var i = 1;
+    var idPaciente = $('#cboPacientesHistorial').val();
 
     $.ajax({
-        url: '/HistorialCitas/CitasDoctor?inicio=' + (inicio == '' ? '-' : inicio) + '&fin=' + (fin == '' ? '-' : fin) + '&id_doctor=' + id_doctor + '&id_estado=' + id_estado + '&ver_sin_reserva=' + ver_sin_reserva,
+        url: '/HistorialCitas/CitasDoctor?inicio=' + (inicio == '' ? '-' : inicio) + '&fin=' + (fin == '' ? '-' : fin) + '&id_doctor=' + id_doctor + '&id_estado=' + id_estado + '&ver_sin_reserva=' + ver_sin_reserva + '&idPaciente=' + idPaciente,
         type: "GET",
         data: {},
         beforeSend: function () {

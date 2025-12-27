@@ -125,7 +125,8 @@ $(document).ready(function () {
         var disabled = id_cita_ > 0 ? 'disabled="disabled"' : '';
 
         for (var i = 0; i < sesiones; i++) {
-            var fecha = addDays(parseDate(fecha_yyyyMMdd(fechaInicial)), i*7);
+            var fecha1 = parseDate(fechaInicial);
+            var fecha = addDays(fecha1, i*7);
             html += '<tr>';
             html += '<td><input class="new-font form-control fechaAd active-input-modulo" type="date" data-id-cita="0" id="txtFecha' + i + '" autocomplete="off" max="2050-12-31" min="2022-08-01" value="' + formatDateISO(fecha) + '" onkeydown="return false" ' + disabled + ' oninput="validarHorarioFecha(' + i + ')" /></td>';
 
@@ -459,6 +460,40 @@ function verFechasAdicionales(servicio = null) {
             }
         });
     } else {
+        //console.log(citasPaquete);
+        //debugger;
+
+        //if (sesiones == 0) {
+        //    sesiones = $('#cboServicio').find(':selected').attr('data-sesiones');
+        //}
+
+        //for (var i = 0; i < sesiones; i++) {
+        //    citasPaquete.push({ fecha_cita: '2025-12-30', id_cita: 0, estado: '', id_estado_cita: 0, nombre_servicio: $('#cboServicio option:selected').text(), id_doctor_asignado: $('#cboDoctor').val(), hora_cita: '-1' });
+        //}
+
+        //for (var i = 0; i < citasPaquete.length; i++) {
+        //    var fecha = citasPaquete[i].fecha_cita;
+        //    var disabled = (citasPaquete[i].id_cita > 0 && citasPaquete[i].estado == 'ATENDIDO') ? 'disabled="disabled"' : '';
+        //    var deshabilitar = (citasPaquete[i].id_cita > 0 && citasPaquete[i].estado == 'ATENDIDO') ? true : false;
+
+        //    html += '<tr>';
+        //    html += '<td><input class="new-font form-control fechaAd active-input-modulo" type="date" data-id-estado="' + citasPaquete[i].id_estado_cita + '" data-id-cita="' + citasPaquete[i].id_cita + '" id="txtFecha' + i + '" autocomplete="off" max="2050-12-31" min="2022-08-01" value="' + (fecha) + '" onkeydown="return false" ' + disabled + ' oninput="validarHorarioFecha(' + i + ')" /></td>';
+        //    html += '<td id="tdEspecialista' + i + '"><select class="new-font form-control especialistaAd active-select-modulo" style="background-color: #18202d !important;" id="cboEspecialista' + i + '" onchange="obtener_horarios_especialista(' + i + ')">' + obtener_especialistas() + '</select></td>';
+        //    html += '<td id="tdHorario' + i + '"><select class="new-font form-control horarioAd active-select-modulo" style="background-color: #18202d !important;" id="cboHorario' + i + '">' + '<option value="-1">Seleccionar horario</option>' + /*obtener_horarios_fecha(formatDateISO(fecha)) +*/ '</select></td>';
+        //    html += '<td>' +
+        //        '<label class="new-font form-control horarioAd active-select-modulo" ' +
+        //        'style="background-color: #18202d !important;top: 10px !important;" ' +
+        //        'id="lblServicio' + i + '">' +
+        //        citasPaquete[i].nombre_servicio +
+        //        '</label>' +
+        //        '</td>';
+
+        //    html += '</tr>';
+
+        //    cbosEspecialistas.push({ idCombo: 'cboEspecialista' + i, valor: citasPaquete[i].id_doctor_asignado, deshabilitar });
+        //    cbosHorarios.push({ idCombo: 'cboHorario' + i, valor: (citasPaquete[i].hora_cita), deshabilitar });
+        //}
+
         $('#mdl_adicionales_').modal('show');
     }
 }
