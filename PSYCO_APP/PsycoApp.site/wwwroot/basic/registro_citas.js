@@ -898,6 +898,38 @@ function GetFechaActual() {
 }
 
 function form_pago() {
+    $('#mdl_cita').modal('hide');
+    var fechaActual = GetFechaActual();
+    var nombrePaciente = $("#cboPaciente option:selected").text();
+    var pendiente = $('#txtMontoPendiente').val();
+
+    if (pendiente == '0.00') {
+        setTimeout(() => {
+            listar_pagos_pendientes($('#cboPaciente').val());
+            $('#mdl_otros_pagos_pendientes').modal('show');
+        }, 250);
+        return;
+    }
+
+    setTimeout(() => {
+        $('#mdl_pago').modal('show');
+    }, 250);
+
+    $('#txtIdCita').val(id_cita_);
+    $('#txtFechaPago').val(fecha_formato_ddmmyyyy(fechaActual));
+    $('#txtPaciente').val(nombrePaciente);
+    $('#cboFormaPago').val(-1);
+    $('#txtComentario').val('');
+    validarSiEsTransferencia();
+
+    $("#txtMonto1, #txtMonto2, #txtMonto3").inputmask({ 'alias': 'numeric', allowMinus: false, digits: 2, max: 999.99 });
+    $('#txtMonto1').val('0.00');    //importe pago
+    $('#txtMonto2').val(pendiente); //pendiente
+    $('#txtMonto3').val(pendiente); //diferencia
+    recargar_pagos_pendientes = false;
+    return;
+
+    //se omitirá la validacion de configuracion de caja (posiblemente deprecado)
     $.ajax({
         url: "/Home/ObtenerConfiguracion",
         type: "GET",
