@@ -297,6 +297,21 @@ namespace PsycoApp.api.Controllers
             return lista;
         }
 
+        [HttpGet("historial_pago_cita/{id_cita}/{id_sede}")]
+        public List<entities.CuadreCaja> historial_pago_cita(int id_cita, int id_sede)
+        {
+            List<entities.CuadreCaja> lista = new List<entities.CuadreCaja>();
+            try
+            {
+                lista = historialBL.historial_pago_cita(id_cita, id_sede);
+            }
+            catch (Exception)
+            {
+                lista.Clear();
+            }
+            return lista;
+        }
+
         [HttpPost("registrar_historial")]
         public RespuestaUsuario RegistrarHistorial([FromBody] HistorialPaciente oHistorial)
         {

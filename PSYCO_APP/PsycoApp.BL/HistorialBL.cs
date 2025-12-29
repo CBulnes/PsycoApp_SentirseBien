@@ -58,5 +58,19 @@ namespace PsycoApp.BL
             return lista;
         }
 
+        public List<entities.CuadreCaja> historial_pago_cita(int id_cita, int id_sede)
+        {
+            List<entities.CuadreCaja> lista = new List<entities.CuadreCaja>();
+            try
+            {
+                lista = historialDA.historial_pago_cita(id_cita, id_sede);
+            }
+            catch (Exception)
+            {
+                lista.Clear();
+            }
+            return lista;
+        }
+
     }
 }

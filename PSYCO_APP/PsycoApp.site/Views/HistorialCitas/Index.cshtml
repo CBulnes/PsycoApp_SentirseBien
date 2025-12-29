@@ -249,6 +249,39 @@
     </div>
 </div>
 
+<div id="mdl_historial_pago_cita" class="modal" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="true">
+    <div class="modal-dialog modal-lg" role="document" style="height: 90%; display: grid; place-items: center; width: 100%;">
+        <div class="modal-content" style="width: 100%;">
+            <div class="modal-header sb-reg-citas-popup-title">
+                <h5 class="modal-title">Historial de pagos por cita</h5>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                        <div class="form-group">
+                            <table class="table table-striped active-table-modulo">
+                                <thead>
+                                    <tr>
+                                        <th>Importe</th>
+                                        <th>Forma de pago</th>
+                                        <th>Detalle de transferencia</th>
+                                        <th>Mes</th>
+                                        <th>Año</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tBodyHistorialPagoCita"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="cerrar_form_historial_pago()">Volver</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div id="mdl_historial" class="modal" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="true">
     <div class="modal-dialog modal-lg" role="document" style="height: 90%; display: grid; place-items: center; width: 100%;">
         <div class="modal-content" style="width: 100%;">

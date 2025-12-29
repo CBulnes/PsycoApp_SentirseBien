@@ -114,6 +114,41 @@ namespace PsycoApp.DA
             return lista;
         }
 
+        public List<entities.CuadreCaja> historial_pago_cita(int id_cita, int id_sede)
+        {
+            List<entities.CuadreCaja> lista = new List<entities.CuadreCaja>();
+            try
+            {
+                cn.Open();
+                SqlCommand cmd = new SqlCommand("SP_LISTAR_CAJA_MES_FORMA_PAGO_CITA", cn);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Add("@id_cita", SqlDbType.Int).Value = id_cita;
+                cmd.Parameters.Add("@sede", SqlDbType.Int).Value = id_sede;
+
+                SqlDataAdapter da = new SqlDataAdapter(cmd);
+                DataTable dt = new DataTable();
+                da.Fill(dt);
+
+                foreach (DataRow row in dt.Rows)
+                {
+                    entities.CuadreCaja historial = new entities.CuadreCaja();
+                    historial.cantidad = Convert.ToInt32(row["cantidad"]);
+                    historial.importe = Convert.ToString(row["importe"]);
+                    historial.forma_pago = Convert.ToString(row["forma_pago"]);
+                    historial.detalle_transferencia = Convert.ToString(row["detalle_transferencia"]);
+                    historial.mes = Convert.ToInt32(row["mes"]);
+                    historial.anho = Convert.ToInt32(row["anho"]);
+                    lista.Add(historial);
+                }
+            }
+            catch (Exception e)
+            {
+                lista.Clear();
+            }
+            cn.Close();
+            return lista;
+        }
+
         public async Task<List<HistorialCita>> listar_historial_cita(int id_cita)
         {
             List<HistorialCita> lista = new List<HistorialCita>();

@@ -15,6 +15,7 @@ namespace PsycoApp.site.Controllers
     {
         private readonly string url_citas_doctor = Helper.GetUrlApi() + "/api/cita/citas_doctor";
         private readonly string url_historial_usuario = Helper.GetUrlApi() + "/api/cita/historial_usuario";
+        private readonly string url_historial_pago_cita = Helper.GetUrlApi() + "/api/cita/historial_pago_cita";
         private readonly string url_registrar_historial = Helper.GetUrlApi() + "/api/cita/registrar_historial";
         private readonly string url_registrar_estado_cuestionario = Helper.GetUrlApi() + "/api/cita/registrar_estado_cuestionario";
 
@@ -94,6 +95,25 @@ namespace PsycoApp.site.Controllers
                 url = url_historial_usuario + "/" + id_usuario;
                 res = ApiCaller.consume_endpoint_method(url, null, "GET");
                 lista = JsonConvert.DeserializeObject<List<HistorialPaciente>>(res);
+            }
+            catch (Exception)
+            {
+                lista.Clear();
+            }
+            return lista;
+        }
+
+        [HttpGet]
+        public async Task<List<entities.CuadreCaja>> VerHistorialPagosCita(int id_cita)
+        {
+            List<entities.CuadreCaja> lista = new List<entities.CuadreCaja>();
+            int? id_sede = HttpContext.Session.GetInt32("id_sede");
+            string res = "";
+            try
+            {
+                url = url_historial_pago_cita + "/" + id_cita + "/" + id_sede;
+                res = ApiCaller.consume_endpoint_method(url, null, "GET");
+                lista = JsonConvert.DeserializeObject<List<entities.CuadreCaja>>(res);
             }
             catch (Exception)
             {

@@ -220,6 +220,9 @@ function accion_cita(esEvaluacion, paciente, monto_pendiente, id_paciente, id_ci
         html_accion += `<a href="#" title="Cita adicional" onclick="form_cita_adicional(${id_paquete},${id_paciente},'${paciente}','${dni}','${telefono}'); return false;" style="cursor: pointer;">📅</a>`;
         html_accion += '</span>';
     }
+    html_accion += '<span class="input-group-text" style="height: 100%; display: inline-block;">';
+    html_accion += `<a href="#" title="Historial de pagos" onclick="form_historial_pago(${id_cita}); return false;" style="cursor: pointer;">🔍</a>`;
+    html_accion += '</span>';
     return html_accion;
 }
 function GetFechaActual() {
@@ -292,6 +295,50 @@ function agregarInformeAdicional() {
 
 function cerrar_form_informe() {
     $('#mdl_informe').modal('hide');
+}
+
+function form_historial_pago(id_cita) {
+    var html = '';
+    $.ajax({
+        url: "/HistorialCitas/VerHistorialPagosCita?id_cita=" + id_cita,
+        type: "GET",
+        success: function (data) {
+            if (data.length > 0) {
+                for (var item of data) {
+                    html += '<tr><td>' + item.importe + '</td><td>' + item.forma_pago + '</td><td>' + item.detalle_transferencia + '</td><td>' + (item.forma_pago == 'TOTAL' ? '' : obtenerMesPorNumero(item.mes)) + '</td><td>' + (item.forma_pago == 'TOTAL' ? '' : item.anho) + '</td></tr>';
+                }
+            } else {
+                html = '<tr><td colspan="5">No se encontraron registros para motrar</td></tr>';
+            }
+            $('#tBodyHistorialPagoCita').html(html);
+            $('#mdl_historial_pago_cita').modal('show');
+        },
+        error: function (response) {
+            Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: "Ocurrió un error al obtener la información"
+            });
+        }
+    });
+}
+
+function obtenerMesPorNumero(numeroMes) {
+    const meses = [
+        "Enero", "Febrero", "Marzo", "Abril",
+        "Mayo", "Junio", "Julio", "Agosto",
+        "Septiembre", "Octubre", "Noviembre", "Diciembre"
+    ];
+
+    if (numeroMes < 1 || numeroMes > 12) {
+        return "Número de mes inválido";
+    }
+
+    return meses[numeroMes - 1];
+}
+
+function cerrar_form_historial_pago() {
+    $('#mdl_historial_pago_cita').modal('hide');
 }
 
 var nombrePaciente_ = '';
