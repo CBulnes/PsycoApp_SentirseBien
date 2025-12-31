@@ -48,6 +48,8 @@ namespace PsycoApp.site.Controllers
             {
                 var usuario = Convert.ToString(HttpContext.Session.GetString("login"));
                 usuario = string.IsNullOrEmpty(usuario) ? "-" : usuario;
+                var tipousuario = Convert.ToInt32(HttpContext.Session.GetInt32("id_tipousuario"));
+
                 // Construir la URL para la API dependiendo de si hay un término de búsqueda
                 string url = $"{apiUrl}/listar_cuadre_caja/{usuario}/{pageNumber}/{pageSize}/{fecha}/{buscar_por}/{sede}/{id_usuario}/{id_cita}/0";
 
@@ -66,7 +68,7 @@ namespace PsycoApp.site.Controllers
                     importe = p.importe,
                     usuario = p.usuario,
                     estado_orden = p.estado_orden
-                }).ToList();
+                }).Where(p => tipousuario != 3 || p.usuario == usuario).ToList();
 
                 dynamic obj = new System.Dynamic.ExpandoObject();
                 string path = $"{this.Request.Scheme}://{this.Request.Host}{this.Request.PathBase}";
@@ -111,8 +113,10 @@ namespace PsycoApp.site.Controllers
             {
                 var usuario = Convert.ToString(HttpContext.Session.GetString("login"));
                 usuario = string.IsNullOrEmpty(usuario) ? "-" : usuario;
-                string url = $"{apiUrl}/listar_cuadre_caja/{usuario}/{pageNumber}/{pageSize}/{fecha}/{buscar_por}/{sede}/{id_usuario}/{id_cita}/{id_caja}";
+                var tipousuario = Convert.ToInt32(HttpContext.Session.GetInt32("id_tipousuario"));
 
+                string url = $"{apiUrl}/listar_cuadre_caja/{usuario}/{pageNumber}/{pageSize}/{fecha}/{buscar_por}/{sede}/{id_usuario}/{id_cita}/{id_caja}";
+                
                 var registros = await GetFromApiAsync<List<PsycoApp.entities.CuadreCaja>>(url);
 
                 dynamic obj = new System.Dynamic.ExpandoObject();
@@ -147,7 +151,7 @@ namespace PsycoApp.site.Controllers
                         importe = p.importe,
                         usuario = p.usuario,
                         estado_orden = p.estado_orden
-                    }).ToList(),
+                    }).Where(p => tipousuario != 3 || p.usuario == usuario).ToList(),
                     DynamicData = obj
                 };
 
