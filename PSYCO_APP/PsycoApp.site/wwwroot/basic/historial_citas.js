@@ -221,7 +221,7 @@ function accion_cita(esEvaluacion, paciente, monto_pendiente, id_paciente, id_ci
         html_accion += '</span>';
     }
     html_accion += '<span class="input-group-text" style="height: 100%; display: inline-block;">';
-    html_accion += `<a href="#" title="Historial de pagos" onclick="form_historial_pago(${id_cita}); return false;" style="cursor: pointer;">🔍</a>`;
+    html_accion += `<a href="#" title="Historial de pagos / historial de estados" onclick="form_historial_pago(${id_cita},${id_paciente}); return false;" style="cursor: pointer;">🔍</a>`;
     html_accion += '</span>';
     return html_accion;
 }
@@ -297,27 +297,62 @@ function cerrar_form_informe() {
     $('#mdl_informe').modal('hide');
 }
 
-function form_historial_pago(id_cita) {
+function form_historial_pago(id_cita, id_paciente) {
     var html = '';
+    var html2 = '';
+    var historial = [];
+
     $.ajax({
-        url: "/HistorialCitas/VerHistorialPagosCita?id_cita=" + id_cita,
+        url: "/RegistroCitas/Historial?idCita=" + id_cita + "&idPaciente=" + id_paciente,
         type: "GET",
+        async: false,
+        beforeSend: function () {
+            historial = [];
+        },
         success: function (data) {
-            if (data.length > 0) {
-                for (var item of data) {
-                    html += '<tr><td>' + item.importe + '</td><td>' + item.forma_pago + '</td><td>' + item.detalle_transferencia + '</td><td>' + (item.forma_pago == 'TOTAL' ? '' : obtenerMesPorNumero(item.mes)) + '</td><td>' + (item.forma_pago == 'TOTAL' ? '' : item.anho) + '</td></tr>';
-                }
-            } else {
-                html = '<tr><td colspan="5">No se encontraron registros para motrar</td></tr>';
-            }
-            $('#tBodyHistorialPagoCita').html(html);
-            $('#mdl_historial_pago_cita').modal('show');
+            historial = data.historial1;
         },
         error: function (response) {
-            Swal.fire({
-                icon: "error",
-                title: "Oops...",
-                text: "Ocurrió un error al obtener la información"
+            historial = [];
+        },
+        complete: function () {
+            try {
+                for (var item of historial) {
+                    html += '<div class="sb-reg-citas-popup-tab-historial-block"><div class="sb-reg-citas-popup-tab-historial-block-item">';
+                    html += '<p>' + item.fecha + '</p>';
+                    html += '</div>';
+                    html += '<div class="sb-reg-citas-popup-tab-historial-block-item-2">';
+                    html += '<button type="button" class="evento_' + item.evento.toLowerCase().replace(' ', '_') + '">' + item.evento + '</button>';
+                    html += '<div class="sb-reg-citas-historial-user" ><span>' + item.usuario + '</span></div>';
+                    html += '</div></div>';
+                }
+            } catch (e) {
+                html = '';
+            }
+            $('#divHistorial').html(html);
+
+            $.ajax({
+                url: "/HistorialCitas/VerHistorialPagosCita?id_cita=" + id_cita,
+                type: "GET",
+                success: function (data) {
+                    console.log('data', data);
+                    if (data.length > 0) {
+                        for (var item of data) {
+                            html2 += '<tr><td>' + item.importe + '</td><td>' + item.forma_pago + '</td><td>' + item.detalle_transferencia + '</td><td>' + (item.forma_pago == 'TOTAL' ? '' : obtenerMesPorNumero(item.mes)) + '</td><td>' + (item.forma_pago == 'TOTAL' ? '' : item.anho) + '</td></tr>';
+                        }
+                    } else {
+                        html2 = '<tr><td colspan="5" style="text-align: center;">No se encontraron registros para mostrar</td></tr>';
+                    }
+                    $('#tBodyHistorialPagoCita').html(html2);
+                    $('#mdl_historial_pago_cita').modal('show');
+                },
+                error: function (response) {
+                    Swal.fire({
+                        icon: "error",
+                        title: "Oops...",
+                        text: "Ocurrió un error al obtener la información"
+                    });
+                }
             });
         }
     });

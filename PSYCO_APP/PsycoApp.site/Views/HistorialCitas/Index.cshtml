@@ -9,6 +9,87 @@
 
 <link rel="stylesheet" href="~/src/css/sb-historial-citas.css" />
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css" />
+<style>
+    .sb-reg-citas-popup-tab-historial-block {
+        display: flex;
+        width: 100%;
+        justify-content: center;
+        align-items: center;
+        border: 1px solid var(--colorbase2);
+        border-radius: .4rem;
+        padding: .5rem;
+    }
+
+    .sb-reg-citas-popup-tab-historial-block-item, .sb-reg-citas-popup-tab-historial-block-item-2 {
+        display: flex;
+        width: 50%;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .sb-reg-citas-popup-tab-historial-block-item-2 {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-content: center;
+        gap: .5rem;
+    }
+
+        .sb-reg-citas-popup-tab-historial-block-item p, .sb-reg-citas-popup-tab-historial-block-item-2 p {
+            margin: 0;
+            font-weight: 600;
+        }
+
+    .sb-reg-citas-historial-user {
+        display: flex;
+        gap: .5rem;
+    }
+
+        .sb-reg-citas-historial-user p, .sb-reg-citas-historial-user span {
+            margin: 0;
+            font-weight: 600;
+        }
+
+    /*leyendas agenda*/
+    button.evento_citado, button.evento_confirmado, button.evento_en_proceso, button.evento_atendido, button.evento_evaluacion, button.evento_taller {
+        text-align: center;
+        width: 100%;
+        padding-top: 5px;
+        padding-bottom: 5px;
+        border-radius: 8px;
+        outline: none;
+    }
+
+    .evento_citado {
+        background-color: #eb5151;
+        color: #ffffff;
+    }
+
+    .evento_confirmado {
+        background-color: #52a351;
+        color: #ffffff;
+    }
+
+    .evento_en_proceso {
+        background-color: #d7cc50;
+        color: #171717;
+    }
+
+    .evento_atendido {
+        background-color: #1c0ed0;
+        color: #ffffff;
+    }
+
+    .evento_evaluacion {
+        background-color: #880cb2;
+        color: #ffffff;
+    }
+
+    .evento_taller {
+        background-color: #603939;
+        color: #ffffff;
+    }
+</style>
 
 <div class="sb-his-citas-container">
 
@@ -253,7 +334,7 @@
     <div class="modal-dialog modal-lg" role="document" style="height: 90%; display: grid; place-items: center; width: 100%;">
         <div class="modal-content" style="width: 100%;">
             <div class="modal-header sb-reg-citas-popup-title">
-                <h5 class="modal-title">Historial de pagos por cita</h5>
+                <h5 class="modal-title">Historial de pagos - Historial de estados</h5>
             </div>
             <div class="modal-body">
                 <div class="row">
@@ -271,6 +352,12 @@
                                 </thead>
                                 <tbody id="tBodyHistorialPagoCita"></tbody>
                             </table>
+                        </div>
+                    </div>
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                        <div class="form-group">
+                            <div class="sb-reg-citas-popup-tab-historial" id="divHistorial"></div>
+                            <br />
                         </div>
                     </div>
                 </div>
