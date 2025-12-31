@@ -38,6 +38,7 @@ namespace PsycoApp.entities
         public decimal importe { get; set; } = 0;
         public string comentario { get; set; } = "";
         public string usuario { get; set; } = "";
+        public int id_sede { get; set; } = 0;
     }
 
     public class PagosPendientes

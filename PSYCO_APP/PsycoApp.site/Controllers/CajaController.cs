@@ -287,7 +287,7 @@ namespace PsycoApp.site.Controllers
         {
             string res = "";
             model.usuario = Convert.ToString(HttpContext.Session.GetString("login"));
-
+            model.id_sede = Convert.ToInt32(HttpContext.Session.GetInt32("id_sede"));
             RespuestaUsuario res_ = new RespuestaUsuario();
             try
             {
@@ -418,9 +418,10 @@ namespace PsycoApp.site.Controllers
             string usuario = Convert.ToString(HttpContext.Session.GetString("login"));
             int sede = Convert.ToInt32(HttpContext.Session.GetInt32("id_sede"));
             usuario = string.IsNullOrEmpty(usuario) ? "-" : usuario;
+            var tipousuario = Convert.ToInt32(HttpContext.Session.GetInt32("id_tipousuario"));
             try
             {
-                url = Endpoints.apiUrl + "/api" + Endpoints.Caja.url_listar_efectivo_diario + "/" + usuario +"/"+$"{fecha:yyyy-MM-dd}"+ "/" + sede;
+                url = Endpoints.apiUrl + "/api" + Endpoints.Caja.url_listar_efectivo_diario + "/" + usuario + "/" + $"{fecha:yyyy-MM-dd}" + "/" + sede;
                 res = ApiCaller.consume_endpoint_method(url, null, "GET");
                 lista = JsonConvert.DeserializeObject<List<entities.ListaEfectivoDiario>>(res);
             }
