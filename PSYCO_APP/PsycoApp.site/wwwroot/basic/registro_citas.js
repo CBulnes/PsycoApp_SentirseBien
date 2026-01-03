@@ -1291,6 +1291,8 @@ function setDecimalValue() {
     setTimeout(() => {
         var monto1 = $('#txtMonto1').val();
         $('#txtMonto1').val(formatDecimal(monto1));
+        var monto2 = $('#txtMontoDescuento').val();
+        $('#txtMontoDescuento').val(formatDecimal(monto2));
     }, 200);
 }
 
@@ -1890,52 +1892,63 @@ $('.dateCrearCita').on('change', function () {
 });
 
 function agregar_descuento() {
-    var importe = $('#txtMontoDescuento').val();
+    setTimeout(() => {
+        var importe = $('#txtMontoDescuento').val();
 
-    if (importe == '0.00' || (importe != '' && !isPrecise(importe))) {
-        Swal.fire({
-            icon: "warning",
-            title: "Oops...",
-            text: "Para registrar el descuento debe ingresar un importe válido.",
-        });
-        return;
-    }
+        if (id_cita_ == 0) {
+            Swal.fire({
+                icon: "warning",
+                title: "Oops...",
+                text: "Para nuevas citas, el descuento se aplicará al momento de registar la citas.",
+            });
+            return;
+        }
 
-    var data_ = {
-        id_cita: id_cita_,
-        importe: importe
-    };
+        if (importe == '0.00' || (importe != '' && !isPrecise(importe))) {
+            Swal.fire({
+                icon: "warning",
+                title: "Oops...",
+                text: "Para registrar el descuento debe ingresar un importe válido.",
+            });
+            return;
+        }
 
-    $.ajax({
-        url: "/Caja/RegistrarDescuento",
-        type: "POST",
-        data: data_,
-        success: function (data) {
-            if (data.estado) {
-                Swal.fire({
-                    icon: "success",
-                    text: "Descuento registrado exitosamente.",
-                });
+        var data_ = {
+            id_cita: id_cita_,
+            importe: importe
+        };
 
-                $("#txtMontoDescuento").val('0.00');
-            } else {
+        $.ajax({
+            url: "/Caja/RegistrarDescuento",
+            type: "POST",
+            data: data_,
+            success: function (data) {
+                if (data.estado) {
+                    Swal.fire({
+                        icon: "success",
+                        text: "Descuento registrado exitosamente.",
+                    });
+
+                    $("#txtMontoDescuento").val('0.00');
+                } else {
+                    Swal.fire({
+                        icon: "error",
+                        title: "Oops...",
+                        text: data.descripcion,
+                    });
+                }
+            },
+            error: function (response) {
                 Swal.fire({
                     icon: "error",
                     title: "Oops...",
-                    text: data.descripcion,
+                    text: "Ocurrió un error al aplicar el descuento.",
                 });
+            },
+            complete: function () {
             }
-        },
-        error: function (response) {
-            Swal.fire({
-                icon: "error",
-                title: "Oops...",
-                text: "Ocurrió un error al aplicar el descuento.",
-            });
-        },
-        complete: function () {
-        }
-    });
+        });
+    }, 500);
 }
 
 function guardar_cita() {
@@ -1949,6 +1962,8 @@ function guardar_cita() {
     var paciente = $('#cboPaciente').val();
     var id_servicio = $('#cboServicio').val();
     var id_sede = $('#cboSedeChange_').val();
+    var descuento = $('#txtMontoDescuento').val();
+    
     var tipo_cita = $('#cboTipoCita').val();
     adicionales = adicionales.filter(x => x.id_cita !== undefined);
 
@@ -2009,6 +2024,15 @@ function guardar_cita() {
     var feedback = $('input[name="feedback"]:checked').val(); // 'happy' o 'sad'
     var comentario = $('#comment').val(); // Comentario adicional si es cara triste
 
+    if (descuento == '0.00' || (descuento != '' && !isPrecise(descuento))) {
+        Swal.fire({
+            icon: "warning",
+            title: "Oops...",
+            text: "Para registrar el descuento debe ingresar un importe válido.",
+        });
+        return;
+    }
+
     var data_ = {
         id_cita: id_cita_,
         id_usuario: 0,
@@ -2021,6 +2045,7 @@ function guardar_cita() {
         id_servicio: id_servicio,
         id_sede: id_sede,
         tipo_cita: tipo_cita,
+        descuento: descuento,
         fechas_adicionales: adicionales
     };
     if (feedback === 'sad') {

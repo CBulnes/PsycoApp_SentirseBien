@@ -129,7 +129,7 @@ namespace PsycoApp.DA
             try
             {
                 cn.Open();
-                SqlCommand cmd = new SqlCommand(Procedures.sp_registrar_cita, cn);
+                SqlCommand cmd = new SqlCommand("SP_REGISTRAR_CITA", cn);
                 cmd.CommandType = CommandType.StoredProcedure;
 
                 cmd.Parameters.Add("@id_cita", SqlDbType.Int).Value = oCita.id_cita;
@@ -138,6 +138,7 @@ namespace PsycoApp.DA
                 cmd.Parameters.Add("@hora_cita", SqlDbType.VarChar).Value = oCita.hora_cita;
                 cmd.Parameters.Add("@id_doctor", SqlDbType.Int).Value = oCita.id_doctor_asignado;
                 cmd.Parameters.Add("@monto_pactado", SqlDbType.Decimal).Value = oCita.monto_pactado;
+                cmd.Parameters.Add("@descuento", SqlDbType.Decimal).Value = oCita.descuento;
                 cmd.Parameters.Add("@id_servicio", SqlDbType.Int).Value = oCita.id_servicio;
                 cmd.Parameters.Add("@id_sede", SqlDbType.Int).Value = oCita.id_sede;
                 cmd.Parameters.Add("@tipo_cita", SqlDbType.VarChar).Value = oCita.tipo_cita;

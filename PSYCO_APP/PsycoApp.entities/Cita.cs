@@ -25,6 +25,7 @@ namespace PsycoApp.entities
         public string servicio { get; set; } = "";
         public string telefono { get; set; } = "";
         public string moneda { get; set; } = "";
+        public decimal descuento { get; set; } = 0;
         public decimal monto_pactado { get; set; } = 0;
         public decimal monto_pagado { get; set; } = 0;
         public decimal monto_pendiente { get; set; } = 0;
