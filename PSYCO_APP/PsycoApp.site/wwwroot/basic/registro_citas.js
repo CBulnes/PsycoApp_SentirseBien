@@ -1131,7 +1131,7 @@ function actualizar_fechas_adicionales() {
     console.log('recarga');
     adicionales = adicionales.filter(x => x.id_cita !== undefined);
 
-    var adicionales_validar = adicionales.filter(x => x.id_estado_cita > 1);
+    var adicionales_validar = adicionales.filter(x => x.id_estado_cita == 1);
     if (adicionales_validar.length == 0) {
         Swal.fire({
             icon: "Error",
