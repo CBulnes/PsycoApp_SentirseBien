@@ -2674,7 +2674,7 @@ function agregarHoraLibre(fecha, hora, libres) {
             } else {
                 html = '<div class="div_horario" style="background-color: #5c9d9d; color: #FFFFFF; padding: 5px; font-size: 12px; border-radius: 5px; cursor: pointer;"';
                 if (parseDate(fecha) >= parseDate(fecha_actual())) {
-                    html += ' data-id-cita="0" data-id-especialista="-1" data-servicio="" data-evaluacion="false" data-id-paciente="-1" data-fecha-cita="' + fecha + '" data-pago-gratis="0" data-hora-cita="" data-estado="-" data-telefono="--" data-moneda="S/." data-monto-pactado="0.00" data-monto-pagado="0.00" data-monto-pendiente="0.00" data-id-servicio="-1" data-id-sede="-1" data-dni-paciente="" data-paciente="" data-id-paquete="0" onclick="ver_cita(this)" ';
+                    html += ' data-id-cita="0" data-id-especialista="-1" data-servicio="" data-evaluacion="false" data-id-paciente="-1" data-fecha-cita="' + fecha + '" data-pago-gratis="0" data-hora-cita="" data-estado="-" data-telefono="--" data-moneda="S/." data-monto-pactado="0.00" data-monto-pagado="0.00" data-monto-pendiente="0.00" data-id-servicio="-1" data-id-sede="-1" data-dni-paciente="" data-paciente="" data-id-paquete="0" data-tipocita="P" onclick="ver_cita(this)" ';
                 }
                 html +='>' + libre[0].tipo + ' <br> ' + libre[0].hora_cita + '</div> ';
             }
