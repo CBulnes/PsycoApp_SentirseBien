@@ -391,7 +391,7 @@ function guardar_efectivo_diario() {
             },
             error: function (response) {
                 Swal.fire({
-                    icon: "error",
+                    icon: "error",  
                     title: "Oops...",
                     text: "Ocurrió un error al guardar el efectivo.",
                 });

@@ -2392,6 +2392,7 @@ function disponibilidad_reasignar_doctor() {
                     var hora = item.estado == 'DISPONIBLE' ? item.hora_cita : '';
                     var accion = ' onclick="seleccionar_hora_disponible(this)" data-hora="' + hora + '"';
                     html += '<tr data-option="item_clase' + i.toString() + '" class="' + clase + '"' + accion + '><td class="text-center">' + (item.hora_cita_mostrar) + '</td><td class="text-center">' + item.estado + '</td></tr>';
+                    i++;
                 }
             }
         },
