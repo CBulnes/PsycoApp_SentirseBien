@@ -1,4 +1,5 @@
-﻿using PsycoApp.DA.SQLConnector;
+﻿using Microsoft.VisualBasic;
+using PsycoApp.DA.SQLConnector;
 using PsycoApp.entities;
 using PsycoApp.utilities;
 using System;
@@ -574,8 +575,9 @@ namespace PsycoApp.DA
                     }
                 }
             }
-            catch
+            catch(Exception ex)
             {
+                string msg = ex.ToString();
                 lista.Clear();
             }
             finally

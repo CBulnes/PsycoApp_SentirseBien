@@ -2023,15 +2023,17 @@ function guardar_cita() {
     // Obtener el feedback
     var feedback = $('input[name="feedback"]:checked').val(); // 'happy' o 'sad'
     var comentario = $('#comment').val(); // Comentario adicional si es cara triste
-
-    if (descuento == '0.00' || (descuento != '' && !isPrecise(descuento))) {
-        Swal.fire({
-            icon: "warning",
-            title: "Oops...",
-            text: "Para registrar el descuento debe ingresar un importe válido.",
-        });
-        return;
+    if (id_cita_ > 0) {
+        if (descuento == '0.00' || (descuento != '' && !isPrecise(descuento))) {
+            Swal.fire({
+                icon: "warning",
+                title: "Oops...",
+                text: "Para registrar el descuento debe ingresar un importe válido.",
+            });
+            return;
+        }
     }
+ 
 
     var data_ = {
         id_cita: id_cita_,
