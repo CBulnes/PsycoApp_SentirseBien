@@ -491,7 +491,6 @@ namespace PsycoApp.DA
                     cita.tipo_cita = Convert.ToString(row["tipo_cita"]);
                     cita.esEvaluacion = Convert.ToBoolean(row["esEvaluacion"]);
                     cita.siglas = Convert.ToString(row["siglas"]);
-                    cita.siglas = Convert.ToString(row["siglas"]);
                     cita.feedback = Convert.ToBoolean(row["feedback"]);
                     cita.comentario = Convert.ToString(row["comentario"]);
                     cita.pago_gratis = Convert.ToBoolean(row["pago_gratis"]);
