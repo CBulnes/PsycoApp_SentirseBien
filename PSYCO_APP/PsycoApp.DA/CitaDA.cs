@@ -1,4 +1,5 @@
-﻿using PsycoApp.DA.SQLConnector;
+﻿using Microsoft.VisualBasic;
+using PsycoApp.DA.SQLConnector;
 using PsycoApp.entities;
 using PsycoApp.utilities;
 using System;
@@ -574,8 +575,9 @@ namespace PsycoApp.DA
                     }
                 }
             }
-            catch
+            catch(Exception ex)
             {
+                string msg = ex.ToString();
                 lista.Clear();
             }
             finally
@@ -642,20 +644,21 @@ namespace PsycoApp.DA
                 foreach (DataRow row in dt.Rows)
                 {
                     Cita cita = new Cita();
-                    cita.id_cita = Convert.ToInt32(row["id_cita"]);
-                    cita.id_paquete = Convert.ToInt32(row["id_paquete"]);
-                    cita.informe_adicional = Convert.ToString(row["informe_adicional"]);
-                    cita.id_estado_cita = Convert.ToInt32(row["id_estado_cita"]);
-                    cita.estado = Convert.ToString(row["estado"]);
-                    cita.fecha_cita = Convert.ToString(row["fecha_cita"]);
-                    cita.hora_cita = Convert.ToString(row["hora_cita"]);
-                    cita.id_usuario = Convert.ToInt32(row["id_usuario"]);
-                    cita.usuario = Convert.ToString(row["usuario"]);
-                    cita.tipo = Convert.ToString(row["tipo"]);
-                    cita.servicio = Convert.ToString(row["servicio"]);
-                    cita.monto_pendiente_ = Convert.ToString(row["monto_pendiente"]);
-                    cita.id_paciente = Convert.ToInt32(row["id_paciente"]);
-                    cita.esEvaluacion = Convert.ToBoolean(row["esEvaluacion"]);
+                    cita.id_cita = row["id_cita"] != DBNull.Value ? Convert.ToInt32(row["id_cita"]) : 0;
+                    cita.id_paquete = row["id_paquete"] != DBNull.Value ? Convert.ToInt32(row["id_paquete"]) : 0;
+                    cita.informe_adicional = row["informe_adicional"] != DBNull.Value ? Convert.ToString(row["informe_adicional"]) : string.Empty;
+                    cita.id_estado_cita = row["id_estado_cita"] != DBNull.Value ? Convert.ToInt32(row["id_estado_cita"]) : 0;
+                    cita.estado = row["estado"] != DBNull.Value ? Convert.ToString(row["estado"]) : string.Empty;
+                    cita.fecha_cita = row["fecha_cita"] != DBNull.Value ? Convert.ToString(row["fecha_cita"]) : string.Empty;
+                    cita.hora_cita = row["hora_cita"] != DBNull.Value ? Convert.ToString(row["hora_cita"]) : string.Empty;
+                    cita.id_usuario = row["id_usuario"] != DBNull.Value ? Convert.ToInt32(row["id_usuario"]) : 0;
+                    cita.usuario = row["usuario"] != DBNull.Value ? Convert.ToString(row["usuario"]) : string.Empty;
+                    cita.tipo = row["tipo"] != DBNull.Value ? Convert.ToString(row["tipo"]) : string.Empty;
+                    cita.servicio = row["servicio"] != DBNull.Value ? Convert.ToString(row["servicio"]) : string.Empty;
+                    cita.monto_pendiente_ = row["monto_pendiente"] != DBNull.Value ? Convert.ToString(row["monto_pendiente"]) : string.Empty;
+                    cita.id_paciente = row["id_paciente"] != DBNull.Value ? Convert.ToInt32(row["id_paciente"]) : 0;
+                    cita.esEvaluacion = row["esEvaluacion"] != DBNull.Value ? Convert.ToBoolean(row["esEvaluacion"]) : false;
+
                     lista.Add(cita);
                 }
             }

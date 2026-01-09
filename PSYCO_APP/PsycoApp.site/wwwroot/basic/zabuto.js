@@ -890,6 +890,10 @@ function contenido_cita(dia, mes, año, hora, btnNuevaCita = false, btnCita = fa
                     if (item.pago_gratis == 'true' || item.pago_gratis == true || item.pago_gratis || item.siglas == '(_CSC)'|| item.siglas == '(_I30)') {
                         html += '<img src="../images/free.png" style="height: 20px; width: auto; cursor: pointer; margin: 0px 0px 0px 5px; border-radius: 10px;" title="' + (item.siglas == '(EG)' ? 'Evaluación gratuita' : 'Pago gratuito') + '" />';
                     }
+                    console.log(item.orden_cita);
+                    console.log(item.servicioGratuito);
+                    console.log(item.nombre_servicio.toUpperCase());
+
                     html += '</div > ';
                 }
             }

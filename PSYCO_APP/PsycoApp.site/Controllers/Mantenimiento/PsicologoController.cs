@@ -84,15 +84,15 @@ namespace PsycoApp.site.Controllers.Mantenimiento
                 obj.ubigeos = ubigeosViewModel;
                 if (obj.id_sede == 1) //La molina
                 {
-                    psicologos = psicologos.Where(x => x.IdSedePrincipal == 1 || x.IdSedeSecundaria == 1).ToList();
+                    psicologos = psicologos.Where(x => x.IdSedePrincipal == 1 || x.IdSedeSecundaria == 1 || x.IdSedeSecundaria2 == 1).ToList();
                 }
                 else if (obj.id_sede == 2) //Surco
                 {
-                    psicologos = psicologos.Where(x => x.IdSedePrincipal == 2 || x.IdSedeSecundaria == 2).ToList();
+                    psicologos = psicologos.Where(x => x.IdSedePrincipal == 2 || x.IdSedeSecundaria == 2 || x.IdSedeSecundaria2 == 2).ToList();
                 }
                 else if (obj.id_sede == 3) //Miraflores
                 {
-                    psicologos = psicologos.Where(x => x.IdSedePrincipal == 3 || x.IdSedeSecundaria == 3).ToList();
+                    psicologos = psicologos.Where(x => x.IdSedePrincipal == 3 || x.IdSedeSecundaria == 3 || x.IdSedeSecundaria2 == 3).ToList();
                 }
                 psicologosViewModel = psicologos.Select(p => new PsycoApp.site.Models.Psicologo
                 {
@@ -151,14 +151,14 @@ namespace PsycoApp.site.Controllers.Mantenimiento
             var psicologos = await GetFromApiAsync<List<entities.Psicologo>>(url);
             if (sede == 1) //La molina
             {
-                psicologos = psicologos.Where(x => x.IdSedePrincipal == 1 || x.IdSedeSecundaria == 1).ToList();
+                psicologos = psicologos.Where(x => x.IdSedePrincipal == 1 || x.IdSedeSecundaria == 1 || x.IdSedeSecundaria2 == 1).ToList();
             } else if (sede == 2) //Surco
             {
-                psicologos = psicologos.Where(x => x.IdSedePrincipal == 2 || x.IdSedeSecundaria == 2).ToList();
+                psicologos = psicologos.Where(x => x.IdSedePrincipal == 2 || x.IdSedeSecundaria == 2 || x.IdSedeSecundaria2 == 2).ToList();
             }
             else if (sede == 3) //Miraflores
             {
-                psicologos = psicologos.Where(x => x.IdSedePrincipal == 3 || x.IdSedeSecundaria == 3).ToList();
+                psicologos = psicologos.Where(x => x.IdSedePrincipal == 3 || x.IdSedeSecundaria == 3 || x.IdSedeSecundaria2 == 3).ToList();
             }
             
             return Json(psicologos);
