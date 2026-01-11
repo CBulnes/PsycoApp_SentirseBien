@@ -315,7 +315,6 @@ namespace PsycoApp.DA
                 SqlDataAdapter da = new SqlDataAdapter(cmd);
                 DataTable dt = new DataTable();
                 da.Fill(dt);
-
                 foreach (DataRow row in dt.Rows)
                 {
                     entities.Usuario item = new entities.Usuario();
