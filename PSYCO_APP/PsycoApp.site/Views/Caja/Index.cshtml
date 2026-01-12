@@ -484,12 +484,16 @@
 
     function mostrarModalCajas() {
         $('#cbUsuarioCaja').html($('#cboUsuario').html());
-        $('#cajasModal').show();
-    }
 
-    var tipousuario = $('#hdnIdTipoUsuario').val();
-    if (tipousuario == 3){
-        $('#divcbUsuarioCaja').hide();
+        var tipousuario = $('#hdnIdTipoUsuario').val();
+        var idusuario = $('#hdnIdUsuario').val();
+        if (tipousuario == 3){
+            // $('#divcbUsuarioCaja').hide();
+            $('#cbUsuarioCaja option[value="-1"]').remove();
+            $('#cbUsuarioCaja').val(idusuario);
+        }
+
+        $('#cajasModal').show();
     }
     
     function buscarCajaUsuario() {
