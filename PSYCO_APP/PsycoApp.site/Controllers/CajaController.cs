@@ -390,7 +390,9 @@ namespace PsycoApp.site.Controllers
         {
             List<CajasUsuario> lista = new List<CajasUsuario>();
             //string usuario = HttpContext.Session.GetString("login");
-
+            var tipousuario = Convert.ToInt32(HttpContext.Session.GetInt32("id_tipousuario"));
+            var id_usuario = HttpContext.Session.GetInt32("id_usuario");
+            usuario = tipousuario == 3 ? id_usuario.ToString() : usuario;
             try
             {
                 string url = $"{url_listar_cajas}/{usuario}/{fecha:yyyy-MM-dd}";

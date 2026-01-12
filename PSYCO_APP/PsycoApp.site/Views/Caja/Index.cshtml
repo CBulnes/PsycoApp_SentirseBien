@@ -335,8 +335,7 @@
 
                     <div class="sb-reg-citas-popup-tab-panel-block">
 
-
-                        <div class="sb-reg-citas-popup-tab-panel-block-item">
+                        <div class="sb-reg-citas-popup-tab-panel-block-item" id="divcbUsuarioCaja">
                             <span class="label-form">Usuario</span>
                             <select id="cbUsuarioCaja" class="form-control">
                                 <option value="">-- Seleccione --</option>
@@ -485,9 +484,18 @@
 
     function mostrarModalCajas() {
         $('#cbUsuarioCaja').html($('#cboUsuario').html());
+
+        var tipousuario = $('#hdnIdTipoUsuario').val();
+        var idusuario = $('#hdnIdUsuario').val();
+        if (tipousuario == 3){
+            // $('#divcbUsuarioCaja').hide();
+            $('#cbUsuarioCaja option[value="-1"]').remove();
+            $('#cbUsuarioCaja').val(idusuario);
+        }
+
         $('#cajasModal').show();
     }
-
+    
     function buscarCajaUsuario() {
         const usuario = $('#cbUsuarioCaja').val();
         const fecha = $('#txtFechaCaja').val();

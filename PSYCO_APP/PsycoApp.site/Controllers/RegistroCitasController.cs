@@ -247,9 +247,7 @@ namespace PsycoApp.site.Controllers
             }
             try
             {
-                string apiUrl =
-                    url_lista_psicologos_dinamico +
-                    $"?page={page}&pageSize={pageSize}&search={(IdBusqueda ? filtro : "*" + filtro + "*")}&sede={id_sede}";
+                string apiUrl = url_lista_psicologos_dinamico + $"?page={page}&pageSize={pageSize}&search={(IdBusqueda ? filtro : "*" + filtro + "*")}&sede={id_sede}";
 
                 // 🔥 AQUÍ estaba tu error → faltaba el await
                 string res = await ApiCaller.consume_endpoint_method_async(apiUrl, null, "GET");

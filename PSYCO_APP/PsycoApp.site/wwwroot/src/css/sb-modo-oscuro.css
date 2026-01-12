@@ -69,9 +69,10 @@
     background-color: var(--colormodular_oscura) !important;
 }
 
-.active-table-modulo tr:nth-of-type(even) {
-    background-color: var(--colorletra_sin_seleccionar_oscura) !important;
-}
+    .active-table-modulo tr:nth-of-type(even) {
+        /*background-color: var(--colorletra_sin_seleccionar_oscura) !important;*/
+        background-color: #3e4454 !important;
+    }
 
 .active-table-modulo td, .active-table-modulo th {
     color: var(--colorletra_oscura) !important;

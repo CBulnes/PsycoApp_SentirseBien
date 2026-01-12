@@ -637,6 +637,7 @@ namespace PsycoApp.DA
                 cmd.Parameters.Add("@ver_sin_reserva", SqlDbType.Int).Value = ver_sin_reserva;
                 cmd.Parameters.Add("@sede", SqlDbType.Int).Value = sede;
                 cmd.Parameters.Add("@id_paciente", SqlDbType.Int).Value = idPaciente;
+
                 SqlDataAdapter da = new SqlDataAdapter(cmd);
                 DataTable dt = new DataTable();
                 da.Fill(dt);
