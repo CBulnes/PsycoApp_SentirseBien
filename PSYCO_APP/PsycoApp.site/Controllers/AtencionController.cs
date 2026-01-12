@@ -66,7 +66,7 @@ namespace PsycoApp.site.Controllers
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+               
                 oRespuesta.estado = "ERROR";
                 oRespuesta.descripcion = "Ocurrió un error obteniendo la lista de centros de atención"; //ex.Message.ToString();
             }

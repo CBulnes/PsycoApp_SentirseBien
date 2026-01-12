@@ -47,7 +47,7 @@ namespace PsycoApp.api.Controllers
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.Message);
+              
                 LOG.registrarLog("(Output " + random_str + ")[DATA]->[ReporteController.cs / reporte_nps <> json_error: " + JsonConvert.SerializeObject(lista), "TRANSAC", main_path);
             }
             return lista;

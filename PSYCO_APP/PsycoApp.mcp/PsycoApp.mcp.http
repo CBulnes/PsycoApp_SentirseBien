@@ -1,0 +1,6 @@
+@PsycoApp.mcp_HostAddress = http://localhost:5033
+
+GET {{PsycoApp.mcp_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

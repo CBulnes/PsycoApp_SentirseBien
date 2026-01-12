@@ -274,7 +274,7 @@ namespace PsycoApp.site.Controllers.Mantenimiento
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+             
                 lista.Clear();
             }
             return lista;
@@ -294,7 +294,7 @@ namespace PsycoApp.site.Controllers.Mantenimiento
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+             
                 lista.Clear();
             }
             return lista;

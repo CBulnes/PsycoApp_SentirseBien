@@ -1,0 +1,15 @@
+[
+  {
+    "Name": "Nuevo perfil",
+    "Projects": [
+      {
+        "Path": "PsycoApp.site\\PsycoApp.site.csproj",
+        "Action": "Start"
+      },
+      {
+        "Path": "PsycoApp.api\\PsycoApp.api.csproj",
+        "Action": "Start"
+      }
+    ]
+  }
+]

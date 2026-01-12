@@ -155,7 +155,7 @@ namespace PsycoApp.site.Controllers
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+               
                 oRespuesta.estado = "ERROR";
                 oRespuesta.descripcion = "Ocurrió un error obteniendo la lista de centros de atención"; //ex.Message.ToString();
             }
@@ -181,7 +181,7 @@ namespace PsycoApp.site.Controllers
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+             
                 lista.Clear();
             }
             return lista;
@@ -206,7 +206,7 @@ namespace PsycoApp.site.Controllers
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+              
                 lista.Clear();
             }
             return lista;
@@ -226,7 +226,7 @@ namespace PsycoApp.site.Controllers
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+           
                 lista.Clear();
             }
             return lista;
@@ -265,7 +265,7 @@ namespace PsycoApp.site.Controllers
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+              
                 listaPacientes.Clear();
             }
 
@@ -601,7 +601,7 @@ namespace PsycoApp.site.Controllers
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+            
                 lista.Clear();
             }
             return lista;
@@ -618,7 +618,7 @@ namespace PsycoApp.site.Controllers
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+               
                 res.estado = false;
                 res.descripcion = "Ocurrió un error al guardar la sede";
             }
@@ -638,7 +638,7 @@ namespace PsycoApp.site.Controllers
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+               
                 lista.Clear();
             }
             return lista;
@@ -657,7 +657,7 @@ namespace PsycoApp.site.Controllers
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+             
                 lista.Clear();
             }
             return lista;

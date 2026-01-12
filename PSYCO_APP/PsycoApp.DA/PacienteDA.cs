@@ -287,7 +287,7 @@ namespace PsycoApp.DA
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.Message);
+            
                 lista.Clear(); // Limpiar en caso de error
             }
             finally

@@ -34,7 +34,7 @@ namespace PsycoApp.site.Controllers
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+              
                 rpta = "Ocurrió un error registrando el usuario";
             }
             return rpta;

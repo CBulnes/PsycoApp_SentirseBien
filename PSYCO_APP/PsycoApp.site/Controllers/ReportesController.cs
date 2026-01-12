@@ -67,7 +67,7 @@ namespace PsycoApp.site.Controllers
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+             
                 //oRespuestaPV.descripcion = ex.Message.ToString();
             }
             return listaReporteNPS;

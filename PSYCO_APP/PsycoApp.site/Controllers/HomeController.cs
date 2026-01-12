@@ -133,7 +133,7 @@ namespace PsycoApp.site.Controllers
                         assistantId: assistant_id
                     );
 
-                    //Console.WriteLine(result.Response);
+                    
                     string sessionId = result.Result.SessionId;
 
                     var resultM = assistant.Message(
@@ -143,13 +143,13 @@ namespace PsycoApp.site.Controllers
                     {
                         Text = msg
                     });
-                    Console.WriteLine(resultM.Response);
+                  
 
                     var resultF = assistant.DeleteSession(
                         assistantId: assistant_id,
                         sessionId: sessionId
                     );
-                    Console.WriteLine(resultF.Response);
+                   
 
                     obj_response = resultM.Response;
                 }
@@ -264,7 +264,7 @@ namespace PsycoApp.site.Controllers
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+               
                 flag_chat = -1;
             }
             return flag_chat;
@@ -281,7 +281,7 @@ namespace PsycoApp.site.Controllers
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                
                 rpta = "Ocurrió un error deshabilitando el flag_chat";
             }
             return rpta;
@@ -300,7 +300,7 @@ namespace PsycoApp.site.Controllers
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+              
                 rpta = "Ocurrió un error registrando la visita";
             }
             return rpta;
@@ -358,7 +358,7 @@ namespace PsycoApp.site.Controllers
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+              
                 oRespuestaA.estado = "ERROR";
                 oRespuestaA.descripcion = "Ocurrió un error listando sus recibos";
             }
@@ -410,7 +410,7 @@ namespace PsycoApp.site.Controllers
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+              
                 oListaArticulos.Clear();
             }
             return oListaArticulos;

@@ -33,7 +33,7 @@ namespace PsycoApp.site.Controllers
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+              
                 //oRespuestaPV.descripcion = ex.Message.ToString();
             }
             return listaFlujo;
@@ -58,7 +58,7 @@ namespace PsycoApp.site.Controllers
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+               
                 rpta = "Ocurrió un error registrando el flujo";
             }
             return rpta;

@@ -49,7 +49,7 @@ namespace PsycoApp.site.Controllers
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+              
                 //oTicket.codigo = "ERROR";
                 respuesta.estado = false;
                 respuesta.descripcion = "Ocurrió un error al procesar su solicitud, vuelva a intentarlo";
@@ -70,7 +70,7 @@ namespace PsycoApp.site.Controllers
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+              
                 rpta = "Ocurrió un error generando el ticket";
             }
             return oTicket.codigo;
