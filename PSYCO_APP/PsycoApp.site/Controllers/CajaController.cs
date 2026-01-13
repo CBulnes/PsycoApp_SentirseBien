@@ -44,11 +44,14 @@ namespace PsycoApp.site.Controllers
             {
                 fecha = fechaYyyyMmDd();
             }
+
             if (!string.IsNullOrEmpty(HttpContext.Session.GetString("nombres") as string))
             {
                 var usuario = Convert.ToString(HttpContext.Session.GetString("login"));
                 usuario = string.IsNullOrEmpty(usuario) ? "-" : usuario;
                 var tipousuario = Convert.ToInt32(HttpContext.Session.GetInt32("id_tipousuario"));
+                if (tipousuario == 3)
+                    id_usuario = Convert.ToInt32(HttpContext.Session.GetInt32("id_usuario"));
 
                 // Construir la URL para la API dependiendo de si hay un término de búsqueda
                 string url = $"{apiUrl}/listar_cuadre_caja/{usuario}/{pageNumber}/{pageSize}/{fecha}/{buscar_por}/{sede}/{id_usuario}/{id_cita}/0";
