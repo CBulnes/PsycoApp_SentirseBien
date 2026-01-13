@@ -455,7 +455,6 @@
         var formattedToday = yyyy + '-' + mm + '-' + dd;
         return formattedToday;
     }
-
     $('#txtFechaBusqueda, #txtFechaCaja').val(fechaActualYYYYMMDD());
 
     function cargar_lista_usuarios_caja() {
@@ -477,6 +476,13 @@
             },
             complete: function () {
                 $('#cboUsuario').html(html);
+
+                var tipousuario = $('#hdnIdTipoUsuario').val();
+                var idusuario = $('#hdnIdUsuario').val();
+                if (tipousuario == 3){
+                    $('#cboUsuario option[value="-1"]').remove();
+                    $('#cboUsuario').val(idusuario);
+                }
             }
         });
     }
