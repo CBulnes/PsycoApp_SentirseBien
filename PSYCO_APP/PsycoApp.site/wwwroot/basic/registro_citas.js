@@ -128,7 +128,7 @@ $(document).ready(function () {
             var fecha1 = parseDate(fechaInicial);
             var fecha = addDays(fecha1, i*7);
             html += '<tr>';
-            html += '<td><input class="new-font form-control fechaAd active-input-modulo" type="date" data-id-cita="0" id="txtFecha' + i + '" autocomplete="off" max="2050-12-31" min="2022-08-01" value="' + formatDateISO(fecha) + '" onkeydown="return false" ' + disabled + ' oninput="validarHorarioFecha(' + i + ')" /></td>';
+            html += '<td><input class="new-font form-control fechaAd active-input-modulo" type="date" data-id-cita="0" id="txtFecha' + i + '" autocomplete="off" max="2050-12-31" min="2022-08-01" value="' + formatDateISO(fecha) + '" ' + disabled + ' oninput="validarHorarioFecha(' + i + ')" /></td>';
 
             html += '<td id="tdEspecialista' + i + '"><select class="new-font form-control especialistaAd active-select-modulo" id="cboEspecialista' + i + '" onchange="obtener_horarios_especialista(' + i + ')">' + obtener_especialistas() + '</select></td>';
 
