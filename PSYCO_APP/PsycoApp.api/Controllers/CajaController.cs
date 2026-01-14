@@ -175,13 +175,13 @@ namespace PsycoApp.api.Controllers
             return lista;
         }
 
-        [HttpGet("listar_efectivo_diario/{usuario}/{fecha}/{idSede}")]
-        public List<ListaEfectivoDiario> listar_efectivo_diario(string usuario, DateTime fecha, int idSede)
+        [HttpGet("listar_efectivo_diario/{usuario}/{fecha}/{idSede}/{buscarPor}/{id_usuario}")]
+        public List<ListaEfectivoDiario> listar_efectivo_diario(string usuario, DateTime fecha, int idSede, int buscarPor, int id_usuario)
         {
             List<ListaEfectivoDiario> lista = new List<ListaEfectivoDiario>();
             try
             {
-                lista = cajaBL.listar_efectivo_diario(usuario, fecha,  idSede);
+                lista = cajaBL.listar_efectivo_diario(usuario, fecha,  idSede, buscarPor, id_usuario);
             }
             catch (Exception)
             {

@@ -407,7 +407,7 @@ function listar_efectivo_diario() {
     var html = '';
     var contador = 1;
     var fecha = $('#txtFechaBusqueda').val();
-    $.get('/Caja/ListarEfectivoDiario?fecha='+fecha)
+    $.get('/Caja/ListarEfectivoDiario?fecha=' + fecha + '&buscarPor=' + $('#cboBuscarPor').val() + '&id_usuario=' + $('#cboUsuario').val())
         .done(function (data) {
             if (data.length > 0) {
                 for (var item of data) {

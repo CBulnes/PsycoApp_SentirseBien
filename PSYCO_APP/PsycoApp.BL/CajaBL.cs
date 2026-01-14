@@ -164,13 +164,12 @@ namespace PsycoApp.BL
             return lista;
         }
 
-        public List<ListaEfectivoDiario> listar_efectivo_diario(string usuario, DateTime fecha, int idSede)
+        public List<ListaEfectivoDiario> listar_efectivo_diario(string usuario, DateTime fecha, int idSede, int buscarPor, int id_usuario)
         {
             List<ListaEfectivoDiario> lista = new List<ListaEfectivoDiario>();
             try
             {
-                lista = cajaDA.listar_efectivo_diario(usuario, 
-                    fecha, idSede);
+                lista = cajaDA.listar_efectivo_diario(usuario, fecha, idSede, buscarPor, id_usuario);
             }
             catch (Exception)
             {

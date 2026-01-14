@@ -338,10 +338,10 @@ function form_historial_pago(id_cita, id_paciente) {
                     console.log('data', data);
                     if (data.length > 0) {
                         for (var item of data) {
-                            html2 += '<tr><td>' + item.importe + '</td><td>' + item.forma_pago + '</td><td>' + item.detalle_transferencia + '</td><td>' + (item.forma_pago == 'TOTAL' ? '' : obtenerMesPorNumero(item.mes)) + '</td><td>' + (item.forma_pago == 'TOTAL' ? '' : item.anho) + '</td></tr>';
+                            html2 += '<tr><td>' + item.importe + '</td><td>' + item.forma_pago + '</td><td>' + item.detalle_transferencia + '</td><td>' + (item.forma_pago == 'TOTAL' ? '' : obtenerMesPorNumero(item.mes)) + '</td><td>' + (item.forma_pago == 'TOTAL' ? '' : item.anho) + '</td><td>' + (item.usuario) + '</td></tr>';
                         }
                     } else {
-                        html2 = '<tr><td colspan="5" style="text-align: center;">No se encontraron registros para mostrar</td></tr>';
+                        html2 = '<tr><td colspan="6" style="text-align: center;">No se encontraron registros para mostrar</td></tr>';
                     }
                     $('#tBodyHistorialPagoCita').html(html2);
                     $('#mdl_historial_pago_cita').modal('show');

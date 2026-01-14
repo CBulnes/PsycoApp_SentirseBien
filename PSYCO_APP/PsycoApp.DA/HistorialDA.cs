@@ -138,6 +138,7 @@ namespace PsycoApp.DA
                     historial.detalle_transferencia = Convert.ToString(row["detalle_transferencia"]);
                     historial.mes = Convert.ToInt32(row["mes"]);
                     historial.anho = Convert.ToInt32(row["anho"]);
+                    historial.usuario = Convert.ToString(row["usuario"]);
                     lista.Add(historial);
                 }
             }

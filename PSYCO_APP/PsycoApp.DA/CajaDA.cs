@@ -353,7 +353,7 @@ namespace PsycoApp.DA
             return lista;
         }
 
-        public List<ListaEfectivoDiario> listar_efectivo_diario(string usuario,DateTime fecha,int idSede)
+        public List<ListaEfectivoDiario> listar_efectivo_diario(string usuario,DateTime fecha,int idSede, int buscarPor, int id_usuario)
         {
             List<ListaEfectivoDiario> lista = new List<ListaEfectivoDiario>();
             try
@@ -364,6 +364,8 @@ namespace PsycoApp.DA
                 cmd.Parameters.Add("@usuario", SqlDbType.VarChar).Value = usuario;
                 cmd.Parameters.Add("@fecha", SqlDbType.Date).Value = fecha;
                 cmd.Parameters.Add("@idSede", SqlDbType.Int).Value = idSede;
+                cmd.Parameters.Add("@buscarPor", SqlDbType.Int).Value = buscarPor;
+                cmd.Parameters.Add("@idUsuario", SqlDbType.Int).Value = id_usuario;
                 SqlDataAdapter da = new SqlDataAdapter(cmd);
                 DataTable dt = new DataTable();
                 da.Fill(dt);

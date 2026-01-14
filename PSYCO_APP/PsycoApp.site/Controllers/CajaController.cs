@@ -416,7 +416,7 @@ namespace PsycoApp.site.Controllers
 
 
         [HttpGet]
-        public async Task<List<entities.ListaEfectivoDiario>> ListarEfectivoDiario(DateTime fecha)
+        public async Task<List<entities.ListaEfectivoDiario>> ListarEfectivoDiario(DateTime fecha, int buscarPor, int id_usuario)
         {
             List<entities.ListaEfectivoDiario> lista = new List<entities.ListaEfectivoDiario>();
             string res = "";
@@ -426,7 +426,7 @@ namespace PsycoApp.site.Controllers
             var tipousuario = Convert.ToInt32(HttpContext.Session.GetInt32("id_tipousuario"));
             try
             {
-                url = Endpoints.apiUrl + "/api" + Endpoints.Caja.url_listar_efectivo_diario + "/" + usuario + "/" + $"{fecha:yyyy-MM-dd}" + "/" + sede;
+                url = Endpoints.apiUrl + "/api" + Endpoints.Caja.url_listar_efectivo_diario + "/" + usuario + "/" + $"{fecha:yyyy-MM-dd}" + "/" + sede + "/" + buscarPor + "/" + id_usuario;
                 res = ApiCaller.consume_endpoint_method(url, null, "GET");
                 lista = JsonConvert.DeserializeObject<List<entities.ListaEfectivoDiario>>(res);
             }
