@@ -380,7 +380,7 @@ var nombrePaciente_ = '';
 var mostrarPagosPendientes = false;
 var idPaciente_ = 0;
 function form_pago(nombrePaciente, pendiente, idPaciente, id_cita_) {
-    nombrePaciente_ = nombrePaciente;
+    /*nombrePaciente_ = nombrePaciente;
     idPaciente_ = idPaciente;
     mostrarPagosPendientes = false;
 
@@ -398,7 +398,7 @@ function form_pago(nombrePaciente, pendiente, idPaciente, id_cita_) {
                                 title: "Oops...",
                                 text: "El registro de caja se encuentra deshabilitado, comunicarse con el administrador.",
                             });
-                        } else {
+                        } else {*/
 
                             var fechaActual = GetFechaActual();
 
@@ -427,7 +427,7 @@ function form_pago(nombrePaciente, pendiente, idPaciente, id_cita_) {
                             $('#txtMonto2').val(pendiente); //pendiente
                             $('#txtMonto3').val(pendiente); //diferencia
 
-                        }
+                        /*}
                     }
                 }
             }
@@ -439,7 +439,7 @@ function form_pago(nombrePaciente, pendiente, idPaciente, id_cita_) {
                 text: "Ocurrió un error al obtener la información."
             });
         }
-    });
+    });*/
 }
 
 function listar_pagos_pendientes(id_paciente) {

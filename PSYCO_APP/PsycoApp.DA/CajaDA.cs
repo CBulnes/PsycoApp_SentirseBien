@@ -209,21 +209,12 @@ namespace PsycoApp.DA
                 {
                     CajasUsuario item = new CajasUsuario();
                     item.id_caja = row["turno"] != DBNull.Value ? Convert.ToInt32(row["turno"]) : 0;
-                    item.estado = row["Estado"] != DBNull.Value
-                      ? Convert.ToString(row["Estado"])
-                      : string.Empty;
-                    item.nombre_usuario = row["UsuarioApertura"] != DBNull.Value
-                        ? Convert.ToString(row["UsuarioApertura"])
-                        : string.Empty;
+                    item.id_usuario = row["IdUsuario"] != DBNull.Value ? Convert.ToInt32(row["IdUsuario"]) : 0;
+                    item.estado = row["Estado"] != DBNull.Value ? Convert.ToString(row["Estado"]) : string.Empty;
+                    item.nombre_usuario = row["UsuarioApertura"] != DBNull.Value ? Convert.ToString(row["UsuarioApertura"]) : string.Empty;
                     item.fecha = Convert.ToDateTime(row["Fecha"]);
-
-                    item.fecha_apertura = row["HoraApertura"] != DBNull.Value
-                        ? Convert.ToDateTime(row["HoraApertura"])
-                        : (DateTime?)null;
-
-                    item.fecha_cierre = row["HoraCierre"] != DBNull.Value
-                        ? Convert.ToDateTime(row["HoraCierre"])
-                        : (DateTime?)null;
+                    item.fecha_apertura = row["HoraApertura"] != DBNull.Value ? Convert.ToDateTime(row["HoraApertura"]) : (DateTime?)null;
+                    item.fecha_cierre = row["HoraCierre"] != DBNull.Value ? Convert.ToDateTime(row["HoraCierre"]) : (DateTime?)null;
                     lista.Add(item);
                 }
             }

@@ -8,12 +8,12 @@ $(document).ready(function () {
     $("#txtEfectivo_").inputmask({ 'alias': 'numeric', allowMinus: false, digits: 2, max: 999.99 });
 });
 
-function buscarPago(pageNumber = 1, idCaja = 0) {
+function buscarPago(pageNumber = 1, idCaja = 0, idUsuario = null) {
     let pageSize = 10;
     var fecha = $('#txtFechaBusqueda').val();
     var buscar_por = parseInt($('#cboBuscarPor').val());
     var sede = $('#cboSede').val();
-    var id_usuario = parseInt($('#cboUsuario').val());
+    var id_usuario = idUsuario ?? parseInt($('#cboUsuario').val());
 
     if (fecha == '') {
         Swal.fire({
@@ -28,7 +28,7 @@ function buscarPago(pageNumber = 1, idCaja = 0) {
     $.post('/Caja/Buscar', { pageNumber: pageNumber, pageSize: pageSize, fecha: fecha, buscar_por: buscar_por, sede: sede, id_usuario: id_usuario, id_caja: idCaja })
         .done(function (data) {
             $('#containerTabla').html(data);
-            verResumenUsuario(false);
+            verResumenUsuario(false, id_usuario);
         })
         .fail(function () {
             Swal.fire({
@@ -38,13 +38,13 @@ function buscarPago(pageNumber = 1, idCaja = 0) {
             });
         });
 }
-verResumenUsuario(true);
+verResumenUsuario(true, null);
 
 function formatDecimal(num) {
     return (Math.round(num * 100) / 100).toFixed(2);
 }
 
-function verResumenUsuario(recargar) {
+function verResumenUsuario(recargar, idUsuario = null) {
     //if (recargar) {
     //    $('#cboMes').val(-1);
     //    $('#cboAnio').val(-1);
@@ -54,7 +54,7 @@ function verResumenUsuario(recargar) {
     var fecha = $('#txtFechaBusqueda').val();
     var buscar_por = parseInt($('#cboBuscarPor').val());
     var sede = $('#cboSede').val();
-    var id_usuario = parseInt($('#cboUsuario').val());
+    var id_usuario = idUsuario ?? parseInt($('#cboUsuario').val());
     var html = '';
     var contador = 1;
 
@@ -143,7 +143,7 @@ function getResumenTipoPago(fecha, buscar_por, sede, id_usuario) {
             }
             $('#bdResumen2').html(html);
             generar_grafico(data_resumen);
-            listar_efectivo_diario();
+            listar_efectivo_diario(id_usuario);
         })
         .fail(function () {
             Swal.fire({
@@ -380,7 +380,7 @@ function guardar_efectivo_diario() {
                         text: "Efectivo registrado exitosamente.",
                     });
                     cerrar_modal_efectivo_diario();
-                    listar_efectivo_diario();
+                    listar_efectivo_diario(null);
                 } else {
                     Swal.fire({
                         icon: "error",
@@ -403,11 +403,11 @@ function guardar_efectivo_diario() {
     }, 500);
 }
 
-function listar_efectivo_diario() {
+function listar_efectivo_diario(id_usuario = null) {
     var html = '';
     var contador = 1;
     var fecha = $('#txtFechaBusqueda').val();
-    $.get('/Caja/ListarEfectivoDiario?fecha=' + fecha + '&buscarPor=' + $('#cboBuscarPor').val() + '&id_usuario=' + $('#cboUsuario').val())
+    $.get('/Caja/ListarEfectivoDiario?fecha=' + fecha + '&buscarPor=' + $('#cboBuscarPor').val() + '&id_usuario=' + (id_usuario ?? $('#cboUsuario').val()))
         .done(function (data) {
             if (data.length > 0) {
                 for (var item of data) {
@@ -444,10 +444,10 @@ function GetFechaActual() {
     return [year, month, day].join('-');
 }
 
-function seleccionarCaja(idCaja, nombreUsuario) {
+function seleccionarCaja(idCaja, idUsuario) {
     var fechaCaja = $('#txtFechaCaja').val();
     $('#txtFechaBusqueda').val(fechaCaja);
-    buscarPago(pageNumber = 1, idCaja);
+    buscarPago(pageNumber = 1, idCaja, idUsuario);
 }
 
 function deshacerPago(id_pago, id_caja, accion) {
@@ -488,7 +488,7 @@ function deshacerPago(id_pago, id_caja, accion) {
                         text: "Pago " + (accion == "EXTORNAR" ? "extornado" : "cancelado") + " correctamente."
                     });
                     buscarPago(1, 0);
-                    verResumenUsuario(false);
+                    verResumenUsuario(false, null);
                 } else {
                     Swal.fire({
                         icon: "error",
