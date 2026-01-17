@@ -1392,7 +1392,7 @@ function cargar_datos_cita(id_cita, id_doctor, id_paciente, fecha, hora, estado,
     if (id_cita == 0) {
         $('#txtFecha').removeAttr('disabled');
         $('#txtFechaReasignar').val('');
-        $('#divHorarios, .divConfirmar').show();
+        $('#divHorarios, .divConfirmar, .divGuardar').show();
         $('#divReprogramar, #btnConfirmar, #divAtender, #divEstado, #btnCancelar, #divPagoPendiente').hide();
 
         setTimeout(() => {
@@ -1412,20 +1412,20 @@ function cargar_datos_cita(id_cita, id_doctor, id_paciente, fecha, hora, estado,
         $('#cboSedeChange_').val(id_sede);
 
         if (estado == 'CITADO') {
-            $('#divReprogramar, #divHorarios, .divConfirmar, #btnConfirmar, #btnCancelar, #divPagoPendiente').show();
+            $('#divReprogramar, #divHorarios, .divConfirmar, .divGuardar, #btnConfirmar, #btnCancelar, #divPagoPendiente').show();
             $('#divAtender').hide();
             $('.divMonto').show();
             $('#dvEdad').show();
         } else if (estado == 'CONFIRMADO') {
-            $('#divAtender, #btnCancelar, #divPagoPendiente, #ImgActualizarServicio').show();
-            $('#divReprogramar, #divHorarios, .divConfirmar').hide();
+            $('#divReprogramar, #divAtender, #btnCancelar, #divPagoPendiente, #ImgActualizarServicio, .divGuardar').show();
+            $('#divHorarios, .divConfirmar').hide();
             $('.divMonto').show();
             $('#dvEdad').show();
             if (pago_gratis == 'false' || pago_gratis == false || !pago_gratis) {
                 $('#divPagoGratis').show();
             }
         } else if (estado == 'ATENDIDO') {
-            $('#divReprogramar, #divHorarios, .divConfirmar, #divAtender, #btnCancelar').hide();
+            $('#divReprogramar, #divHorarios, .divConfirmar, .divGuardar, #divAtender, #btnCancelar').hide();
             $('.divMonto').show();
             $('#dvEdad').show();
         }
@@ -2117,8 +2117,8 @@ function confirmar_cita() {
                 //$('#mdl_cita').modal('hide');
 
                 //BEGIN: acciones cuando la cita se confirma
-                $('#divAtender, #btnCancelar, #divPagoPendiente, #ImgActualizarServicio').show();
-                $('#divReprogramar, #divHorarios, .divConfirmar').hide();
+                $('#divReprogramar, #divAtender, #btnCancelar, #divPagoPendiente, #ImgActualizarServicio, .divGuardar').show();
+                $('#divHorarios, .divConfirmar').hide();
                 if (pago_gratis_ == 'false' || pago_gratis_ == false || !pago_gratis_) {
                     $('#divPagoGratis').show();
                 } else {
@@ -2175,7 +2175,7 @@ function atender_cita() {
                 //$('#mdl_cita').modal('hide');
 
                 //BEGIN: acciones cuando la cita se atiende
-                $('#divReprogramar, #divHorarios, .divConfirmar, #divAtender, #btnCancelar, #divPagoPendiente, #divPagoGratis').hide();
+                $('#divReprogramar, #divHorarios, .divConfirmar, .divGuardar, #divAtender, #btnCancelar, #divPagoPendiente, #divPagoGratis').hide();
                 $('#btnEstado').html('ATENDIDO').removeClass('evento_confirmado').addClass('evento_atendido');
                 $('#cboDoctor, #cboPaciente, #txtHora, #cboServicio, #cboSedeChange_, #cboTipoCita').attr('disabled', true);
                 verificar_si_es_psicologo();
