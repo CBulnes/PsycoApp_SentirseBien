@@ -2024,7 +2024,7 @@ function guardar_cita() {
     var feedback = $('input[name="feedback"]:checked').val(); // 'happy' o 'sad'
     var comentario = $('#comment').val(); // Comentario adicional si es cara triste
     if (id_cita_ > 0) {
-        if (descuento == '0.00' || (descuento != '' && !isPrecise(descuento))) {
+        if (descuento !== '' && parseFloat(descuento) > 0 && !isPrecise(descuento)) {
             Swal.fire({
                 icon: "warning",
                 title: "Oops...",
@@ -2032,8 +2032,7 @@ function guardar_cita() {
             });
             return;
         }
-    }
- 
+    } 
 
     var data_ = {
         id_cita: id_cita_,
