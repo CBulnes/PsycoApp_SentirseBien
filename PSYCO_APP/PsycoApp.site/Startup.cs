@@ -28,7 +28,10 @@ namespace PsycoApp.site
                 .AddRazorRuntimeCompilation();
             services.AddMvc();
             services.AddProgressiveWebApp().AddHttpClient();
-            services.AddMemoryCache(); // Adds a default in-memory implementation of     IDistributedCache
+            services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromHours(2);
+            });// Adds a default in-memory implementation of     IDistributedCache
             services.AddSession();
             
         }
