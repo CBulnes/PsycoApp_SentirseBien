@@ -1417,8 +1417,8 @@ function cargar_datos_cita(id_cita, id_doctor, id_paciente, fecha, hora, estado,
             $('.divMonto').show();
             $('#dvEdad').show();
         } else if (estado == 'CONFIRMADO') {
-            $('#divReprogramar, #divAtender, #btnCancelar, #divPagoPendiente, #ImgActualizarServicio, .divGuardar').show();
-            $('#divHorarios, .divConfirmar').hide();
+            $('#divHorarios, #divReprogramar, #divAtender, #btnCancelar, #divPagoPendiente, #ImgActualizarServicio, .divGuardar').show();
+            $('.divConfirmar').hide();
             $('.divMonto').show();
             $('#dvEdad').show();
             if (pago_gratis == 'false' || pago_gratis == false || !pago_gratis) {
@@ -2116,15 +2116,15 @@ function confirmar_cita() {
                 //$('#mdl_cita').modal('hide');
 
                 //BEGIN: acciones cuando la cita se confirma
-                $('#divReprogramar, #divAtender, #btnCancelar, #divPagoPendiente, #ImgActualizarServicio, .divGuardar').show();
-                $('#divHorarios, .divConfirmar').hide();
+                $('#divHorarios, #divReprogramar, #divAtender, #btnCancelar, #divPagoPendiente, #ImgActualizarServicio, .divGuardar').show();
+                $('.divConfirmar').hide();
                 if (pago_gratis_ == 'false' || pago_gratis_ == false || !pago_gratis_) {
                     $('#divPagoGratis').show();
                 } else {
                     $('#divPagoGratis').hide();
                 }
                 $('#btnEstado').html('CONFIRMADO').removeClass('evento_citado').addClass('evento_confirmado');
-                $('#cboDoctor, #cboPaciente, #txtHora, #cboServicio, #cboSedeChange_, #cboTipoCita').attr('disabled', true);
+                $('#cboPaciente, #txtHora, #cboServicio, #cboSedeChange_, #cboTipoCita').attr('disabled', true);
                 verificar_si_es_psicologo();
                 mostrar_historial(id_cita_, id_paciente_);
                 mostrar_historial_pago(id_cita_);
@@ -2413,10 +2413,10 @@ function disponibilidad_reasignar_doctor() {
 
 function deshabilitar_campos() {
     if (estado_ != '-' && estado_ != 'CITADO') {
-        $('#cboDoctor, #cboPaciente, #cboServicio').attr('disabled', true);
+        $('#cboPaciente, #cboServicio').attr('disabled', true);
     }
     if (estado_ == 'CONFIRMADO') {
-        $('#cboDoctor, #cboPaciente, #txtHora, #cboServicio').attr('disabled', true);
+        $('#cboPaciente, #txtHora, #cboServicio').attr('disabled', true);
     }
 }
 function toggleComment(show) {
