@@ -398,6 +398,7 @@ namespace PsycoApp.DA
             {
                 cn.Open();
                 SqlCommand cmd = new SqlCommand(Procedures.sp_listar_horario_psicologo, cn);
+
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.Add("@id_psicologo", SqlDbType.Int).Value = id_psicologo;
                 cmd.Parameters.Add("@inicio", SqlDbType.VarChar).Value = inicio;
