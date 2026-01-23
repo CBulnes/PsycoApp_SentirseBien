@@ -19,20 +19,16 @@ window.addEventListener("load", function (event) {
     });
 
     btn_colapse.addEventListener('click', (e) => {
+        var aside_active = $('.sb-aside');
+        var admin_active = $('.sb-admninistrator');
 
-        var aside_active = document.querySelector('.sb-aside');
-        var admin_active = document.querySelector('.sb-admninistrator');
-        var list_class = aside_active.classList[1];
-
-        if (list_class === 'displayed') {
-            aside_active.classList.remove("displayed");
-            admin_active.classList.remove("displayed");
+        if (!aside_active.hasClass('displayed')) {
+            aside_active.addClass("displayed");
+            admin_active.addClass("displayed");
         }
         else {
-            if (list_class !== 'displayed') {
-                aside_active.classList.add("displayed");
-                admin_active.classList.add("displayed");
-            }
+            aside_active.removeClass("displayed");
+            admin_active.removeClass("displayed");
         }
 
     });
