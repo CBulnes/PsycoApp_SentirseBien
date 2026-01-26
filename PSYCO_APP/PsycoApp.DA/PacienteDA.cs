@@ -195,6 +195,9 @@ namespace PsycoApp.DA
 
         public void ActualizarPaciente(Paciente paciente)
         {
+            paciente.EstadoCivil = "S";
+            paciente.Sexo = "M";
+
             using (var command = new SqlCommand("sp_actualizar_paciente", _connection))
             {
                 command.CommandType = CommandType.StoredProcedure;
