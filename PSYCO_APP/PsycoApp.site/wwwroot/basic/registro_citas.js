@@ -519,6 +519,7 @@ function TipoVista() {
 function cargar_citas_dinamico(id) {
     $("#txtMontoPactado, #txtMontoPagado, #txtMontoPendiente").inputmask({ 'alias': 'numeric', allowMinus: false, digits: 2, max: 999.99 });
 
+    console.log('dinamicox');
     var filtroPaciente = id;
     var filtroDoctor = $('#cboDoctorFiltro').val();
     var filtroSede = $('#cboSedeFiltro').val();
@@ -573,7 +574,7 @@ function cargar_citas() {
     var filtroDoctor = $('#cboDoctorFiltro').val();
     var filtroSede = $('#cboSedeFiltro').val();
     var tipoVista = TipoVista();
-
+    console.log('dinamicox2');
     $.ajax({
         url: '/RegistroCitas/CitasUsuario?idPaciente=' + filtroPaciente + '&idDoctor=' + filtroDoctor + '&idSede=' + filtroSede + '&tipoVista=' + tipoVista,
         type: "GET",
@@ -2780,3 +2781,6 @@ $('.trigger_mes_siguiente').on('click', function () {
     $('#trigger_seleccion_mes').html($('#cbo_seleccion_mes').html());
     $('.btn-vista').trigger('click');
 })
+if (typeof window.reinitSidebar === 'function') {
+    window.reinitSidebar();
+}

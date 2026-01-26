@@ -328,7 +328,8 @@ $.fn.zabuto_calendar = function (options) {
                 for (var dow = 0; dow < 7; dow++) {
                     if (dow < firstDow || currDayOfMonth > lastDayinMonth) {
                         $dowRow.append('<td class="dia_inhabilitado"></td>');
-                    } else {
+                    } else
+                    {
                         var dateId = $calendarElement.attr('id') + '_' + dateAsString(year, month, currDayOfMonth);
                         var attr_fecha = dateAsString(year, month, currDayOfMonth);
                         var dayId = dateId + '_day';
@@ -739,7 +740,8 @@ function validar_dia_inhabilitado(fecha) {
     var date = new Date(mes + '/' + dia + '/' + año); //mm/dd/yyyy
     var dia = date.toLocaleDateString('es-ES', { weekday: 'long' })
 
-    return (dia == 'sábado' || dia == 'domingo') ? ' dia_inhabilitado' : '';
+    /*    return (dia == 'sábado' || dia == 'domingo') ? ' dia_inhabilitado' : '';*/
+    return '';
 }
 
 function ver_semana() {
@@ -844,11 +846,11 @@ function contenido_cita(dia, mes, año, hora, btnNuevaCita = false, btnCita = fa
         date = new Date(mes_ + '/' + dia_ + '/' + año_); //mm/dd/yyyy
         dia_nombre = date.toLocaleDateString('es-ES', { weekday: 'long' });
 
-        if (dia_nombre == 'domingo') {
-            html = '-';
-        } else {
+        //if (dia_nombre == 'domingo') {
+        //    html = '-';
+        //} else {
             html = '';
-        }
+        /*}*/
     } else {
         for (var item of lista_citas_dia) {
             dia_ = item.fecha_cita.slice(-2);
@@ -858,9 +860,10 @@ function contenido_cita(dia, mes, año, hora, btnNuevaCita = false, btnCita = fa
             date = new Date(mes_ + '/' + dia_ + '/' + año_); //mm/dd/yyyy
             dia_nombre = date.toLocaleDateString('es-ES', { weekday: 'long' });
 
-            if (dia_nombre == 'domingo') {
-                html = '-';
-            } else {
+            //if (dia_nombre == 'domingo') {
+            //    html = '-';
+            //} else
+            //{
                 if (item.tipo == 'CITA') {
                     console.log(item);
                     var INFORMES = ['CSC', 'I30'];
@@ -896,7 +899,7 @@ function contenido_cita(dia, mes, año, hora, btnNuevaCita = false, btnCita = fa
 
                     html += '</div > ';
                 }
-            }
+           /* }*/
         }
     }
 
