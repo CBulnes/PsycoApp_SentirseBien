@@ -34,6 +34,8 @@ namespace PsycoApp.site.Controllers
         {
             try
             {
+                usuario.email= usuario.email.Trim().ToUpper();
+                usuario.password = usuario.password.Trim().ToUpper();
                 int centro = usuario.id_sede;
 
                 url = url_api + "/api/usuario/validar_usuario";
