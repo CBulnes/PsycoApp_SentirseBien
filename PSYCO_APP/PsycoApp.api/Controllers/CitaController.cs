@@ -184,15 +184,13 @@ namespace PsycoApp.api.Controllers
             return res_;
         }
 
-        [HttpGet("disponibilidad_doctor/{id_doctor}/{fecha}")]
-        public async Task<List<Cita>> disponibilidad_doctor(int id_doctor, string fecha)
+        [HttpGet("disponibilidad_doctor/{id_doctor}/{fecha}/{servicio}")]
+        public async Task<List<Cita>> disponibilidad_doctor(int id_doctor, string fecha, int servicio)
         {
             List<Cita> lista = new List<Cita>();
-            random_str = ru.RandomString(8) + "|" + ru.CurrentDate();
-
             try
             {
-                lista = await citaBL.disponibilidad_doctor(id_doctor, fecha, main_path, random_str);
+                lista = await citaBL.disponibilidad_doctor(id_doctor, fecha, servicio);
             }
             catch (Exception)
             {

@@ -407,7 +407,7 @@
                                             <img id="ImgActualizarServicio" src="../images/free.png" style="height: 15px; width: auto; cursor: pointer; margin: 0px 0px 0px 5px; border-radius: 10px;" title="Actualizar servicio" onclick="modalActualizarServicio()" />
                                         </span>
                                         <div class="input-group">
-                                            <select class="form-control" id="cboServicio">
+                                            <select class="form-control" id="cboServicio" onchange="verificar_disponibilidad()">
                                                 <option value="-1" data-sesiones="0">Seleccionar</option>
                                                 @foreach (var prod in productos)
                                                 {

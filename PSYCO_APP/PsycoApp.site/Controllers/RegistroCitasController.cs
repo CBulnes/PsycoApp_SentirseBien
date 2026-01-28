@@ -448,13 +448,13 @@ namespace PsycoApp.site.Controllers
         [HttpGet]
         //[AllowAnonymous]
         //[ResponseCache(NoStore = true, Duration = 0)]
-        public async Task<List<Cita>> DisponibilidadDoctor(int id_doctor, string fecha)
+        public async Task<List<Cita>> DisponibilidadDoctor(int id_doctor, string fecha, int servicio)
         {
             List<Cita> lista = new List<Cita>();
 
             try
             {
-                string url = $"{url_disponibilidad_doctor}/{id_doctor}/{fecha}";
+                string url = $"{url_disponibilidad_doctor}/{id_doctor}/{fecha}/{servicio}";
 
                 // 🔥 Debe ser await OBLIGATORIO
                 string res = await ApiCaller.consume_endpoint_method_async(url, null, "GET");

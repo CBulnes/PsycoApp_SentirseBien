@@ -276,12 +276,12 @@ namespace PsycoApp.BL
             return res_;
         }
 
-        public async  Task<List<Cita>> disponibilidad_doctor(int id_doctor, string fecha, string main_path, string random_str)
+        public async  Task<List<Cita>> disponibilidad_doctor(int id_doctor, string fecha, int servicio)
         {
             List<Cita> lista = new List<Cita>();
             try
             {
-                lista = await citaDA.disponibilidad_doctor_async(id_doctor, fecha, main_path, random_str);
+                lista = await citaDA.disponibilidad_doctor_async(id_doctor, fecha, servicio);
             }
             catch (Exception)
             {

@@ -398,11 +398,7 @@ namespace PsycoApp.DA
             return res_;
         }
 
-        public async Task<List<Cita>> disponibilidad_doctor_async(
-     int id_doctor,
-     string fecha,
-     string main_path,
-     string random_str)
+        public async Task<List<Cita>> disponibilidad_doctor_async(int id_doctor, string fecha, int servicio)
         {
             List<Cita> lista = new List<Cita>();
 
@@ -410,11 +406,12 @@ namespace PsycoApp.DA
             {
                 await cn.OpenAsync();
 
-                using (SqlCommand cmd = new SqlCommand(Procedures.sp_listar_disponibilidad_doctor, cn))
+                using (SqlCommand cmd = new SqlCommand("SP_LISTAR_DISPONIBILIDAD_DOCTOR_V2", cn))
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
                     cmd.Parameters.Add("@id_doctor", SqlDbType.Int).Value = id_doctor;
                     cmd.Parameters.Add("@fecha", SqlDbType.VarChar).Value = fecha;
+                    cmd.Parameters.Add("@id_servicio", SqlDbType.Int).Value = servicio;
 
                     // El SqlDataReader async es mucho más rápido que SqlDataAdapter
                     using (SqlDataReader reader = await cmd.ExecuteReaderAsync())

@@ -178,10 +178,11 @@ var obtener_horarios_fecha = function (fecha, idEspecialista = null) {
     if (idEspecialista != null) {
         doctor = idEspecialista
     }
+    var servicio = $('#cboServicio').val();
     var html = '';
 
     $.ajax({
-        url: "/RegistroCitas/DisponibilidadDoctor?id_doctor=" + doctor + "&fecha=" + fecha,
+        url: "/RegistroCitas/DisponibilidadDoctor?id_doctor=" + doctor + "&fecha=" + fecha + "&servicio=" + servicio,
         type: "GET",
         async: false,
         beforeSend: function () {
@@ -2328,10 +2329,11 @@ function validar_sede_usuario(id_doc, id_selected) {
 function disponibilidad_doctor() {
     var fecha = $('#txtFecha').attr('data-fecha');
     var doctor = $('#cboDoctor').val();
+    var servicio = $('#cboServicio').val();
     var html = '';
 
     $.ajax({
-        url: "/RegistroCitas/DisponibilidadDoctor?id_doctor=" + doctor + "&fecha=" + fecha,
+        url: "/RegistroCitas/DisponibilidadDoctor?id_doctor=" + doctor + "&fecha=" + fecha + "&servicio=" + servicio,
         type: "GET",
         data: null,
         beforeSend: function () {
@@ -2375,10 +2377,11 @@ function disponibilidad_doctor() {
 function disponibilidad_reasignar_doctor() {
     var fecha = $('#txtFechaReasignar').val();
     var doctor = $('#cboDoctor').val();
+    var servicio = $('#cboServicio').val();
     var html = '';
 
     $.ajax({
-        url: "/RegistroCitas/DisponibilidadDoctor?id_doctor=" + doctor + "&fecha=" + fecha,
+        url: "/RegistroCitas/DisponibilidadDoctor?id_doctor=" + doctor + "&fecha=" + fecha + "&servicio=" + servicio,
         type: "GET",
         data: null,
         beforeSend: function () {
