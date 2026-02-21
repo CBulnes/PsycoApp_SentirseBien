@@ -98,9 +98,13 @@ namespace PsycoApp.DA
                 SqlCommand cmd = new SqlCommand("SP_INSERTAR_INFORME_ADICIONAL", cn);
                 cmd.CommandType = CommandType.StoredProcedure;
 
-                cmd.Parameters.Add("@id_cita", SqlDbType.Int).Value = oCita.id_cita;
+                cmd.Parameters.Add("@id_informe", SqlDbType.Int).Value = oCita.id_informe;
                 cmd.Parameters.Add("@id_paquete", SqlDbType.Int).Value = oCita.id_paquete;
                 cmd.Parameters.Add("@usuario", SqlDbType.VarChar).Value = oCita.usuario;
+                cmd.Parameters.Add("@fecha_cita", SqlDbType.VarChar).Value = oCita.fecha_cita;
+                cmd.Parameters.Add("@hora_cita", SqlDbType.VarChar).Value = oCita.hora_cita;
+                cmd.Parameters.Add("@id_doctor", SqlDbType.Int).Value = oCita.id_doctor_asignado;
+                cmd.Parameters.Add("@tipo_cita", SqlDbType.VarChar).Value = oCita.tipo_cita;
 
                 SqlDataAdapter da = new SqlDataAdapter(cmd);
                 DataTable dt = new DataTable();

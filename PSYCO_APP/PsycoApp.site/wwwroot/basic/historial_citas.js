@@ -114,7 +114,6 @@ function loadPatients(filtro = "", page) {
 }
 
 function cargar_lista_doctores() {
-    console.log(1);
     var html = '';
     $.ajax({
         url: "/RegistroCitas/listar_doctores",
@@ -140,7 +139,30 @@ function cargar_lista_doctores() {
         }
     });
 }
+function cargar_lista_doctores_por_sede() {
+    var html = '';
+    $.ajax({
+        url: "/RegistroCitas/listar_doctores?filtrar_por_sede=1",
+        type: "GET",
+        async: false,
+        beforeSend: function () {
+            html += '<option value="-1">Todos</option>';
+        },
+        success: function (data) {
+            for (var item of data) {
+                html += '<option value="' + item.id + '" data-sedes="' + item.sedes + '">' + item.nombre + '</option>';
+            }
+        },
+        error: function (response) {
+            html = '<option value="-1">Todos</option>';
+        },
+        complete: function () {
+            $('#cboDoctorForm').html(html);
+        }
+    });
+}
 
+cargar_lista_doctores_por_sede();
 cargar_lista_doctores();
 
 function cargar_historial() {
@@ -232,6 +254,73 @@ function GetFechaActual() {
     return [year, month, day].join('-');
 }
 
+$('.dateCrearCita').on('change', function () {
+    disponibilidad_doctor2();
+    //verificar_disponibilidad2();
+});
+
+function verificar_disponibilidad2() {
+    disponibilidad_doctor2();
+
+    var id_doc = $('#cboDoctorForm').val();
+    var id_doc_ant = $('#cboDoctorForm').attr('data-id-doctor');
+
+    if ((id_doc != id_doc_ant && $('#divReprogramar').is(':visible')) || id_cita_ == 0) {
+        $('#txtHora').val('').attr('data-hora', '');
+    }
+
+
+    console.log('Se omiitirá la validación de sedes');
+    return;
+    var sedes = $("#cboDoctor option:selected").data("sedes");;
+    if (sedes != undefined) {
+        var listaSedes = sedes.split('/');
+        var valorDefault = listaSedes[0];
+
+        validar_sede_usuario(id_doc, valorDefault);
+    } else {
+        validar_sede_usuario(id_doc, null);
+    }
+}
+
+function disponibilidad_doctor2() {
+    var fecha = $('#txtFechaForm').val();
+    var doctor = $('#cboDoctorForm').val();
+    var servicio = $('#cboInformeAdicional').val();
+    var html = '';
+
+    $.ajax({
+        url: "/RegistroCitas/DisponibilidadDoctor?id_doctor=" + doctor + "&fecha=" + fecha + "&servicio=" + servicio,
+        type: "GET",
+        data: null,
+        beforeSend: function () {
+            if (doctor == '-1') {
+                $('#divDisponibilidad2').html('<tr><td colspan="2" class="text-center">Seleccione un especialista</td></tr>');
+            }
+        },
+        success: function (data) {
+            var i = 0;
+            if (data.length > 0) {
+                for (item of data) {
+                    var clase = item.estado == 'DISPONIBLE' ? 'item_disponible item_clase' + i.toString() : 'item_reservado';
+                    var hora = item.estado == 'DISPONIBLE' ? item.hora_cita : '';
+                    var accion = ' onclick="seleccionar_hora_disponible2(this)" data-hora="' + hora + '"';
+                    html += '<tr data-option="item_clase' + i.toString() + '" class="' + clase + '"' + accion + '><td class="text-center">' + (item.hora_cita_mostrar) + '</td><td class="text-center">' + item.estado + '</td></tr>';
+                    i++;
+                }
+            }
+        },
+        error: function (response) {
+            $('#divDisponibilidad2').html('<tr><td colspan="2" class="text-center">Seleccione un especialista</td></tr>');
+        },
+        complete: function () {
+            if (doctor != '-1') {
+                $('#divDisponibilidad2').html(html);
+            }
+        }
+    });
+}
+
 var idPaquete_ = 0;
 function form_informe(id_paquete, informe_adicional) {
     if (informe_adicional == 'SI') {
@@ -243,11 +332,58 @@ function form_informe(id_paquete, informe_adicional) {
         return;
     }
     idPaquete_ = id_paquete;
+
+    const hoy = new Date();
+    const año = hoy.getFullYear();
+    const mes = String(hoy.getMonth() + 1).padStart(2, '0');
+    const dia = String(hoy.getDate()).padStart(2, '0');
+
+    const fechaActual = `${año}-${mes}-${dia}`;
+    $('#txtFechaForm').val(fechaActual);
+    $('#cboDoctorForm').val('-1');
+    //$('#divHorarios2').hide();
+
     $('#mdl_informe').modal('show');
+}
+
+function seleccionar_hora_disponible2(e) {
+    var hora = $(e).attr('data-hora');
+    var option = $(e).attr('data-option');
+
+    $('.item_disponible').removeClass('item_separado');
+    $('.' + option).addClass('item_separado');
+
+    if (hora == '') {
+        Swal.fire({
+            icon: "Error",
+            title: "Oops...",
+            text: "Ya hay una cita registrada en el horario seleccionado.",
+        });
+        $('#txtHoraForm').val('');
+        return;
+    } else {
+        hora = hora.replace(' am', ' AM');
+        hora = hora.replace(' pm', ' PM');
+        $('#txtHoraForm').val(hora);
+    }
 }
 
 function agregarInformeAdicional() {
     var idInforme = $('#cboInformeAdicional').val();
+    var fecha = $('#txtFechaForm').val();
+    var hora = $('#txtHoraForm').val();
+    var doctor = $('#cboDoctorForm').val();
+    var tipo_cita = $('#cboTipoCitaForm').val();
+
+    if (doctor == '-1') {
+        Swal.fire({
+            icon: "warning",
+            title: "Oops...",
+            text: "Seleccione el especialista.",
+        });
+        return;
+    }
+
     if (idInforme == '-1') {
         Swal.fire({
             icon: "Error",
@@ -258,8 +394,12 @@ function agregarInformeAdicional() {
     }
 
     var obj = {
-        id_cita: idInforme,
-        id_paquete: idPaquete_
+        id_informe: idInforme,
+        id_paquete: idPaquete_,
+        fecha_cita: fecha,
+        hora_cita: hora,
+        id_doctor_asignado: doctor,
+        tipo_cita: tipo_cita
     };
 
     $.ajax({

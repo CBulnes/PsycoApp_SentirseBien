@@ -27,6 +27,10 @@
         align-items: center;
     }
 
+    .item_separado {
+        background-color: #43b33c;
+    }
+
     .sb-reg-citas-popup-tab-historial-block-item-2 {
         display: flex;
         flex-direction: column;
@@ -315,10 +319,63 @@
                     <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
                         <div class="form-group">
                             <span class="label-form">Seleccione el informe que se adicionará al paquete</span><br />
-                            <select class="form-control" id="cboInformeAdicional">
-                                <option value="2">Entrega informe 30 minutos</option>
+                        </div>
+                    </div>
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                        <div class="form-group">
+                            <span class="label-form">Especialista</span><br />
+                            <select class="form-control" id="cboDoctorForm" onchange="disponibilidad_doctor2()">
+                                <option value="-1" data-sedes="-1">Seleccionar</option>
                             </select>
                         </div>
+                    </div>
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                        <div class="form-group">
+                            <span class="label-form">Informe</span><br />
+                            <select class="form-control" id="cboInformeAdicional">
+                                <option value="47">Entrega informe 30 minutos</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                        <div class="form-group">
+                            <span class="label-form">Informe</span><br />
+                            <select class="form-control" id="cboTipoCitaForm">
+                                <option value="P">Presencial</option>
+                                <option value="V">Virtual</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                        <div class="form-group">
+                            <span class="label-form">Fecha</span><br />
+                            <input id="txtFechaForm" class="dateCrearCita form-control" type="date" autocomplete="off" style="background-color: #ffffff;" />
+                        </div>
+                    </div>
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12" style="display: none;">
+                        <div class="form-group">
+                            <span class="label-form">Hora</span><br />
+                            <input type="text" class="form-control form-hora" id="txtHoraForm" maxlength="8" autocomplete="off" />
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+
+                        <div class="sb-reg-citas-popup-tab-panel-block" id="divHorarios2">
+                            <div class="sb-reg-citas-popup-tab-panel-block-item">
+                                <table class="table table-responsive" style="display: inline-table;">
+                                    <thead>
+                                        <tr>
+                                            <th class="text-center">Hora</th>
+                                            <th class="text-center">Estado</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="divDisponibilidad2"></tbody>
+                                </table>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
             </div>
