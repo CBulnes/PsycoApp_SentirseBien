@@ -33,6 +33,7 @@ namespace PsycoApp.site
                 options.IdleTimeout = TimeSpan.FromHours(2);
             });// Adds a default in-memory implementation of     IDistributedCache
             services.AddSession();
+            services.AddAntiforgery(options => options.HeaderName = "RequestVerificationToken");
             
         }
 

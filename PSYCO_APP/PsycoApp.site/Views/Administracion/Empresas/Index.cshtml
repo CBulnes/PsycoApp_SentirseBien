@@ -1,0 +1,310 @@
+@model PsycoApp.site.Models.AdminEmpresasViewModel
+@{
+    ViewData["Title"] = "Administración de empresas y sedes";
+    Layout = "_Layout";
+}
+
+<style>
+    .empresas-admin-card label {
+        color: #fff;
+    }
+</style>
+
+<div class="container-fluid p-4">
+    @Html.AntiForgeryToken()
+    <h2>Administración de empresas y sedes</h2>
+    <div class="row mt-4">
+        <div class="col-md-5">
+            <div class="card p-3 empresas-admin-card">
+                <h4>Crear usuario Administrador o Counter</h4>
+                <div class="form-group">
+                    <label for="empresaUsuario">Empresa</label>
+                    <select id="empresaUsuario" class="form-control" required>
+                        <option value="">Seleccionar empresa</option>
+                        @foreach (var empresa in Model.Empresas)
+                        {
+                            <option value="@empresa.Id">@empresa.Nombre</option>
+                        }
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="sedeUsuario">Sede</label>
+                    <select id="sedeUsuario" class="form-control" disabled required>
+                        <option value="">Selecciona primero una empresa</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="rolUsuario">Tipo de usuario</label>
+                    <select id="rolUsuario" class="form-control" required>
+                        <option value="">Seleccionar rol</option>
+                        <option value="1">Administrador</option>
+                        <option value="3">Counter</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="nombresUsuario">Nombres</label>
+                    <input id="nombresUsuario" class="form-control" maxlength="100" required />
+                </div>
+                <div class="form-group">
+                    <label for="apellidosUsuario">Apellidos</label>
+                    <input id="apellidosUsuario" class="form-control" maxlength="100" required />
+                </div>
+                <div class="form-group">
+                    <label for="loginUsuario">Usuario (solo letras)</label>
+                    <input id="loginUsuario" class="form-control" maxlength="100" pattern="[A-Za-zÁÉÍÓÚÜÑáéíóúüñ]+" title="Ingrese solo letras, sin arroba ni espacios." required />
+                </div>
+                <div class="form-group">
+                    <label for="passwordUsuario">Contraseña</label>
+                    <input id="passwordUsuario" type="password" class="form-control" maxlength="50" required />
+                </div>
+                <button type="button" class="btn btn-primary" onclick="crearUsuarioEmpresa()">Crear usuario</button>
+                <div id="mensajeUsuario" class="mt-2" role="alert"></div>
+            </div>
+
+            <div class="card p-3 empresas-admin-card">
+                <h4>Crear empresa</h4>
+                <div class="form-group">
+                    <label for="nombreEmpresa">Nombre de empresa</label>
+                    <input id="nombreEmpresa" class="form-control" maxlength="200" required />
+                </div>
+            <button type="button" class="btn btn-primary" onclick="crearEmpresa()">Guardar empresa</button>
+            <div id="mensajeEmpresa" class="mt-2" role="alert"></div>
+            </div>
+
+            <div class="card p-3 mt-4">
+                <h4>Empresas registradas</h4>
+                <ul id="listaEmpresas" class="list-group">
+                    @foreach (var empresa in Model.Empresas)
+                    {
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <span>@empresa.Nombre</span>
+                            <button type="button" class="btn btn-sm btn-outline-primary" onclick="seleccionarEmpresa(@empresa.Id)">Ver sedes</button>
+                        </li>
+                    }
+                </ul>
+            </div>
+
+        </div>
+
+        <div class="col-md-7">
+            <div class="card p-3 empresas-admin-card">
+                <h4>Agregar sede</h4>
+                <div class="form-group">
+                    <label for="empresaSede">Empresa</label>
+                    <select id="empresaSede" class="form-control">
+                        <option value="">Seleccionar empresa</option>
+                        @foreach (var empresa in Model.Empresas)
+                        {
+                            <option value="@empresa.Id">@empresa.Nombre</option>
+                        }
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="nombreSede">Nombre de sede</label>
+                    <input id="nombreSede" class="form-control" maxlength="200" required />
+                </div>
+                <div class="form-group">
+                    <label for="centroSede">Centro (opcional)</label>
+                    <input id="centroSede" class="form-control" maxlength="100" />
+                </div>
+                <button type="button" class="btn btn-primary" onclick="crearSede()">Guardar sede</button>
+                <div id="mensajeSede" class="mt-2" role="alert"></div>
+            </div>
+
+            <div class="card p-3 mt-4">
+                <h4 id="tituloSedes">Sedes de la empresa seleccionada</h4>
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead><tr><th>Nombre</th><th>Centro</th><th>Estado</th></tr></thead>
+                        <tbody id="tablaSedes"><tr><td colspan="3">Selecciona una empresa para ver sus sedes.</td></tr></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+<script>
+    async function crearEmpresa() {
+        const mensaje = document.getElementById('mensajeEmpresa');
+        const nombre = document.getElementById('nombreEmpresa').value.trim();
+        if (!nombre) {
+            mensaje.textContent = 'Ingresa el nombre de la empresa.';
+            return;
+        }
+
+        try {
+            const response = await fetch('/Administracion/Empresas/Crear', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value },
+                body: JSON.stringify({ nombre: nombre })
+            });
+            if (!response.ok) {
+                mensaje.textContent = await response.text();
+                return;
+            }
+            window.location.reload();
+        } catch {
+            mensaje.textContent = 'No se pudo conectar con el servidor.';
+        }
+    }
+
+    async function seleccionarEmpresa(id) {
+        document.getElementById('empresaSede').value = id;
+        const selectEmpresa = document.getElementById('empresaSede');
+        const nombre = selectEmpresa.options[selectEmpresa.selectedIndex].text;
+        document.getElementById('tituloSedes').textContent = 'Sedes de ' + nombre;
+        const tbody = document.getElementById('tablaSedes');
+        tbody.innerHTML = '<tr><td colspan="3">Cargando...</td></tr>';
+
+        try {
+            const response = await fetch('/Administracion/Empresas/Sedes?idEmpresa=' + encodeURIComponent(id));
+            if (!response.ok) {
+                tbody.innerHTML = '<tr><td colspan="3">No se pudieron cargar las sedes.</td></tr>';
+                return;
+            }
+            const sedes = await response.json();
+            tbody.innerHTML = '';
+            if (sedes.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="3">Esta empresa todavía no tiene sedes.</td></tr>';
+                return;
+            }
+            sedes.forEach(sede => {
+                const row = document.createElement('tr');
+                [sede.nombre, sede.centro || '', sede.estado ? 'Activa' : 'Inactiva'].forEach(value => {
+                    const cell = document.createElement('td');
+                    cell.textContent = value;
+                    row.appendChild(cell);
+                });
+                tbody.appendChild(row);
+            });
+        } catch {
+            tbody.innerHTML = '<tr><td colspan="3">No se pudo conectar con el servidor.</td></tr>';
+        }
+    }
+
+    async function crearSede() {
+        const mensaje = document.getElementById('mensajeSede');
+        const idEmpresa = parseInt(document.getElementById('empresaSede').value, 10);
+        const nombre = document.getElementById('nombreSede').value.trim();
+        const centro = document.getElementById('centroSede').value.trim();
+        if (!idEmpresa || !nombre) {
+            mensaje.textContent = 'Selecciona una empresa e ingresa el nombre de la sede.';
+            return;
+        }
+
+        try {
+            const response = await fetch('/Administracion/Empresas/CrearSede', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value },
+                body: JSON.stringify({ idEmpresa: idEmpresa, nombre: nombre, centro: centro })
+            });
+            if (!response.ok) {
+                mensaje.textContent = await response.text();
+                return;
+            }
+            mensaje.textContent = '';
+            document.getElementById('nombreSede').value = '';
+            document.getElementById('centroSede').value = '';
+            await seleccionarEmpresa(idEmpresa);
+        } catch {
+            mensaje.textContent = 'No se pudo conectar con el servidor.';
+        }
+    }
+
+    async function cargarSedesUsuario(idEmpresa) {
+        const sedeSelect = document.getElementById('sedeUsuario');
+        sedeSelect.innerHTML = '<option value="">Cargando sedes...</option>';
+        sedeSelect.disabled = true;
+
+        try {
+            const response = await fetch('/Administracion/Empresas/Sedes?idEmpresa=' + encodeURIComponent(idEmpresa));
+            if (!response.ok) {
+                sedeSelect.innerHTML = '<option value="">No se pudieron cargar las sedes</option>';
+                return;
+            }
+
+            const sedes = await response.json();
+            sedeSelect.innerHTML = '<option value="">Seleccionar sede</option>';
+            sedes.filter(sede => sede.estado).forEach(sede => {
+                const option = document.createElement('option');
+                option.value = sede.id;
+                option.textContent = sede.nombre;
+                sedeSelect.appendChild(option);
+            });
+            sedeSelect.disabled = sedes.filter(sede => sede.estado).length === 0;
+            if (sedeSelect.disabled) {
+                sedeSelect.innerHTML = '<option value="">La empresa no tiene sedes activas</option>';
+            }
+        } catch {
+            sedeSelect.innerHTML = '<option value="">No se pudo conectar con el servidor</option>';
+        }
+    }
+
+    async function crearUsuarioEmpresa() {
+        const mensaje = document.getElementById('mensajeUsuario');
+        const password = document.getElementById('passwordUsuario').value;
+        const usuario = {
+            idEmpresa: parseInt(document.getElementById('empresaUsuario').value, 10),
+            idSede: parseInt(document.getElementById('sedeUsuario').value, 10),
+            idTipoUsuario: parseInt(document.getElementById('rolUsuario').value, 10),
+            nombres: document.getElementById('nombresUsuario').value.trim(),
+            apellidos: document.getElementById('apellidosUsuario').value.trim(),
+            usuario: document.getElementById('loginUsuario').value.trim(),
+            password: password
+        };
+
+        const soloLetras = /^[A-Za-zÁÉÍÓÚÜÑáéíóúüñ]+$/;
+        if (!usuario.idEmpresa || !usuario.idSede || ![1, 3].includes(usuario.idTipoUsuario)
+            || !usuario.nombres || !usuario.apellidos || !soloLetras.test(usuario.usuario)
+            || !password || password.length > 50) {
+            mensaje.textContent = 'Completa todos los campos y selecciona empresa, sede y rol válidos. El usuario debe contener solo letras y la contraseña no superar 50 caracteres.';
+            return;
+        }
+
+        try {
+            const response = await fetch('/Administracion/Empresas/CrearUsuario', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value
+                },
+                body: JSON.stringify(usuario)
+            });
+            if (!response.ok) {
+                mensaje.textContent = await response.text();
+                return;
+            }
+
+            const resultado = await response.json();
+            mensaje.textContent = resultado.message || 'Usuario creado correctamente.';
+            document.getElementById('nombresUsuario').value = '';
+            document.getElementById('apellidosUsuario').value = '';
+            document.getElementById('loginUsuario').value = '';
+            document.getElementById('passwordUsuario').value = '';
+            document.getElementById('rolUsuario').value = '';
+        } catch {
+            mensaje.textContent = 'No se pudo conectar con el servidor.';
+        }
+    }
+
+    document.getElementById('empresaSede').addEventListener('change', function () {
+        const option = this.options[this.selectedIndex];
+        if (this.value) {
+            seleccionarEmpresa(this.value);
+        } else {
+            document.getElementById('tablaSedes').innerHTML = '<tr><td colspan="3">Selecciona una empresa para ver sus sedes.</td></tr>';
+        }
+    });
+
+    document.getElementById('empresaUsuario').addEventListener('change', function () {
+        if (this.value) {
+            cargarSedesUsuario(this.value);
+        } else {
+            document.getElementById('sedeUsuario').innerHTML = '<option value="">Selecciona primero una empresa</option>';
+            document.getElementById('sedeUsuario').disabled = true;
+        }
+    });
+</script>
+}

@@ -308,7 +308,7 @@
                     Swal.fire({
                         icon: "Error",
                         title: "Oops...",
-                        text: "Debe rellenar todos los campos!",
+                        text: xhr.responseText || "No se pudo guardar el paciente.",
                     });
                 }
             });

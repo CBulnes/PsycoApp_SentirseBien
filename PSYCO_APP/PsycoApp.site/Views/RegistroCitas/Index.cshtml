@@ -170,6 +170,7 @@
         <p class="active-titular-modulo">Registro de Citas</p>
     </div>
     <input type="hidden" id="hiddenIdSede" value="@(Model?.DynamicData?.id_sede)" />
+    <input type="hidden" id="hiddenNombreSede" value="@(Model?.DynamicData?.sede_nombre)" />
     <div class="sb-reg-citas-list-colores">
         <div class="sb-reg-citas-color-citado">
             <p class="active-texto-modulo">Citado</p>
@@ -827,36 +828,12 @@
     <link rel="stylesheet" href="~/assets/css/zabuto.css" />
     <link rel="stylesheet" href="~/assets/css/datetimepicker.css" />
     <script>
-        var sedes = [];
-        var tipoUsuario = $('#hdnIdTipoUsuario').val().toString();
-        if (tipoUsuario == '1'){
-            tipoUsuario = 'ADMIN';
-        } else if (tipoUsuario == '3') {
-            tipoUsuario = 'COUNTER';
-        } else {
-            tipoUsuario = 'PSICOLOGO';
-        }
-
         var idSedePrincipal = $('#hdnIdSede').val().toString();
-        var sedePrincipal = (idSedePrincipal == '1' ? 'Sentirse bien' : 'Transforma');
-
-        if (tipoUsuario == 'ADMIN') //si es ADMIN ve todo
-        {
-            sedes.push({ id: '-1', valor: 'Todos' });
-            sedes.push({ id: '1', valor: 'Sentirse bien' });
-            sedes.push({ id: '2', valor: 'Transforma' });
-            sedes.push({ id: '3', valor: 'Miraflores' });
-            // sedes.push({ id: '-2', valor: 'Ambas' });
-        } else {
-            // caso contrario ve solo lo de su sede asignada
-            
-            // sedes.push({ id: idSedePrincipal, valor: sedePrincipal });
-            sedes.push({ id: '1', valor: 'Sentirse bien' });
-            sedes.push({ id: '2', valor: 'Transforma' });
-            sedes.push({ id: '3', valor: 'Miraflores' });
-        }
+        var nombreSedePrincipal = $('#hiddenNombreSede').val();
+        var sedes = [{ id: idSedePrincipal, valor: nombreSedePrincipal }];
         cargarCombo(sedes, 'cboSedeFiltro');
         cargarCombo(sedes, 'cboSedeChange_');
+        $('#cboSedeFiltro, #cboSedeChange_').val(idSedePrincipal);
 
         document.addEventListener('DOMContentLoaded', function () {
             var elems = document.querySelectorAll('.modal');

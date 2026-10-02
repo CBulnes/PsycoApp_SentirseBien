@@ -28,6 +28,70 @@ namespace PsycoApp.api.Controllers
             }
         }
 
+        [HttpGet("empresa/{idEmpresa}/sede/{idSede}/listar/{pagina}/{tamanoPagina}")]
+        public ActionResult<List<Psicologo>> ListarPorEmpresaYSede(int idEmpresa, int idSede, int pagina = 1, int tamanoPagina = 100)
+        {
+            if (idEmpresa <= 0 || idSede <= 0)
+                return BadRequest("La empresa y la sede son obligatorias.");
+
+            try
+            {
+                return _psicologoBL.ListarPsicologos(pagina, tamanoPagina, idEmpresa, idSede);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet("empresa/{idEmpresa}/listar/{pagina}/{tamanoPagina}")]
+        public ActionResult<List<Psicologo>> ListarPorEmpresa(int idEmpresa, int pagina = 1, int tamanoPagina = 100)
+        {
+            if (idEmpresa <= 0)
+                return BadRequest("La empresa es obligatoria.");
+
+            try
+            {
+                return _psicologoBL.ListarPsicologos(pagina, tamanoPagina, idEmpresa);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet("empresa/{idEmpresa}/buscar")]
+        public ActionResult BuscarPorEmpresa(int idEmpresa, [FromQuery] string nombre)
+        {
+            if (idEmpresa <= 0)
+                return BadRequest("La empresa es obligatoria.");
+
+            try
+            {
+                return Ok(_psicologoBL.BuscarPsicologo(nombre ?? string.Empty, idEmpresa));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet("empresa/{idEmpresa}/sede/{idSede}/buscar")]
+        public ActionResult BuscarPorEmpresaYSede(int idEmpresa, int idSede, [FromQuery] string nombre)
+        {
+            if (idEmpresa <= 0 || idSede <= 0)
+                return BadRequest("La empresa y la sede son obligatorias.");
+
+            try
+            {
+                return Ok(_psicologoBL.BuscarPsicologo(nombre ?? string.Empty, idEmpresa, idSede));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
         [HttpPost("agregar")]
         public ActionResult Agregar([FromBody] Psicologo psicologo)
         {
@@ -41,15 +105,29 @@ namespace PsycoApp.api.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+        [HttpPost("guardar_credenciales")]
+        public ActionResult GuardarCredenciales([FromBody] Usuario usuario)
+        {
+            try
+            {
+                _psicologoBL.GuardarCredencialesPsicologo(usuario.id_psicologo, usuario.id_sede, usuario.email, usuario.password);
+                return Ok(new { message = "Usuario del especialista guardado correctamente." });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
  
         [HttpGet("buscar")]
-        public ActionResult Buscar([FromQuery] string nombre)
+        public ActionResult Buscar([FromQuery] string nombre, [FromQuery] int idEmpresa = 0)
         {
             if (string.IsNullOrEmpty(nombre))
                 nombre = "";
             try
             {
-                var psicologos = _psicologoBL.BuscarPsicologo(nombre);
+                var psicologos = _psicologoBL.BuscarPsicologo(nombre, idEmpresa);
                 return Ok(psicologos);
             }
             catch (Exception ex)

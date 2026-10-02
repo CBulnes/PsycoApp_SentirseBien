@@ -231,7 +231,11 @@ namespace PsycoApp.site.Controllers
 
                 menu.Add(new Menu { nombre_opcion = "Inicio", ruta_opcion = "/Home" });
 
-                if (tipo_usuario == "ADMIN" || tipo_usuario == "ADMINISTRADOR")
+                if (HttpContext.Session.GetInt32("id_tipousuario") == 20)
+                {
+                    menu.Add(new Menu { nombre_opcion = "Empresas y sedes", ruta_opcion = "/Administracion/Empresas" });
+                }
+                else if (tipo_usuario == "ADMIN" || tipo_usuario == "ADMINISTRADOR")
                 {
                     //menu.Add(new Menu { nombre_opcion = "Mantenimiento", ruta_opcion = "Mantenimiento" });
                     menu.Add(new Menu { nombre_opcion = "Reportes", ruta_opcion = "/Reportes" });

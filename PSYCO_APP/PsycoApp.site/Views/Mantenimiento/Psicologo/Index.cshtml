@@ -36,9 +36,6 @@
                     <span class="label-form active-texto-modulo">Nombre del psicólogo: </span>
                     <input id="txtBuscarNombre" class="active-input-modulo" name="Nombre" placeholder="Ingrese nombre para buscar" type="text" required />
 
-                    <span class="label-form active-texto-modulo">Centro: </span>
-                    <select class="active-input-modulo" id="cboBuscarSede"></select>
-
                     <button class="active-button-modulo" type="button" onclick="buscarPsicologo()">
                         <i class="fa fa-search"></i>&nbsp;Buscar
                     </button>
@@ -74,6 +71,7 @@
                                     <td class="text-center ">
                                         <div class="sb-psi-container-tble-td">
                                         <button class="btn btn-sm sb-psi-container-table-button-edit active-button-tabla-modulo" onclick="editarPsicologo(@psicologo.item.Id)">Editar</button>
+                                        <button class="btn btn-sm sb-psi-container-table-button-edit active-button-tabla-modulo" onclick="modalCredenciales(@psicologo.item.Id)">Crear usuario</button>
                                         <button class="btn btn-sm sb-psi-container-table-button-edit active-button-tabla-modulo" onclick="modalHorarios(@psicologo.item.Id)">Horarios</button>
                                         <button class="btn btn-sm sb-psi-container-table-button-edit active-button-tabla-modulo" onclick="modalVacaciones(@psicologo.item.Id)">Vacaciones</button>
                                         <button class="btn btn-sm sb-psi-container-table-button-delet active-button-tabla-modulo" onclick="eliminarPsicologo(@psicologo.item.Id, @psicologo.item.Estado)">@(psicologo.item.Estado == "1" ? "Deshabilitar" : "Habilitar")</button>
@@ -283,6 +281,26 @@
 
     </div>
 
+</div>
+
+<div id="mdl_credenciales" class="modal sb-psi-container-agregar" style="display: none;">
+    <div class="sb-psi-container-agregar-popup active-fondo-oscuro">
+        <p class="active-titular-modulo">Crear usuario del especialista</p>
+        <input id="hdnIdPsicologoCredenciales" type="hidden" />
+        <div class="sb-frm-psi-agregar-block-item">
+            <span id="lblEspecialistaCredenciales" class="label-form active-texto-modulo"></span>
+            <span class="label-form active-texto-modulo">Usuario (solo letras, sin arroba)</span>
+            <input id="txtEmailCredenciales" class="form-control active-input-modulo" type="text" maxlength="100" pattern="[A-Za-zÁÉÍÓÚÜÑáéíóúüñ]+" title="Ingrese solo letras, sin arroba ni espacios." required />
+        </div>
+        <div class="sb-frm-psi-agregar-block-item">
+            <span class="label-form active-texto-modulo">Contraseña</span>
+            <input id="txtPasswordCredenciales" class="form-control active-input-modulo" type="password" maxlength="300" required />
+        </div>
+        <div class="sb-frm-psi-agregar-block-button text-right">
+            <button type="button" class="btn btn-success active-button-modulo" onclick="guardarCredencialesPsicologo()">Guardar usuario</button>
+            <button type="button" class="btn btn-secondary active-button-modulo" onclick="cerrarModalCredenciales()">Cancelar</button>
+        </div>
+    </div>
 </div>
 
 <!--modal horarios-->
@@ -498,7 +516,6 @@
             { id: '14:00', valor: '02:00 PM - 03:00 PM' }
         ];
 
-        var sedes = [];
         var tipoUsuario = $('#hdnIdTipoUsuario').val().toString();
         if (tipoUsuario == '1'){
             tipoUsuario = 'ADMIN';
@@ -506,36 +523,6 @@
             tipoUsuario = 'COUNTER';
         } else {
             tipoUsuario = 'PSICOLOGO';
-        }
-
-        var idSedePrincipal = $('#hdnIdSede').val().toString();
-     
-         var sedePrincipal =
-        idSedePrincipal === '1' ? 'Sentirse bien' :
-        idSedePrincipal === '2' ? 'Transforma' :
-        idSedePrincipal === '3' ? 'Miraflores' :
-        '';
-
-        if (tipoUsuario == 'ADMIN') //si es ADMIN ve todo
-        {
-            sedes.push({ id: idSedePrincipal, valor: sedePrincipal });
-            sedes.push({ id: '-2', valor: 'Todos' });
-            sedes.push({ id: '1', valor: 'Sentirse bien' });
-            sedes.push({ id: '2', valor: 'Transforma' });
-            sedes.push({ id: '3', valor: 'Miraflores' });
-
-                    // Eliminar duplicados por id
-        const seen = new Set();
-        sedes = sedes.filter(s => {
-            if (seen.has(s.id)) {
-                return false; // ya existe, lo descartamos
-            }
-            seen.add(s.id);
-            return true; // primera vez que aparece, lo mantenemos
-        });
-        } else {
-            // caso contrario ve solo lo de su sede asignada
-            sedes.push({ id: idSedePrincipal, valor: sedePrincipal });
         }
 
         function cargarCombo(array, idCombo) {
@@ -556,8 +543,6 @@
         cargarCombo(horarios, 'cboInicioM');
         cargarCombo(horarios, 'cboRefrigerioM');
         cargarCombo(horarios, 'cboFinM');
-
-        cargarCombo(sedes, 'cboBuscarSede');
 
         function cargarSedes() {
             var html = '';
@@ -599,8 +584,7 @@
 
         function buscarPsicologo() {
             let nombre = document.getElementById('txtBuscarNombre').value;
-            let sede = document.getElementById('cboBuscarSede').value;
-            $.post('/Mantenimiento/Psicologo/Buscar', { nombre: nombre, sede: sede }, function (data) {
+            $.post('/Mantenimiento/Psicologo/Buscar', { nombre: nombre }, function (data) {
                 let tableBody = $('#bdPsicologos');
                 tableBody.empty();
                 data.forEach((psicologo, index) => {
@@ -614,6 +598,7 @@
                             <td class="text-center">${psicologo.estado == "1" ? "Habilitado" : "Deshabilitado"}</td>
                             <td class="text-center">
                                 <button class="btn btn-sm sb-psi-container-table-button-edit active-button-tabla-modulo" onclick="editarPsicologo(${psicologo.id})">Editar</button>
+                                <button class="btn btn-sm sb-psi-container-table-button-edit active-button-tabla-modulo" onclick="modalCredenciales(${psicologo.id})">Crear usuario</button>
                                 <button class="btn btn-sm sb-psi-container-table-button-edit active-button-tabla-modulo" onclick="modalHorarios(${psicologo.id})">Horarios</button>
                                 <button class="btn btn-sm sb-psi-container-table-button-edit active-button-tabla-modulo" onclick="modalVacaciones(${psicologo.id})">Vacaciones</button>
                                 <button class="btn btn-sm sb-psi-container-table-button-delet active-button-tabla-modulo" onclick="eliminarPsicologo(${psicologo.id}, '${psicologo.estado}')">${psicologo.estado == "1" ? "Deshabilitar" : "Habilitar"}</button>
@@ -674,6 +659,55 @@
             $('#hdnIdPsicologo').val(id);
             $('#bdHorarios').html('<tr><td colspan="4">Realice la búsqueda de horarios.</td></tr>');
             $('#mdl_horarios').modal('show');
+        }
+
+        function modalCredenciales(id) {
+            $('#hdnIdPsicologoCredenciales').val(id);
+            $('#lblEspecialistaCredenciales').text('Especialista #' + id);
+            $('#txtEmailCredenciales, #txtPasswordCredenciales').val('');
+            $('#mdl_credenciales').css('display', 'flex');
+        }
+
+        function cerrarModalCredenciales() {
+            $('#mdl_credenciales').hide();
+        }
+
+        function guardarCredencialesPsicologo() {
+            var email = $('#txtEmailCredenciales').val().trim();
+            var password = $('#txtPasswordCredenciales').val();
+            if (!$('#txtEmailCredenciales')[0].checkValidity() || !email || !password) {
+                $('#txtEmailCredenciales')[0].reportValidity();
+                if (email && !password) {
+                    $('#txtPasswordCredenciales')[0].reportValidity();
+                }
+                return;
+            }
+            var soloLetrasRegex = /^[A-Za-zÁÉÍÓÚÜÑáéíóúüñ]+$/;
+            if (!soloLetrasRegex.test(email)) {
+                Swal.fire({ icon: 'warning', text: 'El usuario debe contener solo letras, sin arroba ni espacios.' });
+                $('#txtEmailCredenciales')[0].reportValidity();
+                return;
+            }
+
+            $.ajax({
+                type: 'POST',
+                url: '/Mantenimiento/Psicologo/GuardarCredenciales',
+                contentType: 'application/json',
+                data: JSON.stringify({
+                    id_psicologo: parseInt($('#hdnIdPsicologoCredenciales').val()),
+                    email: email,
+                    password: password
+                }),
+                success: function (response) {
+                    cerrarModalCredenciales();
+                    Swal.fire({ icon: 'success', text: response.message });
+                },
+                error: function (xhr) {
+                    var mensaje = xhr.responseText || 'No se pudieron guardar las credenciales.';
+                    try { mensaje = JSON.parse(mensaje); } catch (e) { }
+                    Swal.fire({ icon: 'error', title: 'No se pudo crear el usuario', text: mensaje });
+                }
+            });
         }
 
         function modalVacaciones(id) {

@@ -38,6 +38,13 @@ namespace PsycoApp.api.Controllers
         public RespuestaUsuario PostRegistrar([FromBody] Cita oCita)
         {
             RespuestaUsuario res_ = new RespuestaUsuario();
+            if (oCita == null || oCita.id_sede <= 0)
+            {
+                res_.descripcion = "La sede de la cita no es válida.";
+                res_.estado = false;
+                return res_;
+            }
+
             random_str = ru.RandomString(8) + "|" + ru.CurrentDate();
             try
             {

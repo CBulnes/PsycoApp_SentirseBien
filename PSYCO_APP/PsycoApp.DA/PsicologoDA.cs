@@ -197,6 +197,103 @@ namespace PsycoApp.DA
             return new List<Psicologo>();
         }
 
+        public List<Psicologo> ListarPsicologosPorEmpresa(int pagina, int tamanoPagina, int idEmpresa, int? idSede = null)
+        {
+            var psicologos = new List<Psicologo>();
+            var procedure = idSede.HasValue ? Procedures.listar_psicologos_empresa_sede : Procedures.listar_psicologos_empresa;
+            using (var command = new SqlCommand(procedure, _connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.Parameters.Add("@Pagina", SqlDbType.Int).Value = pagina;
+                command.Parameters.Add("@TamanoPagina", SqlDbType.Int).Value = tamanoPagina;
+                command.Parameters.Add("@IdEmpresa", SqlDbType.Int).Value = idEmpresa;
+                if (idSede.HasValue)
+                    command.Parameters.Add("@IdSede", SqlDbType.Int).Value = idSede.Value;
+                _connection.Open();
+                try
+                {
+                    using (var reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            psicologos.Add(new Psicologo
+                            {
+                                Id = Convert.ToInt32(reader["Id"]),
+                                Nombre = Convert.ToString(reader["Nombre"]),
+                                Apellido = Convert.ToString(reader["Apellido"]),
+                                FechaNacimiento = Convert.ToDateTime(reader["FechaNacimiento"]),
+                                DocumentoTipo = Convert.ToString(reader["DocumentoTipo"]),
+                                DocumentoNumero = Convert.ToString(reader["DocumentoNumero"]),
+                                Telefono = Convert.ToString(reader["Telefono"]),
+                                Refrigerio = Convert.ToString(reader["Refrigerio"]),
+                                Especialidad = Convert.ToInt32(reader["Especialidad"]),
+                                Direccion = Convert.ToString(reader["Direccion"]),
+                                Distrito = Convert.ToString(reader["Distrito"]),
+                                Estado = Convert.ToString(reader["Estado"]),
+                                IdSedePrincipal = Convert.ToInt32(reader["IdSedePrincipal"]),
+                                IdSedeSecundaria = Convert.ToInt32(reader["IdSedeSecundaria1"]),
+                                IdSedeSecundaria2 = Convert.ToInt32(reader["IdSedeSecundaria2"]),
+                                Sedes = Convert.ToString(reader["Sedes"])
+                            });
+                        }
+                    }
+                }
+                finally
+                {
+                    _connection.Close();
+                }
+            }
+            return psicologos;
+        }
+
+        public List<Psicologo> BuscarPsicologoPorEmpresa(string nombre, int idEmpresa, int? idSede = null)
+        {
+            var psicologos = new List<Psicologo>();
+            var procedure = idSede.HasValue ? Procedures.buscar_psicologos_empresa_sede : Procedures.buscar_psicologos_empresa;
+            using (var command = new SqlCommand(procedure, _connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.Parameters.Add("@Nombre", SqlDbType.NVarChar, 100).Value = nombre ?? string.Empty;
+                command.Parameters.Add("@IdEmpresa", SqlDbType.Int).Value = idEmpresa;
+                if (idSede.HasValue)
+                    command.Parameters.Add("@IdSede", SqlDbType.Int).Value = idSede.Value;
+                _connection.Open();
+                try
+                {
+                    using (var reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            psicologos.Add(new Psicologo
+                            {
+                                Id = Convert.ToInt32(reader["Id"]),
+                                Nombre = Convert.ToString(reader["Nombre"]),
+                                Apellido = Convert.ToString(reader["Apellido"]),
+                                FechaNacimiento = Convert.ToDateTime(reader["FechaNacimiento"]),
+                                DocumentoTipo = Convert.ToString(reader["DocumentoTipo"]),
+                                DocumentoNumero = Convert.ToString(reader["DocumentoNumero"]),
+                                Telefono = Convert.ToString(reader["Telefono"]),
+                                Refrigerio = Convert.ToString(reader["Refrigerio"]),
+                                Especialidad = Convert.ToInt32(reader["Especialidad"]),
+                                Direccion = Convert.ToString(reader["Direccion"]),
+                                Distrito = Convert.ToString(reader["Distrito"]),
+                                Estado = Convert.ToString(reader["Estado"]),
+                                IdSedePrincipal = Convert.ToInt32(reader["IdSedePrincipal"]),
+                                IdSedeSecundaria = Convert.ToInt32(reader["IdSedeSecundaria1"]),
+                                IdSedeSecundaria2 = Convert.ToInt32(reader["IdSedeSecundaria2"]),
+                                Sedes = Convert.ToString(reader["Sedes"])
+                            });
+                        }
+                    }
+                }
+                finally
+                {
+                    _connection.Close();
+                }
+            }
+            return psicologos;
+        }
+
         public void AgregarPsicologo(Psicologo psicologo)
         {
             DataTable dtEstudios = Helper.ToDataTable(psicologo.Estudios);
@@ -225,6 +322,28 @@ namespace PsycoApp.DA
                 _connection.Open();
                 command.ExecuteNonQuery();
                 _connection.Close();
+            }
+        }
+
+        public void GuardarCredencialesPsicologo(int idPsicologo, int idSede, string email, string password)
+        {
+            using (var command = new SqlCommand(Procedures.guardar_credenciales_psicologo, _connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.Parameters.Add("@IdPsicologo", SqlDbType.Int).Value = idPsicologo;
+                command.Parameters.Add("@IdSede", SqlDbType.Int).Value = idSede;
+                command.Parameters.Add("@Email", SqlDbType.VarChar, 100).Value = email;
+                command.Parameters.Add("@Password", SqlDbType.VarChar, 300).Value = password;
+
+                _connection.Open();
+                try
+                {
+                    command.ExecuteNonQuery();
+                }
+                finally
+                {
+                    _connection.Close();
+                }
             }
         }
 

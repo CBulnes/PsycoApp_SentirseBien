@@ -14,6 +14,9 @@ namespace PsycoApp.utilities
         public const string sp_listar_pacientes_combo_dinamico = "SP_LISTAR_PACIENTES_COMBO_DINAMICO";
         
         public const string sp_listar_productos_combo = "SP_LISTAR_PRODUCTOS_COMBO";
+        public const string sp_admin_productos_listar = "SP_ADMIN_PRODUCTOS_LISTAR";
+        public const string sp_admin_producto_guardar = "SP_ADMIN_PRODUCTO_GUARDAR";
+        public const string sp_admin_producto_eliminar = "SP_ADMIN_PRODUCTO_ELIMINAR";
 
 
 
@@ -72,7 +75,12 @@ namespace PsycoApp.utilities
         public const string buscar_psicologo = "dbo.sp_buscar_psicologo";
         public const string listar_psicologos = "dbo.sp_listar_psicologos";                         //posiblemente deprecado
         public const string listar_psicologos_paginado = "dbo.sp_listar_psicologos_paginado";
+        public const string listar_psicologos_empresa = "dbo.SP_LISTAR_PSICOLOGOS_POR_EMPRESA";
+        public const string buscar_psicologos_empresa = "dbo.SP_BUSCAR_PSICOLOGOS_POR_EMPRESA";
+        public const string listar_psicologos_empresa_sede = "dbo.SP_LISTAR_PSICOLOGOS_POR_EMPRESA_SEDE";
+        public const string buscar_psicologos_empresa_sede = "dbo.SP_BUSCAR_PSICOLOGOS_POR_EMPRESA_SEDE";
         public const string agregar_psicologo = "dbo.sp_agregar_psicologo";
+        public const string guardar_credenciales_psicologo = "dbo.SP_GUARDAR_CREDENCIALES_PSICOLOGO";
         public const string actualizar_psicologo = "dbo.sp_actualizar_psicologo";
         public const string eliminar_psicologo = "dbo.sp_eliminar_psicologo";
 

@@ -32,10 +32,38 @@ namespace PsycoApp.BL
             return list;
         }
 
+        public List<Psicologo> ListarPsicologos(int pagina, int tamanoPagina, int idEmpresa)
+        {
+            if (idEmpresa <= 0)
+                throw new ArgumentException("La empresa es obligatoria.", nameof(idEmpresa));
+
+            return _psicologoDA.ListarPsicologosPorEmpresa(pagina, tamanoPagina, idEmpresa);
+        }
+
+        public List<Psicologo> ListarPsicologos(int pagina, int tamanoPagina, int idEmpresa, int idSede)
+        {
+            if (idEmpresa <= 0 || idSede <= 0)
+                throw new ArgumentException("La empresa y la sede son obligatorias.");
+
+            return _psicologoDA.ListarPsicologosPorEmpresa(pagina, tamanoPagina, idEmpresa, idSede);
+        }
+
         public void AgregarPsicologo(Psicologo psicologo)
         {
             _psicologoDA.AgregarPsicologo(psicologo);
         }
+
+        public void GuardarCredencialesPsicologo(int idPsicologo, int idSede, string email, string password)
+        {
+            if (idPsicologo <= 0 || idSede <= 0 || string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(password))
+                throw new ArgumentException("Ingrese un usuario y contraseña válidos.");
+
+            if (!System.Text.RegularExpressions.Regex.IsMatch(email.Trim(), @"^[A-Za-zÁÉÍÓÚÜÑáéíóúüñ]+$"))
+                throw new ArgumentException("El usuario debe contener solo letras, sin @ ni espacios.");
+
+            _psicologoDA.GuardarCredencialesPsicologo(idPsicologo, idSede, email.Trim(), password);
+        }
+
         public List<Psicologo> BuscarPsicologo(string nombre)
         {
             var list = _psicologoDA.BuscarPsicologo(nombre);
@@ -49,6 +77,22 @@ namespace PsycoApp.BL
             //    }
             //});
             return list;
+        }
+
+        public List<Psicologo> BuscarPsicologo(string nombre, int idEmpresa)
+        {
+            if (idEmpresa <= 0)
+                throw new ArgumentException("La empresa es obligatoria.", nameof(idEmpresa));
+
+            return _psicologoDA.BuscarPsicologoPorEmpresa(nombre, idEmpresa);
+        }
+
+        public List<Psicologo> BuscarPsicologo(string nombre, int idEmpresa, int idSede)
+        {
+            if (idEmpresa <= 0 || idSede <= 0)
+                throw new ArgumentException("La empresa y la sede son obligatorias.");
+
+            return _psicologoDA.BuscarPsicologoPorEmpresa(nombre, idEmpresa, idSede);
         }
         
         public Psicologo BuscarPsicologoId(int id)

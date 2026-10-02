@@ -22,6 +22,58 @@ $(document).ready(function () {
 
     $('#txtEmail').focus();
     //$('#btn_ing').attr('disabled', true);
+
+    cargarEmpresas();
+});
+
+function cargarEmpresas() {
+    var $empresa = $('#cboEmpresa');
+    $empresa.empty().append($('<option>', { value: '', text: 'Cargando empresas...' }));
+
+    $.getJSON(path + '/Login/empresas')
+        .done(function (empresas) {
+            $empresa.empty().append($('<option>', { value: '', text: 'Seleccionar empresa' }));
+            (empresas || []).filter(function (empresa) {
+                return empresa.estado === true || empresa.Estado === true;
+            }).forEach(function (empresa) {
+                $empresa.append($('<option>', {
+                    value: empresa.id || empresa.Id,
+                    text: empresa.nombre || empresa.Nombre
+                }));
+            });
+        })
+        .fail(function () {
+            $empresa.empty().append($('<option>', { value: '', text: 'No se pudieron cargar empresas' }));
+        });
+}
+
+$('#cboEmpresa').on('change', function () {
+    var idEmpresa = $(this).val();
+    var $sede = $('#cboCentro');
+    $sede.empty();
+
+    if (!idEmpresa) {
+        $sede.append($('<option>', { value: '', text: 'Selecciona primero una empresa' })).prop('disabled', true);
+        return;
+    }
+
+    $sede.append($('<option>', { value: '', text: 'Cargando sedes...' })).prop('disabled', true);
+    $.getJSON(path + '/Login/sedes', { idEmpresa: idEmpresa })
+        .done(function (sedes) {
+            $sede.empty().append($('<option>', { value: '', text: 'Seleccionar sede' }));
+            (sedes || []).filter(function (sede) {
+                return sede.estado === true || sede.Estado === true;
+            }).forEach(function (sede) {
+                $sede.append($('<option>', {
+                    value: sede.id || sede.Id,
+                    text: sede.nombre || sede.Nombre
+                }));
+            });
+            $sede.prop('disabled', false);
+        })
+        .fail(function () {
+            $sede.empty().append($('<option>', { value: '', text: 'No se pudieron cargar sedes' })).prop('disabled', true);
+        });
 });
 
 var input = $('.validate-input .input100');
@@ -29,7 +81,8 @@ var input = $('.validate-input .input100');
 $('#btn_ing').on('click', function () {
     var email = $('#txtEmail').val().trim();
     var pass = $('#txtPassword').val().trim();
-    var centro = $('#cboCentro').val().trim();
+    var centro = $('#cboCentro').val();
+    var empresa = $('#cboEmpresa').val();
     var check = true;
 
     if (email == '') {
@@ -48,22 +101,13 @@ $('#btn_ing').on('click', function () {
         });
         check = false;
     }
-    if (centro == '-1') {
-        Swal.fire({
-            icon: "Error",
-            title: "Oops...",
-            text: "Seleccione su centro"
-        });
-        check = false;
-    }
-
     if (check) {
 
         setTimeout(function () {
             $.ajax({
                 type: "POST",
                 url: path + "/Login/validar_usuario",
-                data: { "email": email, "password": pass, "id_sede": parseInt(centro) },
+                data: { "email": email, "password": pass, "id_empresa": parseInt(empresa) || 0, "id_sede": parseInt(centro) || 0 },
                 accept: 'application/json',
                 beforeSend: function () {
                     $('.preloader').removeClass('hide-element');

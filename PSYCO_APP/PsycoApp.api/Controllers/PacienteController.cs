@@ -45,6 +45,9 @@ namespace PsycoApp.api.Controllers
         [HttpPost("agregar")]
         public ActionResult Agregar([FromBody] Paciente paciente)
         {
+            if (paciente == null || paciente.id_sede <= 0)
+                return BadRequest("No se recibió una sede válida para el paciente.");
+
             try
             {
                 _pacienteBL.AgregarPaciente(paciente);

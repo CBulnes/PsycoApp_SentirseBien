@@ -15,9 +15,15 @@ namespace PsycoApp.BL
             _productoDA = new ProductoDA();
         }
 
-        public List<entities.Producto> listar_productos_combo()
+        public List<entities.Producto> listar_productos_combo(int idEmpresa)
         {
-            return _productoDA.listar_productos_combo();
+            return _productoDA.listar_productos_combo(idEmpresa);
         }
+
+        public List<entities.Producto> listar_mantenimiento(int idEmpresa) => _productoDA.listar_mantenimiento(idEmpresa);
+
+        public int guardar(entities.Producto producto, int idEmpresa) => _productoDA.guardar(producto, idEmpresa);
+
+        public bool eliminar(int id, int idEmpresa) => _productoDA.eliminar(id, idEmpresa);
     }
 }

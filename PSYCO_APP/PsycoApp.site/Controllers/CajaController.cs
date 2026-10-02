@@ -47,6 +47,24 @@ namespace PsycoApp.site.Controllers
 
             if (!string.IsNullOrEmpty(HttpContext.Session.GetString("nombres") as string))
             {
+                var idEmpresa = HttpContext.Session.GetInt32("id_empresa");
+                var idSedeSesion = HttpContext.Session.GetInt32("id_sede");
+                if (!idEmpresa.HasValue || idEmpresa.Value <= 0)
+                    return Forbid();
+
+                var sedesEmpresa = await GetFromApiAsync<List<PsycoApp.entities.Sede>>(
+                    Helper.GetUrlApi() + "/api/EmpresaSede/empresas/" + idEmpresa.Value + "/sedes");
+                sedesEmpresa = sedesEmpresa?.Where(s => s.Estado && s.IdEmpresa == idEmpresa.Value).ToList()
+                    ?? new List<PsycoApp.entities.Sede>();
+
+                if (sede == -1 && idSedeSesion.HasValue)
+                    sede = idSedeSesion.Value;
+
+                if (sede != -1 && !sedesEmpresa.Any(s => s.Id == sede))
+                    sede = idSedeSesion.HasValue && sedesEmpresa.Any(s => s.Id == idSedeSesion.Value)
+                        ? idSedeSesion.Value
+                        : -1;
+
                 var usuario = Convert.ToString(HttpContext.Session.GetString("login"));
                 usuario = string.IsNullOrEmpty(usuario) ? "-" : usuario;
                 var tipousuario = Convert.ToInt32(HttpContext.Session.GetInt32("id_tipousuario"));
@@ -88,6 +106,7 @@ namespace PsycoApp.site.Controllers
                 obj.tipo_documento = HttpContext.Session.GetString("tipo_documento");
                 obj.num_documento = HttpContext.Session.GetString("num_documento");
                 obj.id_sede = HttpContext.Session.GetInt32("id_sede");
+                obj.id_empresa = idEmpresa.Value;
                 obj.vista = "CAJA";
 
                 var viewModelContainer = new ViewModelContainer<IEnumerable<PsycoApp.site.Models.CuadreCaja>>
@@ -99,6 +118,8 @@ namespace PsycoApp.site.Controllers
                 // Devolver la vista con los datos del paginado y la lista de pacientes
                 ViewBag.PageNumber = pageNumber;
                 ViewBag.PageSize = pageSize;
+                ViewBag.Sedes = sedesEmpresa;
+                ViewBag.SedeSeleccionada = sede;
 
                 return View("~/Views/Caja/Index.cshtml", viewModelContainer);
             }

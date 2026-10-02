@@ -39,7 +39,7 @@ namespace PsycoApp.site.Controllers
         private string url_historial = Helper.GetUrlApi() + "/api/cita/historial";
         private string url_productos_combo = Helper.GetUrlApi() + "/api/producto/listar_productos_combo";
         private string url_combo_sedes_x_usuario = Helper.GetUrlApi() + "/api/psicologo/listar_sedes_x_usuario_combo";
-        private string url_combo_sedes = Helper.GetUrlApi() + "/api/psicologo/listar_sedes";
+        private string url_empresa_sedes = Helper.GetUrlApi() + "/api/EmpresaSede/empresas";
         private string url_fechas_semana = Helper.GetUrlApi() + "/api/cita/dias_x_semana_mes";
 
         private string url = "";
@@ -59,6 +59,15 @@ namespace PsycoApp.site.Controllers
                 // $"{apiUrl}/buscar?nombre={""}&pageNumber={1}&pageSize={10}";
 
                 var id_sedes = HttpContext.Session.GetInt32("id_sede");
+                var id_empresa = HttpContext.Session.GetInt32("id_empresa");
+                if (!id_sedes.HasValue || id_sedes.Value <= 0 || !id_empresa.HasValue || id_empresa.Value <= 0)
+                    return Forbid();
+
+                var sedes = await GetFromApiAsync<List<entities.Sede>>(url_empresa_sedes + "/" + id_empresa.Value + "/sedes");
+                var sedeActual = sedes?.FirstOrDefault(s => s.Id == id_sedes.Value && s.IdEmpresa == id_empresa.Value && s.Estado);
+                if (sedeActual == null)
+                    return Forbid();
+
                 // Construir la URL para la API dependiendo de si hay un término de búsqueda
                 string urlPaciente = string.IsNullOrEmpty("") ?
                    //$"{apiUrl}/listar/{pageNumber}/{pageSize}" :
@@ -74,23 +83,27 @@ namespace PsycoApp.site.Controllers
                 obj.apellidos = HttpContext.Session.GetString("apellidos");
                 obj.id_usuario = HttpContext.Session.GetInt32("id_usuario");
                 obj.id_tipousuario = HttpContext.Session.GetInt32("id_tipousuario");
-                obj.id_sede = HttpContext.Session.GetInt32("id_sede");
+                obj.id_sede = id_sedes.Value;
+                obj.sede_nombre = string.IsNullOrWhiteSpace(sedeActual.Centro) ? sedeActual.Nombre : sedeActual.Centro;
                 obj.id_psicologo = HttpContext.Session.GetInt32("id_psicologo");
                 obj.tipo_documento = HttpContext.Session.GetString("tipo_documento");
                 obj.num_documento = HttpContext.Session.GetString("num_documento");
-                obj.id_sede = HttpContext.Session.GetInt32("id_sede"); 
                 obj.vista = "ATENCION";
                 obj.call_center_invitado = Helper.GetCallCenterInvitado();
 
-                var productos = await GetFromApiAsync<List<PsycoApp.entities.Producto>>(url_productos_combo);
+                var productos = await GetFromApiAsync<List<PsycoApp.entities.Producto>>(url_productos_combo + "?id_empresa=" + id_empresa.Value);
                 var productosViewModel = productos.Select(p => new PsycoApp.site.Models.Producto
                 {
                     Id = p.Id,
+                    Id_empresa = p.Id_empresa,
                     Nombre = p.Nombre,
                     Alias = p.Alias,
                     Precio = p.Precio,
                     Color = p.Color,
-                    NumSesiones = p.NumSesiones
+                    NumSesiones = p.NumSesiones,
+                    EsEvaluacion = p.EsEvaluacion,
+                    Siglas = p.Siglas,
+                    Mostrar = p.Mostrar
                 }).ToList();
 
                 var pacientes = await GetFromApiAsync<List<PsycoApp.entities.Paciente>>(urlPaciente);
@@ -299,8 +312,17 @@ namespace PsycoApp.site.Controllers
         public async Task<RespuestaUsuario> RegistrarCita(Cita model)
         {
             string res = "";
+            var idTipoUsuario = HttpContext.Session.GetInt32("id_tipousuario");
+            var idEmpresa = HttpContext.Session.GetInt32("id_empresa");
+            var idSede = HttpContext.Session.GetInt32("id_sede");
+            if (model == null || (idTipoUsuario != 1 && idTipoUsuario != 3) ||
+                !idEmpresa.HasValue || idEmpresa.Value <= 0 || !idSede.HasValue || idSede.Value <= 0)
+            {
+                return new RespuestaUsuario { estado = false, descripcion = "No se encontró una sede válida para registrar la cita." };
+            }
+
             model.usuario = Convert.ToString(HttpContext.Session.GetString("login"));
-            //model.id_sede = Convert.ToInt32(HttpContext.Session.GetInt32("id_sede"));
+            model.id_sede = idSede.Value;
 
             RespuestaUsuario res_ = new RespuestaUsuario();
             try
@@ -560,9 +582,12 @@ namespace PsycoApp.site.Controllers
 
             var usuario = Convert.ToString(HttpContext.Session.GetString("login"));
             usuario = string.IsNullOrEmpty(usuario) ? "-" : usuario;
+            var idSede = HttpContext.Session.GetInt32("id_sede");
+            if (!idSede.HasValue || idSede.Value <= 0)
+                return historial;
             
             string apiUrl = Helper.GetUrlApi() + "/api/caja"; // URL base de la API
-            string url = $"{apiUrl}/listar_cuadre_caja/{usuario}/{1}/{100}/{fecha}/{1}/{-1}/{-1}/{id_cita}";
+            string url = $"{apiUrl}/listar_cuadre_caja/{usuario}/{1}/{100}/{fecha}/{1}/{idSede.Value}/{-1}/{id_cita}";
             
             var registros = await GetFromApiAsync<List<PsycoApp.entities.CuadreCaja>>(url);
             historial = registros.Select(p => new PsycoApp.site.Models.CuadreCaja
@@ -630,7 +655,7 @@ namespace PsycoApp.site.Controllers
             string res = "";
             try
             {
-                url = url_combo_sedes;
+                url = Helper.GetUrlApi() + "/api/psicologo/listar_sedes";
                 res = ApiCaller.consume_endpoint_method(url, null, "GET");
                 lista = JsonConvert.DeserializeObject<List<entities.Sede>>(res);
             }

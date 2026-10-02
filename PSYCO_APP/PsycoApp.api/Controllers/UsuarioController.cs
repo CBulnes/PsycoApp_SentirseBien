@@ -27,6 +27,10 @@ namespace PsycoApp.api.Controllers
                 usuario = usuarioBL.validar_usuario(usuario);
 
                 respuesta.estado = usuario.validacion == "OK" ? true : false;
+                if (respuesta.estado && usuario.id_tipousuario == 20)
+                {
+                    usuario.id_sede = 0;
+                }
                 respuesta.descripcion = usuario.validacion;
                 respuesta.data = usuario;
             }

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Data;
-using System.Text;
 using PsycoApp.entities;
 using PsycoApp.DA.SQLConnector;
 using PsycoApp.utilities;
@@ -188,8 +187,18 @@ namespace PsycoApp.DA
                 command.Parameters.AddWithValue("@IdSede", paciente.id_sede);
 
                 _connection.Open();
-                command.ExecuteNonQuery();
-                _connection.Close();
+                try
+                {
+                    using (var reader = command.ExecuteReader())
+                    {
+                        if (reader.Read() && reader["CodigoResultado"] != DBNull.Value && Convert.ToInt32(reader["CodigoResultado"]) != 1)
+                            throw new InvalidOperationException(Convert.ToString(reader["Mensaje"]));
+                    }
+                }
+                finally
+                {
+                    _connection.Close();
+                }
             }
         }
 

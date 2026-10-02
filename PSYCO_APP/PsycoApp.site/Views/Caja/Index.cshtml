@@ -68,10 +68,25 @@
             <div class="col-2">
                 <label class="active-titular-modulo">Centro:</label>
                 <select class="input100 custom-select col-12 active-select-modulo" id="cboSede" style="padding: 0 25px 0 25px;">
-                    <option value="-1">Todos</option>
-                    <option value="1">Sentirse bien</option>
-                    <option value="2">Transforma</option>
-                    <option value="3">Miraflores</option>
+                    @if ((int)ViewBag.SedeSeleccionada == -1)
+                    {
+                        <option value="-1" selected>Todos</option>
+                    }
+                    else
+                    {
+                        <option value="-1">Todos</option>
+                    }
+                    @foreach (var sede in (IEnumerable<PsycoApp.entities.Sede>)ViewBag.Sedes)
+                    {
+                        if (sede.Id == (int)ViewBag.SedeSeleccionada)
+                        {
+                            <option value="@sede.Id" selected>@sede.Nombre</option>
+                        }
+                        else
+                        {
+                            <option value="@sede.Id">@sede.Nombre</option>
+                        }
+                    }
                 </select>
             </div>
             <div class="col-2">

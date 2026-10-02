@@ -62,10 +62,13 @@ namespace PsycoApp.site.Controllers
         [HttpGet]
         public async Task<List<Cita>> CitasDoctor(string inicio, string fin, int id_doctor, int id_estado, int ver_sin_reserva, int? idPaciente = null)
         {
-            string usuario = HttpContext.Session.GetString("login").ToString();
-            int? sede = HttpContext.Session.GetInt32("id_sede");
             List<Cita> lista = new List<Cita>();
             string res = "";
+            string usuario = HttpContext.Session.GetString("login");
+            int? sede = HttpContext.Session.GetInt32("id_sede");
+            if (string.IsNullOrWhiteSpace(usuario) || !sede.HasValue || sede.Value <= 0)
+                return lista;
+
             try
             {
                 url = url_citas_doctor + "/" + usuario + "/" + inicio + "/" + fin + "/" + id_estado + "/" + id_doctor +  "/" + ver_sin_reserva + "/" + sede + "/" + idPaciente;
@@ -109,6 +112,9 @@ namespace PsycoApp.site.Controllers
             List<entities.CuadreCaja> lista = new List<entities.CuadreCaja>();
             int? id_sede = HttpContext.Session.GetInt32("id_sede");
             string res = "";
+            if (!id_sede.HasValue || id_sede.Value <= 0)
+                return lista;
+
             try
             {
                 url = url_historial_pago_cita + "/" + id_cita + "/" + id_sede;

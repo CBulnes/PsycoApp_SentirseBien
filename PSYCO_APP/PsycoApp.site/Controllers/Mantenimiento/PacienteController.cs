@@ -183,18 +183,24 @@ namespace PsycoApp.site.Controllers.Mantenimiento
         [HttpPost]
         public async Task<IActionResult> Agregar([FromBody] Models.Paciente paciente)
         {
-            if (ModelState.IsValid)
+            var idTipoUsuario = HttpContext.Session.GetInt32("id_tipousuario");
+            var idEmpresa = HttpContext.Session.GetInt32("id_empresa");
+            var idSede = HttpContext.Session.GetInt32("id_sede");
+            if ((idTipoUsuario != 1 && idTipoUsuario != 3) || !idEmpresa.HasValue || idEmpresa.Value <= 0 || !idSede.HasValue || idSede.Value <= 0)
+                return Forbid();
+
+            if (!ModelState.IsValid || paciente == null)
+                return BadRequest("Modelo no válido.");
+
+            paciente.id_sede = idSede.Value;
+            string url = $"{apiUrl}/agregar";
+            var response = await PostToApiAsync(url, paciente);
+            var body = await response.Content.ReadAsStringAsync();
+            if (response.IsSuccessStatusCode)
             {
-                paciente.id_sede = HttpContext.Session.GetInt32("id_sede");
-                string url = $"{apiUrl}/agregar";
-                var response = await PostToApiAsync(url, paciente);
-                if (response.IsSuccessStatusCode)
-                {
-                    return Ok(new { message = "Paciente guardado correctamente" });
-                }
-                return StatusCode((int)response.StatusCode, "Error al agregar paciente.");
+                return Ok(new { message = "Paciente guardado correctamente" });
             }
-            return BadRequest("Modelo no válido.");
+            return StatusCode((int)response.StatusCode, body);
         }
 
         //[HttpPost]

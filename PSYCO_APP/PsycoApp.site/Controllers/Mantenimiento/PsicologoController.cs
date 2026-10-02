@@ -27,7 +27,16 @@ namespace PsycoApp.site.Controllers.Mantenimiento
         {
             if (!string.IsNullOrEmpty(HttpContext.Session.GetString("nombres") as string))
             {
-                string url = $"{apiUrl}/listar/{pageNumber}/{pageSize}";
+                var idTipoUsuario = HttpContext.Session.GetInt32("id_tipousuario");
+                if (idTipoUsuario != 1 && idTipoUsuario != 3)
+                    return RedirectToAction("Index", "Home");
+
+                var idEmpresa = HttpContext.Session.GetInt32("id_empresa");
+                var idSede = HttpContext.Session.GetInt32("id_sede");
+                if (!idEmpresa.HasValue || idEmpresa.Value <= 0 || !idSede.HasValue || idSede.Value <= 0)
+                    return Forbid();
+
+                string url = $"{apiUrl}/empresa/{idEmpresa.Value}/sede/{idSede.Value}/listar/{pageNumber}/{pageSize}";
                 var psicologos = await GetFromApiAsync<List<PsycoApp.entities.Psicologo>>(url);
                 var psicologosViewModel = psicologos.Select(p => new PsycoApp.site.Models.Psicologo
                 {
@@ -82,18 +91,6 @@ namespace PsycoApp.site.Controllers.Mantenimiento
                 obj.vista = "PSICOLOGO";
 
                 obj.ubigeos = ubigeosViewModel;
-                if (obj.id_sede == 1) //La molina
-                {
-                    psicologos = psicologos.Where(x => x.IdSedePrincipal == 1 || x.IdSedeSecundaria == 1 || x.IdSedeSecundaria2 == 1).ToList();
-                }
-                else if (obj.id_sede == 2) //Surco
-                {
-                    psicologos = psicologos.Where(x => x.IdSedePrincipal == 2 || x.IdSedeSecundaria == 2 || x.IdSedeSecundaria2 == 2).ToList();
-                }
-                else if (obj.id_sede == 3) //Miraflores
-                {
-                    psicologos = psicologos.Where(x => x.IdSedePrincipal == 3 || x.IdSedeSecundaria == 3 || x.IdSedeSecundaria2 == 3).ToList();
-                }
                 psicologosViewModel = psicologos.Select(p => new PsycoApp.site.Models.Psicologo
                 {
                     Id = p.Id,
@@ -145,22 +142,16 @@ namespace PsycoApp.site.Controllers.Mantenimiento
 
         [Route("/Mantenimiento/Psicologo/Buscar")]
         [HttpPost]
-        public async Task<IActionResult> Buscar(string nombre, int sede = -1)
+        public async Task<IActionResult> Buscar(string nombre)
         {
-            string url = $"{apiUrl}/buscar?nombre={nombre}";
+            var idTipoUsuario = HttpContext.Session.GetInt32("id_tipousuario");
+            var idEmpresa = HttpContext.Session.GetInt32("id_empresa");
+            var idSede = HttpContext.Session.GetInt32("id_sede");
+            if ((idTipoUsuario != 1 && idTipoUsuario != 3) || !idEmpresa.HasValue || idEmpresa.Value <= 0 || !idSede.HasValue || idSede.Value <= 0)
+                return Forbid();
+
+            string url = $"{apiUrl}/empresa/{idEmpresa.Value}/sede/{idSede.Value}/buscar?nombre={Uri.EscapeDataString(nombre ?? string.Empty)}";
             var psicologos = await GetFromApiAsync<List<entities.Psicologo>>(url);
-            if (sede == 1) //La molina
-            {
-                psicologos = psicologos.Where(x => x.IdSedePrincipal == 1 || x.IdSedeSecundaria == 1 || x.IdSedeSecundaria2 == 1).ToList();
-            } else if (sede == 2) //Surco
-            {
-                psicologos = psicologos.Where(x => x.IdSedePrincipal == 2 || x.IdSedeSecundaria == 2 || x.IdSedeSecundaria2 == 2).ToList();
-            }
-            else if (sede == 3) //Miraflores
-            {
-                psicologos = psicologos.Where(x => x.IdSedePrincipal == 3 || x.IdSedeSecundaria == 3 || x.IdSedeSecundaria2 == 3).ToList();
-            }
-            
             return Json(psicologos);
         }
 
@@ -179,6 +170,38 @@ namespace PsycoApp.site.Controllers.Mantenimiento
                 return StatusCode((int)response.StatusCode, "Error al agregar psicólogo.");
             }
             return BadRequest("Modelo no válido.");
+        }
+
+        [Route("Mantenimiento/Psicologo/GuardarCredenciales")]
+        [HttpPost]
+        public async Task<IActionResult> GuardarCredenciales([FromBody] PsycoApp.entities.Usuario usuario)
+        {
+            if (HttpContext.Session.GetInt32("id_tipousuario") != 1 && HttpContext.Session.GetInt32("id_tipousuario") != 3)
+            {
+                return Forbid();
+            }
+
+            if (usuario == null || usuario.id_psicologo <= 0 || string.IsNullOrWhiteSpace(usuario.email) || string.IsNullOrWhiteSpace(usuario.password))
+            {
+                return BadRequest("Ingrese un email y contraseña válidos.");
+            }
+
+            var idSedeSesion = HttpContext.Session.GetInt32("id_sede");
+            if (!idSedeSesion.HasValue || idSedeSesion.Value <= 0)
+            {
+                return BadRequest("No se encontró una sede válida en la sesión del usuario.");
+            }
+
+            usuario.id_sede = idSedeSesion.Value;
+
+            var response = await PostToApiAsync($"{apiUrl}/guardar_credenciales", usuario);
+            var responseContent = await response.Content.ReadAsStringAsync();
+            if (response.IsSuccessStatusCode)
+            {
+                return Ok(new { message = "Usuario del especialista guardado correctamente." });
+            }
+
+            return StatusCode((int)response.StatusCode, responseContent.Trim('"'));
         }
 
         [Route("/Mantenimiento/Psicologo/Editar")]
