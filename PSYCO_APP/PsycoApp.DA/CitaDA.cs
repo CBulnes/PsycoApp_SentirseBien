@@ -1,12 +1,10 @@
-﻿using Microsoft.VisualBasic;
-using PsycoApp.DA.SQLConnector;
+﻿using PsycoApp.DA.SQLConnector;
 using PsycoApp.entities;
 using PsycoApp.utilities;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace PsycoApp.DA

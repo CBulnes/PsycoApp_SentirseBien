@@ -36,9 +36,9 @@ namespace PsycoApp.site.Controllers
         Menu oMenu = new Menu();
         dynamic obj = new System.Dynamic.ExpandoObject();
 
-        private IHostingEnvironment Environment;
+        private readonly IWebHostEnvironment Environment;
 
-        public HomeController(IHostingEnvironment _environment)
+        public HomeController(IWebHostEnvironment _environment)
         {
             Environment = _environment;
         }
