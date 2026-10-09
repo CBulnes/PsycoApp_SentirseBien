@@ -44,6 +44,9 @@ namespace PsycoApp.DA
                     usuario.test_actual = Convert.ToInt32(row["test_actual"]);
                     usuario.login = Convert.ToString(row["login"]);
                     usuario.id_sede = Convert.ToInt32(row["id_sede"]);
+                    usuario.id_empresa = row.Table.Columns.Contains("id_empresa") && row["id_empresa"] != DBNull.Value
+                        ? Convert.ToInt32(row["id_empresa"])
+                        : 0;
                 }
             }
             catch (Exception e)

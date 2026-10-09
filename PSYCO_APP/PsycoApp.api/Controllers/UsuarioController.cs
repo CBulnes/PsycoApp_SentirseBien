@@ -5,10 +5,16 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using PsycoApp.BL;
 using PsycoApp.utilities;
 using PsycoApp.entities;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 
 namespace PsycoApp.api.Controllers
 {
@@ -17,8 +23,15 @@ namespace PsycoApp.api.Controllers
     public class UsuarioController : ControllerBase
     {
         UsuarioBL usuarioBL = new UsuarioBL();
+        private readonly IConfiguration configuration;
+
+        public UsuarioController(IConfiguration configuration)
+        {
+            this.configuration = configuration;
+        }
 
         [HttpPost("validar_usuario")]
+        [AllowAnonymous]
         public ActionResult<RespuestaUsuario> validar_usuario([FromBody] Usuario usuario)
         {
             RespuestaUsuario respuesta = new RespuestaUsuario();
@@ -27,12 +40,22 @@ namespace PsycoApp.api.Controllers
                 usuario = usuarioBL.validar_usuario(usuario);
 
                 respuesta.estado = usuario.validacion == "OK" ? true : false;
+                if (respuesta.estado && usuario.id_tipousuario != 20 && (usuario.id_sede <= 0 || usuario.id_empresa <= 0))
+                {
+                    respuesta.estado = false;
+                    respuesta.descripcion = "No se pudo validar la empresa y sede activa del usuario.";
+                }
                 if (respuesta.estado && usuario.id_tipousuario == 20)
                 {
                     usuario.id_sede = 0;
                 }
                 respuesta.descripcion = usuario.validacion;
+                usuario.password = string.Empty;
                 respuesta.data = usuario;
+                if (respuesta.estado)
+                {
+                    respuesta.token = GenerarToken(usuario);
+                }
             }
             catch (Exception e)
             {
@@ -43,6 +66,7 @@ namespace PsycoApp.api.Controllers
         }
 
         [HttpPost("actualizar_contraseña")]
+        [AllowAnonymous]
         public ActionResult<RespuestaUsuario> actualizar_contraseña([FromBody] Usuario usuario)
         {
             RespuestaUsuario respuesta = new RespuestaUsuario();
@@ -60,6 +84,31 @@ namespace PsycoApp.api.Controllers
                 respuesta.descripcion = "Ocurrió un error al actualizar la contraseña";
             }
             return respuesta;
+        }
+
+        private string GenerarToken(Usuario usuario)
+        {
+            var claims = new[]
+            {
+                new Claim(ClaimTypes.NameIdentifier, usuario.id_usuario.ToString()),
+                new Claim(ClaimTypes.Name, usuario.email ?? string.Empty),
+                new Claim("login", usuario.login ?? string.Empty),
+                new Claim(ClaimTypes.Role, usuario.id_tipousuario.ToString()),
+                new Claim("id_tipousuario", usuario.id_tipousuario.ToString()),
+                new Claim("id_sede", usuario.id_sede.ToString()),
+                new Claim("id_empresa", usuario.id_empresa.ToString())
+            };
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:Key"]));
+            var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+            var expirationMinutes = int.TryParse(configuration["Jwt:ExpirationMinutes"], out var minutes) ? minutes : 120;
+            var token = new JwtSecurityToken(
+                issuer: configuration["Jwt:Issuer"],
+                audience: configuration["Jwt:Audience"],
+                claims: claims,
+                expires: DateTime.UtcNow.AddMinutes(expirationMinutes),
+                signingCredentials: credentials);
+
+            return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
     }

@@ -4,22 +4,25 @@
 @{
     var dHoy = DateTime.Now;
     int? idSede = Context.Session.GetInt32("id_sede");
-    string centro_nombre = "";
+    string centro_nombre = Context.Session.GetString("nombre_sede");
 
-    switch (idSede)
+    if (string.IsNullOrWhiteSpace(centro_nombre))
     {
-        case 1:
-            centro_nombre = "Sentirse bien";
-            break;
-        case 2:
-            centro_nombre = "Transforma";
-            break;
-        case 3:
-            centro_nombre = "Miraflores";
-            break;
-        default:
-            centro_nombre = "Desconocido";
-            break;
+        switch (idSede)
+        {
+            case 1:
+                centro_nombre = "Sentirse bien";
+                break;
+            case 2:
+                centro_nombre = "Transforma";
+                break;
+            case 3:
+                centro_nombre = "Miraflores";
+                break;
+            default:
+                centro_nombre = "Sede";
+                break;
+        }
     }
 
     var logo = (Context.Session.GetInt32("id_sede") == 1 ? "sentirse_bien" : "transforma") + ".jpg";
@@ -51,6 +54,13 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - @Helper.GetNombreSite()</title>
+    <script>
+        try {
+            if (localStorage.getItem('psycoapp-theme') === 'dark') {
+                document.documentElement.classList.add('psycoapp-dark-theme');
+            }
+        } catch (e) { }
+    </script>
 
     @*
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -140,8 +150,8 @@
     @* SB-Administador *@
 
     <div class="sb-main-hm">
-        <div class="sb-aside active-modular-oscuro">
-            <div class="sb-aside-container active-modular2-oscuro">
+        <div class="sb-aside">
+            <div class="sb-aside-container">
                 <div class="sb-aside-user">
                     <div class="sb-aside-user-photo">
                         <img src="../images/@logo" alt="">
@@ -156,6 +166,13 @@
                 </div>
                 <div class="sb-aside-list">
                     <div class="sb-aside-admin">
+                        <div class="theme-switch-item">
+                            <span>Modo nocturno</span>
+                            <label class="theme-switch" for="themeToggle">
+                                <input type="checkbox" id="themeToggle" aria-label="Activar modo nocturno" />
+                                <span class="theme-switch-slider"></span>
+                            </label>
+                        </div>
                         @if ((int)@Model.DynamicData.id_tipousuario == 1 || (int)@Model.DynamicData.id_tipousuario == 2 || (int)@Model.DynamicData.id_tipousuario == 3)
                         {
                             <a href="/Home" class="sb-aside-item">
@@ -333,6 +350,13 @@
             <div class="sb-aside-reponsive-menu">
                 <div class="sb-aside-list">
                     <div class="sb-aside-admin">
+                        <div class="theme-switch-item theme-switch-responsive">
+                            <span>Modo nocturno</span>
+                            <label class="theme-switch" for="themeToggleResponsive">
+                                <input type="checkbox" id="themeToggleResponsive" aria-label="Activar modo nocturno" />
+                                <span class="theme-switch-slider"></span>
+                            </label>
+                        </div>
                         @if ((int)@Model.DynamicData.id_tipousuario == 1 || (int)@Model.DynamicData.id_tipousuario == 2 || (int)@Model.DynamicData.id_tipousuario == 3)
                         {
                             <a href="/Home" class="sb-aside-item">
@@ -457,7 +481,7 @@
             </div>
         </div>
 
-        <div class="sb-admninistrator active-fondo-oscuro">
+        <div class="sb-admninistrator">
 
             @RenderBody()
 
@@ -1144,6 +1168,26 @@
     <script type="text/javascript" src="~/basic/general.js?f=@dHoy.ToString("yyyyMMddhhmmss")"></script>
     <script type="text/javascript" src="~/basic/check_timeout_session.js?f=@dHoy.ToString("yyyyMMddhhmmss")"></script>
     <script type="text/javascript" src="~/basic/layout.js?f=@dHoy.ToString("yyyyMMddhhmmss")"></script>
+    <script>
+        (function () {
+            var toggles = document.querySelectorAll('#themeToggle, #themeToggleResponsive');
+            var isDark = document.documentElement.classList.contains('psycoapp-dark-theme');
+
+            toggles.forEach(function (toggle) {
+                toggle.checked = isDark;
+                toggle.addEventListener('change', function () {
+                    var enableDark = toggle.checked;
+                    document.documentElement.classList.toggle('psycoapp-dark-theme', enableDark);
+                    toggles.forEach(function (otherToggle) {
+                        otherToggle.checked = enableDark;
+                    });
+                    try {
+                        localStorage.setItem('psycoapp-theme', enableDark ? 'dark' : 'light');
+                    } catch (e) { }
+                });
+            });
+        })();
+    </script>
     @{
         if (Model.DynamicData.vista == "HOME")
         {

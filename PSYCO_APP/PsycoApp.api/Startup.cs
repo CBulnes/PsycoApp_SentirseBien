@@ -15,6 +15,8 @@ using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using PsycoApp.utilities;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.Authorization;
 
 namespace PsycoApp.api
 {
@@ -32,10 +34,15 @@ namespace PsycoApp.api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddApplicationInsightsTelemetry(Configuration["APPLICATIONINSIGHTS_CONNECTION_STRING"]);
-            
-            services.AddControllers();
+
+            services.AddControllers(options =>
+            {
+                options.Filters.Add(new AuthorizeFilter(new AuthorizationPolicyBuilder()
+                    .RequireAuthenticatedUser()
+                    .Build()));
+            });
             services.AddMemoryCache();
-            string semilla = "PsycoApp2024";
+            string semilla = Configuration["Jwt:Key"];
             byte[] semillarByte = Encoding.UTF8.GetBytes(semilla);
             SymmetricSecurityKey key = new SymmetricSecurityKey(semillarByte);
 
@@ -47,9 +54,12 @@ namespace PsycoApp.api
                     {
                         IssuerSigningKey = key,
                         ValidateLifetime = true,
-                        ValidIssuer = "www.sentirsebien.com",
-                        ValidAudience = "www.sentirsebien.com",
-                        ValidateIssuer = true
+                        ValidIssuer = Configuration["Jwt:Issuer"],
+                        ValidAudience = Configuration["Jwt:Audience"],
+                        ValidateIssuer = true,
+                        ValidateAudience = true,
+                        ValidateIssuerSigningKey = true,
+                        RoleClaimType = System.Security.Claims.ClaimTypes.Role
                     };
                 });
 

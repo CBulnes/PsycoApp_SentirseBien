@@ -121,7 +121,7 @@ namespace PsycoApp.site.Controllers
 
         private async Task<T> GetFromApiAsync<T>(string url)
         {
-            using var client = new HttpClient();
+            using var client = ApiCaller.CreateHttpClient();
             var response = await client.GetStringAsync(url);
             return JsonConvert.DeserializeObject<T>(response);
         }

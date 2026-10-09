@@ -144,7 +144,7 @@ namespace PsycoApp.site.Controllers
         {
             try
             {
-                using var client = new HttpClient();
+                using var client = ApiCaller.CreateHttpClient();
                 var response = await client.GetStringAsync(url);
                 return JsonConvert.DeserializeObject<T>(response);
             }
@@ -201,21 +201,29 @@ namespace PsycoApp.site.Controllers
         }
 
         [HttpGet]
-        public ActionResult<List<entities.Usuario>> listar_usuarios_caja(int filtrar_por_sede)
+        public ActionResult<List<entities.Usuario>> listar_usuarios_caja(int id_sede)
         {
             List<entities.Usuario> lista = new List<entities.Usuario>();
             string res = "";
             try
             {
-                url = url_lista_usuarios_caja;
-                res = ApiCaller.consume_endpoint_method(url, null, "GET");
-                lista = JsonConvert.DeserializeObject<List<entities.Usuario>>(res);
+                if (string.IsNullOrEmpty(HttpContext.Session.GetString("nombres")))
+                    return Unauthorized();
 
-                if (filtrar_por_sede == 1)
-                {
-                    var id_sede = HttpContext.Session.GetInt32("id_sede");
-                    lista = lista.Where(x => x.sedes.Contains(id_sede.ToString())).ToList();
-                }
+                var idEmpresa = HttpContext.Session.GetInt32("id_empresa");
+                var tipoUsuario = HttpContext.Session.GetInt32("id_tipousuario");
+                var idSedeSesion = HttpContext.Session.GetInt32("id_sede");
+                if (!idEmpresa.HasValue || idEmpresa.Value <= 0 || !idSedeSesion.HasValue || idSedeSesion.Value <= 0)
+                    return lista;
+
+                if (tipoUsuario == 3)
+                    id_sede = idSedeSesion.Value;
+                else if (id_sede == -1 && tipoUsuario != 1 && tipoUsuario != 20)
+                    return lista;
+
+                var urlUsuariosCaja = url_lista_usuarios_caja + "?idEmpresa=" + idEmpresa.Value + "&idSede=" + id_sede;
+                res = ApiCaller.consume_endpoint_method(urlUsuariosCaja, null, "GET");
+                lista = JsonConvert.DeserializeObject<List<entities.Usuario>>(res);
             }
             catch (Exception ex)
             {

@@ -7,36 +7,36 @@
     var productos = Model.Productos;
 }
 
-<link rel="stylesheet" href="~/src/css/sb-pacientes.css?ver=005" />
+<link rel="stylesheet" href="~/src/css/sb-psicologo.css?ver=004" />
 
-<div class="sb-pa-container">
-    <div class="sb-pa-container-buscar">
-        <div class="sb-pa-container-buscar-title">
-            <p class="active-titular-modulo">Búsqueda y registro de productos y terapias</p>
+<div class="sb-psi-container">
+    <div class="sb-psi-page-header">
+        <div class="sb-psi-container-buscar-title">
+            <p class="active-titular-modulo">Productos y terapias</p>
+            <span>Gestiona el catálogo de productos, precios y servicios del centro.</span>
         </div>
+        <button class="sb-psi-add-button" type="button" onclick="nuevoProducto()">
+            <i class="fa fa-plus"></i> Agregar producto
+        </button>
+    </div>
 
-        <div class="sb-pa-container-buscador">
-            <div class="sb-pa-container-buscador-block">
-                <button class="active-button-modulo" type="button" onclick="nuevoProducto()">
-                    <i class="fa fa-plus"></i>&nbsp;Agregar
-                </button>
-            </div>
-            <div class="sb-pa-container-buscador-block">
-                <div class="sb-pa-container-buscador-block-item">
-                    <span class="label-form active-texto-modulo">Nombre del producto o terapia:</span>
-                    <input id="txtBuscarProducto" class="active-input-modulo" placeholder="Ingrese nombre para buscar" type="text" />
-                    <button class="active-button-modulo" type="button" onclick="buscarProducto()">
-                        <i class="fa fa-search"></i>&nbsp;Buscar
-                    </button>
-                </div>
+    <div class="sb-psi-search-card">
+        <div class="sb-psi-search-icon"><i class="fa fa-search"></i></div>
+        <div class="sb-psi-search-content">
+            <label for="txtBuscarProducto">Buscar producto o terapia</label>
+            <div class="sb-psi-search-controls">
+                <input id="txtBuscarProducto" class="active-input-modulo" placeholder="Buscar por nombre..." type="text" />
+                <button type="button" onclick="buscarProducto()"><i class="fa fa-search"></i> Buscar</button>
             </div>
         </div>
+    </div>
 
-        <div id="containerTabla" class="sb-pa-container-table">
-            <table class="table table-striped active-table-modulo">
+    <div class="sb-psi-container-table">
+        <div class="sb-psi-table-scroll">
+            <table class="table active-table-modulo">
                 <thead>
                     <tr>
-                        <th>Nombre</th><th>Precio</th><th>Color</th><th>Evaluación</th><th>Sesiones</th><th>Siglas</th><th>Mostrar</th><th>Acciones</th>
+                        <th>Nombre</th><th>Precio</th><th>Color</th><th>Evaluación</th><th>Sesiones</th><th>Siglas</th><th>Mostrar en agenda</th><th>Acciones</th>
                     </tr>
                 </thead>
                 <tbody id="bdProductos">
@@ -45,11 +45,11 @@
                         @foreach (var p in productos)
                         {
                             <tr>
-                                <td>@p.Nombre</td><td>@p.Precio</td><td>@p.Color</td><td>@(p.EsEvaluacion ? "Sí" : "No")</td><td>@p.NumSesiones</td><td>@p.Siglas</td><td>@(p.Mostrar == 1 ? "Sí" : "No")</td>
+                                <td class="sb-psi-name-cell">@p.Nombre</td><td>S/ @p.Precio</td><td>@(string.IsNullOrWhiteSpace(p.Color) ? "Automático" : p.Color)</td><td>@(p.EsEvaluacion ? "Sí" : "No")</td><td>@p.NumSesiones</td><td>@p.Siglas</td><td>@(p.Mostrar == 1 ? "Sí" : "No")</td>
                                 <td>
-                                    <div class="sb-pa-container-tble-td">
-                                        <button type="button" class="btn btn-sm sb-pa-container-table-button-edit active-button-tabla-modulo" onclick="editarProducto(this)" data-id="@p.Id" data-nombre="@p.Nombre" data-precio="@p.Precio" data-color="@p.Color" data-evaluacion="@p.EsEvaluacion" data-sesiones="@p.NumSesiones" data-siglas="@p.Siglas" data-mostrar="@p.Mostrar">Editar</button>
-                                        <button type="button" class="btn btn-sm sb-pa-container-table-button-delet active-button-tabla-modulo" onclick="eliminarProducto(@p.Id)">Desactivar</button>
+                                    <div class="sb-psi-row-actions">
+                                        <button type="button" class="sb-psi-action-button" onclick="editarProducto(this)" data-id="@p.Id" data-nombre="@p.Nombre" data-precio="@p.Precio" data-color="@p.Color" data-evaluacion="@p.EsEvaluacion" data-sesiones="@p.NumSesiones" data-siglas="@p.Siglas" data-mostrar="@p.Mostrar"><i class="fa fa-pencil"></i> Editar</button>
+                                        <button type="button" class="sb-psi-action-button" onclick="eliminarProducto(@p.Id)"><i class="fa fa-ban"></i> Desactivar</button>
                                     </div>
                                 </td>
                             </tr>
@@ -57,41 +57,55 @@
                     }
                     else
                     {
-                        <tr><td colspan="8">No se encontraron productos o terapias.</td></tr>
+                        <tr><td colspan="8" class="text-center">No se encontraron productos o terapias.</td></tr>
                     }
                 </tbody>
             </table>
         </div>
+        <div class="sb-psi-table-footer">
+            <span>Mostrando @(productos?.Count() ?? 0) productos y terapias</span>
+        </div>
     </div>
 </div>
 
-<div id="productoModal" class="modal sb-pa-container-agregar" style="display: none;">
-    <div class="sb-pa-container-agregar-popup active-fondo-oscuro">
+<div id="productoModal" class="modal sb-psi-container-agregar" style="display: none;">
+    <div class="sb-psi-container-agregar-popup active-fondo-oscuro">
         <p id="productoModalTitulo" class="active-titular-modulo">Agregar producto o terapia</p>
-        <form id="formProducto">
-                <input type="hidden" id="productoId" value="0" />
-            <div class="sb-frm-agregar-block">
-                <div class="sb-frm-agregar-block-item"><span class="label-form active-texto-modulo">Nombre (*)</span><input id="productoNombre" class="form-control active-input-modulo" maxlength="100" required /></div>
+        <form id="formProducto" class="sb-frm-psi-agregar">
+            <input type="hidden" id="productoId" value="0" />
+            <div class="sb-frm-psi-agregar-block-item">
+                <span class="label-form active-texto-modulo">Nombre (*)</span>
+                <input id="productoNombre" class="form-control active-input-modulo" maxlength="100" required />
             </div>
-            <div class="sb-frm-agregar-block">
-                <div class="sb-frm-agregar-block-item"><span class="label-form active-texto-modulo">Precio (*)</span><input id="productoPrecio" class="form-control active-input-modulo" type="number" min="0" step="0.01" required /></div>
+            <div class="sb-frm-psi-agregar-block-item">
+                <span class="label-form active-texto-modulo">Precio (*)</span>
+                <input id="productoPrecio" class="form-control active-input-modulo" type="number" min="0" step="0.01" required />
             </div>
-            <div class="sb-frm-agregar-block">
-                <div class="sb-frm-agregar-block-item"><span class="label-form active-texto-modulo">Color</span><input id="productoColor" class="form-control active-input-modulo" type="color" /></div>
+            <div class="sb-frm-psi-agregar-block-item">
+                <span class="label-form active-texto-modulo">Número de sesiones</span>
+                <input id="productoSesiones" class="form-control active-input-modulo" type="number" min="0" value="0" />
             </div>
-            <div class="sb-frm-agregar-block">
-                <div class="sb-frm-agregar-block-item"><span class="label-form active-texto-modulo">Es evaluación</span><select id="productoEvaluacion" class="form-control active-select-modulo"><option value="false">No</option><option value="true">Sí</option></select></div>
+            <div class="sb-frm-psi-agregar-block-item">
+                <span class="label-form active-texto-modulo">Siglas</span>
+                <input id="productoSiglas" class="form-control active-input-modulo" maxlength="10" />
             </div>
-            <div class="sb-frm-agregar-block">
-                <div class="sb-frm-agregar-block-item"><span class="label-form active-texto-modulo">Número de sesiones</span><input id="productoSesiones" class="form-control active-input-modulo" type="number" min="0" value="0" /></div>
+            <div class="sb-frm-psi-agregar-block-item">
+                <span class="label-form active-texto-modulo">Mostrar en agenda</span>
+                <select id="productoMostrar" class="form-control active-select-modulo"><option value="1">Sí</option><option value="0">No</option></select>
             </div>
-            <div class="sb-frm-agregar-block">
-                <div class="sb-frm-agregar-block-item"><span class="label-form active-texto-modulo">Siglas</span><input id="productoSiglas" class="form-control active-input-modulo" maxlength="10" /></div>
+            <div class="sb-frm-psi-agregar-block-item">
+                <span class="label-form active-texto-modulo">Es evaluación</span>
+                <select id="productoEvaluacion" class="form-control active-select-modulo"><option value="false">No</option><option value="true">Sí</option></select>
             </div>
-            <div class="sb-frm-agregar-block">
-                <div class="sb-frm-agregar-block-item"><span class="label-form active-texto-modulo">Mostrar en agenda</span><select id="productoMostrar" class="form-control active-select-modulo"><option value="1">Sí</option><option value="0">No</option></select></div>
+            <div class="sb-frm-psi-agregar-block-item">
+                <span class="label-form active-texto-modulo">Color</span>
+                <small style="display: block; margin-bottom: .5rem;">Se elige el color cuando es evaluación</small>
+                <div id="productoColorOpciones" style="display: none;">
+                    <label><input id="productoColorAutomatico" type="checkbox" checked /> Automático</label>
+                    <input id="productoColor" type="color" value="#000000" style="width: 56px; height: 40px; padding: 2px; vertical-align: middle;" disabled />
+                </div>
             </div>
-            <div class="sb-frm-agregar-block-button text-right">
+            <div class="sb-frm-psi-agregar-block-button text-right">
                 <button type="button" class="btn btn-success active-button-modulo" onclick="guardarProducto()">Guardar</button>
                 <button type="button" class="btn btn-secondary active-button-modulo" onclick="cerrarProducto()">Cancelar</button>
             </div>
@@ -103,14 +117,14 @@
 <script>
     function nuevoProducto() {
         $('#productoId').val(0); $('#productoNombre').val(''); $('#productoPrecio').val('0');
-        $('#productoColor').val('#000000'); $('#productoEvaluacion').val('false'); $('#productoSesiones').val(0);
+        $('#productoColor').val('#000000'); $('#productoColorAutomatico').prop('checked', true); $('#productoEvaluacion').val('false'); actualizarColorProducto(); $('#productoSesiones').val(0);
         $('#productoSiglas').val(''); $('#productoMostrar').val(1); $('#productoModalTitulo').text('Agregar producto o terapia');
         $('.sb-admninistrator').css('overflow', 'hidden'); $('#productoModal').css('display', 'flex');
     }
     function editarProducto(button) {
         var p = $(button).data();
         $('#productoId').val(p.id); $('#productoNombre').val(p.nombre); $('#productoPrecio').val(parseFloat(p.precio));
-        $('#productoColor').val(p.color || '#000000'); $('#productoEvaluacion').val(String(p.evaluacion) === 'true' ? 'true' : 'false');
+        $('#productoColor').val(p.color || '#000000'); $('#productoColorAutomatico').prop('checked', !p.color); $('#productoEvaluacion').val(String(p.evaluacion) === 'true' ? 'true' : 'false'); actualizarColorProducto();
         $('#productoSesiones').val(p.sesiones); $('#productoSiglas').val(p.siglas || ''); $('#productoMostrar').val(p.mostrar);
         $('#productoModalTitulo').text('Editar producto o terapia');
         $('.sb-admninistrator').css('overflow', 'hidden'); $('#productoModal').css('display', 'flex');
@@ -118,6 +132,13 @@
     function cerrarProducto() {
         $('#productoModal').hide(); $('.sb-admninistrator').css('overflow', 'auto');
     }
+    function actualizarColorProducto() {
+        var esEvaluacion = $('#productoEvaluacion').val() === 'true';
+        $('#productoColorOpciones').toggle(esEvaluacion);
+        $('#productoColor').prop('disabled', !esEvaluacion || $('#productoColorAutomatico').is(':checked'));
+    }
+    $('#productoEvaluacion').on('change', actualizarColorProducto);
+    $('#productoColorAutomatico').on('change', actualizarColorProducto);
     function buscarProducto() {
         var nombre = $('#txtBuscarProducto').val().trim().toLowerCase();
         $('#bdProductos tr').each(function () {
@@ -128,7 +149,8 @@
         var precio = parseFloat($('#productoPrecio').val());
         if (!$('#productoNombre').val().trim() || isNaN(precio) || precio < 0) { alert('Ingrese nombre y precio válidos.'); return; }
         var p = { Id: parseInt($('#productoId').val()), Nombre: $('#productoNombre').val().trim(), Precio: precio.toFixed(2),
-            Color: $('#productoColor').val(), EsEvaluacion: $('#productoEvaluacion').val() === 'true', NumSesiones: parseInt($('#productoSesiones').val()) || 0,
+            Color: $('#productoEvaluacion').val() === 'true' && !$('#productoColorAutomatico').is(':checked') ? $('#productoColor').val() : null,
+            EsEvaluacion: $('#productoEvaluacion').val() === 'true', NumSesiones: parseInt($('#productoSesiones').val()) || 0,
             Siglas: $('#productoSiglas').val().trim(), Mostrar: parseInt($('#productoMostrar').val()) };
         $.ajax({ url: '/Mantenimiento/Producto/Guardar', type: 'POST', contentType: 'application/json', data: JSON.stringify(p) })
             .done(function () { cerrarProducto(); location.reload(); }).fail(function (xhr) { alert(xhr.responseText || 'No se pudo guardar el producto.'); });

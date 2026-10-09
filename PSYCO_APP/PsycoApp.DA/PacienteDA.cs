@@ -17,7 +17,7 @@ namespace PsycoApp.DA
             _connection = cn; // Cambia la cadena de conexión según tu configuración
         }
 
-        public Paciente BuscarPacienteId(int id)
+        public Paciente BuscarPacienteId(int id, int idSede = 0)
         {
             Paciente paciente = null;
 
@@ -25,6 +25,7 @@ namespace PsycoApp.DA
             {
                 command.CommandType = CommandType.StoredProcedure;
                 command.Parameters.AddWithValue("@Id", id);
+                command.Parameters.Add("@IdSede", SqlDbType.Int).Value = idSede;
 
                 _connection.Open();
                 using (var reader = command.ExecuteReader())
@@ -50,6 +51,25 @@ namespace PsycoApp.DA
             }
 
             return paciente;
+        }
+
+        public bool PacientePerteneceASede(int idPaciente, int idSede)
+        {
+            using (var command = new SqlCommand("SELECT 1 FROM dbo.tbl_paciente WHERE Id = @Id AND id_sede = @IdSede", _connection))
+            {
+                command.Parameters.Add("@Id", SqlDbType.Int).Value = idPaciente;
+                command.Parameters.Add("@IdSede", SqlDbType.Int).Value = idSede;
+
+                _connection.Open();
+                try
+                {
+                    return command.ExecuteScalar() != null;
+                }
+                finally
+                {
+                    _connection.Close();
+                }
+            }
         }
 
         public List<Paciente> BuscarPaciente(string nombre, int pageNumber = 1, int pageSize = 10,int sede= 0)
@@ -221,6 +241,7 @@ namespace PsycoApp.DA
                 command.Parameters.AddWithValue("@EstadoCivil", paciente.EstadoCivil);
                 command.Parameters.AddWithValue("@Sexo", paciente.Sexo);
                 command.Parameters.AddWithValue("@Estado", paciente.Estado);
+                command.Parameters.Add("@IdSede", SqlDbType.Int).Value = paciente.id_sede;
 
                 _connection.Open();
                 command.ExecuteNonQuery();
@@ -228,12 +249,13 @@ namespace PsycoApp.DA
             }
         }
 
-        public void EliminarPaciente(int id)
+        public void EliminarPaciente(int id, int idSede = 0)
         {
             using (var command = new SqlCommand("sp_eliminar_paciente", _connection))
             {
                 command.CommandType = CommandType.StoredProcedure;
                 command.Parameters.AddWithValue("@Id", id);
+                command.Parameters.Add("@IdSede", SqlDbType.Int).Value = idSede;
 
                 _connection.Open();
                 command.ExecuteNonQuery();
@@ -241,7 +263,7 @@ namespace PsycoApp.DA
             }
         }
         
-        public List<entities.Paciente> listar_pacientes_combo()
+        public List<entities.Paciente> listar_pacientes_combo(int idSede = 0)
         {
             List<entities.Paciente> lista = new List<entities.Paciente>();
             try
@@ -249,6 +271,7 @@ namespace PsycoApp.DA
                 cn.Open();
                 SqlCommand cmd = new SqlCommand(Procedures.sp_listar_pacientes_combo, cn);
                 cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@IdSede", idSede);
 
                 SqlDataAdapter da = new SqlDataAdapter(cmd);
                 DataTable dt = new DataTable();

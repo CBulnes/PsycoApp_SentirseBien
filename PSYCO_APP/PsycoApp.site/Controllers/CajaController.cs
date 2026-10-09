@@ -37,9 +37,21 @@ namespace PsycoApp.site.Controllers
             return DateTime.Now.ToString("yyyy-MM-dd");
         }
 
+        private bool PuedeAccederCaja()
+        {
+            return HttpContext.Session.GetInt32("id_tipousuario") == 1 ||
+                HttpContext.Session.GetInt32("id_tipousuario") == 3 ||
+                HttpContext.Session.GetInt32("id_tipousuario") == 20;
+        }
+
         [Route("Caja")]
         public async Task<IActionResult> Index(int pageNumber = 1, int pageSize = 10, string fecha = "", int buscar_por = 1, int sede = -1, int id_usuario = -1, int id_cita = 0)
         {
+            if (string.IsNullOrEmpty(HttpContext.Session.GetString("nombres")))
+                return RedirectToAction("Index", "Login");
+            if (!PuedeAccederCaja())
+                return Forbid();
+
             if (fecha == "")
             {
                 fecha = fechaYyyyMmDd();
@@ -102,11 +114,10 @@ namespace PsycoApp.site.Controllers
                 obj.id_usuario = HttpContext.Session.GetInt32("id_usuario");
                 obj.id_tipousuario = HttpContext.Session.GetInt32("id_tipousuario");
                 obj.id_sede = HttpContext.Session.GetInt32("id_sede");
+                obj.id_empresa = idEmpresa.Value;
                 obj.id_psicologo = HttpContext.Session.GetInt32("id_psicologo");
                 obj.tipo_documento = HttpContext.Session.GetString("tipo_documento");
                 obj.num_documento = HttpContext.Session.GetString("num_documento");
-                obj.id_sede = HttpContext.Session.GetInt32("id_sede");
-                obj.id_empresa = idEmpresa.Value;
                 obj.vista = "CAJA";
 
                 var viewModelContainer = new ViewModelContainer<IEnumerable<PsycoApp.site.Models.CuadreCaja>>
@@ -133,6 +144,11 @@ namespace PsycoApp.site.Controllers
         [HttpPost]
         public async Task<IActionResult> Buscar(int pageNumber = 1, int pageSize = 10, string fecha = "", int buscar_por = 1, int sede = -1, int id_usuario = -1, int id_cita = 0, int id_caja = 0)
         {
+            if (string.IsNullOrEmpty(HttpContext.Session.GetString("nombres")))
+                return Unauthorized();
+            if (!PuedeAccederCaja())
+                return Forbid();
+
             if (!string.IsNullOrEmpty(HttpContext.Session.GetString("nombres") as string))
             {
                 var usuario = Convert.ToString(HttpContext.Session.GetString("login"));
@@ -193,6 +209,9 @@ namespace PsycoApp.site.Controllers
         [HttpGet]
         public ActionResult<List<ReporteNPS>> reporte_nps(InputVisita oInputReporte)
         {
+            if (HttpContext.Session.GetInt32("id_tipousuario") != 20)
+                return Forbid();
+
             string res = "";
             try
             {
@@ -211,7 +230,7 @@ namespace PsycoApp.site.Controllers
 
         private async Task<T> GetFromApiAsync<T>(string url)
         {
-            using var client = new HttpClient();
+            using var client = ApiCaller.CreateHttpClient();
             var response = await client.GetStringAsync(url);
             return JsonConvert.DeserializeObject<T>(response);
         }
@@ -219,6 +238,9 @@ namespace PsycoApp.site.Controllers
         [HttpPost]
         public async Task<RespuestaUsuario> DeshacerPago(Pago model)
         {
+            if (!PuedeAccederCaja())
+                return new RespuestaUsuario { estado = false, descripcion = "No está autorizado para anular pagos." };
+
             string res = "";
             model.usuario = Convert.ToString(HttpContext.Session.GetString("login"));
 
@@ -241,6 +263,9 @@ namespace PsycoApp.site.Controllers
         [HttpPost]
         public async Task<RespuestaUsuario> RegistrarPago(Pago model)
         {
+            if (!PuedeAccederCaja())
+                return new RespuestaUsuario { estado = false, descripcion = "No está autorizado para registrar pagos." };
+
             string res = "";
             model.usuario = Convert.ToString(HttpContext.Session.GetString("login"));
             model.idSede = Convert.ToInt32(HttpContext.Session.GetInt32("id_sede"));
@@ -264,6 +289,9 @@ namespace PsycoApp.site.Controllers
         [HttpPost]
         public async Task<RespuestaUsuario> RegistrarPagoMasivo(PagoMasivo model)
         {
+            if (!PuedeAccederCaja())
+                return new RespuestaUsuario { estado = false, descripcion = "No está autorizado para registrar pagos." };
+
             string res = "";
             model.usuario = Convert.ToString(HttpContext.Session.GetString("login"));
             model.idSede = Convert.ToInt32(HttpContext.Session.GetInt32("id_sede"));
@@ -287,6 +315,9 @@ namespace PsycoApp.site.Controllers
         [HttpPost]
         public async Task<RespuestaUsuario> RegistrarDescuento(Pago model)
         {
+            if (!PuedeAccederCaja())
+                return new RespuestaUsuario { estado = false, descripcion = "No está autorizado para registrar descuentos." };
+
             string res = "";
             model.usuario = Convert.ToString(HttpContext.Session.GetString("login"));
 
@@ -309,6 +340,9 @@ namespace PsycoApp.site.Controllers
         [HttpPost]
         public async Task<RespuestaUsuario> RegistrarEfectivoDiario(EfectivoDiario model)
         {
+            if (!PuedeAccederCaja())
+                return new RespuestaUsuario { estado = false, descripcion = "No está autorizado para registrar efectivo." };
+
             string res = "";
             model.usuario = Convert.ToString(HttpContext.Session.GetString("login"));
             model.id_sede = Convert.ToInt32(HttpContext.Session.GetInt32("id_sede"));
@@ -331,6 +365,9 @@ namespace PsycoApp.site.Controllers
         [HttpPost]
         public async Task<RespuestaUsuario> AperturarCaja(CajaNuevo model)
         {
+            if (!PuedeAccederCaja())
+                return new RespuestaUsuario { estado = false, descripcion = "No está autorizado para aperturar la caja." };
+
             string res = "";
             model.usuario = Convert.ToString(HttpContext.Session.GetString("login"));
             model.idSede = Convert.ToInt32(HttpContext.Session.GetInt32("id_sede"));
@@ -354,6 +391,9 @@ namespace PsycoApp.site.Controllers
         [HttpPost]
         public async Task<RespuestaUsuario> CerrarCaja(CajaNuevo model)
         {
+            if (!PuedeAccederCaja())
+                return new RespuestaUsuario { estado = false, descripcion = "No está autorizado para cerrar la caja." };
+
             string res = "";
             model.usuario = Convert.ToString(HttpContext.Session.GetString("login"));
             model.idSede = Convert.ToInt32(HttpContext.Session.GetInt32("id_sede"));
@@ -377,6 +417,9 @@ namespace PsycoApp.site.Controllers
         public async Task<List<PagosPendientes>> ListarPagosPendientes(int idPaciente)
         {
             List<PagosPendientes> lista = new List<PagosPendientes>();
+            if (!PuedeAccederCaja())
+                return lista;
+
             string res = "";
             try
             {
@@ -413,6 +456,11 @@ namespace PsycoApp.site.Controllers
         public IActionResult ListarCajas(DateTime fecha, string usuario)
         {
             List<CajasUsuario> lista = new List<CajasUsuario>();
+            if (string.IsNullOrEmpty(HttpContext.Session.GetString("nombres")))
+                return Unauthorized();
+            if (HttpContext.Session.GetInt32("id_tipousuario") != 1 && HttpContext.Session.GetInt32("id_tipousuario") != 20)
+                return Forbid();
+
             //string usuario = HttpContext.Session.GetString("login");
             var tipousuario = Convert.ToInt32(HttpContext.Session.GetInt32("id_tipousuario"));
             var id_usuario = HttpContext.Session.GetInt32("id_usuario");
@@ -440,6 +488,9 @@ namespace PsycoApp.site.Controllers
         public async Task<List<entities.ListaEfectivoDiario>> ListarEfectivoDiario(DateTime fecha, int buscarPor, int id_usuario)
         {
             List<entities.ListaEfectivoDiario> lista = new List<entities.ListaEfectivoDiario>();
+            if (!PuedeAccederCaja())
+                return lista;
+
             string res = "";
             string usuario = Convert.ToString(HttpContext.Session.GetString("login"));
             int sede = Convert.ToInt32(HttpContext.Session.GetInt32("id_sede"));
@@ -461,6 +512,9 @@ namespace PsycoApp.site.Controllers
         [HttpGet]
         public async Task<List<entities.CuadreCaja>> ListarResumenCajaPorUsuario(string fecha = "", int buscar_por = 1, int sede = -1, int id_usuario = -1)
         {
+            if (!PuedeAccederCaja())
+                return new List<entities.CuadreCaja>();
+
             if (fecha == "")
             {
                 fecha = fechaYyyyMmDd();
@@ -486,6 +540,9 @@ namespace PsycoApp.site.Controllers
         [HttpGet]
         public async Task<List<entities.CuadreCaja>> ListarResumenCajaPorFormaPago(string fecha = "", int buscar_por = 1, int sede = -1, int id_usuario = -1)
         {
+            if (!PuedeAccederCaja())
+                return new List<entities.CuadreCaja>();
+
             if (fecha == "")
             {
                 fecha = fechaYyyyMmDd();

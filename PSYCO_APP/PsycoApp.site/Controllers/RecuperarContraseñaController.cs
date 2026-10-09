@@ -31,16 +31,17 @@ namespace PsycoApp.site.Controllers
         {
             try
             {
+                string passwordActual = usuario.password;
                 url = url_api + "/api/usuario/validar_usuario";
                 obj = (dynamic)usuario;
                 res = ApiCaller.consume_endpoint_method(url, obj, "POST");
                 oRespuesta = JsonConvert.DeserializeObject<RespuestaUsuario>(res);
-                usuario = oRespuesta.data;
 
                 if (oRespuesta.estado)
                 {
                     // actualizar contraseña
                     url = url_api + "/api/usuario/actualizar_contraseña";
+                    usuario.password = passwordActual;
                     obj = (dynamic)usuario;
                     res = ApiCaller.consume_endpoint_method(url, obj, "POST");
                     oRespuesta = JsonConvert.DeserializeObject<RespuestaUsuario>(res);

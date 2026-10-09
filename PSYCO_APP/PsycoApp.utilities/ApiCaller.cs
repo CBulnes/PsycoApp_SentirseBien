@@ -3,20 +3,49 @@ using System;
 using System.IO;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace PsycoApp.utilities
 {
     public class ApiCaller
     {
+        private static readonly AsyncLocal<string> accessToken = new AsyncLocal<string>();
+
+        public static void SetAccessToken(string token)
+        {
+            accessToken.Value = token;
+        }
+
+        public static void ClearAccessToken()
+        {
+            accessToken.Value = null;
+        }
+
+        public static HttpClient CreateHttpClient()
+        {
+            var client = new HttpClient();
+            AddAuthorizationHeader(client);
+            return client;
+        }
+
+        private static void AddAuthorizationHeader(HttpClient client)
+        {
+            if (!string.IsNullOrWhiteSpace(accessToken.Value))
+            {
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken.Value);
+            }
+        }
+
         public static string consume_endpoint_method(string url, object obj, string method)//, string tk)
         {
             HttpWebRequest request = HttpWebRequest.Create(url) as HttpWebRequest;
-            //if (!string.IsNullOrEmpty(tk))
-            //{
-            //    request.Headers["Authorization"] = tk;
-            //}
+            if (!string.IsNullOrWhiteSpace(accessToken.Value))
+            {
+                request.Headers["Authorization"] = "Bearer " + accessToken.Value;
+            }
             request.Method = method;
             request.Accept = "application/json";
             request.ContentType = "application/json";
@@ -72,6 +101,7 @@ namespace PsycoApp.utilities
 
                 using (HttpClient client = new HttpClient(handler))
                 {
+                    AddAuthorizationHeader(client);
                     client.DefaultRequestHeaders.Accept.Clear();
                     client.DefaultRequestHeaders.Accept.Add(
                         new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json")

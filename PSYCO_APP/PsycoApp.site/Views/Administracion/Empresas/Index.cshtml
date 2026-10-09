@@ -5,93 +5,166 @@
 }
 
 <style>
-    .empresas-admin-card label {
+    .empresas-admin-page {
+        max-width: 1440px;
+        margin: 0 auto;
+        padding: 2rem;
+    }
+
+    .empresas-admin-header {
+        margin-bottom: 1.5rem;
+    }
+
+    .empresas-admin-header h2 {
+        margin-bottom: .4rem;
+        color: var(--colorbase2);
+        font-weight: 600;
+    }
+
+    .empresas-admin-header p {
+        margin: 0;
+        color: #6c757d;
+    }
+
+    .empresas-admin-step {
+        min-height: 100%;
+        border: 1px solid #e7ebef;
+        border-radius: .75rem;
+        box-shadow: 0 4px 16px rgba(30, 50, 70, .06);
+    }
+
+    .empresas-admin-step-header {
+        display: flex;
+        align-items: center;
+        gap: .85rem;
+        padding: 1.1rem 1.25rem;
+        border-bottom: 1px solid #edf0f2;
+        background: #fff;
+    }
+
+    .empresas-admin-step-number {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        flex: 0 0 2.4rem;
+        width: 2.4rem;
+        height: 2.4rem;
+        border-radius: 50%;
+        background: var(--colorbase2);
         color: #fff;
+        font-weight: 700;
+    }
+
+    .empresas-admin-step-header h4 {
+        margin: 0;
+        color: var(--colorbase2);
+        font-size: 1.1rem;
+        font-weight: 600;
+    }
+
+    .empresas-admin-step-header small {
+        display: block;
+        margin-top: .2rem;
+        color: #6c757d;
+    }
+
+    .empresas-admin-step-body {
+        padding: 1.25rem;
+    }
+
+    .empresas-admin-step-body label {
+        color: #343a40;
+        font-weight: 500;
+    }
+
+    .empresas-admin-step-body .btn {
+        display: inline-block;
+        visibility: visible;
+        opacity: 1;
+    }
+
+    .empresas-admin-message:empty {
+        display: none;
+    }
+
+    .empresas-admin-message {
+        padding: .65rem .8rem;
+        border-radius: .4rem;
+        background: #f4f7f9;
+    }
+
+    .empresas-admin-list {
+        max-height: 310px;
+        overflow-y: auto;
+    }
+
+    .empresas-admin-list .list-group-item {
+        gap: .75rem;
+    }
+
+    .empresas-admin-table thead th {
+        white-space: nowrap;
+        color: #495057;
+        font-weight: 600;
+    }
+
+    .empresas-admin-hint {
+        margin-bottom: 1rem;
+        padding: .75rem 1rem;
+        border-left: 3px solid var(--colorbase2);
+        border-radius: .25rem;
+        background: #f6f8fa;
+        color: #5e6871;
+    }
+
+    @@media (max-width: 767.98px) {
+        .empresas-admin-page {
+            padding: 1rem;
+        }
     }
 </style>
 
-<div class="container-fluid p-4">
+<div class="empresas-admin-page">
     @Html.AntiForgeryToken()
-    <h2>Administración de empresas y sedes</h2>
-    <div class="row mt-4">
-        <div class="col-md-5">
-            <div class="card p-3 empresas-admin-card">
-                <h4>Crear usuario Administrador o Counter</h4>
-                <div class="form-group">
-                    <label for="empresaUsuario">Empresa</label>
-                    <select id="empresaUsuario" class="form-control" required>
-                        <option value="">Seleccionar empresa</option>
-                        @foreach (var empresa in Model.Empresas)
-                        {
-                            <option value="@empresa.Id">@empresa.Nombre</option>
-                        }
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="sedeUsuario">Sede</label>
-                    <select id="sedeUsuario" class="form-control" disabled required>
-                        <option value="">Selecciona primero una empresa</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="rolUsuario">Tipo de usuario</label>
-                    <select id="rolUsuario" class="form-control" required>
-                        <option value="">Seleccionar rol</option>
-                        <option value="1">Administrador</option>
-                        <option value="3">Counter</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="nombresUsuario">Nombres</label>
-                    <input id="nombresUsuario" class="form-control" maxlength="100" required />
-                </div>
-                <div class="form-group">
-                    <label for="apellidosUsuario">Apellidos</label>
-                    <input id="apellidosUsuario" class="form-control" maxlength="100" required />
-                </div>
-                <div class="form-group">
-                    <label for="loginUsuario">Usuario (solo letras)</label>
-                    <input id="loginUsuario" class="form-control" maxlength="100" pattern="[A-Za-zÁÉÍÓÚÜÑáéíóúüñ]+" title="Ingrese solo letras, sin arroba ni espacios." required />
-                </div>
-                <div class="form-group">
-                    <label for="passwordUsuario">Contraseña</label>
-                    <input id="passwordUsuario" type="password" class="form-control" maxlength="50" required />
-                </div>
-                <button type="button" class="btn btn-primary" onclick="crearUsuarioEmpresa()">Crear usuario</button>
-                <div id="mensajeUsuario" class="mt-2" role="alert"></div>
-            </div>
+    <div class="empresas-admin-header">
+        <h2>Administración de empresas</h2>
+        <p>Configura la empresa, registra sus sedes y luego crea los usuarios que tendrán acceso.</p>
+    </div>
 
-            <div class="card p-3 empresas-admin-card">
-                <h4>Crear empresa</h4>
-                <div class="form-group">
-                    <label for="nombreEmpresa">Nombre de empresa</label>
-                    <input id="nombreEmpresa" class="form-control" maxlength="200" required />
+    <div class="row">
+        <div class="col-lg-6 mb-4">
+            <section class="card empresas-admin-step">
+                <div class="empresas-admin-step-header">
+                    <span class="empresas-admin-step-number">1</span>
+                    <div>
+                        <h4>Crear empresa</h4>
+                        <small>Registra la organización principal.</small>
+                    </div>
                 </div>
-            <button type="button" class="btn btn-primary" onclick="crearEmpresa()">Guardar empresa</button>
-            <div id="mensajeEmpresa" class="mt-2" role="alert"></div>
-            </div>
-
-            <div class="card p-3 mt-4">
-                <h4>Empresas registradas</h4>
-                <ul id="listaEmpresas" class="list-group">
-                    @foreach (var empresa in Model.Empresas)
-                    {
-                        <li class="list-group-item d-flex justify-content-between align-items-center">
-                            <span>@empresa.Nombre</span>
-                            <button type="button" class="btn btn-sm btn-outline-primary" onclick="seleccionarEmpresa(@empresa.Id)">Ver sedes</button>
-                        </li>
-                    }
-                </ul>
-            </div>
-
+                <div class="empresas-admin-step-body">
+                    <div class="form-group">
+                        <label for="nombreEmpresa">Nombre de empresa</label>
+                        <input id="nombreEmpresa" class="form-control" maxlength="200" placeholder="Ej. Nombre de la empresa" required />
+                    </div>
+                    <button type="button" class="btn btn-primary" onclick="crearEmpresa()">Guardar empresa</button>
+                    <div id="mensajeEmpresa" class="empresas-admin-message mt-3" role="alert" aria-live="polite"></div>
+                </div>
+            </section>
         </div>
 
-        <div class="col-md-7">
-            <div class="card p-3 empresas-admin-card">
-                <h4>Agregar sede</h4>
+        <div class="col-lg-6 mb-4">
+            <section class="card empresas-admin-step">
+                <div class="empresas-admin-step-header">
+                    <span class="empresas-admin-step-number">2</span>
+                    <div>
+                        <h4>Agregar sede</h4>
+                        <small>Asocia una o más sedes a una empresa.</small>
+                    </div>
+                </div>
+                <div class="empresas-admin-step-body">
                 <div class="form-group">
-                    <label for="empresaSede">Empresa</label>
-                    <select id="empresaSede" class="form-control">
+                        <label for="empresaSede">Empresa</label>
+                        <select id="empresaSede" class="form-control" required>
                         <option value="">Seleccionar empresa</option>
                         @foreach (var empresa in Model.Empresas)
                         {
@@ -100,26 +173,111 @@
                     </select>
                 </div>
                 <div class="form-group">
-                    <label for="nombreSede">Nombre de sede</label>
-                    <input id="nombreSede" class="form-control" maxlength="200" required />
+                        <label for="nombreSede">Nombre de sede</label>
+                        <input id="nombreSede" class="form-control" maxlength="200" placeholder="Ej. Sede principal" required />
                 </div>
                 <div class="form-group">
-                    <label for="centroSede">Centro (opcional)</label>
-                    <input id="centroSede" class="form-control" maxlength="100" />
+                        <label for="centroSede">Centro <span class="text-muted">(opcional)</span></label>
+                        <input id="centroSede" class="form-control" maxlength="100" placeholder="Centro de atención" />
                 </div>
-                <button type="button" class="btn btn-primary" onclick="crearSede()">Guardar sede</button>
-                <div id="mensajeSede" class="mt-2" role="alert"></div>
-            </div>
+                    <button type="button" class="btn btn-primary" onclick="crearSede()">Guardar sede</button>
+                    <div id="mensajeSede" class="empresas-admin-message mt-3" role="alert" aria-live="polite"></div>
+                </div>
+            </section>
+        </div>
 
-            <div class="card p-3 mt-4">
-                <h4 id="tituloSedes">Sedes de la empresa seleccionada</h4>
-                <div class="table-responsive">
-                    <table class="table table-striped">
-                        <thead><tr><th>Nombre</th><th>Centro</th><th>Estado</th></tr></thead>
-                        <tbody id="tablaSedes"><tr><td colspan="3">Selecciona una empresa para ver sus sedes.</td></tr></tbody>
-                    </table>
+        <div class="col-lg-6 mb-4">
+            <section class="card empresas-admin-step">
+                <div class="empresas-admin-step-header">
+                    <span class="empresas-admin-step-number">3</span>
+                    <div>
+                        <h4>Crear usuario</h4>
+                        <small>Necesitas una empresa y una sede activa.</small>
+                    </div>
                 </div>
-            </div>
+                <div class="empresas-admin-step-body">
+                    <div class="empresas-admin-hint">Selecciona primero la empresa. Después podrás elegir una de sus sedes activas y asignar el rol.</div>
+                    <div class="form-group">
+                        <label for="empresaUsuario">Empresa</label>
+                        <select id="empresaUsuario" class="form-control" required>
+                            <option value="">Seleccionar empresa</option>
+                            @foreach (var empresa in Model.Empresas)
+                            {
+                                <option value="@empresa.Id">@empresa.Nombre</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="sedeUsuario">Sede</label>
+                        <select id="sedeUsuario" class="form-control" disabled required>
+                            <option value="">Selecciona primero una empresa</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="rolUsuario">Tipo de usuario</label>
+                        <select id="rolUsuario" class="form-control" required>
+                            <option value="">Seleccionar rol</option>
+                            <option value="1">Administrador</option>
+                            <option value="3">Counter</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="nombresUsuario">Nombres</label>
+                        <input id="nombresUsuario" class="form-control" maxlength="100" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="apellidosUsuario">Apellidos</label>
+                        <input id="apellidosUsuario" class="form-control" maxlength="100" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="loginUsuario">Usuario <span class="text-muted">(solo letras, sin espacios)</span></label>
+                        <input id="loginUsuario" class="form-control" maxlength="100" pattern="[A-Za-zÁÉÍÓÚÜÑáéíóúüñ]+" title="Ingrese solo letras, sin arroba ni espacios." required />
+                    </div>
+                    <div class="form-group">
+                        <label for="passwordUsuario">Contraseña</label>
+                        <input id="passwordUsuario" type="password" class="form-control" maxlength="50" required />
+                    </div>
+                    <button id="btnCrearUsuarioEmpresa" type="button" class="btn btn-primary" onclick="crearUsuarioEmpresa()">Crear usuario</button>
+                    <div id="mensajeUsuario" class="empresas-admin-message mt-3" role="alert" aria-live="polite"></div>
+                </div>
+            </section>
+        </div>
+
+        <div class="col-12 mb-4">
+            <section class="card empresas-admin-step">
+                <div class="empresas-admin-step-header">
+                    <div>
+                        <h4>Empresas y sedes registradas</h4>
+                        <small>Selecciona una empresa para consultar sus sedes.</small>
+                    </div>
+                </div>
+                <div class="empresas-admin-step-body">
+                    @if (Model.Empresas != null && Model.Empresas.Count > 0)
+                    {
+                        <ul id="listaEmpresas" class="list-group empresas-admin-list">
+                            @foreach (var empresa in Model.Empresas)
+                            {
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    <span>@empresa.Nombre</span>
+                                    <button type="button" class="btn btn-sm btn-outline-primary" onclick="seleccionarEmpresa(@empresa.Id)">Ver sedes</button>
+                                </li>
+                            }
+                        </ul>
+                    }
+                    else
+                    {
+                        <div class="empresas-admin-hint">Aún no hay empresas. Registra una empresa en el paso 1 para continuar.</div>
+                    }
+
+                    <h5 id="tituloSedes" class="mt-4">Sedes de la empresa seleccionada</h5>
+                    <div class="table-responsive">
+                        <table class="table table-striped empresas-admin-table">
+                            <thead><tr><th>Nombre</th><th>Centro</th><th>Estado</th></tr></thead>
+                            <tbody id="tablaSedes"><tr><td colspan="3">Selecciona una empresa para ver sus sedes.</td></tr></tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
         </div>
     </div>
 </div>

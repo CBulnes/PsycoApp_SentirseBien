@@ -4,8 +4,6 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using PsycoApp.site.Models;
 using IBM.Cloud.SDK.Core.Authentication.Iam;
 using IBM.Watson.Assistant.v2;
 using IBM.Watson.Assistant.v2.Model;
@@ -14,10 +12,10 @@ using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 using System.IO;
 using PsycoApp.entities;
+using PsycoApp.site.Models;
 using PsycoApp.utilities;
 using Microsoft.AspNetCore.Hosting;
 using System.Drawing;
-using static PsycoApp.utilities.Endpoints;
 using System.Net.Http;
 
 namespace PsycoApp.site.Controllers
@@ -45,7 +43,7 @@ namespace PsycoApp.site.Controllers
             Environment = _environment;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
             if (!string.IsNullOrEmpty(HttpContext.Session.GetString("nombres") as string))
             {
@@ -65,24 +63,103 @@ namespace PsycoApp.site.Controllers
                 obj.num_documento = HttpContext.Session.GetString("num_documento");
                 obj.vista = "HOME";
                 obj.call_center_invitado = Helper.GetCallCenterInvitado();
-                string vista = "";
-                //if (obj.id_tipousuario == 1) //admin
-                //{
-                    vista = "IndexAdmin";
-                //}
-                //if (obj.id_tipousuario == 2) //cliente
-                //{
-                //    vista = "Index";
-                //}
-                //if (obj.id_tipousuario == 3) //doctor
-                //{
-                //    vista = "IndexDoctor";
-                //}
-                var viewModelContainer = new ViewModelContainer<List<PsycoApp.site.Models.Paciente>>
+                var tipoUsuario = HttpContext.Session.GetInt32("id_tipousuario").GetValueOrDefault();
+                if (tipoUsuario == 20)
+                    return View("IndexAdmin", new ViewModelContainer<List<PsycoApp.site.Models.Paciente>> { DynamicData = obj });
+
+                if (tipoUsuario != 1 && tipoUsuario != 3 && tipoUsuario != 4)
+                    return Forbid();
+
+                var dashboard = new DashboardViewModel
                 {
-                    DynamicData = obj
+                    NombreUsuario = string.Join(" ", new[] { obj.nombres as string, obj.apellidos as string }.Where(x => !string.IsNullOrWhiteSpace(x))),
+                    NombreSede = HttpContext.Session.GetString("nombre_sede") ?? string.Empty,
+                    TipoUsuario = tipoUsuario,
+                    FechaActual = DateTime.Today,
+                    MostrarCaja = tipoUsuario == 1 || tipoUsuario == 3,
+                    MostrarPacientesYEspecialistas = tipoUsuario == 1,
+                    MostrarActividadReciente = tipoUsuario != 4,
+                    EsEspecialista = tipoUsuario == 4,
+                    UrlAgenda = tipoUsuario == 4 ? "/HistorialCitas" : "/RegistroCitas"
                 };
-                return View(vista, viewModelContainer);
+                dashboard.DynamicData = obj;
+
+                string respuestaDashboard = null;
+                try
+                {
+                    using (var client = ApiCaller.CreateHttpClient())
+                    {
+                        var response = await client.GetAsync(Helper.GetUrlApi() + "/api/dashboard/resumen");
+                        if (response.IsSuccessStatusCode)
+                        {
+                            respuestaDashboard = await response.Content.ReadAsStringAsync();
+                            var data = JsonConvert.DeserializeObject<DashboardData>(respuestaDashboard);
+                            if (data != null)
+                            {
+                                dashboard.CitasHoy = data.CitasHoy;
+                                dashboard.FechaAgendaLocal = data.FechaActual;
+                                dashboard.FechaActual = data.FechaActual == DateTime.MinValue ? DateTime.Today : data.FechaActual.Date;
+                                dashboard.CitasConfirmadasHoy = data.CitasConfirmadasHoy;
+                                dashboard.CitasAtendidasHoy = data.CitasAtendidasHoy;
+                                dashboard.CitasProgramadasHoy = data.CitasCitadasHoy;
+                                dashboard.PacientesTotal = data.PacientesTotal;
+                                dashboard.PacientesMes = data.PacientesMes;
+                                dashboard.IngresosCajaHoy = data.IngresosHoy;
+                                dashboard.CajaAbierta = data.CajaAbierta;
+                                dashboard.EstadoCaja = data.EstadoCaja;
+                                dashboard.IngresosPorFormaPago = data.IngresosPorFormaPago;
+                                dashboard.EspecialistasDisponibles = data.EspecialistasDisponibles;
+                                dashboard.EspecialistasTotal = data.EspecialistasTotal;
+                                dashboard.PacientesAtendidos = data.PacientesAtendidos;
+                                dashboard.PacientesCitados = data.PacientesCitados;
+                                dashboard.PacientesConfirmados = data.PacientesConfirmados;
+                                dashboard.PacientesPorAtender = data.PacientesPorAtender;
+                                dashboard.ProximasCitas = data.ProximasCitas.Select(c => new DashboardCitaViewModel
+                                {
+                                    Id = c.Id,
+                                    Fecha = c.Fecha,
+                                    Hora = string.IsNullOrWhiteSpace(c.Hora) ? "—" : c.Hora,
+                                    Paciente = c.Paciente,
+                                    Especialista = c.Especialista,
+                                    Servicio = c.Servicio,
+                                    Estado = c.Estado
+                                }).ToList();
+                                dashboard.ActividadReciente = data.ActividadReciente.Select(a => new DashboardActividadViewModel
+                                {
+                                    Tipo = a.Tipo,
+                                    Titulo = a.Titulo,
+                                    Descripcion = a.Descripcion,
+                                    Fecha = a.Fecha
+                                }).ToList();
+                                dashboard.ActividadSemanal = data.ActividadSemanal.Select(d => new DashboardDiaViewModel
+                                {
+                                    Fecha = d.Fecha,
+                                    Citas = d.Citas,
+                                    Pacientes = d.Pacientes,
+                                    Ingresos = d.Ingresos
+                                }).ToList();
+                            }
+                        }
+                        else
+                        {
+                            dashboard.ErrorCarga = "No se pudieron cargar las métricas del inicio.";
+                        }
+                    }
+                }
+                catch (JsonSerializationException ex)
+                {
+                    dashboard.ErrorCarga = Environment != null && Environment.EnvironmentName == "Development"
+                        ? "La API respondió, pero no se pudo interpretar el dashboard: " + ex.Message
+                        : "No se pudieron interpretar las métricas del inicio.";
+                }
+                catch (Exception ex)
+                {
+                    dashboard.ErrorCarga = Environment != null && Environment.EnvironmentName == "Development"
+                        ? "No se pudieron cargar las métricas: " + ex.Message
+                        : "No se pudieron cargar las métricas del inicio. Verifica que la API y los parches SQL estén disponibles.";
+                }
+
+                return View("Dashboard", dashboard);
             }
             else
             {
@@ -313,6 +390,9 @@ namespace PsycoApp.site.Controllers
         [HttpGet]
         public ActionResult<RespuestaPuntoVisitado> listar_puntos_visitados(InputVisita oInputVisita)
         {
+            if (HttpContext.Session.GetInt32("id_tipousuario") != 20)
+                return Forbid();
+
             string res = "";
             try
             {
@@ -462,7 +542,7 @@ namespace PsycoApp.site.Controllers
 
         private async Task<HttpResponseMessage> PutToApiAsync<T>(string url, T data)
         {
-            using var client = new HttpClient();
+            using var client = ApiCaller.CreateHttpClient();
             var content = new StringContent(JsonConvert.SerializeObject(data), System.Text.Encoding.UTF8, "application/json");
             return await client.PutAsync(url, content);
         }

@@ -9,6 +9,8 @@ using Newtonsoft.Json;
 using PsycoApp.BL;
 using PsycoApp.entities;
 using PsycoApp.utilities;
+using PsycoApp.api.Security;
+using System.Security.Claims;
 
 namespace PsycoApp.api.Controllers
 {
@@ -35,6 +37,10 @@ namespace PsycoApp.api.Controllers
         [HttpPost("registrar_puntuacion")]
         public string Post([FromBody] Puntuacion oPuntuacion)
         {
+            if (oPuntuacion == null || !TenantContext.TryGetIntClaim(User, ClaimTypes.NameIdentifier, out var idUsuario) || idUsuario <= 0)
+                return "No está autorizado para registrar la encuesta.";
+
+            oPuntuacion.id_usuario = idUsuario;
             random_str = ru.RandomString(8) + "|" + ru.CurrentDate();
 
             try

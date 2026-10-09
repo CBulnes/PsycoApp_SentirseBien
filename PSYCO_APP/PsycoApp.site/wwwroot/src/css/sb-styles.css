@@ -84,6 +84,73 @@
     align-items: flex-start;
 }
 
+.theme-switch-item {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: space-between;
+    padding: .75rem 1rem;
+    color: #fff;
+}
+
+.theme-switch-item span {
+    color: inherit;
+    font-size: 14px;
+}
+
+.theme-switch {
+    position: relative;
+    display: inline-block;
+    width: 42px;
+    height: 24px;
+    flex: 0 0 auto;
+    cursor: pointer;
+}
+
+.theme-switch input {
+    width: 0;
+    height: 0;
+    opacity: 0;
+}
+
+.theme-switch-slider {
+    position: absolute;
+    inset: 0;
+    border-radius: 24px;
+    background-color: #9aa0a6;
+    transition: .2s;
+    cursor: pointer;
+}
+
+.theme-switch-slider::before {
+    position: absolute;
+    content: "";
+    width: 18px;
+    height: 18px;
+    left: 3px;
+    bottom: 3px;
+    border-radius: 50%;
+    background-color: #fff;
+    transition: .2s;
+}
+
+.theme-switch input:checked + .theme-switch-slider {
+    background-color: var(--colorsecundario);
+}
+
+.theme-switch input:checked + .theme-switch-slider::before {
+    transform: translateX(18px);
+}
+
+.theme-switch input:focus-visible + .theme-switch-slider {
+    outline: 2px solid #fff;
+    outline-offset: 2px;
+}
+
+.theme-switch-responsive {
+    display: none;
+}
+
 .sb-aside-item {
     display: flex;
     width: 100%;
@@ -458,6 +525,10 @@
     .sb-aside-list {
         background-color: var(--colorbase2);
         height: 90dvh;
+    }
+
+    .theme-switch-responsive {
+        display: flex;
     }
 
 

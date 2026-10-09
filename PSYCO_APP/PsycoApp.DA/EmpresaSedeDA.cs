@@ -45,6 +45,29 @@ namespace PsycoApp.DA
             }
         }
 
+        public bool EmpresaActiva(int idEmpresa)
+        {
+            using (var cn = new SqlConnector().cadConnection_psyco)
+            using (var cmd = new SqlCommand("SELECT CASE WHEN EXISTS (SELECT 1 FROM dbo.tbl_empresa WHERE Id = @IdEmpresa AND Estado = 1) THEN 1 ELSE 0 END", cn))
+            {
+                cmd.Parameters.Add("@IdEmpresa", SqlDbType.Int).Value = idEmpresa;
+                cn.Open();
+                return Convert.ToBoolean(cmd.ExecuteScalar());
+            }
+        }
+
+        public bool SedePerteneceEmpresaActiva(int idSede, int idEmpresa)
+        {
+            using (var cn = new SqlConnector().cadConnection_psyco)
+            using (var cmd = new SqlCommand("SELECT CASE WHEN EXISTS (SELECT 1 FROM dbo.tbl_sede s INNER JOIN dbo.tbl_empresa e ON e.Id = s.Id_empresa WHERE s.Id = @IdSede AND s.Id_empresa = @IdEmpresa AND s.Estado = 1 AND e.Estado = 1) THEN 1 ELSE 0 END", cn))
+            {
+                cmd.Parameters.Add("@IdSede", SqlDbType.Int).Value = idSede;
+                cmd.Parameters.Add("@IdEmpresa", SqlDbType.Int).Value = idEmpresa;
+                cn.Open();
+                return Convert.ToBoolean(cmd.ExecuteScalar());
+            }
+        }
+
         public List<Sede> ListarSedes(int idEmpresa)
         {
             var sedes = new List<Sede>();
@@ -102,6 +125,32 @@ namespace PsycoApp.DA
                 cn.Open();
                 return Convert.ToInt32(cmd.ExecuteScalar());
             }
+        }
+
+        public RegistroSaasEmpresa RegistrarEmpresaPrueba(RegistroSaasEmpresa registro)
+        {
+            using (var cn = new SqlConnector().cadConnection_psyco)
+            using (var cmd = new SqlCommand("SP_SAAS_REGISTRAR_EMPRESA_PRUEBA", cn))
+            {
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Add("@Empresa", SqlDbType.VarChar, 200).Value = registro.Empresa;
+                cmd.Parameters.Add("@Sede", SqlDbType.VarChar, 200).Value = registro.Sede;
+                cmd.Parameters.Add("@Nombres", SqlDbType.VarChar, 100).Value = registro.Nombres;
+                cmd.Parameters.Add("@Apellidos", SqlDbType.VarChar, 100).Value = registro.Apellidos;
+                cmd.Parameters.Add("@Usuario", SqlDbType.VarChar, 100).Value = registro.Usuario;
+                cmd.Parameters.Add("@Password", SqlDbType.VarChar, 50).Value = registro.Password;
+                cn.Open();
+                using (var reader = cmd.ExecuteReader())
+                {
+                    if (!reader.Read())
+                        throw new InvalidOperationException("No se recibió la confirmación del registro.");
+
+                    registro.IdEmpresa = Convert.ToInt32(reader["IdEmpresa"]);
+                    registro.IdSede = Convert.ToInt32(reader["IdSede"]);
+                    registro.IdUsuario = Convert.ToInt32(reader["IdUsuario"]);
+                }
+            }
+            return registro;
         }
 
     }

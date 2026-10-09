@@ -36,9 +36,14 @@ namespace PsycoApp.BL
            return _pacienteDA.BuscarPaciente(nombre,pageNumber,pageSize,sede);
         }
         
-        public Paciente BuscarPacienteId(int id)
+        public Paciente BuscarPacienteId(int id, int idSede = 0)
         {
-            return _pacienteDA.BuscarPacienteId(id);
+            return _pacienteDA.BuscarPacienteId(id, idSede);
+        }
+
+        public bool PacientePerteneceASede(int idPaciente, int idSede)
+        {
+            return _pacienteDA.PacientePerteneceASede(idPaciente, idSede);
         }
 
         public void ActualizarPaciente(Paciente paciente)
@@ -46,14 +51,14 @@ namespace PsycoApp.BL
             _pacienteDA.ActualizarPaciente(paciente);
         }
 
-        public void EliminarPaciente(int id)
+        public void EliminarPaciente(int id, int idSede = 0)
         {
-            _pacienteDA.EliminarPaciente(id);
+            _pacienteDA.EliminarPaciente(id, idSede);
         }
 
-        public List<entities.Paciente> listar_pacientes_combo()
+        public List<entities.Paciente> listar_pacientes_combo(int idSede = 0)
         {
-            return _pacienteDA.listar_pacientes_combo();
+            return _pacienteDA.listar_pacientes_combo(idSede);
         }
         public List<entities.Paciente> listar_pacientes_combo_dinamico(int page, int pageSize, string search, int sede)
         {

@@ -182,7 +182,7 @@ namespace PsycoApp.site.Controllers.Administracion
 
         private System.Net.Http.HttpClient CrearClienteApi()
         {
-            return new System.Net.Http.HttpClient();
+            return ApiCaller.CreateHttpClient();
         }
     }
 }

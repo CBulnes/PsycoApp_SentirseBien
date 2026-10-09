@@ -1,59 +1,59 @@
 ﻿
-.active-modular-oscuro {
+html.psycoapp-dark-theme .active-modular-oscuro {
     background-color: var(--colormodular_oscura) !important;
 }
 
-.active-modular2-oscuro {
+html.psycoapp-dark-theme .active-modular2-oscuro {
     background-color: var(--colormodular2_oscura) !important;
 }
 
-.active-fondo-oscuro {
+html.psycoapp-dark-theme .active-fondo-oscuro {
     background-color: var(--colorfondo_oscura) !important;
 }
 
 /* Titulos de los modulos */
 
-.active-titular-modulo {
+html.psycoapp-dark-theme .active-titular-modulo {
     color: var(--colorletra_titular_oscura) !important;
 }
 
 /* Letras de los modulos */
 
-.active-texto-modulo {
+html.psycoapp-dark-theme .active-texto-modulo {
     color: var(--colorletra_oscura) !important;
 }
 
 /* select de los modulos */
 
-.active-select-modulo {
+html.psycoapp-dark-theme .active-select-modulo {
     color: var(--colorletra_oscura) !important;
     background-color: var(--colorfondoletra_oscura) !important;
 }
 
-.active-select-modulo option {
+html.psycoapp-dark-theme .active-select-modulo option {
     color: var(--colorletra_oscura) !important;
 }
 
 /* inputs de los modulos */
 
-.active-input-modulo {
+html.psycoapp-dark-theme .active-input-modulo {
     color: var(--colorletra_oscura) !important;
     background-color: var(--colorfondoletra_oscura) !important;
 }
 
 /* Botones de los modulos */
 
-.active-button-modulo {
+html.psycoapp-dark-theme .active-button-modulo {
     color: var(--colorletra_oscura) !important;
     background-color: transparent !important;
     border: 1px solid var(--colorborderbutton_oscura) !important;
 }
 
-.active-button-modulo i {
+html.psycoapp-dark-theme .active-button-modulo i {
     color: #FFF !important;
 }
 
-.active-button-modulo:hover {
+html.psycoapp-dark-theme .active-button-modulo:hover {
     color: var(--colorletra_oscura) !important;
     background-color: var(--colorfondobutton_oscura) !important;
     border: 1px solid var(--colorborderbutton_oscura) !important;
@@ -61,41 +61,41 @@
 
 /* Tabla de los modulos */
 
-.active-table-modulo {
+html.psycoapp-dark-theme .active-table-modulo {
     background-color: var(--colormodular_oscura);
 }
 
-.active-table-modulo tr:nth-of-type(odd) {
+html.psycoapp-dark-theme .active-table-modulo tr:nth-of-type(odd) {
     background-color: var(--colormodular_oscura) !important;
 }
 
-    .active-table-modulo tr:nth-of-type(even) {
+    html.psycoapp-dark-theme .active-table-modulo tr:nth-of-type(even) {
         /*background-color: var(--colorletra_sin_seleccionar_oscura) !important;*/
         background-color: #3e4454 !important;
     }
 
-.active-table-modulo td, .active-table-modulo th {
+html.psycoapp-dark-theme .active-table-modulo td, html.psycoapp-dark-theme .active-table-modulo th {
     color: var(--colorletra_oscura) !important;
     vertical-align: baseline;
 }
 
-.active-table-modulo.caja td, .active-table-modulo.caja th {
+html.psycoapp-dark-theme .active-table-modulo.caja td, html.psycoapp-dark-theme .active-table-modulo.caja th {
     background-color: transparent !important;
 }
 
 /* Botones Tabla de los modulos */
 
-.active-button-tabla-modulo {
+html.psycoapp-dark-theme .active-button-tabla-modulo {
     color: #FFF !important;
     background-color: var(--colorfondobutton_oscura) !important;
     border: 1px solid var(--colorborderbutton_oscura) !important;
 }
 
-.active-button-tabla-modulo i {
+html.psycoapp-dark-theme .active-button-tabla-modulo i {
     color: var(--colormodular_oscura) !important;
 }
 
-.active-button-tabla-modulo:hover {
+html.psycoapp-dark-theme .active-button-tabla-modulo:hover {
     color: #FFF !important;
     background-color: var(--colorfondo_oscura) !important;
     border: 1px solid var(--colorborderbutton_oscura) !important;
@@ -103,35 +103,35 @@
 
 /* Paginacion Tabla  de los modulos */
 
-.active-paginacion-tabla-modulo li:nth-of-type(odd) a {
+html.psycoapp-dark-theme .active-paginacion-tabla-modulo li:nth-of-type(odd) a {
     background-color: var(--colormodular_oscura) !important;
     color: #FFF !important;
 }
 
-.active-paginacion-tabla-modulo li:nth-of-type(even) a {
+html.psycoapp-dark-theme .active-paginacion-tabla-modulo li:nth-of-type(even) a {
     background-color: var(--colorletra_sin_seleccionar_oscura) !important;
     color: #FFF !important;
 }
 
 /* Botonera de los modulos */
 
-.active-botonera-modulo {
+html.psycoapp-dark-theme .active-botonera-modulo {
     color: var(--colorletra_oscura) !important;
     background-color: transparent !important;
     border: 1px solid var(--colorborderbutton_oscura) !important;
 }
 
-.active-botonera-modulo.active {
+html.psycoapp-dark-theme .active-botonera-modulo.active {
     color: var(--colorletra_oscura) !important;
     background-color: var(--colorfondobutton_oscura) !important;
     border: 1px solid var(--colorborderbutton_oscura) !important;
 }
 
-.active-botonera-modulo i {
+html.psycoapp-dark-theme .active-botonera-modulo i {
     color: #FFF !important;
 }
 
-.active-botonera-modulo:hover {
+html.psycoapp-dark-theme .active-botonera-modulo:hover {
     color: var(--colorletra_oscura) !important;
     background-color: var(--colorfondobutton_oscura) !important;
     border: 1px solid var(--colorborderbutton_oscura) !important;
@@ -139,69 +139,181 @@
 
 /* Registro de citas de modulos */
 
-.active-buscador-modulo {
+html.psycoapp-dark-theme .active-buscador-modulo {
     color: var(--colorletra_oscura) !important;
     background-color: var(--colorfondoletra_oscura) !important;
 }
 
-.active-buscador-bloque-modulo input {
+html.psycoapp-dark-theme .active-buscador-bloque-modulo input {
     color: var(--colorletra_oscura) !important;
     background-color: var(--colorfondoletra_oscura) !important;
 }
 
-.active-buscador-bloque-modulo select {
+html.psycoapp-dark-theme .active-buscador-bloque-modulo select {
     color: var(--colorletra_oscura) !important;
     background-color: var(--colorfondoletra_oscura) !important;
 }
 
-.active-buscador-bloque-modulo select option {
+html.psycoapp-dark-theme .active-buscador-bloque-modulo select option {
     color: var(--colorletra_oscura) !important;
 }
 
-.active-buscador-bloque-modulo div {
+html.psycoapp-dark-theme .active-buscador-bloque-modulo div {
     color: var(--colorletra_oscura) !important;
     background-color: var(--colorfondoletra_oscura) !important;
 }
 
 /* Tabla registro de citas de modulos */
 
-.active-table-modulo .calendar-dow-header th {
+html.psycoapp-dark-theme .active-table-modulo .calendar-dow-header th {
     color: var(--colorletra_oscura) !important;
 }
 
-.active-table-modulo .calendar-month-header th div span {
+html.psycoapp-dark-theme .active-table-modulo .calendar-month-header th div span {
     color: var(--colorletra_oscura) !important;
 }
 
-.active-table-modulo .calendar-month-header th select {
+html.psycoapp-dark-theme .active-table-modulo .calendar-month-header th select {
     color: var(--colorletra_oscura) !important;
     background-color: var(--colorfondoletra_oscura) !important;
     font-weight: 500 !important;
 }
 
-.active-table-modulo .calendar-month-header th select option {
+html.psycoapp-dark-theme .active-table-modulo .calendar-month-header th select option {
     color: var(--colorletra_oscura) !important;
 }
 
 /* Tabla registro de citas (Semanal) de modulos */
 
-.active-table-semanal-modulo {
+html.psycoapp-dark-theme .active-table-semanal-modulo {
     background-color: var(--colormodular_oscura);
 }
 
-    .active-table-semanal-modulo td {
+    html.psycoapp-dark-theme .active-table-semanal-modulo td {
         background-color: var(--colormodular_oscura) !important;
     }
 
-    .active-table-semanal-modulo th {
+    html.psycoapp-dark-theme .active-table-semanal-modulo th {
         background-color: var(--colormodular_oscura) !important;
     }
 
-    .active-table-semanal-modulo td, .active-table-modulo th {
+    html.psycoapp-dark-theme .active-table-semanal-modulo td, html.psycoapp-dark-theme .active-table-modulo th {
         color: var(--colorletra_oscura) !important;
         vertical-align: baseline;
     }
 
+html.psycoapp-dark-theme,
+html.psycoapp-dark-theme body {
+    background-color: #111217 !important;
+    color: #e5e7eb;
+}
+
+html.psycoapp-dark-theme .sb-admninistrator,
+html.psycoapp-dark-theme .page-wrapper,
+html.psycoapp-dark-theme .container-fluid {
+    background-color: #111217 !important;
+    color: #e5e7eb;
+}
+
+html.psycoapp-dark-theme .sb-aside,
+html.psycoapp-dark-theme .sb-aside-container,
+html.psycoapp-dark-theme .sb-aside-responsive,
+html.psycoapp-dark-theme .sb-aside-reponsive-top,
+html.psycoapp-dark-theme .sb-aside-reponsive-menu,
+html.psycoapp-dark-theme .sb-aside-list {
+    background-color: #191c23 !important;
+    color: #e5e7eb !important;
+}
+
+html.psycoapp-dark-theme .card,
+html.psycoapp-dark-theme .modal-content,
+html.psycoapp-dark-theme .dropdown-menu,
+html.psycoapp-dark-theme .well,
+html.psycoapp-dark-theme .panel,
+html.psycoapp-dark-theme .list-group-item,
+html.psycoapp-dark-theme .sb-reg-citas-popup-container,
+html.psycoapp-dark-theme .sb-reg-citas-popup-body,
+html.psycoapp-dark-theme .sb-reg-citas-popup-tab-panel,
+html.psycoapp-dark-theme .sb-reg-citas-popup-tab-panel-block-item {
+    background-color: #20232b !important;
+    color: #e5e7eb !important;
+    border-color: #383d49 !important;
+}
+
+html.psycoapp-dark-theme .card-header,
+html.psycoapp-dark-theme .card-footer,
+html.psycoapp-dark-theme .modal-header,
+html.psycoapp-dark-theme .modal-footer,
+html.psycoapp-dark-theme .sb-reg-citas-popup-title,
+html.psycoapp-dark-theme .sb-reg-citas-popup-btn {
+    background-color: #191c23 !important;
+    color: #e5e7eb !important;
+    border-color: #383d49 !important;
+}
+
+html.psycoapp-dark-theme .sb-admninistrator h1,
+html.psycoapp-dark-theme .sb-admninistrator h2,
+html.psycoapp-dark-theme .sb-admninistrator h3,
+html.psycoapp-dark-theme .sb-admninistrator h4,
+html.psycoapp-dark-theme .sb-admninistrator h5,
+html.psycoapp-dark-theme .sb-admninistrator h6,
+html.psycoapp-dark-theme .sb-admninistrator label,
+html.psycoapp-dark-theme .sb-admninistrator .label-form,
+html.psycoapp-dark-theme .sb-admninistrator p,
+html.psycoapp-dark-theme .sb-admninistrator span,
+html.psycoapp-dark-theme .modal-content h1,
+html.psycoapp-dark-theme .modal-content h2,
+html.psycoapp-dark-theme .modal-content h3,
+html.psycoapp-dark-theme .modal-content h4,
+html.psycoapp-dark-theme .modal-content h5,
+html.psycoapp-dark-theme .modal-content h6,
+html.psycoapp-dark-theme .modal-content label,
+html.psycoapp-dark-theme .modal-content p,
+html.psycoapp-dark-theme .modal-content span {
+    color: #e5e7eb;
+}
+
+html.psycoapp-dark-theme .form-control,
+html.psycoapp-dark-theme .custom-select,
+html.psycoapp-dark-theme input:not([type="checkbox"]):not([type="radio"]),
+html.psycoapp-dark-theme textarea,
+html.psycoapp-dark-theme select {
+    background-color: #191c23 !important;
+    color: #e5e7eb !important;
+    border-color: #454b58 !important;
+}
+
+html.psycoapp-dark-theme select option {
+    background-color: #191c23;
+    color: #e5e7eb;
+}
+
+html.psycoapp-dark-theme .table,
+html.psycoapp-dark-theme .table th,
+html.psycoapp-dark-theme .table td,
+html.psycoapp-dark-theme .table thead th,
+html.psycoapp-dark-theme .table tbody + tbody {
+    background-color: #20232b !important;
+    color: #e5e7eb !important;
+    border-color: #383d49 !important;
+}
+
+html.psycoapp-dark-theme .table-striped tbody tr:nth-of-type(odd),
+html.psycoapp-dark-theme .table-hover tbody tr:hover {
+    background-color: #292d37 !important;
+}
+
+html.psycoapp-dark-theme .close,
+html.psycoapp-dark-theme .text-muted,
+html.psycoapp-dark-theme .breadcrumb-item,
+html.psycoapp-dark-theme .breadcrumb-item a {
+    color: #b8c0cc !important;
+}
+
+html.psycoapp-dark-theme .sb-alert-off-block {
+    background-color: #20232b !important;
+    color: #e5e7eb;
+}
 
 
 

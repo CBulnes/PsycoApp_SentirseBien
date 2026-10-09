@@ -9,6 +9,7 @@ using Newtonsoft.Json;
 using PsycoApp.BL;
 using PsycoApp.entities;
 using PsycoApp.utilities;
+using PsycoApp.api.Security;
 
 namespace PsycoApp.api.Controllers
 {
@@ -35,6 +36,8 @@ namespace PsycoApp.api.Controllers
         [HttpGet("reporte_nps/{año}/{mes}")]
         public ActionResult<List<ReporteNPS>> Get(int año, int mes)
         {
+            if (!TenantContext.IsGlobalAdministrator(User)) return Forbid();
+
             random_str = ru.RandomString(8) + "|" + ru.CurrentDate();
 
             try

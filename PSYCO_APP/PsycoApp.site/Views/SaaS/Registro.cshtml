@@ -1,0 +1,41 @@
+@model PsycoApp.site.Models.RegistroSaasViewModel
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Crear espacio de prueba | PsycoApp</title>
+    <link rel="stylesheet" href="~/login/vendor/bootstrap/css/bootstrap.min.css" />
+    <style>
+        body { background: #f4f7f8; color: #28333d; font-family: Arial, sans-serif; }
+        .panel { max-width: 680px; margin: 40px auto; padding: 36px; background: white; border-radius: 14px; box-shadow: 0 8px 28px #28333d18; }
+        h1 { color: #557e88; }
+        .form-control { height: 46px; }
+        .btn-primary { border: 0; background: #557e88; padding: 12px 22px; }
+        .back { color: #557e88; }
+    </style>
+</head>
+<body>
+    <main class="panel">
+        <a class="back" href="@Url.Action("Index", "SaaS")">← Volver</a>
+        <h1 class="mt-3">Crea el espacio de tu centro</h1>
+        <p>Se prepararán la empresa, la sede principal y el usuario administrador.</p>
+        <form asp-action="Registro" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group"><label asp-for="Empresa">Nombre de la empresa o centro</label><input asp-for="Empresa" class="form-control" /><span asp-validation-for="Empresa" class="text-danger"></span></div>
+            <div class="form-group"><label asp-for="Sede">Nombre de la sede principal</label><input asp-for="Sede" class="form-control" /><span asp-validation-for="Sede" class="text-danger"></span></div>
+            <div class="form-row">
+                <div class="form-group col-md-6"><label asp-for="Nombres">Nombres del administrador</label><input asp-for="Nombres" class="form-control" /><span asp-validation-for="Nombres" class="text-danger"></span></div>
+                <div class="form-group col-md-6"><label asp-for="Apellidos">Apellidos</label><input asp-for="Apellidos" class="form-control" /><span asp-validation-for="Apellidos" class="text-danger"></span></div>
+            </div>
+            <div class="form-group"><label asp-for="Usuario">Usuario (solo letras)</label><input asp-for="Usuario" class="form-control" autocomplete="username" /><span asp-validation-for="Usuario" class="text-danger"></span></div>
+            <div class="form-group"><label asp-for="Password">Contraseña</label><input asp-for="Password" class="form-control" autocomplete="new-password" /><span asp-validation-for="Password" class="text-danger"></span></div>
+            <div class="form-group"><label asp-for="ConfirmarPassword">Confirmar contraseña</label><input asp-for="ConfirmarPassword" class="form-control" autocomplete="new-password" /><span asp-validation-for="ConfirmarPassword" class="text-danger"></span></div>
+            <button type="submit" class="btn btn-primary">Crear espacio de prueba</button>
+        </form>
+    </main>
+</body>
+</html>

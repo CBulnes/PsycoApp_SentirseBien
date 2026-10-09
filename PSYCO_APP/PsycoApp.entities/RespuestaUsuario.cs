@@ -10,5 +10,6 @@ namespace PsycoApp.entities
         public string descripcion { get; set; } = "";
         public Usuario data { get; set; } = null;
         public int? id_paquete { get; set; }
+        public string token { get; set; } = "";
     }
 }

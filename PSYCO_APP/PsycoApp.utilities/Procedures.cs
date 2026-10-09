@@ -81,6 +81,8 @@ namespace PsycoApp.utilities
         public const string buscar_psicologos_empresa_sede = "dbo.SP_BUSCAR_PSICOLOGOS_POR_EMPRESA_SEDE";
         public const string agregar_psicologo = "dbo.sp_agregar_psicologo";
         public const string guardar_credenciales_psicologo = "dbo.SP_GUARDAR_CREDENCIALES_PSICOLOGO";
+        public const string obtener_credenciales_psicologo = "dbo.SP_OBTENER_CREDENCIALES_PSICOLOGO";
+        public const string actualizar_password_psicologo = "dbo.SP_ACTUALIZAR_PASSWORD_PSICOLOGO";
         public const string actualizar_psicologo = "dbo.sp_actualizar_psicologo";
         public const string eliminar_psicologo = "dbo.sp_eliminar_psicologo";
 

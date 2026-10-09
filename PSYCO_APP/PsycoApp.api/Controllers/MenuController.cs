@@ -9,6 +9,8 @@ using Newtonsoft.Json;
 using PsycoApp.BL;
 using PsycoApp.entities;
 using PsycoApp.utilities;
+using PsycoApp.api.Security;
+using System.Security.Claims;
 
 namespace PsycoApp.api.Controllers
 {
@@ -26,6 +28,14 @@ namespace PsycoApp.api.Controllers
         [HttpGet("{id_usuario}/{id_tipousuario}")]
         public ActionResult<RespuestaMenu> Get(int id_usuario, int id_tipousuario)
         {
+            if (!TenantContext.TryGetIntClaim(User, ClaimTypes.NameIdentifier, out var idUsuarioAutenticado)
+                || !TenantContext.TryGetIntClaim(User, "id_tipousuario", out var tipoUsuarioAutenticado)
+                || idUsuarioAutenticado <= 0 || tipoUsuarioAutenticado <= 0
+                || id_usuario != idUsuarioAutenticado || id_tipousuario != tipoUsuarioAutenticado)
+                return Forbid();
+
+            id_usuario = idUsuarioAutenticado;
+            id_tipousuario = tipoUsuarioAutenticado;
             usuario.id_usuario = id_usuario;
             usuario.id_tipousuario = id_tipousuario;
 

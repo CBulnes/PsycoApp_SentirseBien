@@ -1,0 +1,26 @@
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Registro completado | PsycoApp</title>
+    <link rel="stylesheet" href="~/login/vendor/bootstrap/css/bootstrap.min.css" />
+    <style>
+        body { display: grid; min-height: 100vh; place-items: center; background: #f4f7f8; font-family: Arial, sans-serif; color: #28333d; }
+        main { max-width: 560px; padding: 42px; text-align: center; background: white; border-radius: 14px; box-shadow: 0 8px 28px #28333d18; }
+        h1 { color: #557e88; }
+        .btn-primary { border: 0; background: #557e88; padding: 12px 22px; }
+    </style>
+</head>
+<body>
+    <main>
+        <h1>¡Tu espacio está listo!</h1>
+        <p>Se creó la empresa, su sede principal y la cuenta administradora.</p>
+        <p>Tu usuario es <strong>@ViewBag.Usuario</strong>. Entra para configurar tu equipo, pacientes y primeras citas.</p>
+        <a class="btn btn-primary" href="@Url.Action("Index", "Login")">Ingresar y empezar</a>
+    </main>
+</body>
+</html>

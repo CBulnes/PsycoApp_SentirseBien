@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using System.Security.Claims;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using PsycoApp.BL;
@@ -36,6 +34,16 @@ namespace PsycoApp.api.Controllers
         [HttpGet("{id_usuario}")]
         public ActionResult<List<Flujo>> Get(int id_usuario)
         {
+            if (!int.TryParse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value, out var authenticatedUserId))
+            {
+                return Unauthorized();
+            }
+
+            if (id_usuario != authenticatedUserId)
+            {
+                return Forbid();
+            }
+
             random_str = ru.RandomString(8) + "|" + ru.CurrentDate();
 
             try
@@ -55,8 +63,23 @@ namespace PsycoApp.api.Controllers
         }
 
         [HttpPost("registrar_flujo")]
-        public string Post([FromBody] Flujo oFlujo)
+        public ActionResult<string> Post([FromBody] Flujo oFlujo)
         {
+            if (oFlujo == null)
+            {
+                return BadRequest();
+            }
+
+            if (!int.TryParse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value, out var authenticatedUserId))
+            {
+                return Unauthorized();
+            }
+
+            if (oFlujo.id_usuario != authenticatedUserId)
+            {
+                return Forbid();
+            }
+
             random_str = ru.RandomString(8) + "|" + ru.CurrentDate();
 
             try

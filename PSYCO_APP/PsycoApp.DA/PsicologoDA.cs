@@ -7,6 +7,7 @@ using PsycoApp.entities;
 using PsycoApp.DA.SQLConnector;
 using PsycoApp.utilities;
 using System.Collections;
+using System.Linq;
 
 namespace PsycoApp.DA
 {
@@ -243,6 +244,7 @@ namespace PsycoApp.DA
                     _connection.Close();
                 }
             }
+            AplicarEstadoCredenciales(psicologos);
             return psicologos;
         }
 
@@ -291,7 +293,43 @@ namespace PsycoApp.DA
                     _connection.Close();
                 }
             }
+            AplicarEstadoCredenciales(psicologos);
             return psicologos;
+        }
+
+        private void AplicarEstadoCredenciales(List<Psicologo> psicologos)
+        {
+            if (psicologos == null || psicologos.Count == 0)
+                return;
+
+            var parametros = psicologos.Select((psicologo, index) => "@Id" + index).ToArray();
+            var consulta = "SELECT p.Id, CONVERT(BIT, CASE WHEN NULLIF(LTRIM(RTRIM(u.email)), '') IS NULL THEN 0 ELSE 1 END) AS TieneUsuario " +
+                "FROM dbo.tbl_psicologo p LEFT JOIN dbo.tbl_usuario u ON u.id_tipousuario = 4 AND u.num_documento = p.DocumentoNumero " +
+                "WHERE p.Id IN (" + string.Join(",", parametros) + ")";
+
+            using (var command = new SqlCommand(consulta, _connection))
+            {
+                for (var i = 0; i < psicologos.Count; i++)
+                    command.Parameters.Add(parametros[i], SqlDbType.Int).Value = psicologos[i].Id;
+
+                _connection.Open();
+                try
+                {
+                    using (var reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            var psicologo = psicologos.FirstOrDefault(item => item.Id == Convert.ToInt32(reader["Id"]));
+                            if (psicologo != null)
+                                psicologo.TieneUsuario = Convert.ToBoolean(reader["TieneUsuario"]);
+                        }
+                    }
+                }
+                finally
+                {
+                    _connection.Close();
+                }
+            }
         }
 
         public void AgregarPsicologo(Psicologo psicologo)
@@ -335,6 +373,56 @@ namespace PsycoApp.DA
                 command.Parameters.Add("@Email", SqlDbType.VarChar, 100).Value = email;
                 command.Parameters.Add("@Password", SqlDbType.VarChar, 300).Value = password;
 
+                _connection.Open();
+                try
+                {
+                    command.ExecuteNonQuery();
+                }
+                finally
+                {
+                    _connection.Close();
+                }
+            }
+        }
+
+        public Usuario ObtenerCredencialesPsicologo(int idPsicologo, int idSede)
+        {
+            using (var command = new SqlCommand(Procedures.obtener_credenciales_psicologo, _connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.Parameters.Add("@IdPsicologo", SqlDbType.Int).Value = idPsicologo;
+                command.Parameters.Add("@IdSede", SqlDbType.Int).Value = idSede;
+                _connection.Open();
+                try
+                {
+                    using (var reader = command.ExecuteReader())
+                    {
+                        if (!reader.Read())
+                            return null;
+
+                        return new Usuario
+                        {
+                            id_usuario = Convert.ToInt32(reader["IdUsuario"]),
+                            id_psicologo = idPsicologo,
+                            email = Convert.ToString(reader["Login"])
+                        };
+                    }
+                }
+                finally
+                {
+                    _connection.Close();
+                }
+            }
+        }
+
+        public void ActualizarPasswordPsicologo(int idPsicologo, int idSede, string password)
+        {
+            using (var command = new SqlCommand(Procedures.actualizar_password_psicologo, _connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.Parameters.Add("@IdPsicologo", SqlDbType.Int).Value = idPsicologo;
+                command.Parameters.Add("@IdSede", SqlDbType.Int).Value = idSede;
+                command.Parameters.Add("@Password", SqlDbType.VarChar, 300).Value = password;
                 _connection.Open();
                 try
                 {
@@ -422,14 +510,16 @@ namespace PsycoApp.DA
             return lista;
         }
 
-        public List<entities.Usuario> listar_usuarios_caja_combo()
+        public List<entities.Usuario> listar_usuarios_caja_combo(int idEmpresa, int idSede)
         {
             List<entities.Usuario> lista = new List<entities.Usuario>();
             try
             {
                 cn.Open();
-                SqlCommand cmd = new SqlCommand("SP_LISTAR_USUARIOS_CAJA_COMBO", cn); 
+                SqlCommand cmd = new SqlCommand("SP_LISTAR_USUARIOS_CAJA_COMBO", cn);
                 cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Add("@IdEmpresa", SqlDbType.Int).Value = idEmpresa;
+                cmd.Parameters.Add("@IdSede", SqlDbType.Int).Value = idSede;
 
                 SqlDataAdapter da = new SqlDataAdapter(cmd);
                 DataTable dt = new DataTable();
@@ -440,6 +530,8 @@ namespace PsycoApp.DA
                     item.id_usuario = Convert.ToInt32(row["id_usuario"]);
                     item.nombres = Convert.ToString(row["nombres"]);
                     item.sedes = Convert.ToString(row["sedes"]);
+                    item.id_sede = Convert.ToInt32(row["id_sede"]);
+                    item.id_empresa = Convert.ToInt32(row["id_empresa"]);
                     lista.Add(item);
                 }
             }

@@ -26,6 +26,7 @@ namespace PsycoApp.entities
         public string Estado { get; set; }
         public List<Estudio> Estudios { get; set; }
         public string Sedes { get; set; }
+        public bool TieneUsuario { get; set; }
     }
 
     public class Estudio

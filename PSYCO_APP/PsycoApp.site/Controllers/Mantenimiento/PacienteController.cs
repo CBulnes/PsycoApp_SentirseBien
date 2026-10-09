@@ -239,8 +239,12 @@ namespace PsycoApp.site.Controllers.Mantenimiento
         [HttpPost]
         public async Task<IActionResult> Editar([FromBody] entities.Paciente paciente)
         {
+            var idSede = HttpContext.Session.GetInt32("id_sede");
+            if (!idSede.HasValue || idSede.Value <= 0)
+                return Forbid();
             if (ModelState.IsValid)
             {
+                paciente.id_sede = idSede.Value;
                 string url = $"{apiUrl}/actualizar";
                 var response = await PutToApiAsync(url, paciente);
                 if (response.IsSuccessStatusCode)
@@ -256,6 +260,9 @@ namespace PsycoApp.site.Controllers.Mantenimiento
         [HttpPost]
         public async Task<IActionResult> Eliminar(int id)
         {
+            var idSede = HttpContext.Session.GetInt32("id_sede");
+            if (!idSede.HasValue || idSede.Value <= 0)
+                return Forbid();
             string url = $"{apiUrl}/eliminar/{id}";
             var response = await DeleteFromApiAsync(url);
             if (response.IsSuccessStatusCode)
@@ -267,7 +274,7 @@ namespace PsycoApp.site.Controllers.Mantenimiento
 
         private async Task<T> GetFromApiAsync<T>(string url)
         {
-            using var client = new HttpClient();
+            using var client = ApiCaller.CreateHttpClient();
             var response = await client.GetStringAsync(url);
             return JsonConvert.DeserializeObject<T>(response);
         }
@@ -277,7 +284,10 @@ namespace PsycoApp.site.Controllers.Mantenimiento
         {
             try
             {
-                string url = $"{apiUrl}/BuscarId/{id}"; // URL de la API para obtener el paciente por ID
+                var idSede = HttpContext.Session.GetInt32("id_sede");
+                if (!idSede.HasValue || idSede.Value <= 0)
+                    return Forbid();
+                string url = $"{apiUrl}/BuscarId/{id}";
                 var paciente = await GetFromApiAsync<PsycoApp.entities.Paciente>(url);
 
                 if (paciente == null)
@@ -295,21 +305,21 @@ namespace PsycoApp.site.Controllers.Mantenimiento
 
         private async Task<HttpResponseMessage> PostToApiAsync<T>(string url, T data)
         {
-            using var client = new HttpClient();
+            using var client = ApiCaller.CreateHttpClient();
             var content = new StringContent(JsonConvert.SerializeObject(data), System.Text.Encoding.UTF8, "application/json");
             return await client.PostAsync(url, content);
         }
 
         private async Task<HttpResponseMessage> PutToApiAsync<T>(string url, T data)
         {
-            using var client = new HttpClient();
+            using var client = ApiCaller.CreateHttpClient();
             var content = new StringContent(JsonConvert.SerializeObject(data), System.Text.Encoding.UTF8, "application/json");
             return await client.PutAsync(url, content);
         }
 
         private async Task<HttpResponseMessage> DeleteFromApiAsync(string url)
         {
-            using var client = new HttpClient();
+            using var client = ApiCaller.CreateHttpClient();
             return await client.DeleteAsync(url);
         }
 

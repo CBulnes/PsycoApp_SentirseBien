@@ -75,6 +75,7 @@ namespace PsycoApp.site.Controllers
                 usuario.password = usuario.password.Trim().ToUpper();
                 int centro = usuario.id_sede;
                 int idEmpresaSeleccionada = usuario.id_empresa;
+                Sede sedeSeleccionada = null;
 
                 url = url_api + "/api/usuario/validar_usuario";
                 obj = (dynamic)usuario;
@@ -82,32 +83,39 @@ namespace PsycoApp.site.Controllers
                 oRespuesta = JsonConvert.DeserializeObject<RespuestaUsuario>(res);
                 usuario = oRespuesta.data;
 
-                if (oRespuesta.estado && usuario.id_tipousuario != 20
-                    && !await EmpresaYSedeValidas(idEmpresaSeleccionada, usuario.id_sede))
+                if (oRespuesta.estado && usuario.id_tipousuario != 20)
                 {
-                    oRespuesta.estado = false;
-                    oRespuesta.descripcion = "Selecciona una empresa y una sede activa que pertenezca a esa empresa.";
-                    return oRespuesta;
+                    sedeSeleccionada = await ObtenerSedeValida(usuario.id_empresa, usuario.id_sede);
+                    if (sedeSeleccionada == null)
+                    {
+                        oRespuesta.estado = false;
+                        oRespuesta.descripcion = "Selecciona una empresa y una sede activa que pertenezca a esa empresa.";
+                        return oRespuesta;
+                    }
                 }
 
                 if (oRespuesta.estado)
                 {
                     centro = usuario.id_tipousuario == 20 ? 0 : usuario.id_sede;
                     HttpContext.Session.SetString("email", usuario.email);
-                    HttpContext.Session.SetString("password", usuario.password);
+                    HttpContext.Session.SetString("jwt", oRespuesta.token);
                     HttpContext.Session.SetInt32("id_usuario", usuario.id_usuario);
                     HttpContext.Session.SetString("nombres", usuario.nombres);
                     HttpContext.Session.SetString("apellidos", usuario.apellidos);
                     HttpContext.Session.SetInt32("id_tipousuario", usuario.id_tipousuario);
                     HttpContext.Session.SetInt32("id_psicologo", usuario.id_psicologo);
                     HttpContext.Session.SetInt32("id_sede", centro);
-                    HttpContext.Session.SetInt32("id_empresa", usuario.id_tipousuario == 20 ? 0 : idEmpresaSeleccionada);
+                    HttpContext.Session.SetString("nombre_sede", usuario.id_tipousuario == 20
+                        ? "Administrador global"
+                        : sedeSeleccionada.Nombre);
+                    HttpContext.Session.SetInt32("id_empresa", usuario.id_tipousuario == 20 ? 0 : usuario.id_empresa);
                     HttpContext.Session.SetString("tipousuario", usuario.tipousuario.ToUpper());
                     HttpContext.Session.SetString("tipo_documento", usuario.tipo_documento);
                     HttpContext.Session.SetString("num_documento", usuario.num_documento);
                     HttpContext.Session.SetInt32("test_actual", usuario.test_actual);
                     HttpContext.Session.SetString("login", usuario.email);
                     HttpContext.Session.SetInt32("flag_chat", 1);
+                    oRespuesta.token = string.Empty;
                 }
             }
             catch (Exception ex)
@@ -118,7 +126,7 @@ namespace PsycoApp.site.Controllers
             return oRespuesta;
         }
 
-        private async Task<bool> EmpresaYSedeValidas(int idEmpresa, int idSede)
+        private async Task<Sede> ObtenerSedeValida(int idEmpresa, int idSede)
         {
             using (var client = new HttpClient())
             {
@@ -126,11 +134,11 @@ namespace PsycoApp.site.Controllers
                 var empresas = JsonConvert.DeserializeObject<List<Empresa>>(empresasJson);
                 var empresaActiva = empresas != null && empresas.Exists(e => e.Id == idEmpresa && e.Estado);
                 if (!empresaActiva || idSede <= 0)
-                    return false;
+                    return null;
 
                 var sedesJson = await client.GetStringAsync(url_api + "/api/EmpresaSede/empresas/" + idEmpresa + "/sedes");
                 var sedes = JsonConvert.DeserializeObject<List<Sede>>(sedesJson);
-                return sedes != null && sedes.Exists(s => s.Id == idSede && s.IdEmpresa == idEmpresa && s.Estado);
+                return sedes?.Find(s => s.Id == idSede && s.IdEmpresa == idEmpresa && s.Estado);
             }
         }
 

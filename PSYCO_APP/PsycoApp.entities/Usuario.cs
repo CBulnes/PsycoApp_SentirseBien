@@ -23,6 +23,7 @@ namespace PsycoApp.entities
 		public string num_documento { get; set; } = "";
 		public string validacion { get; set; } = "";
 		public int test_actual { get; set; } = 0;
+		// Este valor debe ser establecido desde DB y no desde el cliente.
 		public string login { get; set; } = "";
 	}
 }

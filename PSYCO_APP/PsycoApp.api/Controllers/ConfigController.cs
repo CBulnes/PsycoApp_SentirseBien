@@ -1,15 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using System.Security.Claims;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
 using PsycoApp.BL;
-using PsycoApp.DA;
 using PsycoApp.entities;
-using PsycoApp.utilities;
 
 namespace PsycoApp.api.Controllers
 {
@@ -46,6 +41,16 @@ namespace PsycoApp.api.Controllers
         [HttpPut("actualizar_valor")]
         public ActionResult ActualizarValor([FromBody] Configuracion conf)
         {
+            if (User.FindFirst(ClaimTypes.Role)?.Value != "20")
+            {
+                return Forbid();
+            }
+
+            if (conf == null || string.IsNullOrWhiteSpace(conf.ConfigKey) || conf.ConfigValue == null)
+            {
+                return BadRequest("La configuración no es válida.");
+            }
+
             try
             {
                 configBL.actualizar_valor(conf.ConfigKey, conf.ConfigValue);

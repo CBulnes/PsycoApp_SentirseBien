@@ -9,6 +9,7 @@ using Newtonsoft.Json;
 using PsycoApp.BL;
 using PsycoApp.entities;
 using PsycoApp.utilities;
+using PsycoApp.api.Security;
 
 namespace PsycoApp.api.Controllers
 {
@@ -35,6 +36,10 @@ namespace PsycoApp.api.Controllers
         [HttpPost("registrar_visita")]
         public string Post([FromBody] Visita oVisita)
         {
+            if (oVisita == null || !TenantContext.TryGetIntClaim(User, "id_tipousuario", out var tipoUsuario) || tipoUsuario <= 0)
+                return "No está autorizado para registrar la visita.";
+
+            oVisita.id_tipousuario = tipoUsuario;
             random_str = ru.RandomString(8) + "|" + ru.CurrentDate();
 
             try
@@ -57,6 +62,10 @@ namespace PsycoApp.api.Controllers
         [HttpPut("registrar_punto_visitado")]
         public string Put([FromBody] Visita oVisita)
         {
+            if (oVisita == null || !TenantContext.TryGetIntClaim(User, "id_tipousuario", out var tipoUsuario) || tipoUsuario <= 0)
+                return "No está autorizado para registrar el punto visitado.";
+
+            oVisita.id_tipousuario = tipoUsuario;
             random_str = ru.RandomString(8) + "|" + ru.CurrentDate();
 
             try

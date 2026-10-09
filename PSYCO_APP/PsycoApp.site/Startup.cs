@@ -4,10 +4,12 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using PsycoApp.utilities;
 
 namespace PsycoApp.site
 {
@@ -66,10 +68,26 @@ namespace PsycoApp.site
 
             app.UseRouting();
 
-            app.UseAuthorization();
             app.UseSession();
+            app.Use(async (context, next) =>
+            {
+                ApiCaller.SetAccessToken(context.Session.GetString("jwt"));
+                try
+                {
+                    await next();
+                }
+                finally
+                {
+                    ApiCaller.ClearAccessToken();
+                }
+            });
+            app.UseAuthorization();
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapControllerRoute(
+                    name: "public-landing",
+                    pattern: "",
+                    defaults: new { controller = "SaaS", action = "Index" });
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Login}/{action=Index}/{id?}");

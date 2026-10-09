@@ -1,80 +1,63 @@
 ﻿@model IEnumerable<PsycoApp.site.Models.Paciente>
 
-<table class="table table-striped active-table-modulo">
-    <thead>
-        <tr>
-            <th>Nº</th>
-            <th>Nombre</th>
-            <th>Documento</th>
-            <th>Estado</th>
-            <th>Fecha de nacimiento</th>
-            <th>Teléfono</th>
-            <th>Acciones</th>
-        </tr>
-    </thead>
-    <tbody>
-        @if (Model != null && Model.Any())
-        {
-            @foreach (var paciente in Model.Select((item, index) => (item, index)))
-            {
-                <tr>
-                    <td class="text-center">@(paciente.index + 1)</td>
-                    <td>@paciente.item.Nombre @paciente.item.Apellido</td>
-                    <td>@paciente.item.DocumentoTipo - @paciente.item.DocumentoNumero</td>
-                  <td>
-                    @if (@paciente.item.Estado == "1")
-                    {
-                        <span class="active-texto-modulo">Habilitado</span>
-                    }
-                        else if (@paciente.item.Estado == "0")
-                    {
-                        <span class="active-texto-modulo">Deshabilitado</span>
-                    }
-                    else
-                    {
-                        <span class="active-texto-modulo">Desconocido</span> <!-- Por si hay otros estados no contemplados -->
-                    }
-                </td>
-                    <td>@paciente.item.FechaNacimiento.ToString().Substring(0, 10)</td>
-                    <td>@paciente.item.Telefono</td>
-                    <td>
-                        <div class="sb-pa-container-tble-td">
-                            <!-- Acciones como editar o eliminar -->
-                            <button class="btn btn-sm sb-pa-container-table-button-edit active-button-tabla-modulo" onclick="editarPaciente(@paciente.item.Id)">Editar</button>
-                            <button class="btn btn-sm sb-psi-container-table-button-delet active-button-tabla-modulo" onclick="eliminarPaciente(@paciente.item.Id, @paciente.item.Estado)">@(paciente.item.Estado == "1" ? "Deshabilitar" : "Habilitar")</button>
-                        </div>
-                    </td>
-                </tr>
-            }
-        }
-        else
-        {
+<div class="sb-psi-table-scroll">
+    <table class="table active-table-modulo">
+        <thead>
             <tr>
-                <td colspan="6">No se encontraron pacientes.</td>
+                <th class="text-center">N.º</th>
+                <th>Nombre y apellidos</th>
+                <th>Documento</th>
+                <th>Estado</th>
+                <th>Fecha de nacimiento</th>
+                <th>Teléfono</th>
+                <th class="text-center">Acciones</th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @if (Model != null && Model.Any())
+            {
+                @foreach (var paciente in Model.Select((item, index) => (item, index)))
+                {
+                    var habilitado = paciente.item.Estado == "1";
+                    <tr>
+                        <td class="text-center">@(paciente.index + 1)</td>
+                        <td class="sb-psi-name-cell">@paciente.item.Nombre @paciente.item.Apellido</td>
+                        <td>@paciente.item.DocumentoTipo - @paciente.item.DocumentoNumero</td>
+                        <td><span class="sb-psi-status @(habilitado ? "habilitado" : "deshabilitado")">@(habilitado ? "Habilitado" : "Deshabilitado")</span></td>
+                        <td>@paciente.item.FechaNacimiento.ToString().Substring(0, 10)</td>
+                        <td>@paciente.item.Telefono</td>
+                        <td>
+                            <div class="sb-psi-row-actions">
+                                <button type="button" class="sb-psi-action-button" onclick="editarPaciente(@paciente.item.Id)"><i class="fa fa-pencil"></i> Editar</button>
+                                <button type="button" class="sb-psi-action-button" onclick="eliminarPaciente(@paciente.item.Id)"><i class="fa fa-trash"></i> Eliminar</button>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr><td colspan="7" class="text-center">No se encontraron pacientes.</td></tr>
+            }
+        </tbody>
+    </table>
+</div>
 
 <!-- Controles de Paginación -->
 @if (ViewBag.PageNumber != null && ViewBag.PageSize != null)
 {
-    <nav aria-label="Paginación">
-        <ul class="pagination sb-pa-container-nav active-paginacion-tabla-modulo">
-            <li class="page-item @(ViewBag.PageNumber == 1 ? "disabled" : "")">
-                <a class="page-link" href="javascript:void(0)" onclick="buscarPaciente(@(ViewBag.PageNumber - 1))"><span>&#60;</span></a>
-            </li>
-
-            <!-- Aquí podrías agregar más lógica para mostrar números de página si es necesario -->
-            <li class="page-item">
-                <span class="page-link">
-                    @(ViewBag.PageNumber)
-                </span>
-            </li>
-
-            <li class="page-item @(Model.Count() < ViewBag.PageSize ? "disabled" : "")">
-                <a class="page-link" href="javascript:void(0)" onclick="buscarPaciente(@(ViewBag.PageNumber + 1))"><span>&#62;</span></a>
-            </li>
-        </ul>
-    </nav>
+    <div class="sb-psi-table-footer">
+        <span>Mostrando @Model.Count() pacientes</span>
+        <nav aria-label="Paginación">
+            <ul class="pagination active-paginacion-tabla-modulo">
+                <li class="page-item @(ViewBag.PageNumber == 1 ? "disabled" : "")">
+                    <a class="page-link" href="javascript:void(0)" onclick="buscarPaciente(@(ViewBag.PageNumber - 1))" aria-label="Página anterior"><i class="fa fa-chevron-left"></i></a>
+                </li>
+                <li class="page-item active"><span class="page-link">@(ViewBag.PageNumber)</span></li>
+                <li class="page-item @(Model.Count() < ViewBag.PageSize ? "disabled" : "")">
+                    <a class="page-link" href="javascript:void(0)" onclick="buscarPaciente(@(ViewBag.PageNumber + 1))" aria-label="Página siguiente"><i class="fa fa-chevron-right"></i></a>
+                </li>
+            </ul>
+        </nav>
+    </div>
 }

@@ -216,13 +216,13 @@
         </div>
 
         <div class="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
-            <span class="label-form active-texto-modulo">&nbsp;</span>
-            <a onclick="$('#pacientesModal').modal('show');" class="btn modal-trigger sb-reg-citas-button active-botonera-modulo" style="margin-left: 0px; text-align: center; display: block;">Acceso a pacientes</a>
+            <span class="label-form active-texto-modulo" >&nbsp;</span>
+            <a onclick="$('#pacientesModal').modal('show');" class="btn modal-trigger sb-reg-citas-button active-botonera-modulo" style="color:white;margin-left: 0px; text-align: center; display: block;">Acceso a pacientes</a>
         </div>
 
         <div class="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
-            <span class="label-form active-texto-modulo">&nbsp;</span>
-            <a data-id-cita="0" data-id-especialista="-1" data-evaluacion="false" data-servicio="" data-id-paciente="-1" data-fecha-cita="" data-pago-gratis="0" data-hora-cita="" data-estado="-" data-telefono="--" data-moneda="S/." data-monto-pactado="0.00" data-monto-pagado="0.00" data-monto-pendiente="0.00" data-id-servicio="-1" data-id-sede="-1" data-dni-paciente="--" data-paciente="" data-id-paquete="0" data-tipocita="P" onclick="ver_cita(this)" class="btn modal-trigger sb-reg-citas-button active-botonera-modulo btn_nueva_cita" style="margin-left: 0px; text-align: center; display: block;">Nueva cita</a>
+            <span class="label-form active-texto-modulo" >&nbsp;</span>
+            <a data-id-cita="0" data-id-especialista="-1" data-evaluacion="false" data-servicio="" data-id-paciente="-1" data-fecha-cita="" data-pago-gratis="0" data-hora-cita="" data-estado="-" data-telefono="--" data-moneda="S/." data-monto-pactado="0.00" data-monto-pagado="0.00" data-monto-pendiente="0.00" data-id-servicio="-1" data-id-sede="-1" data-dni-paciente="--" data-paciente="" data-id-paquete="0" data-tipocita="P" onclick="ver_cita(this)" class="btn modal-trigger sb-reg-citas-button active-botonera-modulo btn_nueva_cita" style="color:white;margin-left: 0px; text-align: center; display: block;">Nueva cita</a>
         </div>
 
     </div>
@@ -459,6 +459,13 @@
                                     </div>
                                 </div>
 
+                                <div class="sb-reg-citas-popup-tab-panel-block">
+                                    <div class="sb-reg-citas-popup-tab-panel-block-item">
+                                        <span class="label-form">Link de Zoom</span>
+                                        <input class="form-control" type="url" id="txtUrlZoom" autocomplete="off" maxlength="500" placeholder="https://zoom.us/j/..." />
+                                    </div>
+                                </div>
+
                                 <div class="customer-feedback" style="display:none">
                                     <label for="feedback">Estado del Cliente:</label>
                                     <div class="feedback-icons">
@@ -495,15 +502,11 @@
                                         <input class="form-control" type="text" id="txtMontoPendiente" autocomplete="off" disabled="disabled" />
                                     </div>
                                 </div>
-                                <div class="sb-reg-citas-popup-tab-panel-block" style="display: flex;">
-                                    <div class="sb-reg-citas-popup-tab-panel-block-item" style="width: 50%; display: inline-flex;">
+                                <div class="sb-reg-citas-popup-tab-panel-block" id="divDescuentoCita" style="display: none;">
+                                    <div class="sb-reg-citas-popup-tab-panel-block-item">
                                         <span class="label-form">Descuento</span>
                                         <input class="form-control" type="text" id="txtMontoDescuento" autocomplete="off" onfocusout="setDecimalValue()" />
-                                    </div>
-
-                                    <div class="sb-reg-citas-popup-tab-panel-block-item" style="width: 50%;">
-                                        <span class="label-form">&nbsp;</span>
-                                        <button type="button" class="btn btn-secondary sb-reg-citas-popup-button-volver" style="width: 100%;" onclick="agregar_descuento()">Aplicar</button>
+                                        <button type="button" class="btn btn-secondary sb-reg-citas-popup-button-volver" onclick="agregar_descuento()">Aplicar</button>
                                     </div>
                                 </div>
                              
@@ -524,8 +527,15 @@
                         <div class="row">
                             <div class="sb-reg-citas-popup-tab-panel col-md-8">
 
-                                <div class="sb-reg-citas-popup-tab-panel-block" id="divHorarios">
+                                <div class="sb-reg-citas-popup-tab-panel-block" id="divHorarios" style="display: none;">
                                     <div class="sb-reg-citas-popup-tab-panel-block-item">
+                                        <div class="sb-reg-citas-horarios-ayuda">
+                                            <p>Aquí puedes seleccionar un horario del especialista:</p>
+                                            <div class="sb-reg-citas-horarios-leyenda">
+                                                <span><i class="sb-reg-citas-horarios-color disponible"></i>Disponible</span>
+                                                <span><i class="sb-reg-citas-horarios-color no-disponible"></i>Reservado o refrigerio</span>
+                                            </div>
+                                        </div>
                                         <table class="table table-responsive" style="display: inline-table;">
                                             <thead>
                                                 <tr>

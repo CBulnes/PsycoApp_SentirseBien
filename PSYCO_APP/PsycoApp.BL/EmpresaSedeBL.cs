@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using PsycoApp.DA;
 using PsycoApp.entities;
 
@@ -21,6 +22,16 @@ namespace PsycoApp.BL
 
             empresa.Nombre = empresa.Nombre.Trim();
             return _empresaSedeDA.CrearEmpresa(empresa);
+        }
+
+        public bool EmpresaActiva(int idEmpresa)
+        {
+            return idEmpresa > 0 && _empresaSedeDA.EmpresaActiva(idEmpresa);
+        }
+
+        public bool SedePerteneceEmpresaActiva(int idSede, int idEmpresa)
+        {
+            return idSede > 0 && idEmpresa > 0 && _empresaSedeDA.SedePerteneceEmpresaActiva(idSede, idEmpresa);
         }
 
         public List<Sede> ListarSedes(int idEmpresa)
@@ -64,5 +75,33 @@ namespace PsycoApp.BL
             usuario.Password = usuario.Password.Trim();
             return _empresaSedeDA.CrearUsuario(usuario);
         }
+
+        public RegistroSaasEmpresa RegistrarEmpresaPrueba(RegistroSaasEmpresa registro)
+        {
+            if (registro == null || string.IsNullOrWhiteSpace(registro.Empresa)
+                || string.IsNullOrWhiteSpace(registro.Sede)
+                || string.IsNullOrWhiteSpace(registro.Nombres)
+                || string.IsNullOrWhiteSpace(registro.Apellidos)
+                || string.IsNullOrWhiteSpace(registro.Usuario)
+                || string.IsNullOrWhiteSpace(registro.Password))
+                throw new ArgumentException("Completa los datos de empresa, sede y administrador.");
+
+            registro.Empresa = registro.Empresa.Trim();
+            registro.Sede = registro.Sede.Trim();
+            registro.Nombres = registro.Nombres.Trim();
+            registro.Apellidos = registro.Apellidos.Trim();
+            registro.Usuario = registro.Usuario.Trim().ToUpperInvariant();
+            registro.Password = registro.Password.Trim();
+
+            if (registro.Empresa.Length > 200 || registro.Sede.Length > 200
+                || registro.Nombres.Length > 100 || registro.Apellidos.Length > 100
+                || registro.Usuario.Length > 50 || registro.Password.Length > 50)
+                throw new ArgumentException("Uno o más campos superan el máximo permitido.");
+            if (registro.Usuario.Any(c => !char.IsLetter(c)))
+                throw new ArgumentException("El usuario debe contener solo letras, sin espacios.");
+
+            return _empresaSedeDA.RegistrarEmpresaPrueba(registro);
+        }
+
     }
 }

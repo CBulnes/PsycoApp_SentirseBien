@@ -64,6 +64,22 @@ namespace PsycoApp.BL
             _psicologoDA.GuardarCredencialesPsicologo(idPsicologo, idSede, email.Trim(), password);
         }
 
+        public Usuario ObtenerCredencialesPsicologo(int idPsicologo, int idSede)
+        {
+            if (idPsicologo <= 0 || idSede <= 0)
+                throw new ArgumentException("El especialista seleccionado no es válido.");
+
+            return _psicologoDA.ObtenerCredencialesPsicologo(idPsicologo, idSede);
+        }
+
+        public void ActualizarPasswordPsicologo(int idPsicologo, int idSede, string password)
+        {
+            if (idPsicologo <= 0 || idSede <= 0 || string.IsNullOrWhiteSpace(password))
+                throw new ArgumentException("Ingrese una contraseña válida.");
+
+            _psicologoDA.ActualizarPasswordPsicologo(idPsicologo, idSede, password);
+        }
+
         public List<Psicologo> BuscarPsicologo(string nombre)
         {
             var list = _psicologoDA.BuscarPsicologo(nombre);
@@ -119,9 +135,12 @@ namespace PsycoApp.BL
             return _psicologoDA.listar_psicologos_combo();
         }
 
-        public List<entities.Usuario> listar_usuarios_caja_combo()
+        public List<entities.Usuario> listar_usuarios_caja_combo(int idEmpresa, int idSede)
         {
-            return _psicologoDA.listar_usuarios_caja_combo();
+            if (idEmpresa <= 0 || idSede == 0 || idSede < -1)
+                throw new ArgumentException("La empresa o sede seleccionada no es válida.");
+
+            return _psicologoDA.listar_usuarios_caja_combo(idEmpresa, idSede);
         }
 
         public List<entities.Sede> listar_sedes_x_usuario_combo(int id_usuario)

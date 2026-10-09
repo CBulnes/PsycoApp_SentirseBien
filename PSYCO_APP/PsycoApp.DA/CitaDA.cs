@@ -16,6 +16,65 @@ namespace PsycoApp.DA
         SqlConnection cn = new SqlConnector().cadConnection_psyco;
         string rpta = "";
 
+        public bool CitaPerteneceASede(int idCita, int idSede)
+        {
+            using (var conexion = new SqlConnector().cadConnection_psyco)
+            using (var comando = new SqlCommand("SELECT CASE WHEN EXISTS (SELECT 1 FROM dbo.tbl_cita WHERE id_cita = @id_cita AND id_sede = @id_sede) THEN 1 ELSE 0 END", conexion))
+            {
+                comando.Parameters.Add("@id_cita", SqlDbType.Int).Value = idCita;
+                comando.Parameters.Add("@id_sede", SqlDbType.Int).Value = idSede;
+                conexion.Open();
+                return Convert.ToBoolean(comando.ExecuteScalar());
+            }
+        }
+
+        public bool SedeActiva(int idSede)
+        {
+            using (var conexion = new SqlConnector().cadConnection_psyco)
+            using (var comando = new SqlCommand("SELECT CASE WHEN EXISTS (SELECT 1 FROM dbo.tbl_sede s INNER JOIN dbo.tbl_empresa e ON e.Id = s.Id_empresa WHERE s.Id = @id_sede AND s.Estado = 1 AND e.Estado = 1) THEN 1 ELSE 0 END", conexion))
+            {
+                comando.Parameters.Add("@id_sede", SqlDbType.Int).Value = idSede;
+                conexion.Open();
+                return Convert.ToBoolean(comando.ExecuteScalar());
+            }
+        }
+
+        public bool PaquetePerteneceASede(int idPaquete, int idSede)
+        {
+            using (var conexion = new SqlConnector().cadConnection_psyco)
+            using (var comando = new SqlCommand("SELECT CASE WHEN EXISTS (SELECT 1 FROM dbo.tbl_cita WHERE id_paquete = @id_paquete AND id_sede = @id_sede) THEN 1 ELSE 0 END", conexion))
+            {
+                comando.Parameters.Add("@id_paquete", SqlDbType.Int).Value = idPaquete;
+                comando.Parameters.Add("@id_sede", SqlDbType.Int).Value = idSede;
+                conexion.Open();
+                return Convert.ToBoolean(comando.ExecuteScalar());
+            }
+        }
+
+        public bool PacientePerteneceASede(int idPaciente, int idSede)
+        {
+            using (var conexion = new SqlConnector().cadConnection_psyco)
+            using (var comando = new SqlCommand("SELECT CASE WHEN EXISTS (SELECT 1 FROM dbo.tbl_paciente WHERE Id = @id_paciente AND id_sede = @id_sede) THEN 1 ELSE 0 END", conexion))
+            {
+                comando.Parameters.Add("@id_paciente", SqlDbType.Int).Value = idPaciente;
+                comando.Parameters.Add("@id_sede", SqlDbType.Int).Value = idSede;
+                conexion.Open();
+                return Convert.ToBoolean(comando.ExecuteScalar());
+            }
+        }
+
+        public bool DoctorPerteneceASede(int idDoctor, int idSede)
+        {
+            using (var conexion = new SqlConnector().cadConnection_psyco)
+            using (var comando = new SqlCommand("SELECT CASE WHEN EXISTS (SELECT 1 FROM dbo.tbl_sede_usuario WHERE Id_psicologo = @id_doctor AND Id_sede = @id_sede) THEN 1 ELSE 0 END", conexion))
+            {
+                comando.Parameters.Add("@id_doctor", SqlDbType.Int).Value = idDoctor;
+                comando.Parameters.Add("@id_sede", SqlDbType.Int).Value = idSede;
+                conexion.Open();
+                return Convert.ToBoolean(comando.ExecuteScalar());
+            }
+        }
+
         public RespuestaUsuario validar_cita(Cita oCita, string adicional, int orden, string main_path, string random_str)
         {
             RespuestaUsuario res_ = new RespuestaUsuario();
@@ -153,6 +212,7 @@ namespace PsycoApp.DA
                 paramIdPaquete.Direction = ParameterDirection.InputOutput;
                 paramIdPaquete.Value = (oCita.id_paquete == null || oCita.id_paquete == 0) ? id_paquete : oCita.id_paquete;
                 cmd.Parameters.Add(paramIdPaquete);
+                cmd.Parameters.Add("@url_zoom", SqlDbType.NVarChar, 500).Value = oCita.url_zoom;
 
                 SqlDataAdapter da = new SqlDataAdapter(cmd);
                 DataTable dt = new DataTable();
@@ -492,6 +552,7 @@ namespace PsycoApp.DA
                     cita.feedback = Convert.ToBoolean(row["feedback"]);
                     cita.comentario = Convert.ToString(row["comentario"]);
                     cita.pago_gratis = Convert.ToBoolean(row["pago_gratis"]);
+                    cita.url_zoom = row["url_zoom"] != DBNull.Value ? Convert.ToString(row["url_zoom"]) : string.Empty;
                     cita.orden_cita = Convert.ToString(row["orden_cita"]);
                     cita.edad = Convert.ToString(row["edad"]);
                     lista.Add(cita);

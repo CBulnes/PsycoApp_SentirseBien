@@ -46,7 +46,6 @@
     }
 </style>
     <input type="hidden" id="hiddenIdSede" value="@(Model?.DynamicData?.id_sede)" />
-
 <div class="sb-pa-container">
     <div class="sb-pa-container-buscar">
         <div class="sb-pa-container-buscar-title">
@@ -160,12 +159,12 @@
                 <p>Resumen</p>
             </div>
             <div class="sb-pa-container-resume-report">
-                <div class="sb-pa-container-resume-report-item">
-                    <div class="flot-chart">
-                        <div class="flot-chart-content" id="reporte_nps"></div>
-                    </div>
+                    <div class="sb-pa-container-resume-report-item">
+                        <div class="flot-chart">
+                            <div class="flot-chart-content" id="reporte_nps"></div>
+                        </div>
 
-                </div>
+                    </div>
                 <div class="sb-pa-container-resume-report-item">
                     <div class="sb-pa-container-resume-report-item-table">
                         <table class="table table-hover yourTableClass active-table-modulo caja">
@@ -474,11 +473,13 @@
 
     function cargar_lista_usuarios_caja() {
         var html = '';
+        var idSede = $('#cboSede').val();
+        var idUsuarioSeleccionado = $('#cboUsuario').val();
         $.ajax({
-            url: "/RegistroCitas/listar_usuarios_caja?filtrar_por_sede=1",
+            url: "/RegistroCitas/listar_usuarios_caja?id_sede=" + idSede,
             type: "GET",
-            async: false,
             beforeSend: function () {
+                $('#cboUsuario').prop('disabled', true);
                 html += '<option value="-1">Todos</option>';
             },
             success: function (data) {
@@ -491,6 +492,9 @@
             },
             complete: function () {
                 $('#cboUsuario').html(html);
+                if (idUsuarioSeleccionado && $('#cboUsuario option[value="' + idUsuarioSeleccionado + '"]').length) {
+                    $('#cboUsuario').val(idUsuarioSeleccionado);
+                }
 
                 var tipousuario = $('#hdnIdTipoUsuario').val();
                 var idusuario = $('#hdnIdUsuario').val();
@@ -498,10 +502,12 @@
                     $('#cboUsuario option[value="-1"]').remove();
                     $('#cboUsuario').val(idusuario);
                 }
+                $('#cboUsuario').prop('disabled', false);
             }
         });
     }
     cargar_lista_usuarios_caja();
+    $('#cboSede').on('change', cargar_lista_usuarios_caja);
 
     function mostrarModalCajas() {
         $('#cbUsuarioCaja').html($('#cboUsuario').html());

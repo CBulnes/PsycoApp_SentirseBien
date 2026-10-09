@@ -1,0 +1,46 @@
+@using PsycoApp.utilities
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>PsycoApp | Gestión para centros psicológicos</title>
+    <link rel="stylesheet" href="~/login/vendor/bootstrap/css/bootstrap.min.css" />
+    <style>
+        body { margin: 0; font-family: Arial, sans-serif; color: #28333d; background: #f6f8fb; }
+        .top { padding: 22px 7%; display: flex; justify-content: space-between; align-items: center; background: white; }
+        .brand { font-size: 24px; font-weight: 700; color: #557e88; }
+        .top a, .button { color: white; background: #557e88; padding: 12px 22px; border-radius: 7px; text-decoration: none; }
+        .hero { padding: 90px 10%; text-align: center; background: linear-gradient(140deg,#e9f2f1,#f6f8fb); }
+        .hero h1 { max-width: 850px; margin: auto; font-size: 48px; line-height: 1.15; }
+        .hero p { max-width: 730px; margin: 24px auto 32px; font-size: 19px; color: #5f6b73; }
+        .features { display: flex; justify-content: center; gap: 22px; padding: 55px 8%; flex-wrap: wrap; }
+        .feature { background: white; border-radius: 12px; padding: 26px; max-width: 300px; box-shadow: 0 8px 28px #28333d12; }
+        .feature h2 { font-size: 20px; }
+        footer { padding: 24px; text-align: center; color: #71808a; }
+        @@media (max-width: 600px) { .hero { padding: 60px 7%; } .hero h1 { font-size: 36px; } }
+    </style>
+</head>
+<body>
+    <header class="top">
+        <div class="brand">PsycoApp</div>
+        <a href="@Url.Action("Index", "Login")">Ingresar</a>
+    </header>
+    <main>
+        <section class="hero">
+            <h1>Más tiempo para las personas, menos tareas para tu centro</h1>
+            <p>Organiza pacientes, profesionales, sedes y citas en una sola plataforma pensada para la gestión de centros psicológicos.</p>
+            <a class="button" href="@Url.Action("Registro", "SaaS")">Crear mi espacio de prueba</a>
+        </section>
+        <section class="features">
+            <article class="feature"><h2>Agenda organizada</h2><p>Centraliza la programación y seguimiento de citas de tu equipo.</p></article>
+            <article class="feature"><h2>Gestión de pacientes</h2><p>Mantén la información operativa de tus pacientes en un solo lugar.</p></article>
+            <article class="feature"><h2>Tu equipo y tus sedes</h2><p>Administra profesionales y centros desde la misma aplicación.</p></article>
+        </section>
+    </main>
+    <footer>Prueba disponible al registrarte. La duración y condiciones comerciales se comunicarán cuando estén definidas.</footer>
+</body>
+</html>

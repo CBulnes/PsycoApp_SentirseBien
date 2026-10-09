@@ -1,0 +1,144 @@
+:root {
+    --sb-db-ink: #112b57;
+    --sb-db-muted: #71809a;
+    --sb-db-blue: #2778df;
+    --sb-db-surface: #fff;
+    --sb-db-border: #e8eef6;
+    --sb-db-shadow: 0 8px 28px rgba(27, 62, 105, .08);
+}
+
+.sb-dashboard { display:flex; flex-direction:column; gap:.85rem; padding:1.15rem 1.25rem; color:var(--sb-db-ink); }
+.sb-dashboard-header { display:flex; align-items:center; justify-content:space-between; gap:1rem; }
+.sb-dashboard-header h1 { margin:0; font-size:1.85rem; font-weight:750; letter-spacing:-.035em; }
+.sb-dashboard-header p { margin:.2rem 0 0; color:var(--sb-db-muted); }
+.sb-dashboard-date { display:flex; align-items:center; gap:.6rem; color:#405675; white-space:nowrap; }
+.sb-dashboard-date i { color:var(--sb-db-blue); font-size:1.15rem; }
+.sb-dashboard-alert { padding:.8rem 1rem; color:#7a5010; background:#fff4d8; border:1px solid #f1d899; border-radius:.7rem; }
+.sb-dashboard-metrics { display:grid; grid-template-columns:1fr 1fr 1.3fr 1fr; gap:.75rem; align-items:stretch; }
+.sb-dashboard-metrics-specialist { grid-template-columns:repeat(3,minmax(0,1fr)); }
+.sb-dashboard-card { position:relative; display:flex; align-items:center; gap:.7rem; min-width:0; min-height:104px; padding:.8rem .85rem; background:var(--sb-db-surface); border:1px solid var(--sb-db-border); border-radius:.8rem; box-shadow:var(--sb-db-shadow); }
+.sb-dashboard-card-appointments { display:grid; grid-template-columns:46px minmax(0,1fr) 16px; grid-template-rows:1fr auto; column-gap:.65rem; row-gap:.45rem; }
+.sb-dashboard-card-appointments .sb-dashboard-icon { grid-column:1; grid-row:1; }
+.sb-dashboard-card-appointments .sb-dashboard-metric-content { grid-column:2; grid-row:1; }
+.sb-dashboard-card-appointments > a { grid-column:3; grid-row:1; }
+.sb-dashboard-appointment-breakdown { display:grid; grid-column:1/-1; grid-row:2; grid-template-columns:repeat(3,1fr); overflow:hidden; border-radius:.5rem; }
+.sb-dashboard-appointment-breakdown span { display:flex!important; flex-direction:column; align-items:center; justify-content:center; gap:.08rem; min-height:37px; padding:.22rem; text-align:center; }
+.sb-dashboard-appointment-breakdown span:nth-child(1) { color:#2a77c8!important; background:#e7f2ff; }
+.sb-dashboard-appointment-breakdown span:nth-child(2) { color:#168451!important; background:#e3f7ec; }
+.sb-dashboard-appointment-breakdown span:nth-child(3) { color:#8149ba!important; background:#f1e8ff; }
+.sb-dashboard-appointment-breakdown b { font-size:.9rem; line-height:1; }
+.sb-dashboard-appointment-breakdown small { color:inherit!important; font-size:.62rem!important; }
+.sb-dashboard-metric-content { flex:1; min-width:0; }
+.sb-dashboard-card span { display:block; color:#517092; font-size:.82rem; line-height:1.2; }
+.sb-dashboard-card strong { display:block; margin:.12rem 0; color:#102b5c; font-size:1.55rem; font-weight:750; line-height:1.12; }
+.sb-dashboard-card small { display:block; color:var(--sb-db-muted); font-size:.69rem; line-height:1.35; }
+.sb-dashboard-card > a { align-self:flex-start; color:var(--sb-db-blue); }
+.sb-dashboard-icon { display:flex; flex:0 0 46px; width:46px; height:46px; align-items:center; justify-content:center; border-radius:.75rem; font-size:1.2rem; }
+.sb-dashboard-card-blue .sb-dashboard-icon { color:#2477da; background:#e8f3ff; }
+.sb-dashboard-card-green .sb-dashboard-icon { color:#129259; background:#e6f8ef; }
+.sb-dashboard-card-amber .sb-dashboard-icon { color:#d88b08; background:#fff3d8; }
+.sb-dashboard-card-purple .sb-dashboard-icon { color:#8745c7; background:#f2e9ff; }
+.sb-dashboard-card-amber { display:grid; grid-template-columns:40px minmax(102px,.9fr) minmax(115px,1fr); align-items:center; gap:.45rem; }
+.sb-dashboard-cash-summary { min-width:0; }
+.sb-dashboard-card-amber .sb-dashboard-icon { display:none; }
+.sb-dashboard-cash-symbol { display:flex; grid-column:1; grid-row:1; width:43px; height:43px; align-items:center; justify-content:center; color:#cf8505; background:#fff1d3; border-radius:.75rem; font-size:1.08rem; font-weight:800; }
+.sb-dashboard-cash-summary { grid-column:2; grid-row:1; }
+.sb-dashboard-payment-list { min-width:0; margin:0; padding:0; list-style:none; }
+.sb-dashboard-card-amber .sb-dashboard-payment-list { grid-column:3; grid-row:1; }
+.sb-dashboard-payment-list li { display:flex; justify-content:space-between; gap:.35rem; padding:.27rem .1rem; border-top:1px solid var(--sb-db-border); color:var(--sb-db-muted); font-size:.68rem; white-space:nowrap; }
+.sb-dashboard-payment-list b { color:#344866; font-weight:600; }
+.sb-dashboard-status { display:inline-block!important; width:max-content; margin-top:.25rem; padding:.15rem .5rem; border-radius:1rem; }
+.sb-dashboard-status.is-open { color:#137748; background:#e2f6eb; }
+.sb-dashboard-status.is-closed { color:#a54b4b; background:#fde9e9; }
+.sb-dashboard-card-link { display:none; }
+.sb-dashboard-main-grid { display:grid; grid-template-columns:minmax(0,1.65fr) minmax(340px,1fr); gap:.85rem; }
+.sb-dashboard-panel { min-width:0; padding:.85rem .9rem; background:var(--sb-db-surface); border:1px solid var(--sb-db-border); border-radius:.8rem; box-shadow:var(--sb-db-shadow); }
+.sb-dashboard-panel-heading { display:flex; align-items:center; justify-content:space-between; gap:.75rem; margin-bottom:.8rem; }
+.sb-dashboard-panel-heading h2 { margin:0; color:#142f60; font-size:1.1rem; font-weight:700; }
+.sb-dashboard-panel-heading h2 i { margin-right:.45rem; color:var(--sb-db-blue); }
+.sb-dashboard-panel-heading > a { color:var(--sb-db-blue); font-size:.85rem; }
+.sb-dashboard-table-wrap { overflow-x:auto; }
+.sb-dashboard-table-wrap table { width:100%; min-width:650px; border-collapse:collapse; }
+.sb-dashboard-table-wrap th { padding:.58rem .5rem; color:#536984; background:#f0f5fb; font-size:.74rem; text-align:left; white-space:nowrap; }
+.sb-dashboard-table-wrap td { padding:.53rem .5rem; color:#34435c; border-bottom:1px solid #edf1f6; font-size:.77rem; }
+.sb-dashboard-patient { display:flex; align-items:center; gap:.45rem; white-space:nowrap; }
+.sb-dashboard-avatar { display:inline-flex; flex:0 0 27px; width:27px; height:27px; align-items:center; justify-content:center; color:var(--avatar-color); background:var(--avatar-bg); border-radius:50%; font-size:.65rem; font-weight:700; }
+.sb-dashboard-badge { display:inline-block; padding:.25rem .6rem; color:#168152; background:#e5f7ed; border-radius:1rem; font-size:.72rem; font-weight:650; white-space:nowrap; }
+.sb-dashboard-badge.confirmed { color:#168152; background:#e2f6eb; }
+.sb-dashboard-badge.pending { color:#b87808; background:#fff2d5; }
+.sb-dashboard-badge.attended { color:#7746b2; background:#f0e7ff; }
+.sb-dashboard-cash-summary .sb-dashboard-status { color:#fff!important; background:#1ca55a; padding:.28rem .65rem; font-size:.68rem; font-weight:650; }
+.sb-dashboard-cash-summary .sb-dashboard-status.is-closed { color:#fff!important; background:#c95252; }
+.sb-dashboard-empty { padding:1.2rem!important; color:var(--sb-db-muted)!important; text-align:center; }
+.sb-dashboard-quick-panel > p { margin:-.45rem 0 .8rem; color:var(--sb-db-muted); font-size:.8rem; }
+.sb-dashboard-quick-links { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:.55rem; }
+.sb-dashboard-quick-links a { display:flex; align-items:center; gap:.65rem; min-width:0; min-height:68px; padding:.65rem; border-radius:.7rem; text-decoration:none; transition:transform .15s ease; }
+.sb-dashboard-quick-links a:hover { transform:translateY(-2px); }
+.sb-dashboard-quick-links a > i { font-size:1.3rem; }
+.sb-dashboard-quick-links span { display:flex; flex-direction:column; min-width:0; }
+.sb-dashboard-quick-links b { font-size:.82rem; }
+.sb-dashboard-quick-links small { color:var(--sb-db-muted); font-size:.68rem; }
+.quick-blue { color:#1c70cc; background:#e8f4ff; }
+.quick-green { color:#14854f; background:#e8f9ef; }
+.quick-amber { color:#b87808; background:#fff5df; }
+.quick-purple { color:#7946b2; background:#f3eaff; }
+.sb-dashboard-chart-heading { align-items:flex-start; }
+.sb-dashboard-chart-heading p { margin:.2rem 0 0; color:var(--sb-db-muted); font-size:.8rem; }
+.sb-dashboard-chart-tabs { display:flex; gap:.2rem; }
+.sb-dashboard-chart-tabs button { padding:.35rem .65rem; color:#65758d; background:transparent; border:1px solid transparent; border-radius:.45rem; font-size:.75rem; cursor:pointer; }
+.sb-dashboard-chart-tabs button.active { color:#fff; background:var(--sb-db-blue); }
+.sb-dashboard-chart { display:flex; min-height:190px; align-items:stretch; justify-content:space-around; gap:.65rem; padding:.55rem .25rem 0; border-bottom:1px solid #dce4ef; background:repeating-linear-gradient(to bottom,transparent 0,transparent 36px,#edf1f6 37px); }
+.sb-dashboard-chart-column { display:flex; flex:1; min-width:0; flex-direction:column; align-items:center; justify-content:flex-end; gap:.3rem; text-align:center; }
+.sb-dashboard-chart-column strong { color:#445b7b; font-size:.7rem; }
+.sb-dashboard-chart-track { display:flex; width:min(70%,42px); height:120px; align-items:flex-end; overflow:hidden; border-radius:.25rem .25rem 0 0; }
+.sb-dashboard-chart-track span { display:block; width:100%; min-height:4px; background:linear-gradient(180deg,#51a4ff,#2378df); border-radius:.25rem .25rem 0 0; }
+.sb-dashboard-chart-column small { min-height:32px; color:#6f7f96; font-size:.67rem; text-transform:capitalize; }
+.sb-dashboard-recent-list { display:flex; flex-direction:column; }
+.sb-dashboard-recent-item { display:flex; align-items:center; gap:.65rem; padding:.65rem 0; border-bottom:1px solid #edf1f6; }
+.sb-dashboard-recent-item:last-child { border-bottom:0; }
+.recent-icon { display:flex; flex:0 0 34px; width:34px; height:34px; align-items:center; justify-content:center; color:#268455; background:#e5f7ed; border-radius:.65rem; }
+.recent-pago { color:#c78a18; background:#fff3d8; }
+.recent-paciente { color:#2875cb; background:#e8f3ff; }
+.sb-dashboard-recent-item > div { display:flex; flex:1; min-width:0; flex-direction:column; }
+.sb-dashboard-recent-item b { color:#293e60; font-size:.78rem; }
+.sb-dashboard-recent-item small,.sb-dashboard-recent-item time { color:var(--sb-db-muted); font-size:.68rem; }
+.sb-dashboard-recent-item time { white-space:nowrap; }
+html.psycoapp-dark-theme .sb-dashboard { color:#e5e7eb; }
+html.psycoapp-dark-theme .sb-dashboard-header p,html.psycoapp-dark-theme .sb-dashboard-date,html.psycoapp-dark-theme .sb-dashboard-card span,html.psycoapp-dark-theme .sb-dashboard-card small,html.psycoapp-dark-theme .sb-dashboard-quick-panel>p,html.psycoapp-dark-theme .sb-dashboard-chart-heading p,html.psycoapp-dark-theme .sb-dashboard-chart-column small,html.psycoapp-dark-theme .sb-dashboard-recent-item small,html.psycoapp-dark-theme .sb-dashboard-recent-item time { color:#abb8ca; }
+html.psycoapp-dark-theme .sb-dashboard-panel,html.psycoapp-dark-theme .sb-dashboard-card { background:#20232b!important; border-color:#383d49; box-shadow:0 8px 28px rgba(0,0,0,.2); }
+html.psycoapp-dark-theme .sb-dashboard-header h1,html.psycoapp-dark-theme .sb-dashboard-card strong,html.psycoapp-dark-theme .sb-dashboard-panel-heading h2,html.psycoapp-dark-theme .sb-dashboard-payment-list b,html.psycoapp-dark-theme .sb-dashboard-recent-item b { color:#e5e7eb; }
+html.psycoapp-dark-theme .sb-dashboard-table-wrap th { color:#e5e7eb; background:#293d5a; }
+html.psycoapp-dark-theme .sb-dashboard-table-wrap td,html.psycoapp-dark-theme .sb-dashboard-recent-item { color:#d5dbe5; border-color:#383d49; }
+html.psycoapp-dark-theme .sb-dashboard-payment-list li { border-color:#383d49; }
+html.psycoapp-dark-theme .sb-dashboard-appointment-breakdown span:nth-child(1) { color:#a9d3ff!important; background:#243d59; }
+html.psycoapp-dark-theme .sb-dashboard-appointment-breakdown span:nth-child(2) { color:#9be3bb!important; background:#1e4234; }
+html.psycoapp-dark-theme .sb-dashboard-appointment-breakdown span:nth-child(3) { color:#d1b2ff!important; background:#3a2d50; }
+html.psycoapp-dark-theme .sb-dashboard-badge.confirmed { color:#a9e8c2; background:#1e4234; }
+html.psycoapp-dark-theme .sb-dashboard-badge.pending { color:#ffd27d; background:#4a3a22; }
+html.psycoapp-dark-theme .sb-dashboard-badge.attended { color:#d1b2ff; background:#3a2d50; }
+html.psycoapp-dark-theme .sb-dashboard-cash-summary .sb-dashboard-status.is-open { color:#fff!important; background:#16884b; }
+html.psycoapp-dark-theme .sb-dashboard-cash-summary .sb-dashboard-status.is-closed { color:#fff!important; background:#a83f45; }
+@media (max-width:1100px) { .sb-dashboard-metrics { grid-template-columns:repeat(2,minmax(0,1fr)); } }
+@media (max-width:760px) {
+    .sb-dashboard { padding:1rem; gap:.75rem; }
+    .sb-dashboard-header { align-items:flex-start; flex-direction:column; }
+    .sb-dashboard-header h1 { font-size:1.4rem; }
+    .sb-dashboard-date { white-space:normal; font-size:.82rem; }
+    .sb-dashboard-metrics { grid-template-columns:1fr; }
+    .sb-dashboard-main-grid { grid-template-columns:1fr; }
+    .sb-dashboard-card-amber { display:grid; grid-template-columns:46px minmax(0,1fr); }
+    .sb-dashboard-payment-list { grid-column:1/-1; margin:.2rem 0 0; }
+    .sb-dashboard-card-link { display:block; grid-column:1/-1; color:var(--sb-db-blue); font-size:.8rem; }
+    .sb-dashboard-chart-heading { flex-direction:column; }
+    .sb-dashboard-chart-tabs { width:100%; }
+    .sb-dashboard-chart-tabs button { flex:1; }
+    .sb-dashboard-chart-column strong { font-size:.62rem; }
+    .sb-dashboard-quick-links { grid-template-columns:1fr; }
+}
+
+@media (min-width:761px) and (max-width:1250px) {
+    .sb-dashboard-metrics:not(.sb-dashboard-metrics-specialist) { grid-template-columns:repeat(2,minmax(0,1fr)); }
+    .sb-dashboard-metrics-specialist { grid-template-columns:repeat(2,minmax(0,1fr)); }
+    .sb-dashboard-card-amber { grid-template-columns:46px minmax(120px,.9fr) minmax(140px,1fr); }
+    .sb-dashboard-main-grid { grid-template-columns:minmax(0,1.4fr) minmax(320px,1fr); }
+}

@@ -16,6 +16,31 @@ namespace PsycoApp.BL
         CitaDA citaDA = new CitaDA();
         HistorialDA historialDA = new HistorialDA();
 
+        public bool CitaPerteneceASede(int idCita, int idSede)
+        {
+            return citaDA.CitaPerteneceASede(idCita, idSede);
+        }
+
+        public bool PaquetePerteneceASede(int idPaquete, int idSede)
+        {
+            return citaDA.PaquetePerteneceASede(idPaquete, idSede);
+        }
+
+        public bool PacientePerteneceASede(int idPaciente, int idSede)
+        {
+            return citaDA.PacientePerteneceASede(idPaciente, idSede);
+        }
+
+        public bool DoctorPerteneceASede(int idDoctor, int idSede)
+        {
+            return citaDA.DoctorPerteneceASede(idDoctor, idSede);
+        }
+
+        public bool SedeActiva(int idSede)
+        {
+            return citaDA.SedeActiva(idSede);
+        }
+
         public RespuestaUsuario registrar_informe(Cita oCita)
         {
             RespuestaUsuario res_ = new RespuestaUsuario();

@@ -8,142 +8,89 @@
 
 <!-- SB - STYLE -->
 
-<link rel="stylesheet" href="~/src/css/sb-pacientes.css?ver=005" />
+<link rel="stylesheet" href="~/src/css/sb-psicologo.css?ver=004" />
 
-<div class="sb-pa-container">
-    <div class="sb-pa-container-buscar">
-        <div class="sb-pa-container-buscar-title">
-            <p class="active-titular-modulo">Búsqueda y registro de pacientes</p>
+<div class="sb-psi-container">
+    <div class="sb-psi-page-header">
+        <div class="sb-psi-container-buscar-title">
+            <p class="active-titular-modulo">Pacientes</p>
+            <span>Gestiona y registra los pacientes del centro.</span>
         </div>
-
-        <!-- Campo de búsqueda por nombre -->
-        <div class="sb-pa-container-buscador">
-            <div class="sb-pa-container-buscador-block">
-                <button class="active-button-modulo" type="button" onclick="mostrarFormularioAgregar()">
-                    <i class="fa fa-plus"></i>&nbsp;Agregar
-                </button>
-            </div>
-            <div class="sb-pa-container-buscador-block">
-                <div class="sb-pa-container-buscador-block-item">
-                    <span class="label-form active-texto-modulo">Nombre del paciente: </span>
-                    <input id="txtBuscarNombre" class="active-input-modulo" name="Nombre" placeholder="Ingrese nombre para buscar" type="text" required />
-                    <button class="active-button-modulo" type="button" onclick="buscarPaciente()">
-                        <i class="fa fa-search"></i>&nbsp;Buscar
-                    </button>
-                </div>
-            </div>
-        </div>
-
-        <!-- Contenedor de la tabla -->
-        <div id="containerTabla" class="sb-pa-container-table">
-            @await Html.PartialAsync("~/Views/Mantenimiento/Paciente/_PacienteTabla.cshtml", Model.Model)
-        </div>
+        <button class="sb-psi-add-button" type="button" onclick="mostrarFormularioAgregar()">
+            <i class="fa fa-plus"></i> Agregar paciente
+        </button>
     </div>
-</div>
 
-<div class="bd-example" style="display: none;">
-    <div class="row">
-        <div class="col-12">
-            <p></p>
-        </div>
-
-        <!-- Campo de búsqueda por nombre -->
-        <div class="col-12">
-            <div class="form-group">
-                <span class="label-form">Nombre del paciente</span><br />
-                <input id="txtBuscarNombreD" class="form-control" type="text" placeholder="Ingrese nombre para buscar" />
+    <div class="sb-psi-search-card">
+        <div class="sb-psi-search-icon"><i class="fa fa-search"></i></div>
+        <div class="sb-psi-search-content">
+            <label for="txtBuscarNombre">Buscar paciente</label>
+            <div class="sb-psi-search-controls">
+                <input id="txtBuscarNombre" class="active-input-modulo" name="Nombre" placeholder="Buscar por nombre o apellido..." type="text" />
+                <button type="button" onclick="buscarPaciente()"><i class="fa fa-search"></i> Buscar</button>
             </div>
-            <button type="button" class="btn btn-doc second_color" onclick="buscarPaciente()">
-                <i class="fa fa-search"></i>&nbsp;Buscar
-            </button>
-            <button type="button" class="btn btn-primary main_color" style="color: #FFF; font-size: 12px;" onclick="mostrarFormularioAgregar()">
-                <i class="fa fa-plus"></i>&nbsp;Agregar
-            </button>
-        </div>
-
-        <div class="col-12">&nbsp;</div>
-
-        <!-- Contenedor de la tabla -->
-        <div id="containerTabla" class="container">
-            <!-- Aquí se carga la vista parcial con la tabla de pacientes -->
-            @await Html.PartialAsync("~/Views/Mantenimiento/Paciente/_PacienteTabla.cshtml", Model.Model)
         </div>
     </div>
 
+    <div id="containerTabla" class="sb-psi-container-table">
+        @await Html.PartialAsync("~/Views/Mantenimiento/Paciente/_PacienteTabla.cshtml", Model.Model)
+    </div>
 </div>
 
 <!-- Contenedor de formulario para agregar/editar paciente -->
-<div id="containerFormulario" class="modal sb-pa-container-agregar" style="display: none;">
-    <div class="sb-pa-container-agregar-popup active-fondo-oscuro">
+<div id="containerFormulario" class="modal sb-psi-container-agregar" style="display: none;">
+    <div class="sb-psi-container-agregar-popup active-fondo-oscuro">
 
         <p class="active-titular-modulo">Agregar paciente</p>
 
-        <form id="formPaciente">
+        <form id="formPaciente" class="sb-frm-psi-agregar">
             <input type="hidden" id="hdnPacienteId" name="Id" />
 
-            <div class="sb-frm-agregar-block">
-                <div class="sb-frm-agregar-block-item">
+            <div class="sb-frm-psi-agregar-block-item">
                     <span class="label-form active-texto-modulo">Nombres (*)</span>
                     <input id="txtNombre" name="Nombre" class="form-control active-input-modulo" type="text" required />
-                </div>
             </div>
 
-            <div class="sb-frm-agregar-block">
-                <div class="sb-frm-agregar-block-item">
+            <div class="sb-frm-psi-agregar-block-item">
                     <span class="label-form active-texto-modulo">Apellidos (*)</span>
                     <input id="txtApellido" name="apellido" class="form-control active-input-modulo" type="text" required />
-                </div>
             </div>
 
-            <div class="sb-frm-agregar-block">
-                <div class="sb-frm-agregar-block-item">
+            <div class="sb-frm-psi-agregar-block-item">
                     <span class="label-form active-texto-modulo">Fecha de nacimiento (*)</span>
                     <input id="txtFecha" name="FechaNacimiento" class="form-control active-input-modulo" type="date" required />
 
-                </div>
             </div>
 
-            <div class="sb-frm-agregar-block">
-                <div class="sb-frm-agregar-block-item" style="display:none !important">
+            <div class="sb-frm-psi-agregar-block-item" style="display:none !important">
                     <span class="label-form active-texto-modulo">Estado civil</span>
                     <select class="form-control active-select-modulo" id="cboEstadoCivil" name="EstadoCivil" required></select>
-                </div>
             </div>
-            <div class="sb-frm-agregar-block">
-                <div class="sb-frm-agregar-block-item" style="display:none !important">
+            <div class="sb-frm-psi-agregar-block-item" style="display:none !important">
                     <span class="label-form active-texto-modulo">Sexo</span>
                     <select class="form-control active-select-modulo" id="cboSexo" name="Sexo" required></select>
-                </div>
             </div>
-            <div class="sb-frm-agregar-block" style="display: none;">
-                <div class="sb-frm-agregar-block-item">
+            <div class="sb-frm-psi-agregar-block-item" style="display: none;">
                     <span class="label-form active-texto-modulo">Estado</span>
                     <select class="form-control active-select-modulo" id="cboEstado" name="Estado" required></select>
-                </div>
             </div>
 
-            <div class="sb-frm-agregar-block">
-                <div class="sb-frm-agregar-block-item">
+            <div class="sb-frm-psi-agregar-block-item">
                     <span class="label-form active-texto-modulo">Documento</span>
                     <select class="form-control active-select-modulo" id="cboDocumento" name="DocumentoTipo" required></select>
-                </div>
             </div>
 
-            <div class="sb-frm-agregar-block">
-                <div class="sb-frm-agregar-block-item">
+            <div class="sb-frm-psi-agregar-block-item">
                     <span class="label-form active-texto-modulo">Número de documento</span>
                     <input id="txtDocumento" name="DocumentoNumero" class="form-control active-input-modulo" type="text" required />
-                </div>
             </div>
 
-            <div class="sb-frm-agregar-block">
-                <div class="sb-frm-agregar-block-item">
+            <div class="sb-frm-psi-agregar-block-item">
                     <span class="label-form active-texto-modulo">Teléfono</span>
                     <input id="txtTelefono" name="Telefono" class="form-control active-input-modulo" type="text" />
-                </div>
             </div>
 
-            <div class="sb-frm-agregar-block-button text-right">
+            <div class="sb-frm-psi-agregar-block-button text-right">
                 <button type="button" class="btn btn-success active-button-modulo" onclick="guardarPaciente()">Guardar</button>
                 <button type="button" class="btn btn-secondary active-button-modulo" onclick="cancelarFormulario()">Cancelar</button>
             </div>

@@ -5,6 +5,8 @@
     ViewData["Title"] = "Reportes";
     var dHoy = DateTime.Now;
 }
+    @if ((int)dynamicData.id_tipousuario == 20)
+    {
     <!--nps-->
     <div class="row" style="background-color: #FFF; margin-top: 30px;">
         <div class="card-body">
@@ -72,6 +74,7 @@
             </div>
         </div>
     </div>
+    }
 
     <!--encuestas-->
     <div class="row" style="background-color: #FFF; margin-top: 30px;">

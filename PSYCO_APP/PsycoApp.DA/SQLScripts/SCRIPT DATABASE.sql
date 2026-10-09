@@ -652,17 +652,17 @@ CREATE TABLE [dbo].[tbl_visitas](
 GO
 SET IDENTITY_INSERT [dbo].[Productos] ON 
 GO
-INSERT [dbo].[Productos] ([id], [Nombre], [Precio], [Color], [EsEvaluacion], [NumSesiones], [Siglas]) VALUES (1, N'Consulta o atención sin costo', CAST(0.00 AS Decimal(10, 2)), NULL, 0, 0, NULL)
+INSERT [dbo].[Productos] ([id], [Nombre], [Precio], [Color], [EsEvaluacion], [NumSesiones], [Siglas]) VALUES (1, N'Consulta o atenci├│n sin costo', CAST(0.00 AS Decimal(10, 2)), NULL, 0, 0, NULL)
 GO
 INSERT [dbo].[Productos] ([id], [Nombre], [Precio], [Color], [EsEvaluacion], [NumSesiones], [Siglas]) VALUES (2, N'Entrega informe 30 minutos', CAST(0.00 AS Decimal(10, 2)), NULL, 0, 0, NULL)
 GO
-INSERT [dbo].[Productos] ([id], [Nombre], [Precio], [Color], [EsEvaluacion], [NumSesiones], [Siglas]) VALUES (3, N'Evaluación de aprendizaje', CAST(520.00 AS Decimal(10, 2)), NULL, 1, 0, NULL)
+INSERT [dbo].[Productos] ([id], [Nombre], [Precio], [Color], [EsEvaluacion], [NumSesiones], [Siglas]) VALUES (3, N'Evaluaci├│n de aprendizaje', CAST(520.00 AS Decimal(10, 2)), NULL, 1, 0, NULL)
 GO
-INSERT [dbo].[Productos] ([id], [Nombre], [Precio], [Color], [EsEvaluacion], [NumSesiones], [Siglas]) VALUES (4, N'Evaluación integral (EI)', CAST(690.00 AS Decimal(10, 2)), NULL, 1, 0, NULL)
+INSERT [dbo].[Productos] ([id], [Nombre], [Precio], [Color], [EsEvaluacion], [NumSesiones], [Siglas]) VALUES (4, N'Evaluaci├│n integral (EI)', CAST(690.00 AS Decimal(10, 2)), NULL, 1, 0, NULL)
 GO
-INSERT [dbo].[Productos] ([id], [Nombre], [Precio], [Color], [EsEvaluacion], [NumSesiones], [Siglas]) VALUES (5, N'Evaluación neuropsicológica', CAST(760.00 AS Decimal(10, 2)), NULL, 1, 0, NULL)
+INSERT [dbo].[Productos] ([id], [Nombre], [Precio], [Color], [EsEvaluacion], [NumSesiones], [Siglas]) VALUES (5, N'Evaluaci├│n neuropsicol├│gica', CAST(760.00 AS Decimal(10, 2)), NULL, 1, 0, NULL)
 GO
-INSERT [dbo].[Productos] ([id], [Nombre], [Precio], [Color], [EsEvaluacion], [NumSesiones], [Siglas]) VALUES (6, N'Evaluación personalidad (EP)', CAST(590.00 AS Decimal(10, 2)), NULL, 1, 0, NULL)
+INSERT [dbo].[Productos] ([id], [Nombre], [Precio], [Color], [EsEvaluacion], [NumSesiones], [Siglas]) VALUES (6, N'Evaluaci├│n personalidad (EP)', CAST(590.00 AS Decimal(10, 2)), NULL, 1, 0, NULL)
 GO
 INSERT [dbo].[Productos] ([id], [Nombre], [Precio], [Color], [EsEvaluacion], [NumSesiones], [Siglas]) VALUES (7, N'Paquete de 5 sesiones de terapia de pareja', CAST(750.00 AS Decimal(10, 2)), NULL, 0, 5, N'STP')
 GO
@@ -682,17 +682,17 @@ INSERT [dbo].[Productos] ([id], [Nombre], [Precio], [Color], [EsEvaluacion], [Nu
 GO
 INSERT [dbo].[Productos] ([id], [Nombre], [Precio], [Color], [EsEvaluacion], [NumSesiones], [Siglas]) VALUES (16, N'Visita colegio', CAST(150.00 AS Decimal(10, 2)), NULL, 0, 0, NULL)
 GO
-INSERT [dbo].[Productos] ([id], [Nombre], [Precio], [Color], [EsEvaluacion], [NumSesiones], [Siglas]) VALUES (93, N'Evaluación gratuita', CAST(0.00 AS Decimal(10, 2)), NULL, 0, 0, N'EG')
+INSERT [dbo].[Productos] ([id], [Nombre], [Precio], [Color], [EsEvaluacion], [NumSesiones], [Siglas]) VALUES (93, N'Evaluaci├│n gratuita', CAST(0.00 AS Decimal(10, 2)), NULL, 0, 0, N'EG')
 GO
 SET IDENTITY_INSERT [dbo].[Productos] OFF
 GO
 SET IDENTITY_INSERT [dbo].[tbl_centros_atencion] ON 
 GO
-INSERT [dbo].[tbl_centros_atencion] ([id_centro_atencion], [centro_atencion], [direccion], [horario], [latitud], [longitud]) VALUES (1, N'Centro Cívico', N'Av. Paseo de la República', N'Todo el día', N'-12.056308', N'-77.037218')
+INSERT [dbo].[tbl_centros_atencion] ([id_centro_atencion], [centro_atencion], [direccion], [horario], [latitud], [longitud]) VALUES (1, N'Centro C├¡vico', N'Av. Paseo de la Rep├║blica', N'Todo el d├¡a', N'-12.056308', N'-77.037218')
 GO
 INSERT [dbo].[tbl_centros_atencion] ([id_centro_atencion], [centro_atencion], [direccion], [horario], [latitud], [longitud]) VALUES (2, N'Rambla', N'Av. Javier Prado', N'10:00 - 18:00', N'-12.087802', N'-77.014022')
 GO
-INSERT [dbo].[tbl_centros_atencion] ([id_centro_atencion], [centro_atencion], [direccion], [horario], [latitud], [longitud]) VALUES (3, N'Plaza Lima Sur', N'Av Paseo de la República', N'10:00 - 21:00', N'-12.173210', N'-77.014127')
+INSERT [dbo].[tbl_centros_atencion] ([id_centro_atencion], [centro_atencion], [direccion], [horario], [latitud], [longitud]) VALUES (3, N'Plaza Lima Sur', N'Av Paseo de la Rep├║blica', N'10:00 - 21:00', N'-12.173210', N'-77.014127')
 GO
 SET IDENTITY_INSERT [dbo].[tbl_centros_atencion] OFF
 GO
@@ -722,7 +722,7 @@ SET IDENTITY_INSERT [dbo].[tbl_forma_pago] ON
 GO
 INSERT [dbo].[tbl_forma_pago] ([id], [descripcion], [estado]) VALUES (1, N'Transferencia', 1)
 GO
-INSERT [dbo].[tbl_forma_pago] ([id], [descripcion], [estado]) VALUES (2, N'Depósito', 1)
+INSERT [dbo].[tbl_forma_pago] ([id], [descripcion], [estado]) VALUES (2, N'Dep├│sito', 1)
 GO
 INSERT [dbo].[tbl_forma_pago] ([id], [descripcion], [estado]) VALUES (3, N'Pago gratis', 1)
 GO
@@ -804,13 +804,13 @@ SET IDENTITY_INSERT [dbo].[tbl_ubigeo] ON
 GO
 INSERT [dbo].[tbl_ubigeo] ([Id], [CodUbigeo], [Departamento], [Provincia], [Distrito]) VALUES (1, N'150101', N'Lima', N'Lima', N'Lima')
 GO
-INSERT [dbo].[tbl_ubigeo] ([Id], [CodUbigeo], [Departamento], [Provincia], [Distrito]) VALUES (2, N'150102', N'Lima', N'Lima', N'Ancón')
+INSERT [dbo].[tbl_ubigeo] ([Id], [CodUbigeo], [Departamento], [Provincia], [Distrito]) VALUES (2, N'150102', N'Lima', N'Lima', N'Anc├│n')
 GO
 INSERT [dbo].[tbl_ubigeo] ([Id], [CodUbigeo], [Departamento], [Provincia], [Distrito]) VALUES (3, N'150103', N'Lima', N'Lima', N'Ate')
 GO
 INSERT [dbo].[tbl_ubigeo] ([Id], [CodUbigeo], [Departamento], [Provincia], [Distrito]) VALUES (4, N'150104', N'Lima', N'Lima', N'Barranco')
 GO
-INSERT [dbo].[tbl_ubigeo] ([Id], [CodUbigeo], [Departamento], [Provincia], [Distrito]) VALUES (5, N'150105', N'Lima', N'Lima', N'Breña')
+INSERT [dbo].[tbl_ubigeo] ([Id], [CodUbigeo], [Departamento], [Provincia], [Distrito]) VALUES (5, N'150105', N'Lima', N'Lima', N'Bre├▒a')
 GO
 INSERT [dbo].[tbl_ubigeo] ([Id], [CodUbigeo], [Departamento], [Provincia], [Distrito]) VALUES (6, N'150106', N'Lima', N'Lima', N'Carabayllo')
 GO
@@ -826,7 +826,7 @@ INSERT [dbo].[tbl_ubigeo] ([Id], [CodUbigeo], [Departamento], [Provincia], [Dist
 GO
 INSERT [dbo].[tbl_ubigeo] ([Id], [CodUbigeo], [Departamento], [Provincia], [Distrito]) VALUES (12, N'150112', N'Lima', N'Lima', N'Independencia')
 GO
-INSERT [dbo].[tbl_ubigeo] ([Id], [CodUbigeo], [Departamento], [Provincia], [Distrito]) VALUES (13, N'150113', N'Lima', N'Lima', N'Jesús María')
+INSERT [dbo].[tbl_ubigeo] ([Id], [CodUbigeo], [Departamento], [Provincia], [Distrito]) VALUES (13, N'150113', N'Lima', N'Lima', N'Jes├║s Mar├¡a')
 GO
 INSERT [dbo].[tbl_ubigeo] ([Id], [CodUbigeo], [Departamento], [Provincia], [Distrito]) VALUES (14, N'150114', N'Lima', N'Lima', N'La Molina')
 GO
@@ -838,7 +838,7 @@ INSERT [dbo].[tbl_ubigeo] ([Id], [CodUbigeo], [Departamento], [Provincia], [Dist
 GO
 INSERT [dbo].[tbl_ubigeo] ([Id], [CodUbigeo], [Departamento], [Provincia], [Distrito]) VALUES (18, N'150118', N'Lima', N'Lima', N'Lurigancho-Chosica')
 GO
-INSERT [dbo].[tbl_ubigeo] ([Id], [CodUbigeo], [Departamento], [Provincia], [Distrito]) VALUES (19, N'150119', N'Lima', N'Lima', N'Lurín')
+INSERT [dbo].[tbl_ubigeo] ([Id], [CodUbigeo], [Departamento], [Provincia], [Distrito]) VALUES (19, N'150119', N'Lima', N'Lima', N'Lur├¡n')
 GO
 INSERT [dbo].[tbl_ubigeo] ([Id], [CodUbigeo], [Departamento], [Provincia], [Distrito]) VALUES (20, N'150120', N'Lima', N'Lima', N'Magdalena del Mar')
 GO
@@ -870,13 +870,13 @@ INSERT [dbo].[tbl_ubigeo] ([Id], [CodUbigeo], [Departamento], [Provincia], [Dist
 GO
 INSERT [dbo].[tbl_ubigeo] ([Id], [CodUbigeo], [Departamento], [Provincia], [Distrito]) VALUES (34, N'150134', N'Lima', N'Lima', N'San Luis')
 GO
-INSERT [dbo].[tbl_ubigeo] ([Id], [CodUbigeo], [Departamento], [Provincia], [Distrito]) VALUES (35, N'150135', N'Lima', N'Lima', N'San Martín de Porres')
+INSERT [dbo].[tbl_ubigeo] ([Id], [CodUbigeo], [Departamento], [Provincia], [Distrito]) VALUES (35, N'150135', N'Lima', N'Lima', N'San Mart├¡n de Porres')
 GO
 INSERT [dbo].[tbl_ubigeo] ([Id], [CodUbigeo], [Departamento], [Provincia], [Distrito]) VALUES (36, N'150136', N'Lima', N'Lima', N'San Miguel')
 GO
 INSERT [dbo].[tbl_ubigeo] ([Id], [CodUbigeo], [Departamento], [Provincia], [Distrito]) VALUES (37, N'150137', N'Lima', N'Lima', N'Santa Anita')
 GO
-INSERT [dbo].[tbl_ubigeo] ([Id], [CodUbigeo], [Departamento], [Provincia], [Distrito]) VALUES (38, N'150138', N'Lima', N'Lima', N'Santa María del Mar')
+INSERT [dbo].[tbl_ubigeo] ([Id], [CodUbigeo], [Departamento], [Provincia], [Distrito]) VALUES (38, N'150138', N'Lima', N'Lima', N'Santa Mar├¡a del Mar')
 GO
 INSERT [dbo].[tbl_ubigeo] ([Id], [CodUbigeo], [Departamento], [Provincia], [Distrito]) VALUES (39, N'150139', N'Lima', N'Lima', N'Santa Rosa')
 GO
@@ -886,7 +886,7 @@ INSERT [dbo].[tbl_ubigeo] ([Id], [CodUbigeo], [Departamento], [Provincia], [Dist
 GO
 INSERT [dbo].[tbl_ubigeo] ([Id], [CodUbigeo], [Departamento], [Provincia], [Distrito]) VALUES (42, N'150142', N'Lima', N'Lima', N'Villa El Salvador')
 GO
-INSERT [dbo].[tbl_ubigeo] ([Id], [CodUbigeo], [Departamento], [Provincia], [Distrito]) VALUES (43, N'150143', N'Lima', N'Lima', N'Villa María del Triunfo')
+INSERT [dbo].[tbl_ubigeo] ([Id], [CodUbigeo], [Departamento], [Provincia], [Distrito]) VALUES (43, N'150143', N'Lima', N'Lima', N'Villa Mar├¡a del Triunfo')
 GO
 SET IDENTITY_INSERT [dbo].[tbl_ubigeo] OFF
 GO
@@ -906,13 +906,13 @@ ALTER TABLE [dbo].[tbl_pago] ADD  DEFAULT (NULL) FOR [comentario]
 GO
 ALTER TABLE [dbo].[Productos]  WITH CHECK ADD CHECK  (([Color] like '#[0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f]'))
 GO
-/****** Object:  StoredProcedure [dbo].[SP_ACTUALIZAR_CONTRASEÑA]    Script Date: 13/02/2025 17:21:26 ******/
+/****** Object:  StoredProcedure [dbo].[SP_ACTUALIZAR_CONTRASE├æA]    Script Date: 13/02/2025 17:21:26 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
 
-CREATE PROCEDURE [dbo].[SP_ACTUALIZAR_CONTRASEÑA]
+CREATE PROCEDURE [dbo].[SP_ACTUALIZAR_CONTRASE├æA]
 (
 	@usuario varchar(100),
 	@password varchar(50),
@@ -1151,16 +1151,16 @@ BEGIN
 	declare @f__actual date = dbo.Get_date();
 	declare @nombre_dia VARCHAR(20) = UPPER(DATENAME(WEEKDAY, @f__actual))
 	declare @ultimo_dia_mes date = EOMONTH(@f__actual);
-	declare @mes int = datepart(month, @f__actual), @año int = datepart(year, @f__actual), @tipo_busqueda varchar(20) = 'ACTUAL';
+	declare @mes int = datepart(month, @f__actual), @a├▒o int = datepart(year, @f__actual), @tipo_busqueda varchar(20) = 'ACTUAL';
 
 	if @f__actual = @ultimo_dia_mes
 	begin
 		set @mes = case when datepart(month, @f__actual) = 12 then 1 else datepart(month, @f__actual) end;
-		set @año = case when datepart(month, @f__actual) = 12 then datepart(year, @f__actual)+1 else datepart(year, @f__actual) end;
+		set @a├▒o = case when datepart(month, @f__actual) = 12 then datepart(year, @f__actual)+1 else datepart(year, @f__actual) end;
 		set @tipo_busqueda = 'SIGUIENTE';
 	end
 
-	DECLARE @dateSearch DATE = DATEFROMPARTS(@año, @mes, 1);
+	DECLARE @dateSearch DATE = DATEFROMPARTS(@a├▒o, @mes, 1);
 
 	WITH DateTable AS
 	(
@@ -1235,7 +1235,7 @@ AS
 BEGIN
     SET NOCOUNT ON;
 
-    -- Buscar pacientes cuyo nombre contenga la cadena de búsqueda
+    -- Buscar pacientes cuyo nombre contenga la cadena de b├║squeda
     SELECT Id, Nombre, Apellido, FechaNacimiento, DocumentoTipo, DocumentoNumero, Telefono, EstadoCivil, Sexo, Estado
     FROM [dbo].[tbl_paciente]
     WHERE (Nombre LIKE '%' + @Nombre + '%' OR Apellido LIKE '%' + @Nombre + '%');
@@ -1270,7 +1270,7 @@ AS
 BEGIN
     SET NOCOUNT ON;
 
-    -- Buscar psicologos cuyo nombre contenga la cadena de búsqueda
+    -- Buscar psicologos cuyo nombre contenga la cadena de b├║squeda
     SELECT p.Id, p.Nombre, p.Apellido, p.FechaNacimiento, td.descripcion 'DocumentoTipo', p.DocumentoNumero, p.Telefono, p.Refrigerio, p.Especialidad, p.Direccion, p.Distrito, p.Estado
     FROM [dbo].[tbl_psicologo] p
 	INNER JOIN tbl_tipo_documento td ON td.id = p.DocumentoTipo
@@ -1587,7 +1587,7 @@ CREATE PROCEDURE [dbo].[SP_LISTAR_CAJA_MES_FORMA_PAGO]
 (
 	@usuario varchar(20),
 	@mes INT,
-	@año INT,
+	@a├▒o INT,
 	@sede INT
 )
 AS
@@ -1605,7 +1605,7 @@ BEGIN
 	LEFT JOIN tbl_detalle_transferencia d ON d.id = p.id_detalle_transferencia
 	LEFT JOIN tbl_cita c on c.id_cita = p.id_cita
 	WHERE (@mes = -1 OR DATEPART(MONTH, p.fecha_registro) = @mes)
-	AND (@año = -1 OR DATEPART(YEAR, p.fecha_registro) = @año)
+	AND (@a├▒o = -1 OR DATEPART(YEAR, p.fecha_registro) = @a├▒o)
 	AND (@sede = -1 OR c.Id_sede = @sede)
 	--AND (@usuario = '-1' OR p.usuario_registro = @usuario)
 	GROUP BY f.descripcion, d.descripcion, DATEPART(MONTH, p.fecha_registro), DATEPART(YEAR, p.fecha_registro)
@@ -1623,7 +1623,7 @@ CREATE PROCEDURE [dbo].[SP_LISTAR_CAJA_MES_USUARIO]
 (
 	@usuario varchar(20),
 	@mes INT,
-	@año INT,
+	@a├▒o INT,
 	@sede INT
 )
 AS
@@ -1637,7 +1637,7 @@ BEGIN
 	FROM tbl_pago p
 	LEFT JOIN tbl_cita c on c.id_cita=p.id_cita
 	WHERE (@mes = -1 OR DATEPART(MONTH, p.fecha_registro) = @mes)
-	AND (@año = -1 OR DATEPART(YEAR, p.fecha_registro) = @año)
+	AND (@a├▒o = -1 OR DATEPART(YEAR, p.fecha_registro) = @a├▒o)
 	AND (@sede = -1 OR c.Id_sede = @sede)
 	--AND (@usuario = '-1' OR p.usuario_registro = @usuario)
 	GROUP BY p.usuario_registro, DATEPART(MONTH, p.fecha_registro), DATEPART(YEAR, p.fecha_registro)
@@ -1666,7 +1666,7 @@ BEGIN
 		'' centro_atencion,
 		'' direccion,
 		'' horario,
-		'No hay centros de atención registrados' validacion
+		'No hay centros de atenci├│n registrados' validacion
 	end
 	else
 	begin
@@ -1795,9 +1795,21 @@ BEGIN
 			when p.Siglas = 'EG' then concat('(',p.Siglas,')')
 			else concat('(',p.Siglas,c.orden,')')
 		end 'siglas',
-		ISNULL(c.feedback, CAST(0 AS BIT)) AS 'feedback', -- Aquí usamos ISNULL para garantizar que sea falso si está vacío
+		ISNULL(c.feedback, CAST(0 AS BIT)) AS 'feedback', -- Aqu├¡ usamos ISNULL para garantizar que sea falso si est├í vac├¡o
 		c.comentario AS 'comentario',
-		isnull(c.pago_gratis, 0) AS 'pago_gratis'
+		isnull(c.pago_gratis, 0) AS 'pago_gratis',
+		c.url_zoom AS 'url_zoom',
+		ISNULL(c.id_paquete, 0) AS 'id_paquete',
+		CASE
+			WHEN ISNULL(c.id_paquete, 0) = 0 THEN ''
+			WHEN c.orden > p.NumSesiones THEN 'Adicional'
+			ELSE CONCAT(c.orden, '/', p.NumSesiones)
+		END AS 'orden_cita',
+		DATEDIFF(YEAR, pa.FechaNacimiento, GETDATE())
+			- CASE WHEN (MONTH(pa.FechaNacimiento) > MONTH(GETDATE())
+				OR (MONTH(pa.FechaNacimiento) = MONTH(GETDATE())
+				AND DAY(pa.FechaNacimiento) > DAY(GETDATE())))
+			THEN 1 ELSE 0 END AS 'edad'
 	FROM tbl_cita c
 	INNER JOIN tbl_psicologo ps ON ps.Id = c.id_doctor_asignado
 	INNER JOIN tbl_paciente pa ON pa.Id = c.id_paciente
@@ -1897,18 +1909,18 @@ CREATE PROCEDURE [dbo].[SP_LISTAR_DIAS_X_SEMANA_MES]
 (
 	@numSemana INT,
 	@mes INT,
-	@año INT
+	@a├▒o INT
 )
 AS
 BEGIN
 	SET LANGUAGE Spanish;
 
-	DECLARE @dateSearch DATE = DATEFROMPARTS(@año, @mes, 1);
+	DECLARE @dateSearch DATE = DATEFROMPARTS(@a├▒o, @mes, 1);
 
 	DECLARE @Fechas TABLE ( Fecha DATE );
 	DECLARE @Fechas2 TABLE ( ID INT IDENTITY(1,1) PRIMARY KEY, NumeroSemana INT, Fecha DATE, NombreDia VARCHAR(20), NumeroDia INT );
 	DECLARE @DiasSemana TABLE ( Nombre VARCHAR(20), Orden INT );
-	INSERT INTO @DiasSemana VALUES ('LUNES',1),('MARTES',2),('MIÉRCOLES',3),('JUEVES',4),('VIERNES',5),('SÁBADO',6),('DOMINGO',7);
+	INSERT INTO @DiasSemana VALUES ('LUNES',1),('MARTES',2),('MI├ëRCOLES',3),('JUEVES',4),('VIERNES',5),('S├üBADO',6),('DOMINGO',7);
 
 
 	WITH DateTable AS
@@ -1937,10 +1949,10 @@ BEGIN
 
 	--UPDATE @Fechas2 SET NombreDia = 'LUNES' WHERE NombreDia = 'MONDAY';
 	--UPDATE @Fechas2 SET NombreDia = 'MARTES' WHERE NombreDia = 'TUESDAY';
-	--UPDATE @Fechas2 SET NombreDia = 'MIÉRCOLES' WHERE NombreDia = 'WEDNESDAY';
+	--UPDATE @Fechas2 SET NombreDia = 'MI├ëRCOLES' WHERE NombreDia = 'WEDNESDAY';
 	--UPDATE @Fechas2 SET NombreDia = 'JUEVES' WHERE NombreDia = 'THURSDAY';
 	--UPDATE @Fechas2 SET NombreDia = 'VIERNES' WHERE NombreDia = 'FRIDAY';
-	--UPDATE @Fechas2 SET NombreDia = 'SÁBADO' WHERE NombreDia = 'SATURDAY';
+	--UPDATE @Fechas2 SET NombreDia = 'S├üBADO' WHERE NombreDia = 'SATURDAY';
 	--UPDATE @Fechas2 SET NombreDia = 'DOMINGO' WHERE NombreDia = 'SUNDAY';
 
 	UPDATE OA SET
@@ -2064,7 +2076,7 @@ GO
 
 CREATE PROCEDURE [dbo].[SP_LISTAR_ENCUESTAS]-- SP_LISTAR_ENCUESTAS 2022,0
 (
-	@año int,
+	@a├▒o int,
 	@mes int
 )
 AS
@@ -2101,7 +2113,7 @@ BEGIN
 		select @visitante = visitante, @num_mes = num_mes from @tbl_meses where orden = @j;
 
 		select @total = count(*) from tbl_encuesta
-		where datepart(year,convert(date,fecha)) = @año and resultado = @visitante and DATEPART(month,convert(date,fecha)) = @num_mes;
+		where datepart(year,convert(date,fecha)) = @a├▒o and resultado = @visitante and DATEPART(month,convert(date,fecha)) = @num_mes;
 
 		update @tbl_meses set total = @total
 		where visitante = @visitante and num_mes = @num_mes;
@@ -2268,10 +2280,10 @@ BEGIN
 	declare @filtroDias table ( dia varchar(20) )
 	IF @dias LIKE '%*LU*%' BEGIN INSERT INTO @filtroDias SELECT 'LUNES' END
 	IF @dias LIKE '%*MA*%' BEGIN INSERT INTO @filtroDias SELECT 'MARTES' END
-	IF @dias LIKE '%*MI*%' BEGIN INSERT INTO @filtroDias SELECT 'MIÉRCOLES' END
+	IF @dias LIKE '%*MI*%' BEGIN INSERT INTO @filtroDias SELECT 'MI├ëRCOLES' END
 	IF @dias LIKE '%*JU*%' BEGIN INSERT INTO @filtroDias SELECT 'JUEVES' END
 	IF @dias LIKE '%*VI*%' BEGIN INSERT INTO @filtroDias SELECT 'VIERNES' END
-	IF @dias LIKE '%*SA*%' BEGIN INSERT INTO @filtroDias SELECT 'SÁBADO' END
+	IF @dias LIKE '%*SA*%' BEGIN INSERT INTO @filtroDias SELECT 'S├üBADO' END
 	IF @dias LIKE '%*DO*%' BEGIN INSERT INTO @filtroDias SELECT 'DOMINGO' END
 
 	select
@@ -2471,19 +2483,19 @@ AS
 BEGIN
     SET NOCOUNT ON;
 
-    DECLARE @Offset INT = (@Page - 1) * @PageSize; -- Cálculo del offset basado en la página y el tamaño de la página
-    DECLARE @IsNumericSearch BIT = 0; -- Variable para verificar si @Search es un número
+    DECLARE @Offset INT = (@Page - 1) * @PageSize; -- C├ílculo del offset basado en la p├ígina y el tama├▒o de la p├ígina
+    DECLARE @IsNumericSearch BIT = 0; -- Variable para verificar si @Search es un n├║mero
 
-    -- Verificar si el parámetro @Search es un número
+    -- Verificar si el par├ímetro @Search es un n├║mero
     IF ISNUMERIC(@Search) = 1
     BEGIN
-        SET @IsNumericSearch = 1; -- Si es un número, marcamos la variable
+        SET @IsNumericSearch = 1; -- Si es un n├║mero, marcamos la variable
     END
 
-    -- Consultar dependiendo de si @Search es numérico o no
+    -- Consultar dependiendo de si @Search es num├®rico o no
     IF @IsNumericSearch = 1
     BEGIN
-        -- Buscar por ID si @Search es un número
+        -- Buscar por ID si @Search es un n├║mero
         SELECT
             Id AS 'id_paciente',
             CONCAT(LTRIM(RTRIM(Nombre)), ' ', LTRIM(RTRIM(Apellido))) AS 'nombres'
@@ -2492,11 +2504,11 @@ BEGIN
         AND Id = CAST(@Search AS INT)
         ORDER BY Nombre, Apellido ASC
         OFFSET @Offset ROWS
-        FETCH NEXT @PageSize ROWS ONLY; -- Usar el tamaño de la página para la cantidad de registros
+        FETCH NEXT @PageSize ROWS ONLY; -- Usar el tama├▒o de la p├ígina para la cantidad de registros
     END
     ELSE
     BEGIN
-        -- Buscar por Nombre o Apellido si @Search no es un número
+        -- Buscar por Nombre o Apellido si @Search no es un n├║mero
         SELECT
             Id AS 'id_paciente',
             CONCAT(LTRIM(RTRIM(Nombre)), ' ', LTRIM(RTRIM(Apellido))) AS 'nombres'
@@ -2505,7 +2517,7 @@ BEGIN
         AND (Nombre LIKE '%' + @Search + '%' OR Apellido LIKE '%' + @Search + '%')
         ORDER BY Nombre, Apellido ASC
         OFFSET @Offset ROWS
-        FETCH NEXT @PageSize ROWS ONLY; -- Usar el tamaño de la página para la cantidad de registros
+        FETCH NEXT @PageSize ROWS ONLY; -- Usar el tama├▒o de la p├ígina para la cantidad de registros
     END
 END
 GO
@@ -2831,7 +2843,7 @@ CREATE PROCEDURE [dbo].[SP_LISTAR_VACACIONES_PSICOLOGO]
 	@id_psicologo int,
 	@inicio date,
 	@fin date,
-	@año int
+	@a├▒o int
 )
 AS
 BEGIN
@@ -2849,7 +2861,7 @@ BEGIN
 		''
 	from tbl_vacaciones_psicologo v
 	where v.Id_psicologo=@id_psicologo
-	and DATEPART(year, v.Fecha)=@año
+	and DATEPART(year, v.Fecha)=@a├▒o
 
 	--WITH DateTable AS
 	--(
@@ -2868,7 +2880,7 @@ BEGIN
 	--	'',
 	--	''
 	--FROM DateTable
-	--WHERE UPPER(DATENAME(WEEKDAY, CAST([date] AS DATE))) NOT IN ('SÁBADO','DOMINGO');
+	--WHERE UPPER(DATENAME(WEEKDAY, CAST([date] AS DATE))) NOT IN ('S├üBADO','DOMINGO');
 
 	--WITH DateTable2 AS
 	--(
@@ -2887,7 +2899,7 @@ BEGIN
 	--	'',
 	--	''
 	--FROM DateTable2
-	--WHERE UPPER(DATENAME(WEEKDAY, CAST([date] AS DATE))) NOT IN ('SÁBADO','DOMINGO')
+	--WHERE UPPER(DATENAME(WEEKDAY, CAST([date] AS DATE))) NOT IN ('S├üBADO','DOMINGO')
 
 	insert into @fechas2
 	select distinct
@@ -2923,7 +2935,7 @@ AS
 BEGIN
     SET NOCOUNT ON;
 
-    -- Obtener los datos del paciente según el ID
+    -- Obtener los datos del paciente seg├║n el ID
     SELECT Id, Nombre, Apellido, FechaNacimiento, DocumentoTipo, DocumentoNumero, Telefono, EstadoCivil, Sexo, Estado
     FROM [dbo].[tbl_paciente]
     WHERE Id = @Id;
@@ -2936,18 +2948,18 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE PROCEDURE [dbo].[sp_obtener_paciente_paginado]
-    @Nombre NVARCHAR(255) = NULL, -- Parámetro para el nombre del paciente (opcional)
-    @NumeroPagina INT = 1, -- Número de página (default: 1)
-    @TamanoPagina INT = 10 -- Tamaño de la página (default: 10)
+    @Nombre NVARCHAR(255) = NULL, -- Par├ímetro para el nombre del paciente (opcional)
+    @NumeroPagina INT = 1, -- N├║mero de p├ígina (default: 1)
+    @TamanoPagina INT = 10 -- Tama├▒o de la p├ígina (default: 10)
 AS
 BEGIN
     SET NOCOUNT ON;
 
-    -- Calcular el índice de la primera fila de la página actual
+    -- Calcular el ├¡ndice de la primera fila de la p├ígina actual
     DECLARE @Inicio INT = (@NumeroPagina - 1) * @TamanoPagina + 1;
     DECLARE @Fin INT = @NumeroPagina * @TamanoPagina;
 
-    -- Seleccionar los datos de pacientes con paginación y filtrado por nombre si se proporciona
+    -- Seleccionar los datos de pacientes con paginaci├│n y filtrado por nombre si se proporciona
     SELECT Id, Nombre, Apellido, FechaNacimiento, DocumentoTipo, DocumentoNumero, Telefono, EstadoCivil, Sexo, Estado
     FROM (
         SELECT
@@ -2966,18 +2978,18 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE PROCEDURE [dbo].[sp_obtener_producto_paginado]
-    @Nombre NVARCHAR(255) = NULL, -- Parámetro para el nombre del paciente (opcional)
-    @NumeroPagina INT = 1, -- Número de página (default: 1)
-    @TamanoPagina INT = 10 -- Tamaño de la página (default: 10)
+    @Nombre NVARCHAR(255) = NULL, -- Par├ímetro para el nombre del paciente (opcional)
+    @NumeroPagina INT = 1, -- N├║mero de p├ígina (default: 1)
+    @TamanoPagina INT = 10 -- Tama├▒o de la p├ígina (default: 10)
 AS
 BEGIN
     SET NOCOUNT ON;
 
-    -- Calcular el índice de la primera fila de la página actual
+    -- Calcular el ├¡ndice de la primera fila de la p├ígina actual
     DECLARE @Inicio INT = (@NumeroPagina - 1) * @TamanoPagina + 1;
     DECLARE @Fin INT = @NumeroPagina * @TamanoPagina;
 
-    -- Seleccionar los datos de pacientes con paginación y filtrado por nombre si se proporciona
+    -- Seleccionar los datos de pacientes con paginaci├│n y filtrado por nombre si se proporciona
     SELECT Id, Nombre, Precio, Color
     FROM (
         SELECT
@@ -3000,7 +3012,7 @@ AS
 BEGIN
     SET NOCOUNT ON;
 
-    -- Obtener los datos del paciente según el ID
+    -- Obtener los datos del paciente seg├║n el ID
     SELECT * 
     FROM Productos
     WHERE id = @id;
@@ -3018,7 +3030,7 @@ AS
 BEGIN
     SET NOCOUNT ON;
 
-    -- Obtener los datos del psicologo según el ID
+    -- Obtener los datos del psicologo seg├║n el ID
     SELECT
 		p.Id,
 		p.Nombre,
@@ -3051,13 +3063,13 @@ GO
 
 CREATE PROCEDURE [dbo].[SP_PUNTOS_VISITADOS]
 (
-	@año int,
+	@a├▒o int,
 	@mes int
 )
 AS
 BEGIN
 
-	--declare @año int = 2020
+	--declare @a├▒o int = 2020
 	declare @tbl_meses table (orden int, num_mes int, mes varchar(50), tipo varchar(50), visitante varchar(50), total int)
 
 	declare @i int = 1;
@@ -3090,7 +3102,7 @@ BEGIN
 		select @tipo = tipo, @visitante = visitante, @num_mes = num_mes from @tbl_meses where orden = @j;
 
 		select @total = count(*) from tbl_puntos_visitados
-		where datepart(year,convert(date,fecha_visita)) = @año and visitante = @visitante and punto_visitado = @tipo and DATEPART(month,convert(date,fecha_visita)) = @num_mes;
+		where datepart(year,convert(date,fecha_visita)) = @a├▒o and visitante = @visitante and punto_visitado = @tipo and DATEPART(month,convert(date,fecha_visita)) = @num_mes;
 
 		update @tbl_meses set total = @total
 		where tipo = @tipo and visitante = @visitante and num_mes = @num_mes;
@@ -3118,13 +3130,17 @@ CREATE PROCEDURE [dbo].[SP_REGISTRAR_CITA]
 	@hora_cita varchar(8),
 	@id_doctor int,
 	@monto_pactado decimal(10,2) = null,
+	@descuento decimal(10,2) = NULL,
 	@id_servicio int,
 	@id_sede int,
+	@tipo_cita varchar(2) = NULL,
 	@usuario varchar(50),
 	@adicional varchar(2),
-	@feedback bit = NULL,            -- Nuevo parámetro
-    @comentario varchar(500) = NULL, -- Nuevo parámetro
-	@orden int = 0
+	@feedback bit = NULL,            -- Nuevo par├ímetro
+    @comentario varchar(500) = NULL, -- Nuevo par├ímetro
+	@orden int = 0,
+	@id_paquete int = NULL OUTPUT,
+	@url_zoom nvarchar(500) = NULL
 )
 AS
 BEGIN
@@ -3132,8 +3148,8 @@ BEGIN
 
 	declare @estado_cita int = 1;
 	declare @fecha_cita_ date = convert(date, @fecha_cita);
-	declare @hora_cita_ time = convert(time, convert(datetime, @hora_cita, 0));
-	declare @fecha_hora_cita_ datetime = CAST(@fecha_cita_ AS DATETIME) + CAST(@hora_cita_ AS DATETIME);
+	declare @hora_cita_ time = NULL;
+	declare @fecha_hora_cita_ datetime = NULL;
 
 	declare @moneda varchar(10) = 'S/.';
 	declare @inicio time = convert(time, convert(datetime, '07:00 AM', 0));
@@ -3144,11 +3160,78 @@ BEGIN
 	if (@adicional = 'SI')
 	begin
 		set @monto_pactado = 0.00;
+		set @descuento = NULL;
 	end
+
+	IF @hora_cita = '-1'
+	BEGIN
+		IF @id_cita = 0
+		BEGIN
+			IF (@orden = 0)
+				SET @id_paquete = 0;
+			ELSE IF (@orden = 1)
+			BEGIN
+				INSERT INTO tbl_paquete (informe_adicional, usuario_registra, fecha_registra)
+				VALUES ('NO', @usuario, dbo.Get_date());
+				SET @id_paquete = SCOPE_IDENTITY();
+			END;
+
+			INSERT INTO tbl_cita (
+				id_paciente, fecha_cita, hora_cita, id_doctor_asignado, id_estado_cita, tipo,
+				Moneda, Monto_pactado, Monto_pagado, Monto_pendiente, id_servicio, id_sede,
+				usuario_registra, fecha_registra, feedback, comentario, orden, pago_gratis,
+				tipo_cita, id_paquete, Monto_descuento, url_zoom
+			)
+			VALUES (
+				@id_paciente, @fecha_cita_, '00:00:00.000', @id_doctor, @estado_cita, 'CITA',
+				@moneda, @monto_pactado, 0.00, @monto_pactado, @id_servicio, @id_sede,
+				@usuario, dbo.Get_date(), @feedback, @comentario, @orden,
+				(CASE WHEN @siglas = 'EG' THEN 1 ELSE 0 END),
+				@tipo_cita, @id_paquete, @descuento, @url_zoom
+			);
+
+			SET @id_cita = SCOPE_IDENTITY();
+			INSERT INTO tbl_historial_cita SELECT @id_cita, 1, 'CITA EN BORRADOR', @usuario, dbo.Get_date();
+			SELECT 'OK' AS 'rpta';
+			RETURN;
+		END
+		ELSE
+		BEGIN
+			UPDATE tbl_cita SET
+				fecha_cita = @fecha_cita_,
+				hora_cita = NULL,
+				id_doctor_asignado = @id_doctor,
+				moneda = @moneda,
+				Monto_pactado = @monto_pactado,
+				id_servicio = @id_servicio,
+				usuario_modifica = @usuario,
+				fecha_modifica = dbo.Get_date(),
+				feedback = @feedback,
+				comentario = @comentario,
+				tipo = 'CITA',
+				tipo_cita = @tipo_cita,
+				Monto_descuento = @descuento,
+				url_zoom = @url_zoom
+			WHERE id_cita = @id_cita;
+
+			INSERT INTO tbl_historial_cita SELECT @id_cita, 0, 'ACTUALIZADO A BORRADOR', @usuario, dbo.Get_date();
+			SELECT 'OK' AS 'rpta';
+			RETURN;
+		END
+	END
+
+	IF (@id_paquete > 0)
+	BEGIN
+		SET @id_servicio = (SELECT TOP 1 id_servicio FROM tbl_cita WHERE id_paquete = @id_paquete);
+		SET @monto_pactado = 0.00;
+	END
+
+	SET @hora_cita_ = CONVERT(time, CONVERT(datetime, @hora_cita, 0));
+	SET @fecha_hora_cita_ = CAST(@fecha_cita_ AS DATETIME) + CAST(@hora_cita_ AS DATETIME);
 
 	if exists (select * from tbl_vacaciones_psicologo where Id_psicologo=@id_doctor and Fecha=@fecha_cita)
 	begin
-		SELECT 'La fecha seleccionada es un día registrado como vacaciones.' AS 'rpta';
+		SELECT 'La fecha seleccionada es un d├¡a registrado como vacaciones.' AS 'rpta';
 	end
 	else
 	begin
@@ -3176,8 +3259,8 @@ BEGIN
 						END
 						ELSE
 						BEGIN
-							INSERT INTO tbl_cita (id_paciente, fecha_cita, hora_cita, id_doctor_asignado, id_estado_cita, tipo, Moneda, Monto_pactado, Monto_pagado, Monto_pendiente, id_servicio, id_sede, usuario_registra, fecha_registra, feedback, comentario, orden, pago_gratis)
-							VALUES (@id_paciente, @fecha_cita_, @hora_cita_, @id_doctor, @estado_cita, 'CITA', @moneda, @monto_pactado, 0.00, @monto_pactado, @id_servicio, @id_sede, @usuario, dbo.Get_date(), @feedback, @comentario, @orden, (case when @siglas = 'EG' then 1 else 0 end));
+							INSERT INTO tbl_cita (id_paciente, fecha_cita, hora_cita, id_doctor_asignado, id_estado_cita, tipo, Moneda, Monto_pactado, Monto_pagado, Monto_pendiente, id_servicio, id_sede, usuario_registra, fecha_registra, feedback, comentario, orden, pago_gratis, tipo_cita, id_paquete, Monto_descuento, url_zoom)
+							VALUES (@id_paciente, @fecha_cita_, @hora_cita_, @id_doctor, @estado_cita, 'CITA', @moneda, @monto_pactado, 0.00, @monto_pactado, @id_servicio, @id_sede, @usuario, dbo.Get_date(), @feedback, @comentario, @orden, (case when @siglas = 'EG' then 1 else 0 end), @tipo_cita, @id_paquete, @descuento, @url_zoom);
 
 							set @id_cita = @@IDENTITY;
 							insert into tbl_historial_cita select @id_cita, 1, (select ec.estado_cita from tbl_estados_cita ec WHERE ec.id_estado_cita=@estado_cita), @usuario, dbo.Get_date();
@@ -3202,7 +3285,7 @@ BEGIN
 						
 							if (@mins_hasta_cita < @mins_x_dia)
 							begin
-								SELECT 'La reprogramación de citas es hasta 24 horas antes.' AS 'rpta';
+								SELECT 'La reprogramaci├│n de citas es hasta 24 horas antes.' AS 'rpta';
 							end
 							else
 							begin
@@ -3216,10 +3299,13 @@ BEGIN
 									usuario_modifica = @usuario,
 									fecha_modifica = dbo.Get_date(),
 									feedback = @feedback,
-									comentario = @comentario
+									comentario = @comentario,
+									tipo_cita = @tipo_cita,
+									Monto_descuento = @descuento,
+									url_zoom = @url_zoom
 								WHERE id_cita = @id_cita;
 
-								insert into tbl_historial_cita select @id_cita, 0, 'REPROGRAMACIÓN', @usuario, dbo.Get_date();
+								insert into tbl_historial_cita select @id_cita, 0, 'REPROGRAMACI├ôN', @usuario, dbo.Get_date();
 
 								SELECT 'OK' AS 'rpta';
 							end
@@ -3261,7 +3347,7 @@ BEGIN
 	declare @fecha_cita_ date = convert(date, dateadd(day, 1, dbo.Get_date()) );
 	declare @nombreDia varchar(20) = (SELECT UPPER(DATENAME(WEEKDAY, @fecha_cita_)));
 	
-	if (@nombreDia = 'SÁBADO' or @nombreDia = 'SABADO' OR @nombreDia = 'SATURDAY')
+	if (@nombreDia = 'S├üBADO' or @nombreDia = 'SABADO' OR @nombreDia = 'SATURDAY')
 	begin
 		set @fecha_cita_ = dateadd(day,2,@fecha_cita_);
 	end
@@ -3277,7 +3363,7 @@ BEGIN
 	declare @minval TINYINT=1,@maxval TINYINT = (select COUNT(*) from @doctores);
 	declare @random_id int;
 
-	--obtener horario de asignación de cita
+	--obtener horario de asignaci├│n de cita
 	declare @horarios table ( id int identity(1,1) primary key, hora time )
 	declare @hora_cita time;
 
@@ -3335,8 +3421,8 @@ BEGIN
 
 	end
 	else
-	if exists (select * from tbl_flujos where habilitado=1 and remitente='person' and tipo='text' and contenido_texto='4 a 11 años')
-	or exists (select * from tbl_flujos where habilitado=1 and remitente='person' and tipo='text' and contenido_texto='6 a 16 años')
+	if exists (select * from tbl_flujos where habilitado=1 and remitente='person' and tipo='text' and contenido_texto='4 a 11 a├▒os')
+	or exists (select * from tbl_flujos where habilitado=1 and remitente='person' and tipo='text' and contenido_texto='6 a 16 a├▒os')
 	begin
 
 		insert into tbl_cita (id_paciente, fecha_cita, hora_cita, id_doctor_asignado, id_estado_cita, tipo)
@@ -3394,7 +3480,7 @@ BEGIN
  END  
  ELSE  
  BEGIN  
-  SELECT 'Ocurrió un error atendiendo su solicitud' AS 'res';  
+  SELECT 'Ocurri├│ un error atendiendo su solicitud' AS 'res';  
  END   
    
 END  
@@ -3436,11 +3522,11 @@ BEGIN
     
 	if @contenido_texto = 'Gracias por participar en el cuestionario'
 	--cuestionario 1
-	or @contenido_texto = 'Muy bien se agendó un nuevo test, a partir de mañana podrá realizarlo'  
-	or @contenido_texto = 'Muy bien se agendó un nuevo test de evaluación, a partir de mañana podrá realizarlo'
+	or @contenido_texto = 'Muy bien se agend├│ un nuevo test, a partir de ma├▒ana podr├í realizarlo'  
+	or @contenido_texto = 'Muy bien se agend├│ un nuevo test de evaluaci├│n, a partir de ma├▒ana podr├í realizarlo'
 	--cuestionario 2
-	or @contenido_texto = 'El test de evaluación ha concluido se generara una cita con su médico.'  
-	or @contenido_texto = 'El test de evaluación ha concluido se generará una cita con su médico.'
+	or @contenido_texto = 'El test de evaluaci├│n ha concluido se generara una cita con su m├®dico.'  
+	or @contenido_texto = 'El test de evaluaci├│n ha concluido se generar├í una cita con su m├®dico.'
 	begin  
 		insert into tbl_flujos (id_usuario, tipo, contenido_texto, contenido_html, habilitado, remitente)    
 		values (@id_usuario, @tipo, @contenido_texto, @contenido_html, 1, @remitente);
@@ -3544,10 +3630,10 @@ BEGIN
 		insert into tbl_invitados select @linea, @id_tipolinea;
 		set @id_invitado = @@IDENTITY;
 
-		declare @nuevo_contenido_html nvarchar(max) = '<li><div class="chat-img"><img src="https://freesvg.org/img/1538298822.png" alt="user" /></div><div class="chat-content"><div class="box bg-light-success">Hola, ¿cómo puedo ayudarte?</div></div><div class="chat-time">' + left(convert(time,dbo.Get_date()),5) + '</div></li>';
+		declare @nuevo_contenido_html nvarchar(max) = '<li><div class="chat-img"><img src="https://freesvg.org/img/1538298822.png" alt="user" /></div><div class="chat-content"><div class="box bg-light-success">Hola, ┬┐c├│mo puedo ayudarte?</div></div><div class="chat-time">' + left(convert(time,dbo.Get_date()),5) + '</div></li>';
 
 		insert into tbl_flujos (id_usuario, tipo, contenido_texto, contenido_html, habilitado, remitente)
-		values (@id_invitado, 'text', 'Hola, ¿cómo puedo ayudarte?', @nuevo_contenido_html, 1, 'bot');
+		values (@id_invitado, 'text', 'Hola, ┬┐c├│mo puedo ayudarte?', @nuevo_contenido_html, 1, 'bot');
 	end
 
 	select @id_invitado 'id_invitado'
@@ -3595,7 +3681,7 @@ BEGIN
 	END
 	ELSE
 	BEGIN
-		SELECT 'La hora límite para el registro de pagos son las 23:00' AS 'rpta';
+		SELECT 'La hora l├¡mite para el registro de pagos son las 23:00' AS 'rpta';
 	END
 
 END
@@ -3660,10 +3746,10 @@ BEGIN
 	--update tbl_flujos set
 	--	habilitado = 0
 	--where id_usuario = @id_usuario;
-	--declare @nuevo_contenido_html varchar(max)  = '<li><div class="chat-img"><img src="https://localhost:44383/images/bot.jpg" class=""/></div><div class="chat-content"><div class="box bg-light-success">Hola, ¿cómo puedo ayudarte?</div></div><div class="chat-time">' + left(convert(time,dbo.Get_date()),5) + '</div></li>'
+	--declare @nuevo_contenido_html varchar(max)  = '<li><div class="chat-img"><img src="https://localhost:44383/images/bot.jpg" class=""/></div><div class="chat-content"><div class="box bg-light-success">Hola, ┬┐c├│mo puedo ayudarte?</div></div><div class="chat-time">' + left(convert(time,dbo.Get_date()),5) + '</div></li>'
 
 	--insert into tbl_flujos (id_usuario, tipo, contenido_texto, contenido_html, habilitado, remitente)
-	--values (@id_usuario, 'text', 'Hola, ¿cómo puedo ayudarte?', @nuevo_contenido_html, 1, 'bot');
+	--values (@id_usuario, 'text', 'Hola, ┬┐c├│mo puedo ayudarte?', @nuevo_contenido_html, 1, 'bot');
 
 	select 'OK' 'rpta';
 
@@ -3721,17 +3807,17 @@ BEGIN
 	--begin
 	--	if exists(select * from tbl_linea where linea = @linea and id_tipolinea = @id_tipolinea)
 	--	begin
-	--		set @rpta = 'La línea ingresada ya se encuentra registrada';
+	--		set @rpta = 'La l├¡nea ingresada ya se encuentra registrada';
 	--	end
 	--	else
 	--	begin
 	--		insert into tbl_usuario select @nombres, @apellidos, @id_tipousuario, '', null, 1, @tipo_documento, @num_documento;
 	--		set @id_usuario = @@IDENTITY;
 
-	--		declare @nuevo_contenido_html nvarchar(max) = '<li><div class="chat-img"><img src="https://freesvg.org/img/1538298822.png" alt="user" /></div><div class="chat-content"><div class="box bg-light-success">Hola, ¿cómo puedo ayudarte?</div></div><div class="chat-time">' + left(convert(time,dbo.Get_date()),5) + '</div></li>';
+	--		declare @nuevo_contenido_html nvarchar(max) = '<li><div class="chat-img"><img src="https://freesvg.org/img/1538298822.png" alt="user" /></div><div class="chat-content"><div class="box bg-light-success">Hola, ┬┐c├│mo puedo ayudarte?</div></div><div class="chat-time">' + left(convert(time,dbo.Get_date()),5) + '</div></li>';
 
 	--		insert into tbl_flujos (id_usuario, tipo, contenido_texto, contenido_html, habilitado, remitente)
-	--		values (@id_usuario, 'text', 'Hola, ¿cómo puedo ayudarte?', @nuevo_contenido_html, 1, 'bot');
+	--		values (@id_usuario, 'text', 'Hola, ┬┐c├│mo puedo ayudarte?', @nuevo_contenido_html, 1, 'bot');
 
 	--		insert into tbl_linea select @linea, @id_tipolinea, @id_usuario, 1;
 	--		set @rpta = 'OK'
@@ -3779,13 +3865,13 @@ SET QUOTED_IDENTIFIER ON
 GO
 CREATE PROCEDURE [dbo].[SP_RESULTADOS_NPS] -- SP_RESULTADOS_NPS 2022,10
 (
-	@año int,
+	@a├▒o int,
 	@mes int
 )
 AS
 BEGIN
 
-	declare @total int = (select count(*) from tbl_encuesta where DATEPART(year,convert(date,fecha)) = @año);
+	declare @total int = (select count(*) from tbl_encuesta where DATEPART(year,convert(date,fecha)) = @a├▒o);
 	declare @total_flujo int = (select count(*) from tbl_resumen_flujo);
 
 	declare @nps_objetivo numeric(10,2) = 85.00;
@@ -3886,8 +3972,8 @@ CREATE PROCEDURE [dbo].[SP_VALIDAR_CITA]
 	@id_sede int,
 	@usuario varchar(50),
 	@adicional varchar(2),
-	@feedback bit = NULL,            -- Nuevo parámetro
-    @comentario varchar(500) = NULL, -- Nuevo parámetro
+	@feedback bit = NULL,            -- Nuevo par├ímetro
+    @comentario varchar(500) = NULL, -- Nuevo par├ímetro
 	@orden int = 0
 )
 AS
@@ -4076,7 +4162,7 @@ GO
 
 CREATE PROCEDURE [dbo].[SP_VISITAS]
 (
-	@año int,
+	@a├▒o int,
 	@mes int
 )
 AS
@@ -4110,7 +4196,7 @@ begin
 	select @visitante = visitante, @num_mes = num_mes from @tbl_meses where orden = @j;
 
 	select @total = count(*) from tbl_visitas
-	where datepart(year,convert(date,fecha_visita)) = @año and visitante = @visitante and DATEPART(month,convert(date,fecha_visita)) = @num_mes;
+	where datepart(year,convert(date,fecha_visita)) = @a├▒o and visitante = @visitante and DATEPART(month,convert(date,fecha_visita)) = @num_mes;
 
 	update @tbl_meses set total = @total
 	where visitante = @visitante and num_mes = @num_mes;

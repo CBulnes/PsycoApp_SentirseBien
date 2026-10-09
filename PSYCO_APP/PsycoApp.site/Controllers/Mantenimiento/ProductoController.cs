@@ -24,7 +24,7 @@ namespace PsycoApp.site.Controllers.Mantenimiento
             if (idTipoUsuario != 1 || !idEmpresa.HasValue || idEmpresa.Value <= 0)
                 return Forbid();
 
-            using var client = new HttpClient();
+            using var client = ApiCaller.CreateHttpClient();
             var json = await client.GetStringAsync($"{apiUrl}/empresa/{idEmpresa.Value}/listar");
             var productos = JsonConvert.DeserializeObject<List<PsycoApp.entities.Producto>>(json) ?? new List<PsycoApp.entities.Producto>();
             dynamic dynamicData = new System.Dynamic.ExpandoObject();
@@ -54,7 +54,7 @@ namespace PsycoApp.site.Controllers.Mantenimiento
                 return Forbid();
             if (producto == null) return BadRequest("Producto inválido.");
 
-            using var client = new HttpClient();
+            using var client = ApiCaller.CreateHttpClient();
             var content = new StringContent(JsonConvert.SerializeObject(producto), Encoding.UTF8, "application/json");
             var response = await client.PostAsync($"{apiUrl}/empresa/{idEmpresa.Value}/guardar", content);
             var body = await response.Content.ReadAsStringAsync();
@@ -70,7 +70,7 @@ namespace PsycoApp.site.Controllers.Mantenimiento
             if (idTipoUsuario != 1 || !idEmpresa.HasValue || idEmpresa.Value <= 0)
                 return Forbid();
 
-            using var client = new HttpClient();
+            using var client = ApiCaller.CreateHttpClient();
             var response = await client.PostAsync($"{apiUrl}/empresa/{idEmpresa.Value}/eliminar/{id}", null);
             var body = await response.Content.ReadAsStringAsync();
             return StatusCode((int)response.StatusCode, body);

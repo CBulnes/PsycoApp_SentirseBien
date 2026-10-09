@@ -22,8 +22,9 @@ namespace PsycoApp.site.Controllers
 
         public IActionResult Index()
         {
-            if (!string.IsNullOrEmpty(HttpContext.Session.GetString("nombres") as string))
-            {
+            if (string.IsNullOrEmpty(HttpContext.Session.GetString("nombres")))
+                return RedirectToAction("Index", "Login");
+
                 dynamic obj = new System.Dynamic.ExpandoObject();
                 string path = $"{this.Request.Scheme}://{this.Request.Host}{this.Request.PathBase}";
                 obj.path = path;
@@ -47,16 +48,14 @@ namespace PsycoApp.site.Controllers
                 };
 
                 return View("Index", viewModelContainer);
-            }
-            else
-            {
-                return RedirectToAction("Index", "Login");
-            }
         }
 
         [HttpGet]
         public ActionResult<List<ReporteNPS>> reporte_nps(InputVisita oInputReporte)
         {
+            if (HttpContext.Session.GetInt32("id_tipousuario") != 20)
+                return Forbid();
+
             string res = "";
             try
             {

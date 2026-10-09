@@ -87,3 +87,59 @@ BEGIN
 	COMMIT TRANSACTION;
 END;
 GO
+
+CREATE OR ALTER PROCEDURE dbo.SP_OBTENER_CREDENCIALES_PSICOLOGO
+	@IdPsicologo INT,
+	@IdSede INT
+AS
+BEGIN
+	SET NOCOUNT ON;
+	IF NOT EXISTS
+	(
+		SELECT 1 FROM dbo.tbl_sede_usuario
+		WHERE Id_psicologo = @IdPsicologo AND Id_sede = @IdSede
+	)
+		THROW 50033, 'El especialista no pertenece a la sede indicada.', 1;
+
+	IF @IdPsicologo <= 0 OR @IdSede <= 0
+	BEGIN
+		RAISERROR('Ingrese un especialista y sede válidos.', 16, 1);
+		RETURN;
+	END;
+
+	SELECT TOP (1)
+		u.id_usuario AS IdUsuario,
+		COALESCE(NULLIF(u.email, ''), NULLIF(u.login, '')) AS Login
+	FROM dbo.tbl_psicologo p
+	INNER JOIN dbo.tbl_usuario u
+		ON u.id_tipousuario = 4
+		AND u.num_documento = p.DocumentoNumero
+	WHERE p.Id = @IdPsicologo
+	  AND u.id_sede = @IdSede
+	ORDER BY u.id_usuario;
+END;
+GO
+
+CREATE OR ALTER PROCEDURE dbo.SP_ACTUALIZAR_PASSWORD_PSICOLOGO
+	@IdPsicologo INT,
+	@IdSede INT,
+	@Password VARCHAR(300)
+AS
+BEGIN
+	SET NOCOUNT ON;
+
+	IF @IdPsicologo <= 0 OR LTRIM(RTRIM(@Password)) = ''
+		THROW 50031, 'Ingrese una contraseña válida.', 1;
+
+	UPDATE u
+	SET u.password = dbo.fn_EncriptarPassword(@Password)
+	FROM dbo.tbl_usuario u
+	INNER JOIN dbo.tbl_psicologo p ON p.DocumentoNumero = u.num_documento
+	INNER JOIN dbo.tbl_sede_usuario su ON su.Id_psicologo = p.Id AND su.Id_sede = @IdSede
+	WHERE p.Id = @IdPsicologo
+	  AND u.id_tipousuario = 4;
+
+	IF @@ROWCOUNT = 0
+		THROW 50032, 'El especialista no tiene una cuenta para actualizar.', 1;
+END;
+GO

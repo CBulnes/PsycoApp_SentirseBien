@@ -52,7 +52,8 @@ namespace PsycoApp.site.Controllers.Mantenimiento
                     Distrito = p.Distrito,
                     Telefono = p.Telefono,
                     Refrigerio = p.Refrigerio,
-                    Sedes = p.Sedes
+                    Sedes = p.Sedes,
+                    TieneUsuario = p.TieneUsuario
                     //Estudios = p.Estudios.Select(q => new PsycoApp.site.Models.Estudio
                     //{
                     //    Id = q.Id,
@@ -105,7 +106,8 @@ namespace PsycoApp.site.Controllers.Mantenimiento
                     Distrito = p.Distrito,
                     Telefono = p.Telefono,
                     Refrigerio = p.Refrigerio,
-                    Sedes = p.Sedes
+                    Sedes = p.Sedes,
+                    TieneUsuario = p.TieneUsuario
                     //Estudios = p.Estudios.Select(q => new PsycoApp.site.Models.Estudio
                     //{
                     //    Id = q.Id,
@@ -204,6 +206,51 @@ namespace PsycoApp.site.Controllers.Mantenimiento
             return StatusCode((int)response.StatusCode, responseContent.Trim('"'));
         }
 
+        [Route("Mantenimiento/Psicologo/ActualizarPassword")]
+        [HttpPost]
+        public async Task<IActionResult> ActualizarPassword([FromBody] PsycoApp.entities.Usuario usuario)
+        {
+            if (HttpContext.Session.GetInt32("id_tipousuario") != 1 && HttpContext.Session.GetInt32("id_tipousuario") != 3)
+                return Forbid();
+            if (usuario == null || usuario.id_psicologo <= 0 || string.IsNullOrWhiteSpace(usuario.password))
+                return BadRequest("Ingrese una contraseña válida.");
+
+            var idSede = HttpContext.Session.GetInt32("id_sede");
+            if (!idSede.HasValue || idSede.Value <= 0)
+                return Forbid();
+            usuario.id_sede = idSede.Value;
+
+            var response = await PostToApiAsync($"{apiUrl}/actualizar_password", usuario);
+            var responseContent = await response.Content.ReadAsStringAsync();
+            if (response.IsSuccessStatusCode)
+                return Content(responseContent, "application/json");
+
+            return StatusCode((int)response.StatusCode, responseContent.Trim('"'));
+        }
+
+        [Route("Mantenimiento/Psicologo/Credenciales/{idPsicologo:int}")]
+        [HttpGet]
+        public async Task<IActionResult> ObtenerCredenciales(int idPsicologo)
+        {
+            var idTipoUsuario = HttpContext.Session.GetInt32("id_tipousuario");
+            var idEmpresa = HttpContext.Session.GetInt32("id_empresa");
+            if ((idTipoUsuario != 1 && idTipoUsuario != 3) || !idEmpresa.HasValue || idEmpresa.Value <= 0)
+                return Forbid();
+
+            var idSede = HttpContext.Session.GetInt32("id_sede");
+            if (!idSede.HasValue || idSede.Value <= 0)
+                return Forbid();
+
+            var response = await GetApiResponseAsync($"{apiUrl}/credenciales/{idPsicologo}/sede/{idSede.Value}");
+            var responseContent = await response.Content.ReadAsStringAsync();
+            if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
+                return Json(null);
+            if (response.IsSuccessStatusCode)
+                return Content(responseContent, "application/json");
+
+            return StatusCode((int)response.StatusCode, responseContent.Trim('"'));
+        }
+
         [Route("/Mantenimiento/Psicologo/Editar")]
         [HttpPost]
         public async Task<IActionResult> Editar([FromBody] entities.Psicologo psicologo)
@@ -258,28 +305,34 @@ namespace PsycoApp.site.Controllers.Mantenimiento
 
         private async Task<T> GetFromApiAsync<T>(string url)
         {
-            using var client = new HttpClient();
+            using var client = ApiCaller.CreateHttpClient();
             var response = await client.GetStringAsync(url);
             return JsonConvert.DeserializeObject<T>(response);
         }
 
+        private async Task<HttpResponseMessage> GetApiResponseAsync(string url)
+        {
+            using var client = ApiCaller.CreateHttpClient();
+            return await client.GetAsync(url);
+        }
+
         private async Task<HttpResponseMessage> PostToApiAsync<T>(string url, T data)
         {
-            using var client = new HttpClient();
+            using var client = ApiCaller.CreateHttpClient();
             var content = new StringContent(JsonConvert.SerializeObject(data), System.Text.Encoding.UTF8, "application/json");
             return await client.PostAsync(url, content);
         }
 
         private async Task<HttpResponseMessage> PutToApiAsync<T>(string url, T data)
         {
-            using var client = new HttpClient();
+            using var client = ApiCaller.CreateHttpClient();
             var content = new StringContent(JsonConvert.SerializeObject(data), System.Text.Encoding.UTF8, "application/json");
             return await client.PutAsync(url, content);
         }
 
         private async Task<HttpResponseMessage> DeleteFromApiAsync(string url)
         {
-            using var client = new HttpClient();
+            using var client = ApiCaller.CreateHttpClient();
             return await client.DeleteAsync(url);
         }
 

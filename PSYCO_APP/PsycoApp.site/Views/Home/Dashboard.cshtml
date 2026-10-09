@@ -1,0 +1,232 @@
+@model PsycoApp.site.Models.DashboardViewModel
+@using System.Globalization
+@using Newtonsoft.Json
+@* Se mantiene Newtonsoft.Json para serializar los datos del gráfico de forma segura. *@
+@{
+    ViewData["Title"] = "Inicio";
+    var hora = (Model.FechaAgendaLocal ?? Model.FechaActual).Hour;
+    var saludo = hora < 12 ? "Buenos días" : hora < 19 ? "Buenas tardes" : "Buenas noches";
+    var semana = Model.ActividadSemanal ?? new List<PsycoApp.site.Models.DashboardDiaViewModel>();
+    var coloresEstado = new[] { "#e5f1ff", "#e4f8ed", "#fff3dd", "#f2e9ff", "#ffe8e8" };
+    var colorEstadoTexto = new[] { "#2778df", "#168451", "#b87808", "#8745c7", "#c95252" };
+}
+<link rel="stylesheet" href="~/src/css/sb-dashboard.css?ver=001" />
+
+<div class="sb-dashboard">
+    <header class="sb-dashboard-header">
+        <div>
+            <h1>@saludo, @(string.IsNullOrWhiteSpace(Model.NombreUsuario) ? "bienvenido" : Model.NombreUsuario.Split(' ')[0])! <span aria-hidden="true">👋</span></h1>
+            <p>Resumen general@(string.IsNullOrWhiteSpace(Model.NombreSede) ? "" : " de " + Model.NombreSede)</p>
+        </div>
+        <div class="sb-dashboard-date"><i class="fa fa-calendar"></i> @Model.FechaActual.ToString("dddd, d 'de' MMMM 'de' yyyy", new CultureInfo("es-PE"))</div>
+    </header>
+
+    @if (!string.IsNullOrWhiteSpace(Model.ErrorCarga))
+    {
+        <div class="sb-dashboard-alert"><i class="fa fa-exclamation-circle"></i> @Model.ErrorCarga</div>
+    }
+
+    <section class="sb-dashboard-metrics @(Model.EsEspecialista ? "sb-dashboard-metrics-specialist" : "")">
+        @if (Model.EsEspecialista)
+        {
+            <article class="sb-dashboard-card sb-dashboard-card-blue sb-dashboard-card-appointments">
+                <div class="sb-dashboard-icon"><i class="fa fa-calendar"></i></div>
+                <div class="sb-dashboard-metric-content"><span>Citas de hoy</span><strong>@Model.CitasHoy</strong></div>
+                <a href="@Model.UrlAgenda" aria-label="Ver agenda"><i class="fa fa-chevron-right"></i></a>
+                <div class="sb-dashboard-appointment-breakdown">
+                    <span><b>@Model.CitasProgramadasHoy</b><small>Citadas</small></span>
+                    <span><b>@Model.CitasConfirmadasHoy</b><small>Confirmadas</small></span>
+                    <span><b>@Model.CitasAtendidasHoy</b><small>Atendidas</small></span>
+                </div>
+            </article>
+            <article class="sb-dashboard-card sb-dashboard-card-green">
+                <div class="sb-dashboard-icon"><i class="fa fa-users"></i></div>
+                <div class="sb-dashboard-metric-content"><span>Pacientes atendidos</span><strong>@Model.PacientesAtendidos</strong><small>@Model.PacientesCitados citados · @Model.PacientesConfirmados confirmados</small></div>
+            </article>
+            <article class="sb-dashboard-card sb-dashboard-card-purple">
+                <div class="sb-dashboard-icon"><i class="fa fa-clock-o"></i></div>
+                <div class="sb-dashboard-metric-content"><span>Por atender</span><strong>@Model.PacientesPorAtender</strong><small>Pacientes con cita pendiente o confirmada</small></div>
+            </article>
+        }
+        else
+        {
+            <article class="sb-dashboard-card sb-dashboard-card-blue sb-dashboard-card-appointments">
+                <div class="sb-dashboard-icon"><i class="fa fa-calendar"></i></div>
+                <div class="sb-dashboard-metric-content"><span>Citas de hoy</span><strong>@Model.CitasHoy</strong></div>
+                <a href="/RegistroCitas" aria-label="Ver agenda"><i class="fa fa-chevron-right"></i></a>
+                <div class="sb-dashboard-appointment-breakdown">
+                    <span><b>@Model.CitasProgramadasHoy</b><small>Citadas</small></span>
+                    <span><b>@Model.CitasConfirmadasHoy</b><small>Confirmadas</small></span>
+                    <span><b>@Model.CitasAtendidasHoy</b><small>Atendidas</small></span>
+                </div>
+            </article>
+            @if (Model.MostrarPacientesYEspecialistas)
+            {
+                <article class="sb-dashboard-card sb-dashboard-card-green">
+                    <div class="sb-dashboard-icon"><i class="fa fa-users"></i></div>
+                    <div class="sb-dashboard-metric-content"><span>Pacientes registrados</span><strong>@Model.PacientesTotal</strong><small>+@Model.PacientesMes este mes</small></div>
+                    <a href="/Mantenimiento/Paciente" aria-label="Ver pacientes"><i class="fa fa-chevron-right"></i></a>
+                </article>
+            }
+            @if (Model.MostrarCaja)
+            {
+                <article class="sb-dashboard-card sb-dashboard-card-amber">
+                    <div class="sb-dashboard-icon"><i class="fa fa-credit-card"></i></div>
+                    <div class="sb-dashboard-cash-symbol" aria-hidden="true">S/</div>
+                    <div class="sb-dashboard-cash-summary"><span>@(Model.TipoUsuario == 1 ? "Caja del día" : "Mi caja de hoy")</span><strong>@Model.IngresosCajaHoy.ToString("C2", CultureInfo.GetCultureInfo("es-PE"))</strong>
+                        @if (Model.TipoUsuario == 1)
+                        {
+                            <small class="sb-dashboard-status @(Model.CajaAbierta ? "is-open" : "is-closed")">Caja @(Model.CajaAbierta ? "abierta" : "cerrada")</small>
+                        }
+                        else
+                        {
+                            <small class="sb-dashboard-status @(Model.CajaAbierta ? "is-open" : "is-closed")">Caja @(Model.CajaAbierta ? "abierta" : "cerrada")</small>
+                        }
+                    </div>
+                    <ul class="sb-dashboard-payment-list">
+                        @{ var metodosMostrados = 0; }
+                        @foreach (var formaPago in Model.IngresosPorFormaPago)
+                        {
+                            if (metodosMostrados >= 3) { break; }
+                            <li><span>@(formaPago.Key.Contains("Yape", StringComparison.OrdinalIgnoreCase) ? "Yape" : formaPago.Key.Contains("Plin", StringComparison.OrdinalIgnoreCase) ? "Plin" : formaPago.Key)</span><b>@formaPago.Value.ToString("C2", CultureInfo.GetCultureInfo("es-PE"))</b></li>
+                            metodosMostrados++;
+                        }
+                        @if (Model.IngresosPorFormaPago.Count == 0) { <li><span>Sin pagos registrados</span><b>@("S/ 0.00")</b></li> }
+                    </ul>
+                    <a href="/Caja" class="sb-dashboard-card-link">Ver caja <i class="fa fa-chevron-right"></i></a>
+                </article>
+            }
+            @if (Model.MostrarPacientesYEspecialistas)
+            {
+                <article class="sb-dashboard-card sb-dashboard-card-purple">
+                    <div class="sb-dashboard-icon"><i class="fa fa-user"></i></div>
+                    <div class="sb-dashboard-metric-content"><span>Especialistas disponibles</span><strong>@Model.EspecialistasDisponibles</strong><small>de @Model.EspecialistasTotal especialistas</small></div>
+                    <a href="/Mantenimiento/Psicologo" aria-label="Ver especialistas"><i class="fa fa-chevron-right"></i></a>
+                </article>
+            }
+        }
+    </section>
+
+    <section class="sb-dashboard-main-grid">
+        <article class="sb-dashboard-panel sb-dashboard-appointments">
+            <div class="sb-dashboard-panel-heading">
+                <h2><i class="fa fa-calendar"></i> Próximas citas</h2>
+                <a href="@Model.UrlAgenda">Ver agenda <i class="fa fa-arrow-right"></i></a>
+            </div>
+            <div class="sb-dashboard-table-wrap">
+                <table>
+                    <thead><tr><th>Hora</th><th>Paciente</th><th>Especialista</th><th>Servicio</th><th>Número</th><th>Estado</th></tr></thead>
+                    <tbody>
+                    @if (Model.ProximasCitas != null && Model.ProximasCitas.Any())
+                    {
+                        foreach (var cita in Model.ProximasCitas)
+                        {
+                            var estado = (cita.Estado ?? string.Empty).ToUpperInvariant();
+                            var estadoCss = estado.Contains("CONFIRM") ? "confirmed" : estado.Contains("ATEND") ? "attended" : "pending";
+                            var avatarIndex = Math.Abs(cita.Id) % coloresEstado.Length;
+                            var iniciales = string.Join("", (cita.Paciente ?? "").Split(' ', StringSplitOptions.RemoveEmptyEntries).Take(2).Select(p => p.Substring(0, 1))).ToUpperInvariant();
+                            <tr>
+                                <td>@(cita.Fecha.Date == Model.FechaActual.Date ? cita.Hora : cita.Fecha.ToString("dd/MM") + " · " + cita.Hora)</td>
+                                <td><span class="sb-dashboard-patient"><span class="sb-dashboard-avatar" style="--avatar-bg:@coloresEstado[avatarIndex];--avatar-color:@colorEstadoTexto[avatarIndex]">@iniciales</span>@cita.Paciente</span></td>
+                                <td>@cita.Especialista</td><td>@cita.Servicio</td><td>@cita.Id</td><td><span class="sb-dashboard-badge @estadoCss">@cita.Estado</span></td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr><td colspan="6" class="sb-dashboard-empty">No hay próximas citas para mostrar.</td></tr>
+                    }
+                    </tbody>
+                </table>
+            </div>
+        </article>
+
+        @if (!Model.EsEspecialista)
+        {
+            <article class="sb-dashboard-panel sb-dashboard-quick-panel">
+                <div class="sb-dashboard-panel-heading"><h2><i class="fa fa-bolt"></i> Accesos rápidos</h2></div>
+                <p>Accede rápidamente a las tareas más frecuentes.</p>
+                <div class="sb-dashboard-quick-links">
+                    @if (Model.TipoUsuario == 1)
+                    {
+                        <a href="/RegistroCitas" class="quick-blue"><i class="fa fa-calendar-plus-o"></i><span><b>Nueva cita</b><small>Agendar una cita</small></span></a>
+                        <a href="/Mantenimiento/Paciente" class="quick-green"><i class="fa fa-user-plus"></i><span><b>Nuevo paciente</b><small>Registrar paciente</small></span></a>
+                        <a href="/Caja" class="quick-amber"><i class="fa fa-usd"></i><span><b>Registrar pago</b><small>Ingresar un pago</small></span></a>
+                        <a href="/Mantenimiento/Psicologo" class="quick-purple"><i class="fa fa-user-md"></i><span><b>Especialistas</b><small>Gestionar equipo</small></span></a>
+                    }
+                    else
+                    {
+                        <a href="/RegistroCitas" class="quick-blue"><i class="fa fa-calendar-plus-o"></i><span><b>Nueva cita</b><small>Agendar una cita</small></span></a>
+                        <a href="/Mantenimiento/Paciente" class="quick-green"><i class="fa fa-user-plus"></i><span><b>Nuevo paciente</b><small>Registrar paciente</small></span></a>
+                        <a href="/Caja" class="quick-amber"><i class="fa fa-usd"></i><span><b>Registrar pago</b><small>En mi caja</small></span></a>
+                    }
+                </div>
+            </article>
+        }
+
+        <article class="sb-dashboard-panel sb-dashboard-activity-chart">
+            <div class="sb-dashboard-panel-heading sb-dashboard-chart-heading">
+                <div><h2><i class="fa fa-bar-chart"></i> Actividad de la semana</h2><p id="dashboardChartSubtitle">@(Model.EsEspecialista ? "Número de citas" : Model.TipoUsuario == 3 ? "Ingresos de tu usuario" : "Resumen semanal del centro")</p></div>
+                @if (Model.TipoUsuario == 1)
+                {
+                    <div class="sb-dashboard-chart-tabs" role="group" aria-label="Métrica semanal">
+                        <button type="button" class="active" data-chart="citas">Citas</button>
+                        <button type="button" data-chart="ingresos">Ingresos</button>
+                        <button type="button" data-chart="pacientes">Pacientes</button>
+                    </div>
+                }
+            </div>
+            <div id="dashboardChart" class="sb-dashboard-chart" data-role="@Model.TipoUsuario" data-specialist="@Model.EsEspecialista.ToString().ToLowerInvariant()"></div>
+        </article>
+
+        @if (Model.MostrarActividadReciente)
+        {
+            <article class="sb-dashboard-panel sb-dashboard-recent-panel">
+                <div class="sb-dashboard-panel-heading"><h2><i class="fa fa-clock-o"></i> Actividad reciente</h2></div>
+                <div class="sb-dashboard-recent-list">
+                    @if (Model.ActividadReciente != null && Model.ActividadReciente.Any())
+                    {
+                        foreach (var item in Model.ActividadReciente)
+                        {
+                            <div class="sb-dashboard-recent-item"><span class="recent-icon recent-@item.Tipo.ToLowerInvariant()"><i class="fa @(item.Tipo == "Pago" ? "fa-usd" : item.Tipo == "Paciente" ? "fa-user" : "fa-calendar")"></i></span><div><b>@item.Titulo</b><small>@item.Descripcion</small></div><time>@item.Fecha.ToString("HH:mm")</time></div>
+                        }
+                    }
+                    else
+                    {
+                        <p class="sb-dashboard-empty">Todavía no hay actividad reciente.</p>
+                    }
+                </div>
+            </article>
+        }
+    </section>
+</div>
+
+<script>
+    (function () {
+        const dias = @Html.Raw(JsonConvert.SerializeObject(semana.Select(d => new { fecha = d.Fecha.ToString("yyyy-MM-dd"), citas = d.Citas, pacientes = d.Pacientes, ingresos = d.Ingresos })));
+        const esEspecialista = @Html.Raw(JsonConvert.SerializeObject(Model.EsEspecialista));
+        const rol = @Model.TipoUsuario;
+        const chart = document.getElementById('dashboardChart');
+        const subtitle = document.getElementById('dashboardChartSubtitle');
+        const buttons = document.querySelectorAll('.sb-dashboard-chart-tabs button');
+        let metric = esEspecialista ? 'citas' : rol === 3 ? 'ingresos' : 'citas';
+
+        function renderChart() {
+            const property = metric;
+            const maxValue = Math.max(1, ...dias.map(d => Number(d[property]) || 0));
+            chart.innerHTML = dias.map(d => {
+                const value = Number(d[property]) || 0;
+                const height = Math.max(4, Math.round(value / maxValue * 100));
+                const date = new Date(d.fecha + 'T12:00:00');
+                const label = date.toLocaleDateString('es-PE', { weekday: 'short' }).replace('.', '');
+                const day = date.toLocaleDateString('es-PE', { day: 'numeric', month: 'short' }).replace('.', '');
+                const display = metric === 'ingresos' ? 'S/ ' + value.toFixed(2) : value;
+                return `<div class="sb-dashboard-chart-column"><strong>${display}</strong><div class="sb-dashboard-chart-track"><span style="height:${height}%"></span></div><small>${label}<br>${day}</small></div>`;
+            }).join('');
+            subtitle.textContent = metric === 'citas' ? (esEspecialista ? 'Tus citas por fecha de agendamiento' : 'Citas por fecha de agendamiento') : metric === 'ingresos' ? (rol === 3 ? 'Tus ingresos por fecha de pago' : 'Ingresos por fecha de pago') : 'Pacientes registrados por fecha';
+            buttons.forEach(button => button.classList.toggle('active', button.dataset.chart === metric));
+        }
+        buttons.forEach(button => button.addEventListener('click', () => { metric = button.dataset.chart; renderChart(); }));
+        renderChart();
+    })();
+</script>

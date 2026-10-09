@@ -8,109 +8,92 @@
 
 <!-- SB - STYLE -->
 
-<link rel="stylesheet" href="~/src/css/sb-psicologo.css" />
+<link rel="stylesheet" href="~/src/css/sb-psicologo.css?ver=004" />
 <style>
-    .btnDia, .btnDia:focus {
-        color: #99abb4 !important;
-    }
-    .btnDiaSeleccionado {
-        background-color: #bff9c6 !important;
-    }
 </style>
 
 <div class="sb-psi-container">
-   <div class="sb-psi-container-buscar">
+    <div class="sb-psi-page-header">
         <div class="sb-psi-container-buscar-title">
-            <p class="active-titular-modulo">Búsqueda y registro de psicólogos</p>
+            <p class="active-titular-modulo">Especialistas</p>
+            <span>Gestiona y registra los especialistas del centro.</span>
         </div>
+        <button class="sb-psi-add-button" type="button" onclick="mostrarFormularioAgregar()">
+            <i class="fa fa-plus"></i> Agregar
+        </button>
+    </div>
 
-        <!-- Campo de búsqueda por nombre -->
-        <div class="sb-psi-container-buscador">
-            <div class="sb-psi-container-buscador-block">
-                <button class="active-button-modulo" type="button" onclick="mostrarFormularioAgregar()">
-                    <i class="fa fa-plus"></i>&nbsp;Agregar
+    <div class="sb-psi-search-card">
+        <div class="sb-psi-search-icon"><i class="fa fa-search"></i></div>
+        <div class="sb-psi-search-content">
+            <label for="txtBuscarNombre">Buscar especialista</label>
+            <div class="sb-psi-search-controls">
+                <input id="txtBuscarNombre" class="active-input-modulo" name="Nombre" placeholder="Buscar por nombre o apellido..." type="text" />
+                <button type="button" onclick="buscarPsicologo()">
+                    <i class="fa fa-search"></i> Buscar
                 </button>
             </div>
-            <div class="sb-psi-container-buscador-block">
-                <div class="sb-psi-container-buscador-block-item">
-                    <span class="label-form active-texto-modulo">Nombre del psicólogo: </span>
-                    <input id="txtBuscarNombre" class="active-input-modulo" name="Nombre" placeholder="Ingrese nombre para buscar" type="text" required />
+        </div>
+    </div>
 
-                    <button class="active-button-modulo" type="button" onclick="buscarPsicologo()">
-                        <i class="fa fa-search"></i>&nbsp;Buscar
-                    </button>
-                </div>
-            </div>
+    <div id="containerTabla" class="sb-psi-container-table">
+        <div class="sb-psi-table-scroll">
+            <table class="table active-table-modulo">
+                <thead>
+                    <tr>
+                        <th class="text-center">N.º</th>
+                        <th>Nombres y apellidos</th>
+                        <th>Documento</th>
+                        <th>Centro</th>
+                        <th>Fecha de nacimiento</th>
+                        <th>Estado</th>
+                        <th class="text-center">Acción</th>
+                    </tr>
+                </thead>
+                <tbody id="bdPsicologos">
+                    @foreach (var psicologo in psicologos.Select((item, index) => (item, index)))
+                    {
+                        <tr>
+                            <td class="text-center">@(psicologo.index + 1)</td>
+                            <td class="sb-psi-name-cell">@psicologo.item.Nombre @psicologo.item.Apellido</td>
+                            <td>@psicologo.item.DocumentoTipo - @psicologo.item.DocumentoNumero</td>
+                            <td>@psicologo.item.Sedes</td>
+                            <td>@psicologo.item.FechaNacimiento.ToString().Substring(0, 10)</td>
+                            <td><span class="sb-psi-status @(psicologo.item.Estado == "1" ? "habilitado" : "deshabilitado")">@(psicologo.item.Estado == "1" ? "Habilitado" : "Deshabilitado")</span></td>
+                            <td>
+                                <div class="sb-psi-row-actions">
+                                    <button type="button" class="sb-psi-action-button" onclick="editarPsicologo(@psicologo.item.Id)"><i class="fa fa-pencil"></i> Editar</button>
+                                    <button type="button" class="sb-psi-action-button" onclick="modalHorarios(@psicologo.item.Id)"><i class="fa fa-calendar"></i> Horarios</button>
+                                    <div class="dropdown">
+                                        <button type="button" class="sb-psi-action-menu dropdown-toggle" data-toggle="dropdown" aria-label="Más acciones"><i class="fa fa-ellipsis-v"></i></button>
+                                        <div class="dropdown-menu dropdown-menu-right">
+                                            <button type="button" class="dropdown-item" onclick="modalCredenciales(@psicologo.item.Id)">@(psicologo.item.TieneUsuario ? "Editar usuario" : "Crear usuario")</button>
+                                            <button type="button" class="dropdown-item" onclick="modalVacaciones(@psicologo.item.Id)">Vacaciones</button>
+                                            <button type="button" class="dropdown-item" onclick="eliminarPsicologo(@psicologo.item.Id, @psicologo.item.Estado)">@(psicologo.item.Estado == "1" ? "Deshabilitar" : "Habilitar")</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
         </div>
 
-        <!-- Contenedor de la tabla -->
-        <div id="containerTabla" class="sb-psi-container-table">
-            <div class="row">
-                <table class="table table-striped active-table-modulo">
-                        <thead>
-                            <tr>
-                            <th class="text-center" style="width: 80px;">N°</th>
-                                <th class="text-center">Nombres y apellidos</th>
-                                <th class="text-center">Documento</th>
-                                <th class="text-center">Centro</th>
-                                <th class="text-center">Fecha de nacimiento</th>
-                                <th class="text-center">Estado</th>
-                                <th class="text-center">Acción</th>
-                            </tr>
-                        </thead>
-                        <tbody id="bdPsicologos">
-                            @foreach (var psicologo in psicologos.Select((item, index) => (item, index)))
-                            {
-                                <tr>
-                                    <td class="text-center">@(psicologo.index + 1)</td>
-                                    <td class="text-center">@psicologo.item.Nombre @psicologo.item.Apellido</td>
-                                    <td class="text-center">@psicologo.item.DocumentoTipo - @psicologo.item.DocumentoNumero</td>
-                                    <td class="text-center">@psicologo.item.Sedes</td>
-                                    <td class="text-center">@psicologo.item.FechaNacimiento.ToString().Substring(0, 10)</td>
-                                    <td class="text-center">@(psicologo.item.Estado == "1" ? "Habilitado" : "Deshabilitado")</td>
-                                    <td class="text-center ">
-                                        <div class="sb-psi-container-tble-td">
-                                        <button class="btn btn-sm sb-psi-container-table-button-edit active-button-tabla-modulo" onclick="editarPsicologo(@psicologo.item.Id)">Editar</button>
-                                        <button class="btn btn-sm sb-psi-container-table-button-edit active-button-tabla-modulo" onclick="modalCredenciales(@psicologo.item.Id)">Crear usuario</button>
-                                        <button class="btn btn-sm sb-psi-container-table-button-edit active-button-tabla-modulo" onclick="modalHorarios(@psicologo.item.Id)">Horarios</button>
-                                        <button class="btn btn-sm sb-psi-container-table-button-edit active-button-tabla-modulo" onclick="modalVacaciones(@psicologo.item.Id)">Vacaciones</button>
-                                        <button class="btn btn-sm sb-psi-container-table-button-delet active-button-tabla-modulo" onclick="eliminarPsicologo(@psicologo.item.Id, @psicologo.item.Estado)">@(psicologo.item.Estado == "1" ? "Deshabilitar" : "Habilitar")</button>
-                                        </div>
-                                    </td>
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
-            </div>
-
-            <!-- Paginación -->
-
+        <div class="sb-psi-table-footer">
+            <span>Mostrando @psicologos.Count() especialistas</span>
             <div class="pagination-container text-center active-paginacion-tabla-modulo">
                 <ul class="pagination">
                     @if (ViewBag.PageNumber > 1)
                     {
-                        <li class="page-item">
-                            <a class="page-link" href="/Mantenimiento/Psicologo?pageNumber=@(ViewBag.PageNumber - 1)&pageSize=@ViewBag.PageSize">
-                                &#60;
-                            </a>
-                        </li>
+                        <li class="page-item"><a class="page-link" href="/Mantenimiento/Psicologo?pageNumber=@(ViewBag.PageNumber - 1)&pageSize=@ViewBag.PageSize" aria-label="Página anterior"><i class="fa fa-chevron-left"></i></a></li>
                     }
-
-                    <li class="page-item active">
-                        <a class="page-link" href="#">@ViewBag.PageNumber</a>
-                    </li>
-
-                    <li class="page-item">
-                        <a class="page-link" href="/Mantenimiento/Psicologo?pageNumber=@(ViewBag.PageNumber + 1)&pageSize=@ViewBag.PageSize">
-                            &#62;
-                        </a>
-                    </li>
+                    <li class="page-item active"><a class="page-link" href="#">@ViewBag.PageNumber</a></li>
+                    <li class="page-item"><a class="page-link" href="/Mantenimiento/Psicologo?pageNumber=@(ViewBag.PageNumber + 1)&pageSize=@ViewBag.PageSize" aria-label="Página siguiente"><i class="fa fa-chevron-right"></i></a></li>
                 </ul>
             </div>
         </div>
-
-   </div>
-
+    </div>
 </div>
 
 <!-- Contenedor de formulario para agregar/editar psicologo -->
@@ -285,11 +268,11 @@
 
 <div id="mdl_credenciales" class="modal sb-psi-container-agregar" style="display: none;">
     <div class="sb-psi-container-agregar-popup active-fondo-oscuro">
-        <p class="active-titular-modulo">Crear usuario del especialista</p>
+        <p id="tituloCredenciales" class="active-titular-modulo">Crear usuario del especialista</p>
         <input id="hdnIdPsicologoCredenciales" type="hidden" />
         <div class="sb-frm-psi-agregar-block-item">
             <span id="lblEspecialistaCredenciales" class="label-form active-texto-modulo"></span>
-            <span class="label-form active-texto-modulo">Usuario (solo letras, sin arroba)</span>
+            <span id="lblEmailCredenciales" class="label-form active-texto-modulo">Usuario (solo letras, sin arroba)</span>
             <input id="txtEmailCredenciales" class="form-control active-input-modulo" type="text" maxlength="100" pattern="[A-Za-zÁÉÍÓÚÜÑáéíóúüñ]+" title="Ingrese solo letras, sin arroba ni espacios." required />
         </div>
         <div class="sb-frm-psi-agregar-block-item">
@@ -297,7 +280,7 @@
             <input id="txtPasswordCredenciales" class="form-control active-input-modulo" type="password" maxlength="300" required />
         </div>
         <div class="sb-frm-psi-agregar-block-button text-right">
-            <button type="button" class="btn btn-success active-button-modulo" onclick="guardarCredencialesPsicologo()">Guardar usuario</button>
+            <button id="btnGuardarCredenciales" type="button" class="btn btn-success active-button-modulo" onclick="guardarCredencialesPsicologo()">Guardar usuario</button>
             <button type="button" class="btn btn-secondary active-button-modulo" onclick="cerrarModalCredenciales()">Cancelar</button>
         </div>
     </div>
@@ -588,24 +571,33 @@
                 let tableBody = $('#bdPsicologos');
                 tableBody.empty();
                 data.forEach((psicologo, index) => {
+                    const habilitado = psicologo.estado == "1";
                     tableBody.append(`
-                    <tr>
+                        <tr>
                             <td class="text-center">${index + 1}</td>
-                            <td class="text-center">${psicologo.nombre + ' ' + psicologo.apellido }</td>
-                            <td class="text-center">${psicologo.documentoTipo + ' - ' + psicologo.documentoNumero}</td>
-                            <td class="text-center">${psicologo.sedes}</td>
-                            <td class="text-center">${formatFechaNacimiento(psicologo.fechaNacimiento)}</td>
-                            <td class="text-center">${psicologo.estado == "1" ? "Habilitado" : "Deshabilitado"}</td>
-                            <td class="text-center">
-                                <button class="btn btn-sm sb-psi-container-table-button-edit active-button-tabla-modulo" onclick="editarPsicologo(${psicologo.id})">Editar</button>
-                                <button class="btn btn-sm sb-psi-container-table-button-edit active-button-tabla-modulo" onclick="modalCredenciales(${psicologo.id})">Crear usuario</button>
-                                <button class="btn btn-sm sb-psi-container-table-button-edit active-button-tabla-modulo" onclick="modalHorarios(${psicologo.id})">Horarios</button>
-                                <button class="btn btn-sm sb-psi-container-table-button-edit active-button-tabla-modulo" onclick="modalVacaciones(${psicologo.id})">Vacaciones</button>
-                                <button class="btn btn-sm sb-psi-container-table-button-delet active-button-tabla-modulo" onclick="eliminarPsicologo(${psicologo.id}, '${psicologo.estado}')">${psicologo.estado == "1" ? "Deshabilitar" : "Habilitar"}</button>
+                            <td class="sb-psi-name-cell">${psicologo.nombre} ${psicologo.apellido}</td>
+                            <td>${psicologo.documentoTipo} - ${psicologo.documentoNumero}</td>
+                            <td>${psicologo.sedes}</td>
+                            <td>${formatFechaNacimiento(psicologo.fechaNacimiento)}</td>
+                            <td><span class="sb-psi-status ${habilitado ? 'habilitado' : 'deshabilitado'}">${habilitado ? 'Habilitado' : 'Deshabilitado'}</span></td>
+                            <td>
+                                <div class="sb-psi-row-actions">
+                                    <button type="button" class="sb-psi-action-button" onclick="editarPsicologo(${psicologo.id})"><i class="fa fa-pencil"></i> Editar</button>
+                                    <button type="button" class="sb-psi-action-button" onclick="modalHorarios(${psicologo.id})"><i class="fa fa-calendar"></i> Horarios</button>
+                                    <div class="dropdown">
+                                        <button type="button" class="sb-psi-action-menu dropdown-toggle" data-toggle="dropdown" aria-label="Más acciones"><i class="fa fa-ellipsis-v"></i></button>
+                                        <div class="dropdown-menu dropdown-menu-right">
+                                            <button type="button" class="dropdown-item" onclick="modalCredenciales(${psicologo.id})">${psicologo.tieneUsuario ? 'Editar usuario' : 'Crear usuario'}</button>
+                                            <button type="button" class="dropdown-item" onclick="modalVacaciones(${psicologo.id})">Vacaciones</button>
+                                            <button type="button" class="dropdown-item" onclick="eliminarPsicologo(${psicologo.id}, '${psicologo.estado}')">${habilitado ? 'Deshabilitar' : 'Habilitar'}</button>
+                                        </div>
+                                    </div>
+                                </div>
                             </td>
                         </tr>
                     `);
                 });
+                $('.sb-psi-table-footer > span').text(`Mostrando ${data.length} especialistas`);
                 $('#containerTabla').show();
             });
         }
@@ -665,7 +657,31 @@
             $('#hdnIdPsicologoCredenciales').val(id);
             $('#lblEspecialistaCredenciales').text('Especialista #' + id);
             $('#txtEmailCredenciales, #txtPasswordCredenciales').val('');
+            $('#tituloCredenciales').text('Cargando usuario del especialista...');
             $('#mdl_credenciales').css('display', 'flex');
+
+            $.get('/Mantenimiento/Psicologo/Credenciales/' + id)
+                .done(function (usuario) {
+                    if (usuario && usuario.email) {
+                        $('#tituloCredenciales').text('Editar usuario del especialista');
+                        $('#lblEmailCredenciales').text('Login creado');
+                        $('#txtEmailCredenciales').val(usuario.email).prop('readonly', true).prop('required', false);
+                        $('#btnGuardarCredenciales').text('Actualizar contraseña');
+                    } else {
+                        prepararAltaCredenciales();
+                    }
+                })
+                .fail(function () {
+                    cerrarModalCredenciales();
+                    Swal.fire({ icon: 'error', text: 'No se pudieron consultar las credenciales del especialista.' });
+                });
+        }
+
+        function prepararAltaCredenciales() {
+            $('#tituloCredenciales').text('Crear usuario del especialista');
+            $('#lblEmailCredenciales').text('Usuario (solo letras, sin arroba)');
+            $('#txtEmailCredenciales').val('').prop('readonly', false).prop('required', true);
+            $('#btnGuardarCredenciales').text('Guardar usuario');
         }
 
         function cerrarModalCredenciales() {
@@ -675,15 +691,16 @@
         function guardarCredencialesPsicologo() {
             var email = $('#txtEmailCredenciales').val().trim();
             var password = $('#txtPasswordCredenciales').val();
-            if (!$('#txtEmailCredenciales')[0].checkValidity() || !email || !password) {
-                $('#txtEmailCredenciales')[0].reportValidity();
-                if (email && !password) {
+            var esEdicion = $('#txtEmailCredenciales').prop('readonly');
+            if ((!esEdicion && !$('#txtEmailCredenciales')[0].checkValidity()) || (!esEdicion && !email) || !password) {
+                if (!esEdicion && !email)
+                    $('#txtEmailCredenciales')[0].reportValidity();
+                if (!password)
                     $('#txtPasswordCredenciales')[0].reportValidity();
-                }
                 return;
             }
             var soloLetrasRegex = /^[A-Za-zÁÉÍÓÚÜÑáéíóúüñ]+$/;
-            if (!soloLetrasRegex.test(email)) {
+            if (!esEdicion && !soloLetrasRegex.test(email)) {
                 Swal.fire({ icon: 'warning', text: 'El usuario debe contener solo letras, sin arroba ni espacios.' });
                 $('#txtEmailCredenciales')[0].reportValidity();
                 return;
@@ -691,11 +708,11 @@
 
             $.ajax({
                 type: 'POST',
-                url: '/Mantenimiento/Psicologo/GuardarCredenciales',
+                url: esEdicion ? '/Mantenimiento/Psicologo/ActualizarPassword' : '/Mantenimiento/Psicologo/GuardarCredenciales',
                 contentType: 'application/json',
                 data: JSON.stringify({
                     id_psicologo: parseInt($('#hdnIdPsicologoCredenciales').val()),
-                    email: email,
+                    email: esEdicion ? undefined : email,
                     password: password
                 }),
                 success: function (response) {
@@ -705,7 +722,7 @@
                 error: function (xhr) {
                     var mensaje = xhr.responseText || 'No se pudieron guardar las credenciales.';
                     try { mensaje = JSON.parse(mensaje); } catch (e) { }
-                    Swal.fire({ icon: 'error', title: 'No se pudo crear el usuario', text: mensaje });
+                    Swal.fire({ icon: 'error', title: esEdicion ? 'No se pudo actualizar la contraseña' : 'No se pudo crear el usuario', text: mensaje });
                 }
             });
         }
