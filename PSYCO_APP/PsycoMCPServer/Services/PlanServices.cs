@@ -55,8 +55,7 @@ namespace PsycoMCPServer.Services
             var horario = await _citaBL.disponibilidad_doctor(
                 doctor.Id,
                 req.Fecha,
-                main_path,
-                random_str
+                servicio.Id
             );
   
             var disponible = horario.Any(h =>

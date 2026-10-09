@@ -2,14 +2,14 @@
 
 ## Overview
 
-**Target**: Move `PsycoApp.api`, `PsycoApp.site`, `PsycoApp.BL`, `PsycoApp.DA`, and `PsycoApp.Entities` from `netcoreapp3.1` to `net10.0`.
-**Scope**: Two ASP.NET Core applications and three shared libraries. MCP projects and `PsycoApp.utilities` remain unchanged; the user accepts that the net9.0 MCP consumer may no longer build against net10.0 libraries.
+**Target**: Move `PsycoApp.api`, `PsycoApp.site`, `PsycoApp.BL`, `PsycoApp.DA`, `PsycoApp.Entities`, and `PsycoApp.mcp` to `net10.0`.
+**Scope**: Two ASP.NET Core applications, three shared libraries, and the net9.0 MCP application. `PsycoMCPServer` is already net10.0; its incompatible method call is corrected. `PsycoApp.utilities` remains unchanged.
 
 ### Selected Strategy
 **All-at-Once** — Upgrade both applications and the three authorized shared libraries; execute library retargeting in dependency order.
-**Rationale**: The user expanded scope to include BL, DA, and Entities, and explicitly accepted that the unchanged net9.0 MCP project may not compile.
+**Rationale**: The user authorized updating the net9.0 MCP app after the shared libraries moved to net10.0, and correcting the affected method calls so the solution can build.
 
-**Projects in scope**: `PsycoApp.api`, `PsycoApp.site`, `PsycoApp.BL`, `PsycoApp.DA`, `PsycoApp.Entities`.
+**Projects in scope**: `PsycoApp.api`, `PsycoApp.site`, `PsycoApp.BL`, `PsycoApp.DA`, `PsycoApp.Entities`, `PsycoApp.mcp`, and the call-site fix in `PsycoMCPServer`.
 
 ## Tasks
 

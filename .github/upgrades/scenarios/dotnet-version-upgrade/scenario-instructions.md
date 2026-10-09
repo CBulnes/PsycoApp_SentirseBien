@@ -3,7 +3,7 @@
 ## Preferences
 - **Flow Mode**: Automatic
 - **Target Framework**: `net10.0` (.NET 10 LTS)
-- **Project Scope**: `PSYCO_APP/PsycoApp.api`, `PSYCO_APP/PsycoApp.site`, `PSYCO_APP/PsycoApp.BL`, `PSYCO_APP/PsycoApp.DA`, and `PSYCO_APP/PsycoApp.Entities` are authorized for the .NET 10 upgrade. MCP projects remain excluded pending a decision on compatibility with the net9.0 MCP app.
+- **Project Scope**: All projects in `PSYCO_APP` are authorized for .NET 10 where needed to maintain compatible project references; `PsycoApp.utilities` remains at its existing target unless a build requires changing it.
 
 ## Source Control
 - **Source Branch**: `MainAI`
@@ -13,8 +13,8 @@
 - **Pending Changes**: Committed before scenario initialization as `113ca0f` (`Save pending work before .NET 10 upgrade`), per user confirmation.
 
 ## Decisions
-- Upgrade `PsycoApp.api`, `PsycoApp.site`, `PsycoApp.BL`, `PsycoApp.DA`, and `PsycoApp.Entities` to `net10.0`. Keep MCP applications and `PsycoApp.utilities` unchanged.
-- User explicitly chose `net10.0` only for BL/DA/Entities and accepts that the `net9.0` `PsycoApp.mcp` project will no longer compile against them. Do not retarget or edit MCP projects.
+- Upgrade `PsycoApp.api`, `PsycoApp.site`, `PsycoApp.BL`, `PsycoApp.DA`, `PsycoApp.Entities`, and `PsycoApp.mcp` to `net10.0`. Keep `PsycoApp.utilities` unchanged.
+- User later authorized upgrading `PsycoApp.mcp` to `net10.0` and fixing both MCP call sites to `disponibilidad_doctor` so the full solution compiles again.
 
 ## Upgrade Options
 **Source**: .github/upgrades/scenarios/dotnet-version-upgrade/upgrade-options.md
@@ -30,10 +30,10 @@
 **Rationale**: Two ASP.NET Core applications and the authorized shared libraries move to `net10.0` together. MCP projects remain outside scope by user decision.
 
 ### Execution Constraints
-- Upgrade `PsycoApp.api`, `PsycoApp.site`, and the authorized shared libraries BL/DA/Entities to `net10.0`; do not retarget or edit MCP projects or `PsycoApp.utilities`.
-- Resolve package and API issues inline only within those five authorized projects.
-- Validate all five authorized projects and run available tests. Also build the solution to document any expected MCP compatibility failure; do not repair MCP.
+- Upgrade `PsycoApp.api`, `PsycoApp.site`, `PsycoApp.BL`, `PsycoApp.DA`, `PsycoApp.Entities`, and `PsycoApp.mcp` to `net10.0`; keep `PsycoApp.utilities` unchanged.
+- Resolve package and API issues inline in authorized projects, including MCP call sites to match BL method signatures.
+- Validate the entire solution and run available tests.
 
 ### Scoped Exception
 - User authorized removing only the two unused `using` directives reported by the full-solution build in `PSYCO_APP/PsycoApp.DA/CitaDA.cs` (`Microsoft.VisualBasic` and `System.Linq`). This does not authorize other edits to DA or other excluded shared projects.
-- User expanded scope to include `PsycoApp.BL`, `PsycoApp.DA`, and `PsycoApp.Entities` as .NET 10 projects; they explicitly accepted that the unchanged net9.0 `PsycoApp.mcp` may fail to build as a result.
+- User later expanded scope again to include `PsycoApp.mcp` migration to `net10.0` and repairs for both MCP call sites after the initial library-only upgrade introduced TFM and method-arity build errors.
