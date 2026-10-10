@@ -64,7 +64,7 @@ namespace PsycoApp.site.Controllers
                 res = ApiCaller.consume_endpoint_method(url, null, "GET");
                 oRespuesta = JsonConvert.DeserializeObject<RespuestaCentroAtencion>(res);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                
                 oRespuesta.estado = "ERROR";

@@ -32,7 +32,7 @@ namespace PsycoApp.site.Controllers
 
                 rpta = ApiCaller.consume_endpoint_method(url, obj, "POST");
             }
-            catch (Exception ex)
+            catch (Exception)
             {
               
                 rpta = "Ocurrió un error registrando el usuario";

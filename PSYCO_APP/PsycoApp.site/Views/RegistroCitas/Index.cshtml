@@ -113,8 +113,8 @@
     }
 
     .calendar-dow > td {
-    border: 2px solid #8d8d8d;
-    color: #333333 !important;
+    border: 1px solid #e2eceb;
+    color: #294b4a !important;
     }
 
     .dia_inhabilitado {
@@ -122,19 +122,20 @@
     }
 
     .active-table-modulo tr:nth-of-type(odd) {
-    background-color: #ededed !important;
+    background-color: #f7fbfa !important;
     }
 
     .active-table-modulo tr:nth-of-type(even) {
-    background-color: #ededed !important;
+    background-color: #ffffff !important;
     }
 
     .active-table-modulo .calendar-dow-header th {
-    color: #282828 !important;
+    color: #426b6a !important;
+    background-color: #f2f8f7;
     }
 
     .active-table-modulo .calendar-month-header th div span {
-    color: #282828 !important;
+    color: #247d79 !important;
     }
 
     #bdTblSemanal tr td {
@@ -148,7 +149,7 @@
     }
 
     .calendar-dow > td {
-    border: 2px solid #919191 !important;
+    border: 1px solid #e2eceb !important;
     }
 
     #nombreServicio, .new-font{
@@ -718,7 +719,7 @@
     </div>
 </div>
 <!-- Referencia la vista parcial de pacientes dentro del modal -->
-@Html.Partial("/Views/Mantenimiento/Paciente/_PacientesModal.cshtml", Model.Pacientes)
+<partial name="/Views/Mantenimiento/Paciente/_PacientesModal.cshtml" model="Model.Pacientes" />
 
 <!--MODAL OTROS PAGOS PENDIENTES-->
 <div id="mdl_otros_pagos_pendientes" class="modal" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="true">

@@ -26,7 +26,7 @@ namespace PsycoApp.api.Controllers
             {
                 lista = _productoBL.listar_productos_combo(empresaAutorizada);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 lista.Clear();
             }

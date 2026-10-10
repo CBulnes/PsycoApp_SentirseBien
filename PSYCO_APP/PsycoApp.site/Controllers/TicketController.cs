@@ -47,7 +47,7 @@ namespace PsycoApp.site.Controllers
                 rpta = ApiCaller.consume_endpoint_method(url, obj, "POST");
                 respuesta = JsonConvert.DeserializeObject<RespuestaUsuario>(rpta);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
               
                 //oTicket.codigo = "ERROR";
@@ -68,7 +68,7 @@ namespace PsycoApp.site.Controllers
                 rpta = ApiCaller.consume_endpoint_method(url, null, "GET");
                 oTicket = JsonConvert.DeserializeObject<Ticket>(rpta);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
               
                 rpta = "Ocurrió un error generando el ticket";

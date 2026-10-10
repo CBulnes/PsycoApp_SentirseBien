@@ -16,7 +16,7 @@ namespace PsycoMCPServer.Mcp.Tools
         }
 
         [McpServerTool, Description("Insertar Cita")]
-        public async Task<string> AgendarCita(AgendarCitaRequest request)
+        public async Task<string> AgendarCita(AgendarCitaRequest? request)
         {
           Console.Error.WriteLine($"agendar_cita called - dni={request?.Dni} especialista={request?.Especialista} servicio={request?.Servicio} fecha={request?.Fecha} hora={request?.Hora} idSede={request?.IdSede}");
     try

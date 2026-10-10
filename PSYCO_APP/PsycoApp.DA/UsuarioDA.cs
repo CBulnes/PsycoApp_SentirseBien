@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.SqlClient;
+using Microsoft.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
 using PsycoApp.DA.SQLConnector;
@@ -13,7 +13,6 @@ namespace PsycoApp.DA
     public class UsuarioDA
     {
         SqlConnection cn = new SqlConnector().cadConnection_psyco;
-        string rpta = "";
 
         public Usuario validar_usuario(Usuario usuario)
         {
@@ -76,7 +75,7 @@ namespace PsycoApp.DA
                     usuario.validacion = Convert.ToString(row["validacion"]);
                 }
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 usuario.validacion = "Ocurrió un error al actualizar la contraseña";
             }

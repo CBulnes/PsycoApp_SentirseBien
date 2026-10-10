@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using PsycoApp.site.Models;
@@ -47,7 +46,7 @@ namespace PsycoApp.site.Controllers
                     oRespuesta = JsonConvert.DeserializeObject<RespuestaUsuario>(res);
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 oRespuesta.estado = false;
                 oRespuesta.descripcion = "Ocurrió un error al validar sus credenciales";
@@ -81,7 +80,7 @@ namespace PsycoApp.site.Controllers
                     oContraseña.especial = false;
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 
             }
@@ -105,7 +104,7 @@ namespace PsycoApp.site.Controllers
                     oRespuesta.estado = false;
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 oRespuesta.estado = false;
             }

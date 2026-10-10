@@ -144,7 +144,8 @@ $(document).ready(function () {
 function obtener_horarios_especialista(index) {
     var fecha = $('#txtFecha' + index).val();
     var especialista = $('#cboEspecialista' + index).val();
-    var html = obtener_horarios_fecha(fecha, especialista);
+    var servicio = $('#cboEspecialista' + index).data('servicio');
+    var html = obtener_horarios_fecha(fecha, especialista, servicio);
     $('#cboHorario' + index).html(html);
 }
 
@@ -173,12 +174,12 @@ var obtener_especialistas = function () {
     return html;
 }
 
-var obtener_horarios_fecha = function (fecha, idEspecialista = null) {
+var obtener_horarios_fecha = function (fecha, idEspecialista = null, idServicio = null) {
     var doctor = $('#cboDoctor').val();
     if (idEspecialista != null) {
         doctor = idEspecialista
     }
-    var servicio = $('#cboServicio').val();
+    var servicio = idServicio != null ? idServicio : $('#cboServicio').val();
     var html = '';
 
     $.ajax({
@@ -403,7 +404,7 @@ function verFechasAdicionales(servicio = null) {
                     //servicio
                     html += '<tr>';
                     html += '<td><input class="new-font form-control fechaAd active-input-modulo" type="date" data-id-estado="' + citasPaquete[i].id_estado_cita + '" data-id-cita="' + citasPaquete[i].id_cita + '" id="txtFecha' + i + '" autocomplete="off" max="2050-12-31" min="2022-08-01" value="' + (fecha) + '" onkeydown="return false" ' + disabled + ' oninput="validarHorarioFecha(' + i + ')" /></td>';
-                    html += '<td id="tdEspecialista' + i + '"><select class="new-font form-control especialistaAd active-select-modulo" style="background-color: #18202d !important;" id="cboEspecialista' + i + '" onchange="obtener_horarios_especialista(' + i + ')">' + obtener_especialistas() + '</select></td>';
+                    html += '<td id="tdEspecialista' + i + '"><select class="new-font form-control especialistaAd active-select-modulo" style="background-color: #18202d !important;" id="cboEspecialista' + i + '" data-servicio="' + citasPaquete[i].id_servicio + '" onchange="obtener_horarios_especialista(' + i + ')">' + obtener_especialistas() + '</select></td>';
                     html += '<td id="tdHorario' + i + '"><select class="new-font form-control horarioAd active-select-modulo" style="background-color: #18202d !important;" id="cboHorario' + i + '">' + '<option value="-1">Seleccionar horario</option>' + /*obtener_horarios_fecha(formatDateISO(fecha)) +*/ '</select></td>';
                     html += '<td>' +
                         '<label class="new-font form-control horarioAd active-select-modulo" ' +
@@ -435,27 +436,25 @@ function verFechasAdicionales(servicio = null) {
                 $('.preloader').addClass('hide-element');                
                 $('#bdFechas').html(html);
 
-                for (var item of cbosEspecialistas) {
+                for (var i = 0; i < cbosEspecialistas.length; i++) {
+                    var item = cbosEspecialistas[i];
                     $('#' + item.idCombo).val(item.valor).change();
                     if (item.deshabilitar)
                         $('#' + item.idCombo).attr('disabled', true);
-                }
-                setTimeout(() => {
-                    for (var item of cbosHorarios) {
-                        const $opcion = $('#' + item.idCombo + ' option[data-original="' + item.valor + '"]');
+                    var horario = cbosHorarios[i];
+                    const $opcion = $('#' + horario.idCombo + ' option[data-original="' + horario.valor + '"]');
 
-                        if ($opcion.length) {
-                            const original = $opcion.data('original');
-                            $opcion
-                                .val(original)      // actualiza el value
-                                .text(formatearHoraMostrar(original))     // actualiza el texto visible
-                                .prop('selected', true); // selecciona
-                        }
-
-                        if (item.deshabilitar)
-                            $('#' + item.idCombo).attr('disabled', true);
+                    if ($opcion.length) {
+                        const original = $opcion.data('original');
+                        $opcion
+                            .val(original)
+                            .text(formatearHoraMostrar(original))
+                            .prop('selected', true);
                     }
-                }, 500);
+
+                    if (horario.deshabilitar)
+                        $('#' + horario.idCombo).attr('disabled', true);
+                }
 
                 $('#mdl_adicionales_').modal('show');
             }
@@ -1086,7 +1085,8 @@ function validarHorarioFecha(i) {
     var idEspecialista = 'cboEspecialista' + i;
     var fechaRecargar = $('#' + idFecha).val();
     var especialistaRecargar = $('#' + idEspecialista).val();
-    var html = '<select class="form-control horarioAd active-select-modulo" id="cboHorario' + i + '">' + obtener_horarios_fecha(fechaRecargar, especialistaRecargar) + '</select>';
+    var servicio = $('#' + idEspecialista).data('servicio');
+    var html = '<select class="form-control horarioAd active-select-modulo" id="cboHorario' + i + '">' + obtener_horarios_fecha(fechaRecargar, especialistaRecargar, servicio) + '</select>';
     $('#tdHorario' + i).html(html);
 }
 

@@ -3,11 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
 using PsycoApp.BL;
-using PsycoApp.DA;
 using PsycoApp.entities;
 using PsycoApp.utilities;
 using PsycoApp.api.Security;
@@ -32,7 +29,6 @@ namespace PsycoApp.api.Controllers
         EmpresaSedeBL empresaSedeBL = new EmpresaSedeBL();
         RandomUtilities ru = new RandomUtilities();
 
-        string res = "";
         string random_str = "";
 
         private bool TryGetTenantSede(out int idSede)

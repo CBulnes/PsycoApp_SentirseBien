@@ -48,7 +48,7 @@ namespace PsycoApp.api.Controllers
 
                 LOG.registrarLog("(Output " + random_str + ")[DATA]->[ReporteController.cs / reporte_nps <> json: " + JsonConvert.SerializeObject(lista), "TRANSAC", main_path);
             }
-            catch (Exception e)
+            catch (Exception)
             {
               
                 LOG.registrarLog("(Output " + random_str + ")[DATA]->[ReporteController.cs / reporte_nps <> json_error: " + JsonConvert.SerializeObject(lista), "TRANSAC", main_path);

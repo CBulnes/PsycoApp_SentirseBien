@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.SqlClient;
+using Microsoft.Data.SqlClient;
 using System.Data;
 using System.Text;
 using PsycoApp.entities;
@@ -502,7 +502,7 @@ namespace PsycoApp.DA
                     lista.Add(item);
                 }
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 lista.Clear();
             }
@@ -535,7 +535,7 @@ namespace PsycoApp.DA
                     lista.Add(item);
                 }
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 lista.Clear();
             }
@@ -565,7 +565,7 @@ namespace PsycoApp.DA
                     lista.Add(item);
                 }
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 lista.Clear();
             }
@@ -594,7 +594,7 @@ namespace PsycoApp.DA
                     lista.Add(item);
                 }
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 lista.Clear();
             }
@@ -633,7 +633,7 @@ namespace PsycoApp.DA
                     lista.Add(item);
                 }
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 lista.Clear();
             }
@@ -669,7 +669,7 @@ namespace PsycoApp.DA
                     lista.Add(item);
                 }
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 lista.Clear();
             }
@@ -724,7 +724,7 @@ namespace PsycoApp.DA
                 da.Fill(dt);
                 res.estado = true;
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 res.estado = false;
                 res.descripcion = "Ocurrió un error al guardar los horarios.";
@@ -756,7 +756,7 @@ namespace PsycoApp.DA
                     res.estado = Convert.ToString(row["rpta"]) == "OK" ? true : false;
                 }
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 res.estado = false;
                 res.descripcion = "Ocurrió un error al guardar las vacaciones.";

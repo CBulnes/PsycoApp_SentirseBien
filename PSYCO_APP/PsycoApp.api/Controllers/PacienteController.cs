@@ -165,7 +165,7 @@ namespace PsycoApp.api.Controllers
             {
                 lista = _pacienteBL.listar_pacientes_combo_dinamico(page, pageSize, search, sedeAutorizada);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 lista.Clear();
             }
@@ -183,7 +183,7 @@ namespace PsycoApp.api.Controllers
                 var sede = TenantContext.TryGetIntClaim(User, "id_sede", out var idSede) ? idSede : 0;
                 lista = _pacienteBL.listar_pacientes_combo(sede);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 lista.Clear();
             }

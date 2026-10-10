@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.SqlClient;
+using Microsoft.Data.SqlClient;
 using System.Data;
 using PsycoApp.entities;
 using PsycoApp.DA.SQLConnector;
@@ -285,7 +285,7 @@ namespace PsycoApp.DA
                     lista.Add(item);
                 }
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 lista.Clear();
             }
@@ -320,7 +320,7 @@ namespace PsycoApp.DA
                     lista.Add(item);
                 }
             }
-            catch (Exception e)
+            catch (Exception)
             {
             
                 lista.Clear(); // Limpiar en caso de error

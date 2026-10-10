@@ -4,7 +4,7 @@ using PsycoApp.utilities;
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.SqlClient;
+using Microsoft.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
 using PsycoApp.DA;
@@ -44,8 +44,6 @@ namespace PsycoApp.BL
         public RespuestaUsuario registrar_informe(Cita oCita)
         {
             RespuestaUsuario res_ = new RespuestaUsuario();
-            List<string> errores = new List<string>();
-            string error = "";
             try
             {
                 res_ = citaDA.registrar_informe(oCita);

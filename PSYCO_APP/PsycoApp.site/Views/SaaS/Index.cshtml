@@ -1,4 +1,3 @@
-@using PsycoApp.utilities
 @{
     Layout = null;
 }
@@ -7,40 +6,68 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#f4f7f5" />
     <title>PsycoApp | Gestión para centros psicológicos</title>
     <link rel="stylesheet" href="~/login/vendor/bootstrap/css/bootstrap.min.css" />
     <style>
-        body { margin: 0; font-family: Arial, sans-serif; color: #28333d; background: #f6f8fb; }
-        .top { padding: 22px 7%; display: flex; justify-content: space-between; align-items: center; background: white; }
-        .brand { font-size: 24px; font-weight: 700; color: #557e88; }
-        .top a, .button { color: white; background: #557e88; padding: 12px 22px; border-radius: 7px; text-decoration: none; }
-        .hero { padding: 90px 10%; text-align: center; background: linear-gradient(140deg,#e9f2f1,#f6f8fb); }
-        .hero h1 { max-width: 850px; margin: auto; font-size: 48px; line-height: 1.15; }
-        .hero p { max-width: 730px; margin: 24px auto 32px; font-size: 19px; color: #5f6b73; }
-        .features { display: flex; justify-content: center; gap: 22px; padding: 55px 8%; flex-wrap: wrap; }
-        .feature { background: white; border-radius: 12px; padding: 26px; max-width: 300px; box-shadow: 0 8px 28px #28333d12; }
-        .feature h2 { font-size: 20px; }
-        footer { padding: 24px; text-align: center; color: #71808a; }
-        @@media (max-width: 600px) { .hero { padding: 60px 7%; } .hero h1 { font-size: 36px; } }
+        :root { --ink: #202b35; --muted: #718079; --sage: #4e7469; --sage-dark: #365c52; --line: #e5ebe6; --paper: #fffefa; }
+        * { box-sizing: border-box; }
+        body { min-height: 100vh; margin: 0; color: var(--ink); background: #f4f7f5; font-family: Inter, "Segoe UI", Arial, sans-serif; }
+        .top { height: 76px; padding: 0 clamp(22px, 7vw, 110px); display: flex; justify-content: space-between; align-items: center; background: rgba(255,254,250,.92); border-bottom: 1px solid #e9ede9; }
+        .brand { display: inline-flex; align-items: center; gap: 10px; color: var(--ink); font-family: "Segoe UI", Arial, sans-serif; font-size: 21px; font-style: italic; font-weight: 750; letter-spacing: -1.1px; text-decoration: none; }
+        .brand-word { display: inline-block; transform: skewX(-7deg); }
+        .brand-mark { display: grid; width: 30px; height: 30px; place-items: center; border-radius: 10px; color: white; background: var(--sage); font-size: 16px; }
+        .top .login { padding: 10px 17px; border: 1px solid #dce5de; border-radius: 9px; color: var(--sage-dark); font-size: 13px; font-weight: 650; text-decoration: none; transition: background .15s, border-color .15s; }
+        .top .login:hover { border-color: #b8ccc0; background: #eff4ef; }
+        .hero { position: relative; overflow: hidden; padding: 88px 24px 92px; text-align: center; background: radial-gradient(ellipse at 50% 0%, #edf4ee 0, #e8f0eb 42%, #f4f7f5 100%); }
+        .hero:before, .hero:after { content: ""; position: absolute; width: 320px; height: 320px; border: 1px solid #71928618; border-radius: 50%; pointer-events: none; }
+        .hero:before { top: -220px; left: -135px; box-shadow: 0 0 0 36px #71928608, 0 0 0 74px #71928606; }
+        .hero:after { right: -145px; bottom: -235px; box-shadow: 0 0 0 36px #71928608, 0 0 0 74px #71928606; }
+        .hero-content { position: relative; z-index: 1; max-width: 820px; margin: auto; }
+        .eyebrow { display: inline-flex; align-items: center; gap: 8px; margin-bottom: 24px; padding: 8px 13px; border: 1px solid #dce8de; border-radius: 30px; color: var(--sage-dark); background: #ffffff9c; font-size: 11px; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase; }
+        .eyebrow span { width: 7px; height: 7px; border-radius: 50%; background: #76978a; }
+        .hero h1 { max-width: 800px; margin: 0 auto; color: #202b35; font-family: Georgia, "Times New Roman", serif; font-size: clamp(42px, 6vw, 64px); font-weight: 500; letter-spacing: -2px; line-height: 1.08; }
+        .hero h1 em { color: var(--sage); font-weight: 500; }
+        .hero p { max-width: 650px; margin: 23px auto 29px; color: #687770; font-size: 17px; line-height: 1.75; }
+        .hero .button { display: inline-flex; align-items: center; gap: 12px; padding: 14px 22px; border-radius: 10px; color: white; background: var(--sage); box-shadow: 0 9px 22px #42695d28; font-size: 14px; font-weight: 700; text-decoration: none; transition: background .15s, transform .15s; }
+        .hero .button:hover { color: white; background: var(--sage-dark); transform: translateY(-2px); }
+        .hero-note { margin-top: 15px; color: #87938c; font-size: 11px; }
+        .features-wrap { max-width: 1030px; margin: -4px auto 0; padding: 0 24px; }
+        .features { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+        .feature { min-height: 178px; padding: 25px 24px; border: 1px solid #e7ece7; border-radius: 15px; background: var(--paper); box-shadow: 0 12px 34px #33483b0c; transition: transform .18s, box-shadow .18s; }
+        .feature:hover { transform: translateY(-3px); box-shadow: 0 16px 38px #33483b14; }
+        .feature-icon { display: grid; width: 38px; height: 38px; margin-bottom: 19px; place-items: center; border-radius: 12px; color: var(--sage-dark); background: #e8f0eb; font-size: 17px; }
+        .feature h2 { margin: 0 0 9px; color: #2c3933; font-size: 15px; font-weight: 700; }
+        .feature p { margin: 0; color: #78847d; font-size: 13px; line-height: 1.65; }
+        footer { padding: 40px 20px 28px; color: #89948d; text-align: center; font-size: 11px; }
+        .top .login:focus-visible, .hero .button:focus-visible { outline: 3px solid #7ca295; outline-offset: 3px; }
+        @@media (max-width: 700px) { .top { height: 66px; padding: 0 20px; } .hero { padding: 67px 22px 73px; } .hero h1 { letter-spacing: -1.2px; } .hero p { font-size: 15px; } .features { grid-template-columns: 1fr; gap: 12px; } .feature { min-height: 0; padding: 21px; } .feature-icon { margin-bottom: 13px; } footer { padding-top: 30px; } }
+        @@media (prefers-reduced-motion: reduce) { *, *:before, *:after { scroll-behavior: auto !important; transition-duration: .01ms !important; } }
     </style>
 </head>
 <body>
     <header class="top">
-        <div class="brand">PsycoApp</div>
-        <a href="@Url.Action("Index", "Login")">Ingresar</a>
+        <a class="brand" href="@Url.Action("Index", "SaaS")" aria-label="ScheLink, inicio"><span class="brand-mark">✦</span><span class="brand-word">ScheLink</span></a>
+        <a class="login" href="@Url.Content("~/Login/Index")">Ingresar</a>
     </header>
     <main>
         <section class="hero">
-            <h1>Más tiempo para las personas, menos tareas para tu centro</h1>
-            <p>Organiza pacientes, profesionales, sedes y citas en una sola plataforma pensada para la gestión de centros psicológicos.</p>
-            <a class="button" href="@Url.Action("Registro", "SaaS")">Crear mi espacio de prueba</a>
+            <div class="hero-content">
+                <div class="eyebrow"><span aria-hidden="true"></span>Una gestión más tranquila</div>
+                <h1>Más tiempo para las personas,<br /><em>menos tareas para tu centro.</em></h1>
+                <p>Organiza pacientes, profesionales, sedes y citas en un espacio claro y confiable, pensado para quienes cuidan de los demás.</p>
+                <a class="button" href="@Url.Action("Registro", "SaaS")">Crear mi espacio de prueba <span aria-hidden="true">→</span></a>
+                <div class="hero-note">Empieza en unos minutos · Tu centro, organizado desde el primer día</div>
+            </div>
         </section>
-        <section class="features">
-            <article class="feature"><h2>Agenda organizada</h2><p>Centraliza la programación y seguimiento de citas de tu equipo.</p></article>
-            <article class="feature"><h2>Gestión de pacientes</h2><p>Mantén la información operativa de tus pacientes en un solo lugar.</p></article>
-            <article class="feature"><h2>Tu equipo y tus sedes</h2><p>Administra profesionales y centros desde la misma aplicación.</p></article>
+        <section class="features-wrap" aria-label="Beneficios de ScheLink">
+            <div class="features">
+                <article class="feature"><div class="feature-icon" aria-hidden="true">◷</div><h2>Agenda organizada</h2><p>Centraliza las citas y la disponibilidad de todo tu equipo con mayor claridad.</p></article>
+                <article class="feature"><div class="feature-icon" aria-hidden="true">♡</div><h2>Gestión de pacientes</h2><p>Ten la información operativa de tus pacientes reunida en un mismo espacio.</p></article>
+                <article class="feature"><div class="feature-icon" aria-hidden="true">⌂</div><h2>Tu equipo y tus sedes</h2><p>Coordina profesionales y centros desde una plataforma pensada para tu trabajo.</p></article>
+            </div>
         </section>
     </main>
-    <footer>Prueba disponible al registrarte. La duración y condiciones comerciales se comunicarán cuando estén definidas.</footer>
+    <footer>Una herramienta para que tu centro funcione mejor y tú puedas enfocarte en las personas.</footer>
 </body>
 </html>

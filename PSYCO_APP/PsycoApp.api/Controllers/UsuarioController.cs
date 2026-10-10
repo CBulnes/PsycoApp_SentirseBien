@@ -49,7 +49,10 @@ namespace PsycoApp.api.Controllers
                 {
                     usuario.id_sede = 0;
                 }
-                respuesta.descripcion = usuario.validacion;
+                else if (respuesta.estado)
+                {
+                    respuesta.descripcion = usuario.validacion;
+                }
                 usuario.password = string.Empty;
                 respuesta.data = usuario;
                 if (respuesta.estado)
@@ -57,7 +60,7 @@ namespace PsycoApp.api.Controllers
                     respuesta.token = GenerarToken(usuario);
                 }
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 respuesta.estado = false;
                 respuesta.descripcion = "Ocurrió un error al validar sus credenciales";
@@ -78,7 +81,7 @@ namespace PsycoApp.api.Controllers
                 respuesta.descripcion = usuario.validacion;
                 respuesta.data = usuario;
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 respuesta.estado = false;
                 respuesta.descripcion = "Ocurrió un error al actualizar la contraseña";

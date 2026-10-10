@@ -31,7 +31,7 @@ namespace PsycoApp.site.Controllers
                 res = ApiCaller.consume_endpoint_method(url, null, "GET");
                 listaFlujo = JsonConvert.DeserializeObject<List<Flujo>>(res);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
               
                 //oRespuestaPV.descripcion = ex.Message.ToString();
@@ -56,7 +56,7 @@ namespace PsycoApp.site.Controllers
                     return RedirectToAction("Index", "Login");
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                
                 rpta = "Ocurrió un error registrando el flujo";

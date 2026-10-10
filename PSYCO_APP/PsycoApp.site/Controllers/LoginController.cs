@@ -118,7 +118,7 @@ namespace PsycoApp.site.Controllers
                     oRespuesta.token = string.Empty;
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 oRespuesta.estado = false;
                 oRespuesta.descripcion = "Ocurrió un error al validar sus credenciales";
@@ -153,7 +153,7 @@ namespace PsycoApp.site.Controllers
                 oRespuesta = JsonConvert.DeserializeObject<RespuestaUsuario>(res);
                 usuario = oRespuesta.data;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 oRespuesta.estado = false;
                 oRespuesta.descripcion = "Ocurrió un error al actualizar la contraseña.";
@@ -177,7 +177,7 @@ namespace PsycoApp.site.Controllers
                     oRespuesta.estado = false;
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 oRespuesta.estado = false;
             }

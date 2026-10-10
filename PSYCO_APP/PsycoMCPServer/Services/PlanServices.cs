@@ -23,8 +23,11 @@ namespace PsycoMCPServer.Services
             this.main_path = main_path;
         }
 
-        public async Task<AgendarCitaResponse> AgendarCita(AgendarCitaRequest req)
+        public async Task<AgendarCitaResponse> AgendarCita(AgendarCitaRequest? req)
         {
+            if (req == null)
+                return Fail("La solicitud no puede estar vacía");
+
                try
                  {
             RandomUtilities ru = new RandomUtilities();

@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Text;
 
+#nullable enable
+
 namespace PsycoApp.entities
 {
     public class Pago
@@ -36,7 +38,7 @@ namespace PsycoApp.entities
     {
         public string fecha { get; set; } = "";
         public decimal importe { get; set; } = 0;
-        public string comentario { get; set; } = "";
+        public string? comentario { get; set; } = "";
         public string usuario { get; set; } = "";
         public int id_sede { get; set; } = 0;
     }

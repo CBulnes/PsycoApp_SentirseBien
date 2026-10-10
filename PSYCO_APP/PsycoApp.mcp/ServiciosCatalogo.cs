@@ -51,7 +51,7 @@
                     new ServicioInfo { Id = 88, Precio = 390, Nombre = "Evaluacion Vocacional" }
             };
 
-        public static ServicioInfo Obtener(string nombre)
+        public static ServicioInfo? Obtener(string nombre)
             => _servicios.TryGetValue(nombre, out var s) ? s : null;
     }
 

@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
-using System.Data.SqlClient;
+using Microsoft.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -14,7 +14,6 @@ namespace PsycoApp.DA
     public class ConfigDA
     {
         SqlConnection cn = new SqlConnector().cadConnection_psyco;
-        string rpta = "";
 
         
         public List<Configuracion> obtener_configuracion()
@@ -40,7 +39,7 @@ namespace PsycoApp.DA
                     lista.Add(item);
                 }
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 lista.Clear();
             }

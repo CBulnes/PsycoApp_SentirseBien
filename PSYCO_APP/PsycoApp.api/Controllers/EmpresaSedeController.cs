@@ -1,4 +1,5 @@
 using System;
+using Microsoft.Data.SqlClient;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PsycoApp.BL;
@@ -36,7 +37,7 @@ namespace PsycoApp.api.Controllers
             {
                 return BadRequest(ex.Message);
             }
-            catch (System.Data.SqlClient.SqlException ex) when (ex.Number >= 50101 && ex.Number <= 50104)
+            catch (SqlException ex) when (ex.Number is >= 50101 and <= 50104)
             {
                 return BadRequest(ex.Message);
             }

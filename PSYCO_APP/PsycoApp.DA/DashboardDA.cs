@@ -2,7 +2,7 @@ using PsycoApp.DA.SQLConnector;
 using PsycoApp.entities;
 using System;
 using System.Data;
-using System.Data.SqlClient;
+using Microsoft.Data.SqlClient;
 
 namespace PsycoApp.DA
 {

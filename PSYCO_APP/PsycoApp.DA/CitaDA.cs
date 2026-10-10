@@ -4,7 +4,7 @@ using PsycoApp.utilities;
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.SqlClient;
+using Microsoft.Data.SqlClient;
 using System.Threading.Tasks;
 
 namespace PsycoApp.DA
@@ -12,7 +12,6 @@ namespace PsycoApp.DA
     public class CitaDA
     {
         SqlConnection cn = new SqlConnector().cadConnection_psyco;
-        string rpta = "";
 
         public bool CitaPerteneceASede(int idCita, int idSede)
         {
@@ -105,7 +104,7 @@ namespace PsycoApp.DA
                 }
                 res_.estado = res_.descripcion == "OK" ? true : false;
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 res_.estado = false;
                 res_.descripcion = "Ocurrió un error al registrar la cita.";
@@ -137,7 +136,7 @@ namespace PsycoApp.DA
                 }
                 res_.estado = res_.descripcion == "OK" ? true : false;
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 res_.estado = false;
                 res_.descripcion = "Ocurrió un error al registrar la cita.";
@@ -169,7 +168,7 @@ namespace PsycoApp.DA
                 }
                 res_.estado = res_.descripcion == "OK" ? true : false;
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 res_.estado = false;
                 res_.descripcion = "Ocurrió un error al registrar el informe.";
@@ -228,7 +227,7 @@ namespace PsycoApp.DA
                     res_.id_paquete = Convert.ToInt32(paramIdPaquete.Value);
                 }
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 res_.estado = false;
                 res_.descripcion = "Ocurrió un error al registrar la cita.";
@@ -266,7 +265,7 @@ namespace PsycoApp.DA
                 }
                 res_.estado = res_.descripcion == "OK" ? true : false;
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 res_.estado = false;
                 res_.descripcion = "Ocurrió un error al registrar la cita.";
@@ -298,7 +297,7 @@ namespace PsycoApp.DA
                 }
                 res_.estado = res_.descripcion == "OK" ? true : false;
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 //LOG.registrarLog("(Excepcion " + random_str + ")[ERROR]->[CitaDA.cs / registrar_cita <> " + e.Message.ToString(), "ERROR", main_path);
                 res_.estado = false;
@@ -327,7 +326,7 @@ namespace PsycoApp.DA
                 }
                 res_.estado = res_.descripcion == "OK" ? true : false;
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 //LOG.registrarLog("(Excepcion " + random_str + ")[ERROR]->[CitaDA.cs / registrar_cita <> " + e.Message.ToString(), "ERROR", main_path);
                 res_.estado = false;
@@ -356,7 +355,7 @@ namespace PsycoApp.DA
                 }
                 res_.estado = res_.descripcion == "OK" ? true : false;
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 //LOG.registrarLog("(Excepcion " + random_str + ")[ERROR]->[CitaDA.cs / registrar_cita <> " + e.Message.ToString(), "ERROR", main_path);
                 res_.estado = false;
@@ -385,7 +384,7 @@ namespace PsycoApp.DA
                 }
                 res_.estado = res_.descripcion == "OK" ? true : false;
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 res_.estado = false;
                 res_.descripcion = "Ocurrió un error al actualizar el servicio.";
@@ -413,7 +412,7 @@ namespace PsycoApp.DA
                 }
                 res_.estado = res_.descripcion == "OK" ? true : false;
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 res_.estado = false;
                 res_.descripcion = "Ocurrió un error al registrar el pago gratuito.";
@@ -446,7 +445,7 @@ namespace PsycoApp.DA
                 }
                 res_.estado = (res_.descripcion == "OK" || res_.descripcion == "Gracias por participar en el cuestionario") ? true : false;
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 //LOG.registrarLog("(Excepcion " + random_str + ")[ERROR]->[CitaDA.cs / registrar_cita <> " + e.Message.ToString(), "ERROR", main_path);
                 res_.estado = false;
@@ -556,7 +555,7 @@ namespace PsycoApp.DA
                     lista.Add(cita);
                 }
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 //LOG.registrarLog("(Excepcion " + random_str + ")[ERROR]->[CitaDA.cs / disponibilidad_doctor <> " + e.Message.ToString(), "ERROR", main_path);
                 lista.Clear();
@@ -668,7 +667,7 @@ namespace PsycoApp.DA
                     lista.Add(cita);
                 }
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 //LOG.registrarLog("(Excepcion " + random_str + ")[ERROR]->[CitaDA.cs / disponibilidad_doctor <> " + e.Message.ToString(), "ERROR", main_path);
                 lista.Clear();
@@ -719,7 +718,7 @@ namespace PsycoApp.DA
                     lista.Add(cita);
                 }
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 lista.Clear();
             }
@@ -754,7 +753,7 @@ namespace PsycoApp.DA
                     lista.Add(item);
                 }
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 lista.Clear();
             }

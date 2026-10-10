@@ -220,7 +220,7 @@ namespace PsycoApp.site.Controllers
                 res = ApiCaller.consume_endpoint_method(url, null, "GET");
                 listaReporteNPS = JsonConvert.DeserializeObject<List<ReporteNPS>>(res);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
             
                 //oRespuestaPV.descripcion = ex.Message.ToString();

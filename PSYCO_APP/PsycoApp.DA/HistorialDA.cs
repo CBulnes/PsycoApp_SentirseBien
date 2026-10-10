@@ -4,7 +4,7 @@ using PsycoApp.utilities;
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.SqlClient;
+using Microsoft.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -13,7 +13,6 @@ namespace PsycoApp.DA
     public class HistorialDA
     {
         SqlConnection cn = new SqlConnector().cadConnection_psyco;
-        string rpta = "";
 
         public RespuestaUsuario registrar_historial(HistorialPaciente oHistorial)
         {
@@ -40,7 +39,7 @@ namespace PsycoApp.DA
                 }
                 res_.estado = res_.descripcion == "OK" ? true : false;
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 res_.estado = false;
                 res_.descripcion = "Ocurrió un error al registrar la información.";
@@ -69,7 +68,7 @@ namespace PsycoApp.DA
                 }
                 res_.estado = res_.descripcion == "OK" ? true : false;
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 res_.estado = false;
                 res_.descripcion = "Ocurrió un error atendiendo su solicitud.";
@@ -106,7 +105,7 @@ namespace PsycoApp.DA
                     lista.Add(historial);
                 }
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 lista.Clear();
             }
@@ -142,7 +141,7 @@ namespace PsycoApp.DA
                     lista.Add(historial);
                 }
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 lista.Clear();
             }

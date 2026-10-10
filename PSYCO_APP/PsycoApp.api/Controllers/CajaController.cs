@@ -28,7 +28,6 @@ namespace PsycoApp.api.Controllers
         CitaBL citaBL = new CitaBL();
         RandomUtilities ru = new RandomUtilities();
 
-        string res = "";
         string random_str = "";
 
         private bool TryGetTenantSede(out int idSede)
@@ -204,7 +203,7 @@ namespace PsycoApp.api.Controllers
         {
             List<CuadreCaja> lista = new List<CuadreCaja>();
             if (!PuedeAccederCaja() || !TryGetTenantSede(out var tenantSede) || !TenantContext.IsGlobalAdministrator(User) &&
-                (sede > 0 && sede != tenantSede || id_cita > 0 && !CitaAccesible(id_cita, tenantSede) || id_caja > 0))
+                (sede > 0 && sede != tenantSede || id_cita > 0 && !CitaAccesible(id_cita, tenantSede)))
                 return lista;
             if (!TenantContext.IsGlobalAdministrator(User))
             {
@@ -332,17 +331,23 @@ namespace PsycoApp.api.Controllers
         public List<CajasUsuario> listar_cajas(string usuario, DateTime fecha)
         {
             List<CajasUsuario> lista = new List<CajasUsuario>();
-            if (!TryGetTenantSede(out _) || !(TenantContext.IsGlobalAdministrator(User) || User.IsInRole("3")))
+            var esAdministradorGlobal = TenantContext.IsGlobalAdministrator(User);
+            var idEmpresa = -1;
+            if (!esAdministradorGlobal &&
+                (!TenantContext.IsCompanyAdministrator(User) ||
+                 !TenantContext.TryGetIntClaim(User, "id_empresa", out idEmpresa) ||
+                 !TenantContext.CanAccessCompany(User, idEmpresa) ||
+                 !TryGetTenantSede(out _)))
                 return lista;
-            if (User.IsInRole("3"))
-                usuario = User.Identity.Name;
-            if (string.IsNullOrWhiteSpace(usuario) && !TenantContext.IsCompanyAdministrator(User) && !TenantContext.IsGlobalAdministrator(User))
+
+            if (string.IsNullOrWhiteSpace(usuario))
                 return lista;
+
             random_str = ru.RandomString(8) + "|" + ru.CurrentDate();
 
             try
             {
-                lista = cajaBL.listar_cajas(usuario, fecha);
+                lista = cajaBL.listar_cajas(usuario, fecha, idEmpresa);
             }
             catch (Exception)
             {

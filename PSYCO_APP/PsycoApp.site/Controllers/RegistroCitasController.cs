@@ -8,9 +8,7 @@ using PsycoApp.entities;
 using PsycoApp.utilities;
 using Newtonsoft.Json;
 using Microsoft.AspNetCore.Http;
-using System.Net.Http;
 using Microsoft.Extensions.Caching.Memory;
-using System.Drawing.Printing;
 
 namespace PsycoApp.site.Controllers
 {
@@ -166,7 +164,7 @@ namespace PsycoApp.site.Controllers
                 res = ApiCaller.consume_endpoint_method(url, null, "GET");
                 oRespuesta = JsonConvert.DeserializeObject<RespuestaCentroAtencion>(res);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                
                 oRespuesta.estado = "ERROR";
@@ -192,7 +190,7 @@ namespace PsycoApp.site.Controllers
                     lista = lista.Where(x => x.Sedes.Contains(id_sede.ToString())).ToList();
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
              
                 lista.Clear();
@@ -225,7 +223,7 @@ namespace PsycoApp.site.Controllers
                 res = ApiCaller.consume_endpoint_method(urlUsuariosCaja, null, "GET");
                 lista = JsonConvert.DeserializeObject<List<entities.Usuario>>(res);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
               
                 lista.Clear();
@@ -245,7 +243,7 @@ namespace PsycoApp.site.Controllers
                 res = ApiCaller.consume_endpoint_method(url, null, "GET");
                 lista = JsonConvert.DeserializeObject<List<entities.Paciente>>(res);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
            
                 lista.Clear();
@@ -282,7 +280,7 @@ namespace PsycoApp.site.Controllers
                 // 🧠 Guardar en memoria por 1 minuto (puedes cambiarlo)
                 _cache.Set(cacheKey, listaPacientes, TimeSpan.FromMinutes(1));
             }
-            catch (Exception ex)
+            catch (Exception)
             {
               
                 listaPacientes.Clear();
@@ -529,14 +527,17 @@ namespace PsycoApp.site.Controllers
         public async Task<List<Cita>> CitasUsuario(int idPaciente, int idDoctor, int idSede, string tipoVista)
         {
             int id_usuario = Convert.ToInt32(HttpContext.Session.GetInt32("id_usuario"));
-            var id_sede = HttpContext.Session.GetInt32("id_sede");
+            var id_sede = idSede > 0 ? idSede : HttpContext.Session.GetInt32("id_sede");
             List<Cita> lista = new List<Cita>();
             string res = "";
             try
             {
-                url = url_citas_usuario + "/" + id_usuario + "/" + idPaciente + "/" + idDoctor + "/" + id_sede;
+                if (!id_sede.HasValue || id_sede.Value <= 0)
+                    return lista;
+
+                url = url_citas_usuario + "/" + id_usuario + "/" + idPaciente + "/" + idDoctor + "/" + id_sede.Value;
                 res = ApiCaller.consume_endpoint_method(url, null, "GET");
-                lista = JsonConvert.DeserializeObject<List<Cita>>(res).Where(x => x.id_sede == id_sede).ToList();
+                lista = JsonConvert.DeserializeObject<List<Cita>>(res).Where(x => x.id_sede == id_sede.Value).ToList();
             }
             catch (Exception)
             {
@@ -586,8 +587,6 @@ namespace PsycoApp.site.Controllers
         public async Task<List<Models.CuadreCaja>> HistorialPago(int id_cita = 0,string fecha="")
         {
             List<Models.CuadreCaja> historial = new List<Models.CuadreCaja>();
-            string res = "";
-
             var usuario = Convert.ToString(HttpContext.Session.GetString("login"));
             usuario = string.IsNullOrEmpty(usuario) ? "-" : usuario;
             var idSede = HttpContext.Session.GetInt32("id_sede");
@@ -595,7 +594,7 @@ namespace PsycoApp.site.Controllers
                 return historial;
             
             string apiUrl = Helper.GetUrlApi() + "/api/caja"; // URL base de la API
-            string url = $"{apiUrl}/listar_cuadre_caja/{usuario}/{1}/{100}/{fecha}/{1}/{idSede.Value}/{-1}/{id_cita}";
+            string url = $"{apiUrl}/listar_cuadre_caja/{usuario}/1/100/{fecha}/0/{idSede.Value}/-1/{id_cita}/0";
             
             var registros = await GetFromApiAsync<List<PsycoApp.entities.CuadreCaja>>(url);
             historial = registros.Select(p => new PsycoApp.site.Models.CuadreCaja
@@ -630,7 +629,7 @@ namespace PsycoApp.site.Controllers
                 //if (id_sede > 0) lista.Clear();
                 //if (lista.Count == 1) HttpContext.Session.SetInt32("id_sede", lista[0].Id);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
             
                 lista.Clear();
@@ -647,7 +646,7 @@ namespace PsycoApp.site.Controllers
                 HttpContext.Session.SetInt32("id_sede", id_sede);
                 res.estado = true;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                
                 res.estado = false;
@@ -667,7 +666,7 @@ namespace PsycoApp.site.Controllers
                 res = ApiCaller.consume_endpoint_method(url, null, "GET");
                 lista = JsonConvert.DeserializeObject<List<entities.Sede>>(res);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                
                 lista.Clear();
@@ -686,7 +685,7 @@ namespace PsycoApp.site.Controllers
                 res = ApiCaller.consume_endpoint_method(url, null, "GET");
                 lista = JsonConvert.DeserializeObject<List<entities.Semana>>(res);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
              
                 lista.Clear();

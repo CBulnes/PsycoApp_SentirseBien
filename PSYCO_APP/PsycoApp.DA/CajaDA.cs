@@ -4,7 +4,7 @@ using PsycoApp.utilities;
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.SqlClient;
+using Microsoft.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -13,7 +13,6 @@ namespace PsycoApp.DA
     public class CajaDA
     {
         SqlConnection cn = new SqlConnector().cadConnection_psyco;
-        string rpta = "";
 
         public RespuestaUsuario registrar_caja(Pago oPago, string main_path, string random_str)
         {
@@ -41,7 +40,7 @@ namespace PsycoApp.DA
                 }
                 res_.estado = res_.descripcion == "OK" ? true : false;
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 res_.estado = false;
                 res_.descripcion = "Ocurrió un error al registrar el pago.";
@@ -77,7 +76,7 @@ namespace PsycoApp.DA
                 }
                 res_.estado = res_.descripcion == "OK";
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 res_.estado = false;
                 res_.descripcion = "Ocurrió un error al " + request.accion.ToLower() + " el pago.";
@@ -110,7 +109,7 @@ namespace PsycoApp.DA
                 }
                 res_.estado = res_.descripcion == "OK" ? true : false;
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 res_.estado = false;
                 res_.descripcion = "Ocurrió un error al registrar el descuento.";
@@ -131,7 +130,7 @@ namespace PsycoApp.DA
                 cmd.Parameters.Add("@importe", SqlDbType.Decimal).Value = oPago.importe;
                 cmd.Parameters.Add("@usuario", SqlDbType.VarChar).Value = oPago.usuario;
                 cmd.Parameters.Add("@id_sede", SqlDbType.Int).Value = oPago.id_sede;
-                cmd.Parameters.Add("@comentario", SqlDbType.VarChar).Value = oPago.comentario;
+                cmd.Parameters.Add("@comentario", SqlDbType.VarChar).Value = (object)oPago.comentario ?? DBNull.Value;
 
                 SqlDataAdapter da = new SqlDataAdapter(cmd);
                 DataTable dt = new DataTable();
@@ -143,8 +142,13 @@ namespace PsycoApp.DA
                 }
                 res_.estado = res_.descripcion == "OK" ? true : false;
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
+                System.Diagnostics.Trace.TraceError(
+                    "CajaDA.registrar_efectivo falló en {0}/{1}: {2}",
+                    cn.DataSource,
+                    cn.Database,
+                    ex);
                 res_.estado = false;
                 res_.descripcion = "Ocurrió un error al registrar el efectivo.";
             }
@@ -181,7 +185,7 @@ namespace PsycoApp.DA
                     lista.Add(item);
                 }
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 lista.Clear();
             }
@@ -190,7 +194,7 @@ namespace PsycoApp.DA
         }
 
         //listar_cajas
-        public List<CajasUsuario> listar_cajas(string usuario, DateTime date)
+        public List<CajasUsuario> listar_cajas(string usuario, DateTime date, int idEmpresa)
         {
             List<CajasUsuario> lista = new List<CajasUsuario>();
             try
@@ -200,6 +204,7 @@ namespace PsycoApp.DA
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.Add("@usuarioApertura", SqlDbType.VarChar).Value = usuario;
                 cmd.Parameters.Add("@fecha", SqlDbType.DateTime).Value = date;
+                cmd.Parameters.Add("@idEmpresa", SqlDbType.Int).Value = idEmpresa;
 
                 SqlDataAdapter da = new SqlDataAdapter(cmd);
                 DataTable dt = new DataTable();
@@ -218,7 +223,7 @@ namespace PsycoApp.DA
                     lista.Add(item);
                 }
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 lista.Clear();
             }
@@ -265,7 +270,7 @@ namespace PsycoApp.DA
                     lista.Add(item);
                 }
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 lista.Clear();
             }
@@ -299,7 +304,7 @@ namespace PsycoApp.DA
                     lista.Add(item);
                 }
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 lista.Clear();
             }
@@ -371,7 +376,7 @@ namespace PsycoApp.DA
                     lista.Add(item);
                 }
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 lista.Clear();
             }

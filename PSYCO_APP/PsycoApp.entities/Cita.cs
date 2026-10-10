@@ -54,7 +54,7 @@ namespace PsycoApp.entities
         public string fecha { get; set; }
         public string especialista { get; set; }
         public string hora { get; set; }
-        public string? usuario { get; set; }
+        public string usuario { get; set; }
         public int? id_estado_cita { get; set; }
     }
 }

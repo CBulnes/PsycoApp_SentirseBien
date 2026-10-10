@@ -328,7 +328,7 @@ namespace PsycoApp.site.Controllers
                     menu.Add(new Menu { nombre_opcion = "Historial de citas", ruta_opcion = "HistorialCitas" });
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 menu.Clear();
             }
@@ -343,7 +343,7 @@ namespace PsycoApp.site.Controllers
             {
                 flag_chat = Convert.ToInt32(HttpContext.Session.GetInt32("flag_chat"));
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                
                 flag_chat = -1;
@@ -360,7 +360,7 @@ namespace PsycoApp.site.Controllers
                 HttpContext.Session.SetInt32("flag_chat", 0);
                 rpta = "OK";
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 
                 rpta = "Ocurrió un error deshabilitando el flag_chat";
@@ -379,7 +379,7 @@ namespace PsycoApp.site.Controllers
 
                 rpta = ApiCaller.consume_endpoint_method(url, obj, "PUT");
             }
-            catch (Exception ex)
+            catch (Exception)
             {
               
                 rpta = "Ocurrió un error registrando la visita";
@@ -440,7 +440,7 @@ namespace PsycoApp.site.Controllers
 
                 oRespuestaA.data = oListaArchivos;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
               
                 oRespuestaA.estado = "ERROR";
@@ -470,7 +470,7 @@ namespace PsycoApp.site.Controllers
                     rpta.descripcion = res;
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 rpta.estado = false;
                 rpta.descripcion = "Ocurrió un error registrando la encuesta";
@@ -492,7 +492,7 @@ namespace PsycoApp.site.Controllers
                     oListaArticulos.Add(file.Name.ToString().Replace(".html", ""));
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
               
                 oListaArticulos.Clear();
@@ -585,6 +585,13 @@ namespace PsycoApp.site.Controllers
                     }
                     else
                     {
+                        if (!OperatingSystem.IsWindowsVersionAtLeast(6, 1))
+                        {
+                            response.estado = false;
+                            response.descripcion = "La validación de imágenes solo está disponible en Windows.";
+                            return Json(response);
+                        }
+
                         using (var ms = new MemoryStream())
                         {
                             file.CopyTo(ms);
@@ -649,7 +656,7 @@ namespace PsycoApp.site.Controllers
                     response.descripcion = "Error al cargar el archivo.";
                 }
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 response.estado = false;
                 response.descripcion = "Ocurrió un error cargando el archivo.";

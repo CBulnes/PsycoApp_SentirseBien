@@ -15,7 +15,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Login - @Helper.GetNombreSite()</title>
+    <title>Iniciar sesión | ScheApp</title>
 
     <link rel="stylesheet" type="text/css" href="~/login/vendor/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="~/login/fonts/font-awesome-4.7.0/css/font-awesome.min.css">
@@ -37,6 +37,55 @@
     <!-- SB - STYLE FIN-->
 
     <style>
+        body:has(.scheapp-login) { overflow: auto; background: #f3f7f8; }
+        .scheapp-login { --brand: #319b95; --brand-dark: #247d79; --ink: #142a3c; --muted: #71869a; --line: #dbe6eb; position: relative; isolation: isolate; display: flex; justify-content: center; align-items: center; min-height: 100vh; height: auto; padding: 32px; background: transparent; font-family: "Segoe UI", Arial, sans-serif; }
+        .scheapp-login *, .scheapp-login *:before, .scheapp-login *:after { box-sizing: border-box; font-family: "Segoe UI", Arial, sans-serif; line-height: normal; text-decoration: none !important; }
+        .scheapp-login .sb-login-bg { position: fixed; z-index: -1; inset: 0; display: block; overflow: hidden; background: #e7eeed; }
+        .scheapp-login .sb-login-bg img { width: 100%; height: 100%; object-fit: cover; filter: blur(9px); opacity: .48; transform: scale(1.04); }
+        .scheapp-login .sb-login-container { width: min(1100px, 100%); height: min(800px, calc(100vh - 64px)); min-height: 680px; max-width: 1100px; margin: 0; overflow: hidden; align-items: stretch; border-radius: 18px; background: #fff; box-shadow: 0 24px 70px rgba(34, 61, 74, .16); }
+        .scheapp-login .sb-login-imagen { position: relative; width: 55%; height: auto; min-height: 100%; justify-content: flex-start; align-items: flex-start; gap: 0; padding: clamp(42px, 7vw, 100px) clamp(38px, 10vw, 150px); background-image: linear-gradient(90deg, rgba(247,243,235,.72), rgba(247,243,235,.38) 57%, rgba(247,243,235,.12)), url('@Url.Content("~/login/images/Login.png")'); background-position: center; background-size: cover; }
+        .scheapp-login .sb-login-imagen:before { display: none; }
+        .scheapp-login .sb-login-imagen > img, .scheapp-login .sb-login-description, .scheapp-login .sb-login-redes { display: none; }
+        .scheapp-login .welcome { position: relative; z-index: 1; max-width: 450px; margin-top: 18px; }
+        .scheapp-login .brand-lockup { display: flex; align-items: center; gap: 12px; margin-bottom: 52px; color: var(--ink); }
+        .scheapp-login .brand-symbol { width: 48px; height: 48px; color: var(--brand-dark); }
+        .scheapp-login .brand-name { color: var(--ink); font-size: 33px; font-weight: 700; letter-spacing: -1.8px; }
+        .scheapp-login .brand-name span { color: var(--brand); }
+        .scheapp-login .welcome h1 { max-width: 440px; margin: 0 0 16px; color: var(--ink); font-size: clamp(38px, 4vw, 52px); font-weight: 650; letter-spacing: -1.6px; line-height: 1.13; }
+        .scheapp-login .welcome-copy { max-width: 380px; margin: 0; color: #637a8d; font-size: 16px; line-height: 1.65; }
+        .scheapp-login .benefits { display: flex; gap: 26px; margin-top: 30px; }
+        .scheapp-login .benefit { width: 104px; color: #36596a; text-align: center; font-size: 12px; line-height: 1.4; }
+        .scheapp-login .benefit-icon { display: grid; width: 48px; height: 48px; margin: 0 auto 9px; place-items: center; border-radius: 50%; color: #277d80; background: #e3eeeb; }
+        .scheapp-login .benefit-icon svg { width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+        .scheapp-login .sb-login-form { width: 45%; max-width: 570px; margin: auto; padding: 48px clamp(32px, 6vw, 82px); gap: 0; }
+        .scheapp-login .login-brand { display: flex; align-items: center; gap: 10px; margin-bottom: 24px; }
+        .scheapp-login .login-brand .brand-symbol { width: 44px; height: 44px; }
+        .scheapp-login .login-brand .brand-name { font-size: 29px; }
+        .scheapp-login .login-tagline { margin: -17px 0 30px 54px; color: var(--muted); font-size: 12px; }
+        .scheapp-login .form-title { margin: 0 0 7px; color: var(--ink); font-size: 25px; font-weight: 700; letter-spacing: -.5px; }
+        .scheapp-login .form-subtitle { margin: 0 0 22px; color: var(--muted); font-size: 13px; line-height: 1.5; }
+        .scheapp-login .sb-login-form-block { position: relative; width: 100%; margin-bottom: 12px; }
+        .scheapp-login .sb-login-form-block.sb-lg-cplt { height: 46px; }
+        .scheapp-login .sb-lg-input { position: relative; inset: auto; width: 100%; height: 46px; padding: 0 14px; border: 1px solid var(--line); border-radius: 9px; color: var(--ink) !important; background: #fff !important; font-size: 13px; box-shadow: none; }
+        .scheapp-login .sb-lg-input:hover, .scheapp-login .sb-lg-input:focus { border-color: #72b9b2 !important; outline: 0; box-shadow: 0 0 0 3px #319b951c; }
+        .scheapp-login .sb-lg-label { display: none; }
+        .scheapp-login select.sb-lg-input { padding: 0 12px !important; color: #71869a !important; }
+        .scheapp-login .sb-lg-btn { margin: 7px 0 0; }
+        .scheapp-login .sb-lg-btn button { width: 100%; min-height: 46px; padding: 12px; border: 1px solid var(--brand); border-radius: 9px; color: #fff; background: var(--brand); font-size: 14px; font-weight: 650; transition: background .15s, transform .15s; }
+        .scheapp-login .sb-lg-btn button:hover { border-color: var(--brand-dark); color: #fff; background: var(--brand-dark); transform: translateY(-1px); }
+        .scheapp-login .sb-lg-rec { justify-content: center; margin: 13px 0 21px; }
+        .scheapp-login .sb-lg-rec a { margin: 0; color: var(--brand); font-size: 12px; font-weight: 600; }
+        .scheapp-login .sb-lg-rec a:hover { color: var(--brand-dark); }
+        .scheapp-login .login-divider { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; color: #91a2af; font-size: 11px; }
+        .scheapp-login .login-divider:before, .scheapp-login .login-divider:after { content: ""; flex: 1; height: 1px; background: #e1e9ed; }
+        .scheapp-login .create-account { display: flex; min-height: 44px; align-items: center; justify-content: center; gap: 10px; border: 1px solid var(--line); border-radius: 9px; color: #36596a; font-size: 13px; font-weight: 600; }
+        .scheapp-login .create-account:hover { border-color: #a8ccc6; background: #f6fbfa; }
+        .scheapp-login .create-account svg { width: 18px; height: 18px; fill: none; stroke: var(--brand-dark); stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+        .scheapp-login .login-footer { margin: 25px 0 0; color: #91a2af; text-align: center; font-size: 11px; }
+        .scheapp-login .login-footer span { padding: 0 5px; color: #b5c4cd; }
+        .scheapp-login a:focus-visible, .scheapp-login button:focus-visible, .scheapp-login input:focus-visible, .scheapp-login select:focus-visible { outline: 3px solid #319b9540; outline-offset: 2px; }
+        @@media (max-width: 900px) { .scheapp-login .sb-login-imagen { width: 45%; padding: 48px 35px; } .scheapp-login .sb-login-form { width: 55%; padding: 38px; } .scheapp-login .benefits { gap: 8px; } }
+        @@media (max-width: 680px) { .scheapp-login { padding: 16px; } .scheapp-login .sb-login-container { width: 100%; min-height: calc(100vh - 32px); height: auto; border-radius: 16px; } .scheapp-login .sb-login-imagen { display: none; } .scheapp-login .sb-login-form { width: min(100%, 520px); min-height: calc(100vh - 32px); padding: 45px 28px; } }
         .bg {
             position: absolute;
             z-index: -1;
@@ -60,13 +109,26 @@
 
     @* SB-login *@
 
-    <div class="sb-login">
+    <div class="sb-login scheapp-login">
         <div class="sb-login-bg">
             <img src="~/src/imagen/bg-sentirse-bien-login.jpeg"/>
         </div>
         <div class="sb-login-container">
             <div class="sb-login-imagen">
                 <img src="~/src/imagen/logo-sb-login.png"/>
+                <div class="welcome">
+                    <div class="brand-lockup" aria-label="ScheApp">
+                        <svg class="brand-symbol" viewBox="0 0 48 48" aria-hidden="true"><path d="M24 42 7.5 26.2A11 11 0 0 1 23 10.8l1 1 1-1a11 11 0 0 1 15.5 15.4L24 42Z" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M26.5 16.5c-3.5 0-5.5 2.7-5.5 6.1v9.2a3.7 3.7 0 1 0 3.7-3.7h-1.1m3.2-7.8a3.8 3.8 0 1 1 3.8 3.8" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                        <span class="brand-name">Sche<span>App</span></span>
+                    </div>
+                    <h1>Tu bienestar,<br />en buenas manos</h1>
+                    <p class="welcome-copy">Agenda tus citas de forma fácil y rápida con profesionales de la salud mental.</p>
+                    <div class="benefits">
+                        <div class="benefit"><span class="benefit-icon"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M16 3v4M8 3v4M3 10h18M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01"/></svg></span>Agenda<br />tus citas</div>
+                        <div class="benefit"><span class="benefit-icon"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-11V5l-8-3-8 3v6c0 7 8 11 8 11Z"/><path d="m9 12 2 2 4-4"/></svg></span>Profesionales<br />certificados</div>
+                        <div class="benefit"><span class="benefit-icon"><svg viewBox="0 0 24 24"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8l1.1 1.1L12 21l7.8-7.5 1.1-1.1a5.5 5.5 0 0 0-.1-7.8Z"/></svg></span>Por una mejor<br />versión de ti</div>
+                    </div>
+                </div>
                 <div class="sb-login-description">
                     <p>Somos Psicólogas con alta calidad humana, con una o dos formaciones Psicoterapéuticas, con experiencia y una sólida formación académica, garantizamos terapias efectivas desde la primera sesión.</p>
                 </div>
@@ -94,13 +156,19 @@
                 </div>
             </div>
             <div class="sb-login-form">
-                <p>Login</p>
+                <div class="login-brand" aria-label="ScheApp">
+                    <svg class="brand-symbol" viewBox="0 0 48 48" aria-hidden="true"><path d="M24 42 7.5 26.2A11 11 0 0 1 23 10.8l1 1 1-1a11 11 0 0 1 15.5 15.4L24 42Z" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M26.5 16.5c-3.5 0-5.5 2.7-5.5 6.1v9.2a3.7 3.7 0 1 0 3.7-3.7h-1.1m3.2-7.8a3.8 3.8 0 1 1 3.8 3.8" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    <span class="brand-name">Sche<span>App</span></span>
+                </div>
+                <p class="login-tagline">Tu bienestar, en buenas manos</p>
+                <h1 class="form-title">Iniciar sesión</h1>
+                <p class="form-subtitle">Bienvenido de nuevo, ¿listo para cuidar<br />de tu salud mental?</p>
                 <div class="sb-login-form-block sb-lg-cplt" data-validate="Ingresa tu usuario">
-                    <input class="sb-lg-input" placeholder="" name="email" id="txtEmail" autocomplete="off" />
+                    <input class="sb-lg-input" type="text" placeholder="Usuario" name="email" id="txtEmail" autocomplete="username" />
                     <label class="sb-lg-label" for="txtEmail">Usuario</label>
                 </div>
                 <div class="sb-login-form-block sb-lg-cplt" data-validate="Ingresa tu contraseña">
-                    <input class="sb-lg-input" placeholder="" type="password" name="password" id="txtPassword" autocomplete="off" />
+                    <input class="sb-lg-input" type="password" placeholder="Contraseña" name="password" id="txtPassword" autocomplete="current-password" />
                     <label class="sb-lg-label" for="txtPassword">Contraseña</label>
                 </div>
                 <div class="sb-login-form-block sb-lg-cplt">
@@ -122,9 +190,15 @@
                 </div>
                 <div class="sb-login-form-block sb-lg-rec">
                     <a onclick="redireccionar('RecuperarContraseña', 2)" href="javascript:void(0)">
-                        <p>¿Has olvidado tu contraseña?</p>
+                        ¿Olvidaste tu contraseña?
                     </a>
                 </div>
+                <div class="login-divider"><span>o</span></div>
+                <a class="create-account" href="@Url.Content("~/SaaS/Registro")">
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21v-2a8 8 0 0 1 16 0v2"/></svg>
+                    Crear una cuenta
+                </a>
+                <p class="login-footer">Agenda <span>•</span> Consulta <span>•</span> Avanza</p>
             </div>
         </div>
     </div>
@@ -141,8 +215,8 @@
                         PSYCO APP
                     </span>
 
-                    <div class="wrap-input100 rs1 validate-input" data-validate="Ingresa tu email">
-                        <input class="input100" type="email" name="email" placeholder="Email" id="txtEmail" autocomplete="off" />
+                    <div class="wrap-input100 rs1 validate-input" data-validate="Ingresa tu Usuario">
+                        <input class="input100" type="email" name="email" placeholder="Usuario" id="txtEmail" autocomplete="off" />
                         <span class="focus-input100-1"></span>
                         <span class="focus-input100-2"></span>
                     </div>

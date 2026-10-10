@@ -4,7 +4,7 @@ using PsycoApp.utilities;
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.SqlClient;
+using Microsoft.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
 using PsycoApp.DA;
@@ -107,12 +107,12 @@ namespace PsycoApp.BL
             return lista;
         }
 
-        public List<CajasUsuario> listar_cajas(string usuario, DateTime date)
+        public List<CajasUsuario> listar_cajas(string usuario, DateTime date, int idEmpresa)
         {
             List<CajasUsuario> lista = new List<CajasUsuario>();
             try
             {
-                lista = cajaDA.listar_cajas(usuario, date);
+                lista = cajaDA.listar_cajas(usuario, date, idEmpresa);
             }
             catch (Exception)
             {

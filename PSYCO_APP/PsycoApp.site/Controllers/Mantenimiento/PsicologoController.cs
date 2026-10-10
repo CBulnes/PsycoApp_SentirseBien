@@ -9,7 +9,6 @@ using PsycoApp.entities;
 using PsycoApp.utilities;
 using Microsoft.AspNetCore.Http;
 using System.Net.Http;
-using System.Security.Policy;
 
 namespace PsycoApp.site.Controllers.Mantenimiento
 {
@@ -348,7 +347,7 @@ namespace PsycoApp.site.Controllers.Mantenimiento
                 res = ApiCaller.consume_endpoint_method(url, null, "GET");
                 lista = JsonConvert.DeserializeObject<List<entities.Horario>>(res);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
              
                 lista.Clear();
@@ -368,7 +367,7 @@ namespace PsycoApp.site.Controllers.Mantenimiento
                 res = ApiCaller.consume_endpoint_method(url, null, "GET");
                 lista = JsonConvert.DeserializeObject<List<entities.Horario>>(res);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
              
                 lista.Clear();
@@ -388,7 +387,7 @@ namespace PsycoApp.site.Controllers.Mantenimiento
                 restring = ApiCaller.consume_endpoint_method(url, lista, "POST");
                 res = JsonConvert.DeserializeObject<RespuestaUsuario>(restring);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 res.estado = false;
                 res.descripcion = "Ocurrió un error al guardar los horarios.";
@@ -408,7 +407,7 @@ namespace PsycoApp.site.Controllers.Mantenimiento
                 restring = ApiCaller.consume_endpoint_method(url, lista, "POST");
                 res = JsonConvert.DeserializeObject<RespuestaUsuario>(restring);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 res.estado = false;
                 res.descripcion = "Ocurrió un error al guardar las vacaciones.";

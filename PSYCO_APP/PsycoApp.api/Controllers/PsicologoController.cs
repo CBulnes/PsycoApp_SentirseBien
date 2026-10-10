@@ -328,7 +328,7 @@ namespace PsycoApp.api.Controllers
                     lista = lista.FindAll(psicologo => SedesIncluyen(psicologo.Sedes, idSede));
                 }
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 lista.Clear();
             }
@@ -359,7 +359,7 @@ namespace PsycoApp.api.Controllers
             {
                 lista = _psicologoBL.listar_usuarios_caja_combo(idEmpresa, idSede);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 lista.Clear();
             }
@@ -384,7 +384,7 @@ namespace PsycoApp.api.Controllers
                         && _empresaSedeBL.SedePerteneceEmpresaActiva(sede.Id, idEmpresa));
                 }
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 lista.Clear();
             }
@@ -409,7 +409,7 @@ namespace PsycoApp.api.Controllers
                         && _empresaSedeBL.SedePerteneceEmpresaActiva(sede.Id, idEmpresa));
                 }
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 lista.Clear();
             }
