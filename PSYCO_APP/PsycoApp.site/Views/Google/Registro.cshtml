@@ -1,0 +1,26 @@
+@model PsycoApp.site.Models.GoogleRegistrationViewModel
+@{ Layout = null; }
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" /><meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Completa tu espacio | ScheApp</title>
+    <link rel="stylesheet" href="~/css/google-access.css" />
+</head>
+<body>
+    <main class="google-card">
+        <a href="/Login">ScheApp</a>
+        <h1>Crea tu espacio</h1>
+        <p>Tu cuenta de Google está verificada. Completa los datos de tu centro para empezar.</p>
+        <form asp-action="Registro" asp-controller="Google" method="post">
+            <div asp-validation-summary="All" role="alert"></div>
+            <label asp-for="Empresa">Empresa o centro</label><input asp-for="Empresa" required maxlength="200" autocomplete="organization" />
+            <label asp-for="Sede">Sede principal</label><input asp-for="Sede" required maxlength="100" />
+            <label asp-for="Nombres">Tus nombres</label><input asp-for="Nombres" required maxlength="100" autocomplete="given-name" />
+            <label asp-for="Apellidos">Tus apellidos</label><input asp-for="Apellidos" required maxlength="100" autocomplete="family-name" />
+            <button type="submit">Crear mi espacio</button>
+        </form>
+        <p>¿Ya trabajas en un centro registrado? <a href="/Login">Ingresa con tu usuario</a> y vincula Google desde tu cuenta para conservar tu empresa y permisos.</p>
+    </main>
+</body>
+</html>

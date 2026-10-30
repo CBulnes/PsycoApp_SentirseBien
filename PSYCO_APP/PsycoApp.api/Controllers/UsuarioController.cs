@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -57,7 +57,7 @@ namespace PsycoApp.api.Controllers
                 respuesta.data = usuario;
                 if (respuesta.estado)
                 {
-                    respuesta.token = GenerarToken(usuario);
+                    respuesta.token = PsycoApp.api.Security.JwtTokenIssuer.Create(usuario, configuration);
                 }
             }
             catch (Exception)
@@ -89,30 +89,7 @@ namespace PsycoApp.api.Controllers
             return respuesta;
         }
 
-        private string GenerarToken(Usuario usuario)
-        {
-            var claims = new[]
-            {
-                new Claim(ClaimTypes.NameIdentifier, usuario.id_usuario.ToString()),
-                new Claim(ClaimTypes.Name, usuario.email ?? string.Empty),
-                new Claim("login", usuario.login ?? string.Empty),
-                new Claim(ClaimTypes.Role, usuario.id_tipousuario.ToString()),
-                new Claim("id_tipousuario", usuario.id_tipousuario.ToString()),
-                new Claim("id_sede", usuario.id_sede.ToString()),
-                new Claim("id_empresa", usuario.id_empresa.ToString())
-            };
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:Key"]));
-            var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-            var expirationMinutes = int.TryParse(configuration["Jwt:ExpirationMinutes"], out var minutes) ? minutes : 120;
-            var token = new JwtSecurityToken(
-                issuer: configuration["Jwt:Issuer"],
-                audience: configuration["Jwt:Audience"],
-                claims: claims,
-                expires: DateTime.UtcNow.AddMinutes(expirationMinutes),
-                signingCredentials: credentials);
 
-            return new JwtSecurityTokenHandler().WriteToken(token);
-        }
 
     }
 }

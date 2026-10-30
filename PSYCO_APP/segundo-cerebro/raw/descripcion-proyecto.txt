@@ -1,0 +1,122 @@
+Los proyectos MCP también consumen componentes de negocio y de datos. PsycoApp.Entities contiene los modelos compartidos, y PsycoApp.utilities reúne utilidades comunes.
+2. Proyectos de la solución
+Proyecto	Responsabilidad principal
+PsycoApp.site	Sitio web para usuarios. Contiene controladores, modelos de vista, vistas Razor y recursos web (CSS, JavaScript, imágenes y plugins). La estructura observada es MVC con vistas Razor, no una organización típica de Razor Pages.
+PsycoApp.api	API HTTP que expone operaciones de la aplicación mediante controladores. Configura autenticación JWT, autorización, CORS y sesión de errores.
+PsycoApp.BL	Capa de negocio. Incluye clases para citas, caja, pacientes, psicólogos, usuarios, reportes, productos y otros dominios.
+PsycoApp.DA	Acceso a datos. Contiene clases *DA, conexión SQL y scripts de base de datos y procedimientos almacenados.
+PsycoApp.Entities	Entidades y DTO usados entre las capas, por ejemplo Cita, Paciente, Usuario, Caja, Pago, Empresa y Sede.
+PsycoApp.utilities	Funciones compartidas, como llamadas a API, helpers, logging y utilidades.
+PsycoApp.mcp	Proyecto MCP con herramientas y servicios relacionados con citas; incluye modelos de solicitud y respuesta.
+PsycoMCPServer	Segundo host MCP, con herramientas y servicios propios, entre ellos herramientas para citas y servicios de planes.
+Referencias entre proyectos
+Las referencias observadas son:
+•	PsycoApp.site → PsycoApp.Entities, PsycoApp.utilities.
+•	PsycoApp.api → PsycoApp.BL, PsycoApp.Entities, PsycoApp.utilities.
+•	PsycoApp.BL → PsycoApp.DA, PsycoApp.Entities.
+•	PsycoApp.DA → PsycoApp.Entities, PsycoApp.utilities.
+•	PsycoApp.mcp → PsycoApp.BL, PsycoApp.DA, PsycoApp.Entities.
+•	PsycoMCPServer → PsycoApp.BL, PsycoApp.DA, PsycoApp.Entities.
+3. Tecnologías y configuración
+Los proyectos de aplicación y bibliotecas principales apuntan a .NET 10. La excepción detectada es PsycoApp.utilities, que apunta a .NET Core 3.1. Esa diferencia merece revisión de compatibilidad y de soporte.
+API
+En PsycoApp.api/Startup.cs se observó:
+•	Autorización global para los controladores.
+•	Autenticación Bearer mediante JWT, con validación de emisor, audiencia, firma y expiración.
+•	Parámetros de JWT configurados mediante claves como Jwt:Key, Jwt:Issuer y Jwt:Audience.
+•	Middleware de routing, CORS, autenticación y autorización.
+•	Controladores para citas, pacientes, caja, usuarios, psicólogos, reportes, configuración, encuestas, sedes, entre otros.
+Sitio web
+En PsycoApp.site/Startup.cs se observó:
+•	MVC con vistas y compilación Razor en ejecución.
+•	Sesión con una duración configurada de dos horas.
+•	Antiforgery con la cabecera RequestVerificationToken.
+•	Integración de PWA.
+•	Un middleware que recupera el JWT de la sesión y lo pasa a ApiCaller, lo que apunta a que el sitio actúa como cliente de la API.
+•	La ruta raíz lleva a la página pública de SaaS; la ruta convencional por defecto apunta a Login.
+MCP
+Hay dos proyectos MCP en la solución. PsycoApp.mcp incluye un paquete ModelContextProtocol en versión preliminar; ambos proyectos contienen modelos y herramientas para citas. La revisión de sus dependencias y de sus operaciones no fue exhaustiva.
+4. Funcionalidades que se aprecian en el código
+Por los nombres de proyectos, clases, controladores y vistas, la aplicación cubre, al menos, estos ámbitos:
+•	Gestión de empresas y sedes, incluyendo elementos de acceso SaaS.
+•	Usuarios, roles y menús.
+•	Psicólogos, sus estudios, horarios y vacaciones.
+•	Pacientes e historial.
+•	Citas y estados de cita.
+•	Caja y pagos, incluido el registro de efectivo diario.
+•	Productos y paquetes.
+•	Flujos de atención, visitas y encuestas.
+•	Reportes y paneles.
+•	Tickets y centros de atención.
+•	Registro y acceso de empresas SaaS.
+Esta lista describe áreas identificadas en los nombres del código; no confirma que todas estén completas o activas en producción.
+5. Esquema de base de datos observado
+El archivo principal es PSYCO_APP/SQL/SchemaSQL.sql. En el fragmento revisado aparece la base PsycoApp, con tablas, funciones y procedimientos almacenados.
+Empresas y sedes
+•	tbl_empresa: empresa, nombre y estado.
+•	tbl_sede: sede, nombre, estado, centro e identificador de empresa.
+•	Relación declarada: tbl_sede.Id_empresa → tbl_empresa.Id.
+Esto proporciona una base para separar datos por empresa y sede.
+Usuarios y permisos
+•	tbl_usuario: datos de usuario, tipo, documento, correo, login, sede y contraseña.
+•	tbl_tipousuario: tipos de usuario.
+•	tbl_opciones_usuario y tbl_menu: opciones y menús.
+•	token: tokens asociados a usuarios.
+•	Relación declarada: token.user_id → tbl_usuario.id_usuario.
+En el fragmento aparecen funciones de cifrado y descifrado de contraseña basadas en DecryptByPassPhrase.
+Psicólogos
+•	tbl_psicologo: información personal y profesional.
+•	tbl_sede_usuario: asociación de psicólogos con sedes y sede principal.
+•	tbl_estudios_psicologo: estudios.
+•	tbl_horarios_psicologo: horarios.
+•	tbl_vacaciones_psicologo: vacaciones.
+tbl_sede_usuario parece representar la relación entre psicólogos y sedes. No se confirmó que todas sus columnas tengan restricciones FK.
+Pacientes y citas
+•	tbl_paciente: pacientes.
+•	tbl_cita: datos de citas, incluyendo referencias mediante columnas a paciente, psicólogo, estado, servicio, sede y paquete, además de fecha, tipo y montos.
+•	tbl_estados_cita: catálogo de estados.
+•	tbl_historial_cita y tbl_historial_paciente: registros históricos.
+•	tbl_flujos, tbl_resumen_flujo, tbl_invitados y tbl_tipolinea: tablas relacionadas con otros flujos de atención o registro.
+En el fragmento revisado, las columnas de tbl_cita sugieren relaciones con pacientes y psicólogos, pero no se verificó que todas estén respaldadas por restricciones FK.
+Productos y paquetes
+•	Productos: productos con empresa, nombre, precio, número de sesiones y otros campos.
+•	tbl_paquete: paquetes asociados a la atención o a las citas.
+•	FK observada: Productos.Id_empresa → tbl_empresa.Id.
+Caja y pagos
+•	tbl_caja: fecha, horas de apertura y cierre, estado e identificador de sede.
+•	tbl_pago: cita, forma de pago, caja, importe y estado.
+•	tbl_forma_pago: catálogo de formas de pago.
+•	tbl_detalle_transferencia: datos complementarios de transferencias.
+•	tbl_efectivo_diario: registro de efectivo diario.
+•	pagos_old: tabla de pagos aparentemente heredada.
+El esquema también contiene scripts de parche relacionados con procedimientos de caja y registro de efectivo. Los scripts son archivos de mantenimiento y no se ejecutan automáticamente por el hecho de estar en el repositorio.
+Catálogos y otras áreas
+En la parte inspeccionada aparecen, entre otras:
+•	tbl_tipo_documento
+•	tbl_ubigeo
+•	tbl_meses
+•	tbl_centros_atencion
+•	tbl_configuracion
+•	tbl_visitas
+•	tbl_puntos_visitados
+•	tbl_tickets
+Procedimientos y funciones
+En el fragmento revisado se encontraron procedimientos de administración de empresas y sedes, gestión o búsqueda de psicólogos y actualización de citas. También aparecen funciones para fecha/hora local, tratamiento de contraseñas y corrección de valores decimales.
+No se puede afirmar que esa lista sea completa: el archivo SQL continúa durante miles de líneas más.
+6. Observaciones importantes
+1.	Frameworks mezclados: PsycoApp.utilities sigue apuntando a .NET Core 3.1, mientras los demás proyectos principales usan .NET 10. Conviene verificar si existe una actualización pendiente o una razón deliberada para mantenerlo así.
+2.	Dos hosts MCP: la solución contiene tanto PsycoApp.mcp como PsycoMCPServer. No está determinado si ambos cumplen funciones distintas, si uno es legado o cómo se despliegan.
+3.	Esquema distribuido: además de SchemaSQL.sql, hay numerosos scripts históricos y parches en PsycoApp.DA/SQLScripts y en la API. Para saber cuál es el esquema vigente, habría que contrastar esos scripts con la base de datos real.
+4.	Relaciones que requieren confirmación: algunas columnas parecen identificadores relacionados con otras tablas, pero no se verificaron todas las restricciones FK en el tramo leído.
+5.	Seguridad: el proyecto configura JWT y utiliza funciones SQL de contraseñas. Para evaluar si el almacenamiento de credenciales y la configuración de secretos son adecuados, habría que revisar la implementación y la configuración desplegada, sin exponer valores sensibles.
+6.	Pruebas y estado funcional: esta revisión describe la estructura; no ejecuté compilaciones ni pruebas, y no confirma que cada módulo funcione actualmente.
+7. Archivos principales para orientarse
+•	PSYCO_APP/PSYCO_APP.sln: solución.
+•	PSYCO_APP/SQL/SchemaSQL.sql: script principal de base de datos.
+•	PSYCO_APP/PsycoApp.site/Startup.cs: configuración del sitio.
+•	PSYCO_APP/PsycoApp.api/Startup.cs: configuración de la API.
+•	PSYCO_APP/PsycoApp.BL/: lógica de negocio.
+•	PSYCO_APP/PsycoApp.DA/: acceso a datos y scripts SQL.
+•	PSYCO_APP/PsycoApp.Entities/: modelos compartidos.
+•	PSYCO_APP/PsycoApp.mcp/ y PSYCO_APP/PsycoMCPServer/: proyectos MCP.
+Para tener el detalle realmente completo del esquema, aún habría que recorrer el resto de SchemaSQL.sql y contrastarlo con todos los parches y scripts históricos.

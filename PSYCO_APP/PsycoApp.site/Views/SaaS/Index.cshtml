@@ -31,6 +31,11 @@
         .hero p { max-width: 650px; margin: 23px auto 29px; color: #687770; font-size: 17px; line-height: 1.75; }
         .hero .button { display: inline-flex; align-items: center; gap: 12px; padding: 14px 22px; border-radius: 10px; color: white; background: var(--sage); box-shadow: 0 9px 22px #42695d28; font-size: 14px; font-weight: 700; text-decoration: none; transition: background .15s, transform .15s; }
         .hero .button:hover { color: white; background: var(--sage-dark); transform: translateY(-2px); }
+        .hero-google { max-width: 320px; margin: 20px auto 0; }
+        .hero-google .google-access { margin: 10px 0 !important; }
+        .hero-google p { margin-bottom: 0; line-height: 1.5; }
+        .hero-google-divider { display: flex; align-items: center; gap: 12px; color: var(--muted); font-size: 12px; }
+        .hero-google-divider::before, .hero-google-divider::after { content: ""; height: 1px; flex: 1; background: #cedbd2; }
         .hero-note { margin-top: 15px; color: #87938c; font-size: 11px; }
         .features-wrap { max-width: 1030px; margin: -4px auto 0; padding: 0 24px; }
         .features { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
@@ -57,6 +62,10 @@
                 <h1>Más tiempo para las personas,<br /><em>menos tareas para tu centro.</em></h1>
                 <p>Organiza pacientes, profesionales, sedes y citas en un espacio claro y confiable, pensado para quienes cuidan de los demás.</p>
                 <a class="button" href="@Url.Action("Registro", "SaaS")">Crear mi espacio de prueba <span aria-hidden="true">→</span></a>
+                <div class="hero-google">
+                    <div class="hero-google-divider" aria-hidden="true">o</div>
+                    @await Html.PartialAsync("_GoogleAccess")
+                </div>
                 <div class="hero-note">Empieza en unos minutos · Tu centro, organizado desde el primer día</div>
             </div>
         </section>

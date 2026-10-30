@@ -1,0 +1,24 @@
+@{ Layout = null; ViewData["GoogleLink"] = true; }
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" /><meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Vincular Google | ScheApp</title>
+    <link rel="stylesheet" href="~/css/google-access.css" />
+</head>
+<body>
+    <main class="google-card">
+        <a href="/Home">Volver a mi cuenta</a>
+        <h1>Accede también con Google</h1>
+        @if (ViewBag.Completado == true)
+        {
+            <p role="status">Solicitud completada. En tu próximo inicio de sesión podrás usar Google.</p>
+        }
+        else
+        {
+            <p>Conecta tu cuenta de Google a tu usuario actual. Conservarás tu empresa, sede y permisos.</p>
+            <partial name="_GoogleAccess" />
+        }
+    </main>
+</body>
+</html>

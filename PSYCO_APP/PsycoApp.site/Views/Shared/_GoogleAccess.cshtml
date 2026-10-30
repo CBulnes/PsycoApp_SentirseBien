@@ -1,0 +1,26 @@
+@inject Microsoft.Extensions.Configuration.IConfiguration GoogleConfiguration
+@using Microsoft.Extensions.Configuration
+@{
+    var enabled = GoogleConfiguration.GetValue<bool>("Authentication:Google:Enabled");
+    var clientId = GoogleConfiguration["Authentication:Google:ClientId"];
+    var link = ViewData["GoogleLink"] is bool shouldLink && shouldLink;
+}
+<div class="google-access" style="margin:18px 0;text-align:center">
+    @if (enabled && !string.IsNullOrWhiteSpace(clientId))
+    {
+        <form id="google-access-form" method="post" action="@Url.Action("Login", "Google")">
+            @Html.AntiForgeryToken()
+            <input type="hidden" name="credential" id="google-credential" />
+            <input type="hidden" name="link" value="@(link ? "true" : "false")" />
+        </form>
+        <div id="google-access-button" data-client-id="@clientId" style="display:flex;justify-content:center"></div>
+        <p id="google-access-status" role="status" aria-live="polite" style="font-size:13px;margin-top:8px"></p>
+        <script src="~/js/google-access.js" defer></script>
+        <script src="https://accounts.google.com/gsi/client?hl=es" async defer onload="window.startGoogleAccess && window.startGoogleAccess()"></script>
+    }
+    else
+    {
+        <button type="button" disabled style="width:100%;padding:12px;border:1px solid #dce5de;border-radius:8px;background:#f7f8f7;color:#697871">Continuar con Google</button>
+        <p style="font-size:12px;color:#697871;margin-top:6px">El acceso con Google estará disponible pronto.</p>
+    }
+</div>

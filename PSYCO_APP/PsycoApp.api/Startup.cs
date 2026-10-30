@@ -37,6 +37,8 @@ namespace PsycoApp.api
                     .Build()));
             });
             services.AddMemoryCache();
+            services.AddTransient<PsycoApp.api.Services.WelcomeEmail>();
+            services.AddSingleton<PsycoApp.api.Security.GoogleIdentityValidator>();
             string semilla = Configuration["Jwt:Key"];
             byte[] semillarByte = Encoding.UTF8.GetBytes(semilla);
             SymmetricSecurityKey key = new SymmetricSecurityKey(semillarByte);
